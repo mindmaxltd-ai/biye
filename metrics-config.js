@@ -16,14 +16,14 @@ var BIYE_METRICS = {
       "bn": "শিক্ষা ও ক্যারিয়ার",
       "en": "Education & Career",
       "color": "purple",
-      "weight": 10
+      "weight": 8
     },
     {
       "id": "personality",
       "bn": "ব্যক্তিত্ব",
       "en": "Personality",
       "color": "blue",
-      "weight": 25
+      "weight": 20
     },
     {
       "id": "family",
@@ -37,28 +37,28 @@ var BIYE_METRICS = {
       "bn": "লাইফস্টাইল ও পছন্দ",
       "en": "Lifestyle & Preferences",
       "color": "green",
-      "weight": 10
+      "weight": 8
     },
     {
       "id": "health",
       "bn": "স্বাস্থ্য",
       "en": "Health",
       "color": "orange",
-      "weight": 10
+      "weight": 8
     },
     {
       "id": "values",
       "bn": "মূল্যবোধ",
       "en": "Values & Ethics",
       "color": "gold",
-      "weight": 10
+      "weight": 8
     },
     {
       "id": "future",
       "bn": "ভবিষ্যৎ পরিকল্পনা",
       "en": "Future Planning",
       "color": "pink-dark",
-      "weight": 10
+      "weight": 8
     },
     {
       "id": "critical",
@@ -67,6 +67,14 @@ var BIYE_METRICS = {
       "color": "purple-dark",
       "weight": 5,
       "ruleEngine": true
+    },
+    {
+      "id": "preference",
+      "bn": "পার্টনার পছন্দ",
+      "en": "Partner Preference",
+      "color": "crimson",
+      "weight": 15,
+      "special": true
     },
     {
       "id": "social",
@@ -1818,6 +1826,468 @@ var BIYE_METRICS = {
       "loEn": "Limited",
       "hiBn": "সক্রিয়ভাবে জড়িত",
       "hiEn": "Actively involved"
+    },
+    {
+      "id": "m114",
+      "cat": "identity",
+      "bn": "গায়ের রঙ/অ্যাপিয়ারেন্স",
+      "en": "Complexion / appearance",
+      "type": "select",
+      "options": [
+        {
+          "bn": "ফর্সা",
+          "en": "Fair"
+        },
+        {
+          "bn": "উজ্জ্বল শ্যামলা",
+          "en": "Wheatish"
+        },
+        {
+          "bn": "শ্যামলা",
+          "en": "Medium"
+        },
+        {
+          "bn": "গাঢ়",
+          "en": "Dark"
+        }
+      ]
+    },
+    {
+      "id": "m115",
+      "cat": "education",
+      "bn": "পেশার ক্যাটাগরি",
+      "en": "Profession category",
+      "type": "select",
+      "options": [
+        {
+          "bn": "ডাক্তার",
+          "en": "Doctor"
+        },
+        {
+          "bn": "ইঞ্জিনিয়ার",
+          "en": "Engineer"
+        },
+        {
+          "bn": "শিক্ষক/অধ্যাপক",
+          "en": "Teacher/Academic"
+        },
+        {
+          "bn": "ব্যবসায়ী",
+          "en": "Business"
+        },
+        {
+          "bn": "সরকারি চাকরি",
+          "en": "Government service"
+        },
+        {
+          "bn": "বেসরকারি চাকরি",
+          "en": "Private service"
+        },
+        {
+          "bn": "প্রবাসে কর্মরত",
+          "en": "Working abroad"
+        },
+        {
+          "bn": "অন্যান্য",
+          "en": "Other"
+        }
+      ]
+    },
+    {
+      "id": "m116",
+      "cat": "identity",
+      "bn": "দাড়ি রাখেন (শুধু পুরুষদের জন্য প্রযোজ্য)",
+      "en": "Has a beard (applicable for male profiles)",
+      "type": "boolean"
+    },
+    {
+      "id": "m117",
+      "cat": "identity",
+      "bn": "শহর",
+      "en": "City",
+      "type": "select",
+      "options": [
+        {
+          "bn": "ঢাকা",
+          "en": "Dhaka"
+        },
+        {
+          "bn": "চট্টগ্রাম",
+          "en": "Chattogram"
+        },
+        {
+          "bn": "সিলেট",
+          "en": "Sylhet"
+        },
+        {
+          "bn": "খুলনা",
+          "en": "Khulna"
+        },
+        {
+          "bn": "রাজশাহী",
+          "en": "Rajshahi"
+        },
+        {
+          "bn": "বরিশাল",
+          "en": "Barishal"
+        },
+        {
+          "bn": "কুমিল্লা",
+          "en": "Cumilla"
+        },
+        {
+          "bn": "অন্যান্য",
+          "en": "Other"
+        }
+      ]
+    },
+    {
+      "id": "m118",
+      "cat": "identity",
+      "bn": "বর্তমানে দেশে নাকি বিদেশে থাকেন",
+      "en": "Currently residing in-country or abroad",
+      "type": "select",
+      "options": [
+        {
+          "bn": "দেশে",
+          "en": "In-country"
+        },
+        {
+          "bn": "বিদেশে",
+          "en": "Abroad"
+        }
+      ]
+    },
+    {
+      "id": "m119",
+      "cat": "identity",
+      "bn": "প্রবাসী/ডায়াস্পোরা (বিদেশে বেড়ে ওঠা)",
+      "en": "Diaspora (raised abroad)",
+      "type": "boolean"
+    },
+    {
+      "id": "m120",
+      "cat": "future",
+      "bn": "নিজের বাসস্থান আছে",
+      "en": "Owns own residence/home",
+      "type": "boolean"
+    },
+    {
+      "id": "m121",
+      "cat": "family",
+      "bn": "সন্তান আছে (আগের সম্পর্ক থেকে, যদি থাকে)",
+      "en": "Has children (from a previous relationship, if any)",
+      "type": "boolean"
+    },
+    {
+      "id": "m122",
+      "cat": "family",
+      "bn": "বর্তমান পারিবারিক কাঠামো",
+      "en": "Current family living structure",
+      "type": "select",
+      "options": [
+        {
+          "bn": "বাবা-মায়ের সাথে",
+          "en": "With parents"
+        },
+        {
+          "bn": "নিউক্লিয়ার পরিবার",
+          "en": "Nuclear family"
+        },
+        {
+          "bn": "যৌথ পরিবার",
+          "en": "Joint family"
+        },
+        {
+          "bn": "একা থাকেন",
+          "en": "Living alone"
+        }
+      ]
+    },
+    {
+      "id": "m123",
+      "cat": "preference",
+      "bn": "পছন্দের উচ্চতা",
+      "en": "Preferred height",
+      "type": "number",
+      "min": 130,
+      "max": 210,
+      "unitBn": "সেমি",
+      "unitEn": "cm"
+    },
+    {
+      "id": "m124",
+      "cat": "preference",
+      "bn": "পছন্দের ওজন",
+      "en": "Preferred weight",
+      "type": "number",
+      "min": 35,
+      "max": 150,
+      "unitBn": "কেজি",
+      "unitEn": "kg"
+    },
+    {
+      "id": "m125",
+      "cat": "preference",
+      "bn": "পছন্দের গায়ের রঙ/অ্যাপিয়ারেন্স",
+      "en": "Preferred complexion / appearance",
+      "type": "select",
+      "options": [
+        {
+          "bn": "ফর্সা",
+          "en": "Fair"
+        },
+        {
+          "bn": "উজ্জ্বল শ্যামলা",
+          "en": "Wheatish"
+        },
+        {
+          "bn": "শ্যামলা",
+          "en": "Medium"
+        },
+        {
+          "bn": "গাঢ়",
+          "en": "Dark"
+        },
+        {
+          "bn": "কোনো পছন্দ নেই",
+          "en": "No preference"
+        }
+      ]
+    },
+    {
+      "id": "m126",
+      "cat": "preference",
+      "bn": "পছন্দের ন্যূনতম শিক্ষাগত যোগ্যতা",
+      "en": "Preferred minimum education",
+      "type": "select",
+      "options": [
+        {
+          "bn": "এসএসসি",
+          "en": "SSC"
+        },
+        {
+          "bn": "এইচএসসি",
+          "en": "HSC"
+        },
+        {
+          "bn": "স্নাতক",
+          "en": "Bachelor's"
+        },
+        {
+          "bn": "স্নাতকোত্তর",
+          "en": "Master's"
+        },
+        {
+          "bn": "পিএইচডি",
+          "en": "PhD"
+        }
+      ]
+    },
+    {
+      "id": "m127",
+      "cat": "preference",
+      "bn": "পার্টনারের জন্য পছন্দের ধর্ম",
+      "en": "Preferred religion for partner",
+      "type": "select",
+      "options": [
+        {
+          "bn": "ইসলাম",
+          "en": "Islam"
+        },
+        {
+          "bn": "হিন্দু",
+          "en": "Hindu"
+        },
+        {
+          "bn": "খ্রিস্টান",
+          "en": "Christian"
+        },
+        {
+          "bn": "বৌদ্ধ",
+          "en": "Buddhist"
+        },
+        {
+          "bn": "যেকোনো",
+          "en": "Any"
+        }
+      ]
+    },
+    {
+      "id": "m128",
+      "cat": "preference",
+      "bn": "পছন্দের পেশার ক্যাটাগরি",
+      "en": "Preferred profession category",
+      "type": "select",
+      "options": [
+        {
+          "bn": "ডাক্তার",
+          "en": "Doctor"
+        },
+        {
+          "bn": "ইঞ্জিনিয়ার",
+          "en": "Engineer"
+        },
+        {
+          "bn": "শিক্ষক/অধ্যাপক",
+          "en": "Teacher/Academic"
+        },
+        {
+          "bn": "ব্যবসায়ী",
+          "en": "Business"
+        },
+        {
+          "bn": "সরকারি চাকরি",
+          "en": "Government service"
+        },
+        {
+          "bn": "বেসরকারি চাকরি",
+          "en": "Private service"
+        },
+        {
+          "bn": "প্রবাসে কর্মরত",
+          "en": "Working abroad"
+        },
+        {
+          "bn": "কোনো পছন্দ নেই",
+          "en": "No preference"
+        }
+      ]
+    },
+    {
+      "id": "m129",
+      "cat": "preference",
+      "bn": "পার্টনার কেমন হোক: অন্তর্মুখী vs বহির্মুখী",
+      "en": "Preferred partner: introvert vs extrovert",
+      "type": "scale",
+      "min": 1,
+      "max": 5,
+      "loBn": "সম্পূর্ণ অন্তর্মুখী",
+      "loEn": "Fully introvert",
+      "hiBn": "সম্পূর্ণ বহির্মুখী",
+      "hiEn": "Fully extrovert"
+    },
+    {
+      "id": "m130",
+      "cat": "preference",
+      "bn": "পার্টনারের দাড়ি থাকা পছন্দ (পুরুষ পার্টনারের ক্ষেত্রে প্রযোজ্য)",
+      "en": "Prefers a partner with a beard (where applicable)",
+      "type": "boolean"
+    },
+    {
+      "id": "m131",
+      "cat": "preference",
+      "bn": "পছন্দের শহর",
+      "en": "Preferred city",
+      "type": "select",
+      "options": [
+        {
+          "bn": "ঢাকা",
+          "en": "Dhaka"
+        },
+        {
+          "bn": "চট্টগ্রাম",
+          "en": "Chattogram"
+        },
+        {
+          "bn": "সিলেট",
+          "en": "Sylhet"
+        },
+        {
+          "bn": "খুলনা",
+          "en": "Khulna"
+        },
+        {
+          "bn": "রাজশাহী",
+          "en": "Rajshahi"
+        },
+        {
+          "bn": "বরিশাল",
+          "en": "Barishal"
+        },
+        {
+          "bn": "কুমিল্লা",
+          "en": "Cumilla"
+        },
+        {
+          "bn": "কোনো পছন্দ নেই",
+          "en": "No preference"
+        }
+      ]
+    },
+    {
+      "id": "m132",
+      "cat": "preference",
+      "bn": "পার্টনার দেশে নাকি বিদেশে থাকুক",
+      "en": "Prefer partner residing in-country or abroad",
+      "type": "select",
+      "options": [
+        {
+          "bn": "দেশে",
+          "en": "In-country"
+        },
+        {
+          "bn": "বিদেশে",
+          "en": "Abroad"
+        },
+        {
+          "bn": "কোনো পছন্দ নেই",
+          "en": "No preference"
+        }
+      ]
+    },
+    {
+      "id": "m133",
+      "cat": "preference",
+      "bn": "প্রবাসী/ডায়াস্পোরা পার্টনার গ্রহণযোগ্য",
+      "en": "Diaspora partner acceptable",
+      "type": "boolean"
+    },
+    {
+      "id": "m134",
+      "cat": "preference",
+      "bn": "পার্টনারের নিজের বাসস্থান থাকা জরুরি",
+      "en": "Partner owning a home is important",
+      "type": "boolean"
+    },
+    {
+      "id": "m135",
+      "cat": "preference",
+      "bn": "আগে বিবাহিত ছিলেন এমন পার্টনার (বিধবা/তালাকপ্রাপ্ত) গ্রহণযোগ্য",
+      "en": "Previously-married partner (widowed/divorced) acceptable",
+      "type": "boolean"
+    },
+    {
+      "id": "m136",
+      "cat": "preference",
+      "bn": "সন্তান আছে এমন পার্টনার গ্রহণযোগ্য",
+      "en": "Partner who already has children is acceptable",
+      "type": "boolean"
+    },
+    {
+      "id": "m137",
+      "cat": "preference",
+      "bn": "পার্টনারের পারিবারিক কাঠামো নিয়ে পছন্দ",
+      "en": "Preferred family living structure for partner",
+      "type": "select",
+      "options": [
+        {
+          "bn": "বাবা-মায়ের সাথে",
+          "en": "With parents"
+        },
+        {
+          "bn": "নিউক্লিয়ার পরিবার",
+          "en": "Nuclear family"
+        },
+        {
+          "bn": "যৌথ পরিবার",
+          "en": "Joint family"
+        },
+        {
+          "bn": "কোনো পছন্দ নেই",
+          "en": "No preference"
+        }
+      ]
     }
   ]
 };
