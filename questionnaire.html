@@ -17,6 +17,7 @@
   --orange:#C2570A;--orange-light:#FB923C;
   --yellow:#C99A0E;--yellow-light:#F4C430;
   --grey:#8A8A8A;--grey-light:#C7C7C7;
+  --crimson:#B91C3C;--crimson-light:#E85D7A;
   --brand-grad:linear-gradient(120deg,var(--pink) 0%,var(--purple) 52%,var(--blue) 100%);
   --bg:#FAFAFC;--card:#FFFFFF;
   --border:rgba(20,20,20,.08);--border2:rgba(20,20,20,.14);
@@ -136,9 +137,10 @@ textarea.field-input{resize:vertical;min-height:64px}
 <script>
 var COLOR_MAP = {
   'pink':'var(--pink)','pink-dark':'var(--pink-dark)','purple':'var(--purple)','purple-dark':'var(--purple-dark)',
-  'blue':'var(--blue)','teal':'var(--teal)','green':'var(--green)','orange':'var(--orange)','gold':'var(--gold)','grey':'var(--grey)'
+  'blue':'var(--blue)','teal':'var(--teal)','green':'var(--green)','orange':'var(--orange)','gold':'var(--gold)','grey':'var(--grey)',
+  'crimson':'var(--crimson)'
 };
-var CAT_ICONS = {identity:'🪪',education:'🎓',personality:'🧠',family:'👪',lifestyle:'🎨',health:'🩺',values:'⚖️',future:'🚀',critical:'🚩',social:'🌐'};
+var CAT_ICONS = {identity:'🪪',education:'🎓',personality:'🧠',family:'👪',lifestyle:'🎨',health:'🩺',values:'⚖️',future:'🚀',critical:'🚩',preference:'💞',social:'🌐'};
 
 var answers = {};
 var catIndex = 0;
@@ -286,6 +288,14 @@ function renderCategory(){
       ? 'এই সেকশন সম্পূর্ণ ঐচ্ছিক ও সম্মতিভিত্তিক — MIS স্কোরে কোনো ওয়েট যোগ করে না, শুধু তথ্যগত।'
       : 'This section is entirely optional and consent-based — it adds no weight to the MIS score, purely informational.')+'</span>';
     wrap.appendChild(note2);
+  }
+  if(c.special){
+    var note3 = document.createElement('div');
+    note3.className = 'cat-rule-note';
+    note3.innerHTML = '💞 <span>'+(lang==='bn'
+      ? 'এই সেকশনের প্রশ্নগুলো <b>আপনার নিজের সম্পর্কে না</b> — আপনি পার্টনারের মধ্যে কী চান, সেটা জিজ্ঞাসা করছে। প্রতিটা ম্যাচের জন্য এটা অন্য পক্ষের প্রকৃত তথ্যের সাথে মেলানো হয় (MIS-এর ১৫%)।'
+      : 'These questions are <b>not about you</b> — they ask what you want in a partner. Each answer is matched against the other person actual attributes (15% of the MIS).')+'</span>';
+    wrap.appendChild(note3);
   }
 
   metricsByCat(c.id).forEach(function(m){ wrap.appendChild(renderField(m)); });
