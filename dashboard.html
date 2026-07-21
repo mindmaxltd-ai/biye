@@ -196,6 +196,9 @@ button{font-family:inherit}
   <button class="tab-item" onclick="location.href='onboarding.html'"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.5-4 5-5 7-5s5.5 1 7 5"/></svg><span data-bn="প্রোফাইল" data-en="Profile">Profile</span></button>
 </nav>
 
+<script src="metrics-config.js"></script>
+<script src="mock-data.js"></script>
+<script src="scoring.js"></script>
 <script src="supabase-client.js"></script>
 <script>
 var KYC_COLORS = ['pink','pink-dark','purple','blue','teal','green','gold'];
@@ -252,7 +255,8 @@ function renderStats(){
 
   document.getElementById('cardKyc').textContent = (STATE.kyc?STATE.kyc.level:0) + ' / 7';
   document.getElementById('cardMatches').textContent = STATE.matches.length;
-  document.getElementById('cardAnswers').textContent = Object.keys(STATE.answers).length + ' / 113';
+  var totalMetrics = (typeof BIYE_METRICS !== 'undefined') ? BIYE_METRICS.metrics.length : 137;
+  document.getElementById('cardAnswers').textContent = Object.keys(STATE.answers).length + ' / ' + totalMetrics;
 
   var verifyChipText = document.getElementById('verifyChipText');
   verifyChipText.textContent = (lang==='bn' ? 'লেভেল ' + (STATE.kyc?STATE.kyc.level:0) + ' যাচাইকৃত' : 'Level ' + (STATE.kyc?STATE.kyc.level:0) + ' verified');
@@ -264,8 +268,19 @@ async function loadDashboard(){
 
   STATE.profile = await BiyeDB.getProfile(userId);
   STATE.kyc = await BiyeDB.getKycStatus(userId);
-  STATE.matches = await BiyeDB.getMatches(userId);
   STATE.answers = await BiyeDB.getAnswers(userId);
+
+  // Use the real Rule Engine + AI Engine (scoring.js) against mock-data.js,
+  // so the preview here matches what match-feed.html computes — rather than
+  // BiyeDB's static demo fallback list.
+  if (typeof BiyeScoring !== 'undefined' && typeof MOCK_CURRENT_USER !== 'undefined') {
+    var ranked = BiyeScoring.rankMatches(MOCK_CURRENT_USER, MOCK_PROFILES, { includeFailed: false });
+    STATE.matches = ranked.map(function (r) {
+      return { id: r.profile.id, name: r.profile.name, age: r.profile.age, city: r.profile.city, score: r.score, verified: r.profile.verified };
+    });
+  } else {
+    STATE.matches = await BiyeDB.getMatches(userId);
+  }
 
   var name = (STATE.profile && STATE.profile.name) || 'BIYE User';
   document.getElementById('greetName').textContent = (lang==='bn' ? 'স্বাগতম, ' : 'Welcome, ') + name;
