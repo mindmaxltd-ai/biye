@@ -13,11 +13,9 @@
 // one customer_id at a time), just a different scoring engine underneath.
 //
 // REPO LAYOUT THIS ASSUMES:
-//   /metrics-config.js     (repo root, also used by questionnaire.html etc.)
-//   /scoring.js            (repo root, also used by match-feed.html etc.)
+//   /netlify/functions/metrics-config.js
+//   /netlify/functions/scoring.js
 //   /netlify/functions/analyze.js   (this file)
-// If your Netlify function bundler needs a different relative path,
-// adjust the two require() lines below accordingly.
 //
 // Netlify env: SUPABASE_URL, SUPABASE_SERVICE_KEY
 //
@@ -25,8 +23,8 @@
 // supabase-client.js's schema comment — no new tables needed.
 // ═══════════════════════════════════════════════════════════════════
 
-const BIYE_METRICS = require('../metrics-config.js');
-const BiyeScoring   = require('../scoring.js');
+const BIYE_METRICS = require('./metrics-config.js');
+const BiyeScoring   = require('./scoring.js');
 
 const SUPA_URL = process.env.SUPABASE_URL || '';
 const SUPA_KEY = process.env.SUPABASE_SERVICE_KEY || '';
