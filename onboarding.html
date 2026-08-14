@@ -165,7 +165,7 @@ button,input{font-family:inherit}
         <label class="field-label" data-bn="মোবাইল নম্বর" data-en="Mobile number">Mobile number</label>
         <input class="field-input" type="tel" placeholder="+৮৮০ 1XXX-XXXXXX" id="phoneInput">
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="sendOtp('phone')" data-bn="OTP পাঠান" data-en="Send OTP">Send OTP</button>
+      <button class="btn btn-primary" style="width:100%" id="phoneSendBtn" onclick="sendOtp('phone')" data-bn="OTP পাঠান" data-en="Send OTP">Send OTP</button>
       <p id="phoneSendStatus" style="display:none;font-size:.78rem;margin-top:.5rem;font-weight:600"></p>
 
       <div id="phoneOtpBlock" style="display:none;margin-top:1rem">
@@ -200,7 +200,7 @@ button,input{font-family:inherit}
         <label class="field-label" data-bn="ইমেইল ঠিকানা" data-en="Email address">Email address</label>
         <input class="field-input" type="email" placeholder="you@example.com" id="emailInput">
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="sendOtp('email')" data-bn="যাচাই কোড পাঠান" data-en="Send verification code">Send verification code</button>
+      <button class="btn btn-primary" style="width:100%" id="emailSendBtn" onclick="sendOtp('email')" data-bn="যাচাই কোড পাঠান" data-en="Send verification code">Send verification code</button>
       <p id="emailSendStatus" style="display:none;font-size:.78rem;margin-top:.5rem;font-weight:600"></p>
       <p class="field-hint" id="emailSentHint" style="display:none;color:var(--ok);font-weight:600" data-bn="✓ কোড পাঠানো হয়েছে — ইনবক্স চেক করুন" data-en="✓ Code sent — check your inbox">✓ Code sent — check your inbox</p>
 
@@ -459,9 +459,7 @@ function showStep(n){
 function goNext(){ if(current < STEPS-1) showStep(current+1); }
 function goPrev(){ if(current > 0) showStep(current-1); }
 
-// ── OTP state ──
 var _otpPhone = null;
-var _otpEmail = null;
 var _resendTimers = {};
 
 function setStatus(elId, msg, isError){
@@ -472,136 +470,6 @@ function setStatus(elId, msg, isError){
   el.style.color = isError ? 'var(--warn)' : 'var(--ok)';
 }
 
-// ── Phone OTP — sms.net.bd via send-otp Netlify function ──
-async function sendOtp(kind){
-  var lang = document.documentElement.getAttribute('lang') || 'en';
-
-  if(kind === 'phone'){
-    var phone = document.getElementById('phoneInput').value.trim();
-    if(!phone){ setStatus('phoneSendStatus', lang==='bn' ? 'ফোন নম্বর দিন' : 'Enter your phone number', true); return; }
-
-    var btn = document.querySelector('[onclick="sendOtp(\'phone\')"]');
-    btn.disabled = true;
-    btn.textContent = lang==='bn' ? 'পাঠানো হচ্ছে...' : 'Sending...';
-    setStatus('phoneSendStatus', '', false);
-
-    try {
-      var res = await fetch('/.netlify/functions/send-otp', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'send', phone: phone })
-      });
-      var d = await res.json();
-      if(d && d.sent){
-        _otpPhone = phone;
-        document.getElementById('phoneOtpBlock').style.display = 'block';
-        setStatus('phoneSendStatus', lang==='bn' ? '✓ SMS পাঠানো হয়েছে' : '✓ SMS sent', false);
-        startResendTimer('phone', 60);
-      } else {
-        setStatus('phoneSendStatus', (d && d.error) || (lang==='bn' ? 'SMS পাঠাতে সমস্যা হয়েছে' : 'Could not send SMS'), true);
-      }
-    } catch(e){
-      setStatus('phoneSendStatus', lang==='bn' ? 'নেটওয়ার্ক সমস্যা — আবার চেষ্টা করুন' : 'Network error — try again', true);
-    }
-    btn.disabled = false;
-    btn.textContent = lang==='bn' ? 'OTP পাঠান' : 'Send OTP';
-
-  } else {
-    // ── Email OTP — Resend via send-email Netlify function ──
-    var email = document.getElementById('emailInput').value.trim();
-    if(!email){ setStatus('emailSendStatus', lang==='bn' ? 'ইমেইল ঠিকানা দিন' : 'Enter your email', true); return; }
-
-    var ebtn = document.querySelector('[onclick="sendOtp(\'email\')"]');
-    ebtn.disabled = true;
-    ebtn.textContent = lang==='bn' ? 'পাঠানো হচ্ছে...' : 'Sending...';
-    setStatus('emailSendStatus', '', false);
-
-    // ৬ সংখ্যার OTP বানাই ও sessionStorage-এ রাখি (email-এর জন্য server-side store নেই, তাই client-side verify)
-    var emailCode = String(Math.floor(100000 + Math.random() * 900000));
-    sessionStorage.setItem('biye_email_otp', emailCode);
-    sessionStorage.setItem('biye_email_otp_addr', email);
-    sessionStorage.setItem('biye_email_otp_exp', Date.now() + 10*60*1000);
-
-    var html = '<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">'
-      + '<h2 style="color:#E2136E">BIYE — ইমেইল যাচাই</h2>'
-      + '<p>আপনার ইমেইল যাচাই কোড:</p>'
-      + '<div style="font-size:2rem;font-weight:800;letter-spacing:.2em;background:#f5f5f5;padding:16px;text-align:center;border-radius:12px;margin:16px 0">' + emailCode + '</div>'
-      + '<p style="color:#666;font-size:.85rem">এই কোড ১০ মিনিট বৈধ। কাউকে শেয়ার করবেন না।</p>'
-      + '<hr style="margin:24px 0;border:none;border-top:1px solid #eee">'
-      + '<p style="color:#aaa;font-size:.75rem">BIYE — biye.ltd</p>'
-      + '</div>';
-
-    try {
-      var er = await fetch('/.netlify/functions/send-email', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ to: email, subject: 'BIYE যাচাই কোড: ' + emailCode, html: html })
-      });
-      var ed = await er.json();
-      if(ed && ed.ok){
-        _otpEmail = email;
-        document.getElementById('emailOtpBlock').style.display = 'block';
-        document.getElementById('emailSentHint').style.display = 'block';
-        setStatus('emailSendStatus', lang==='bn' ? '✓ ইমেইল পাঠানো হয়েছে — ইনবক্স চেক করুন' : '✓ Email sent — check your inbox', false);
-        startResendTimer('email', 60);
-      } else {
-        setStatus('emailSendStatus', (ed && ed.error) || (lang==='bn' ? 'ইমেইল পাঠাতে সমস্যা হয়েছে' : 'Could not send email'), true);
-      }
-    } catch(e){
-      setStatus('emailSendStatus', lang==='bn' ? 'নেটওয়ার্ক সমস্যা — আবার চেষ্টা করুন' : 'Network error — try again', true);
-    }
-    ebtn.disabled = false;
-    ebtn.textContent = lang==='bn' ? 'যাচাই কোড পাঠান' : 'Send verification code';
-  }
-}
-
-// ── Phone OTP verify ──
-async function verifyPhoneOtp(){
-  var lang = document.documentElement.getAttribute('lang') || 'en';
-  var boxes = document.querySelectorAll('#phoneOtpBlock .otp-box');
-  var code = Array.from(boxes).map(function(b){ return b.value; }).join('');
-  if(code.length < 6){ setStatus('phoneVerifyStatus', lang==='bn' ? '৬ সংখ্যার কোড দিন' : 'Enter 6-digit code', true); return; }
-
-  setStatus('phoneVerifyStatus', lang==='bn' ? 'যাচাই হচ্ছে...' : 'Verifying...', false);
-  try {
-    var res = await fetch('/.netlify/functions/send-otp', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'verify', phone: _otpPhone || document.getElementById('phoneInput').value.trim(), code: code })
-    });
-    var d = await res.json();
-    if(d && d.verified){
-      setStatus('phoneVerifyStatus', lang==='bn' ? '✓ ফোন যাচাই সফল হয়েছে!' : '✓ Phone verified!', false);
-      document.querySelectorAll('#phoneOtpBlock .otp-box').forEach(function(b){ b.style.borderColor='var(--ok)'; });
-      uploaded.phoneVerified = true;
-    } else {
-      setStatus('phoneVerifyStatus', (d && d.error) || (lang==='bn' ? 'কোড ভুল' : 'Wrong code'), true);
-    }
-  } catch(e){
-    setStatus('phoneVerifyStatus', lang==='bn' ? 'নেটওয়ার্ক সমস্যা' : 'Network error', true);
-  }
-}
-
-// ── Email OTP verify (client-side) ──
-function verifyEmailOtp(){
-  var lang = document.documentElement.getAttribute('lang') || 'en';
-  var boxes = document.querySelectorAll('#emailOtpBlock .otp-box');
-  var code = Array.from(boxes).map(function(b){ return b.value; }).join('');
-  if(code.length < 6){ setStatus('emailVerifyStatus', lang==='bn' ? '৬ সংখ্যার কোড দিন' : 'Enter 6-digit code', true); return; }
-
-  var stored = sessionStorage.getItem('biye_email_otp');
-  var exp = parseInt(sessionStorage.getItem('biye_email_otp_exp') || '0');
-  if(Date.now() > exp){ setStatus('emailVerifyStatus', lang==='bn' ? 'কোডের মেয়াদ শেষ — আবার পাঠান' : 'Code expired — resend', true); return; }
-  if(code === stored){
-    setStatus('emailVerifyStatus', lang==='bn' ? '✓ ইমেইল যাচাই সফল হয়েছে!' : '✓ Email verified!', false);
-    document.querySelectorAll('#emailOtpBlock .otp-box').forEach(function(b){ b.style.borderColor='var(--ok)'; });
-    uploaded.emailVerified = true;
-  } else {
-    setStatus('emailVerifyStatus', lang==='bn' ? 'কোড ভুল — আবার চেষ্টা করুন' : 'Wrong code — try again', true);
-  }
-}
-
-// ── Resend countdown ──
 function startResendTimer(kind, secs){
   if(_resendTimers[kind]) clearInterval(_resendTimers[kind]);
   var linkId = kind === 'phone' ? 'phoneResendLink' : 'emailResendLink';
@@ -621,6 +489,119 @@ function startResendTimer(kind, secs){
       el.style.opacity = '';
     }
   }, 1000);
+}
+
+async function sendOtp(kind){
+  var lang = document.documentElement.getAttribute('lang') || 'en';
+
+  if(kind === 'phone'){
+    var phone = document.getElementById('phoneInput').value.trim();
+    if(!phone){ setStatus('phoneSendStatus', lang==='bn' ? 'ফোন নম্বর দিন' : 'Enter your phone number', true); return; }
+    var btn = document.getElementById('phoneSendBtn');
+    btn.disabled = true;
+    btn.textContent = lang==='bn' ? 'পাঠানো হচ্ছে...' : 'Sending...';
+    setStatus('phoneSendStatus', '', false);
+    try {
+      var res = await fetch('/.netlify/functions/send-otp', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'send', phone: phone })
+      });
+      var d = await res.json();
+      if(d && d.sent){
+        _otpPhone = phone;
+        document.getElementById('phoneOtpBlock').style.display = 'block';
+        setStatus('phoneSendStatus', lang==='bn' ? '✓ SMS পাঠানো হয়েছে' : '✓ SMS sent', false);
+        startResendTimer('phone', 60);
+      } else {
+        setStatus('phoneSendStatus', (d && d.error) || (lang==='bn' ? 'SMS পাঠাতে সমস্যা হয়েছে' : 'Could not send SMS'), true);
+      }
+    } catch(e){
+      setStatus('phoneSendStatus', lang==='bn' ? 'নেটওয়ার্ক সমস্যা — আবার চেষ্টা করুন' : 'Network error — try again', true);
+    }
+    btn.disabled = false;
+    btn.textContent = lang==='bn' ? 'OTP পাঠান' : 'Send OTP';
+
+  } else {
+    var email = document.getElementById('emailInput').value.trim();
+    if(!email){ setStatus('emailSendStatus', lang==='bn' ? 'ইমেইল ঠিকানা দিন' : 'Enter your email', true); return; }
+    var ebtn = document.getElementById('emailSendBtn');
+    ebtn.disabled = true;
+    ebtn.textContent = lang==='bn' ? 'পাঠানো হচ্ছে...' : 'Sending...';
+    setStatus('emailSendStatus', '', false);
+
+    var emailCode = String(Math.floor(100000 + Math.random() * 900000));
+    sessionStorage.setItem('biye_email_otp', emailCode);
+    sessionStorage.setItem('biye_email_otp_addr', email);
+    sessionStorage.setItem('biye_email_otp_exp', Date.now() + 10*60*1000);
+
+    var html = '<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">'
+      + '<h2 style="color:#E2136E">BIYE — ইমেইল যাচাই</h2>'
+      + '<p>আপনার যাচাই কোড:</p>'
+      + '<div style="font-size:2rem;font-weight:800;letter-spacing:.2em;background:#f5f5f5;padding:16px;text-align:center;border-radius:12px;margin:16px 0">' + emailCode + '</div>'
+      + '<p style="color:#666;font-size:.85rem">এই কোড ১০ মিনিট বৈধ। কাউকে শেয়ার করবেন না।</p>'
+      + '<p style="color:#aaa;font-size:.75rem;margin-top:24px">BIYE — biye.ltd</p></div>';
+
+    try {
+      var er = await fetch('/.netlify/functions/send-email', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ to: email, subject: 'BIYE যাচাই কোড: ' + emailCode, html: html })
+      });
+      var ed = await er.json();
+      if(ed && ed.sent){
+        document.getElementById('emailOtpBlock').style.display = 'block';
+        document.getElementById('emailSentHint').style.display = 'block';
+        setStatus('emailSendStatus', lang==='bn' ? '✓ ইমেইল পাঠানো হয়েছে — ইনবক্স চেক করুন' : '✓ Email sent — check your inbox', false);
+        startResendTimer('email', 60);
+      } else {
+        setStatus('emailSendStatus', (ed && ed.error) || (lang==='bn' ? 'ইমেইল পাঠাতে সমস্যা হয়েছে' : 'Could not send email'), true);
+      }
+    } catch(e){
+      setStatus('emailSendStatus', lang==='bn' ? 'নেটওয়ার্ক সমস্যা — আবার চেষ্টা করুন' : 'Network error — try again', true);
+    }
+    ebtn.disabled = false;
+    ebtn.textContent = lang==='bn' ? 'যাচাই কোড পাঠান' : 'Send verification code';
+  }
+}
+
+async function verifyPhoneOtp(){
+  var lang = document.documentElement.getAttribute('lang') || 'en';
+  var boxes = document.querySelectorAll('#phoneOtpRow .otp-box');
+  var code = Array.from(boxes).map(function(b){ return b.value; }).join('');
+  if(code.length < 6){ setStatus('phoneVerifyStatus', lang==='bn' ? '৬ সংখ্যার কোড দিন' : 'Enter 6-digit code', true); return; }
+  setStatus('phoneVerifyStatus', lang==='bn' ? 'যাচাই হচ্ছে...' : 'Verifying...', false);
+  try {
+    var res = await fetch('/.netlify/functions/send-otp', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'verify', phone: _otpPhone || document.getElementById('phoneInput').value.trim(), code: code })
+    });
+    var d = await res.json();
+    if(d && d.verified){
+      setStatus('phoneVerifyStatus', lang==='bn' ? '✓ ফোন যাচাই সফল!' : '✓ Phone verified!', false);
+      boxes.forEach(function(b){ b.style.borderColor='var(--ok)'; });
+      uploaded.phoneVerified = true;
+    } else {
+      setStatus('phoneVerifyStatus', (d && d.error) || (lang==='bn' ? 'কোড ভুল' : 'Wrong code'), true);
+    }
+  } catch(e){
+    setStatus('phoneVerifyStatus', lang==='bn' ? 'নেটওয়ার্ক সমস্যা' : 'Network error', true);
+  }
+}
+
+function verifyEmailOtp(){
+  var lang = document.documentElement.getAttribute('lang') || 'en';
+  var boxes = document.querySelectorAll('#emailOtpRow .otp-box');
+  var code = Array.from(boxes).map(function(b){ return b.value; }).join('');
+  if(code.length < 6){ setStatus('emailVerifyStatus', lang==='bn' ? '৬ সংখ্যার কোড দিন' : 'Enter 6-digit code', true); return; }
+  var stored = sessionStorage.getItem('biye_email_otp');
+  var exp = parseInt(sessionStorage.getItem('biye_email_otp_exp') || '0');
+  if(Date.now() > exp){ setStatus('emailVerifyStatus', lang==='bn' ? 'কোডের মেয়াদ শেষ — আবার পাঠান' : 'Code expired — resend', true); return; }
+  if(code === stored){
+    setStatus('emailVerifyStatus', lang==='bn' ? '✓ ইমেইল যাচাই সফল!' : '✓ Email verified!', false);
+    boxes.forEach(function(b){ b.style.borderColor='var(--ok)'; });
+    uploaded.emailVerified = true;
+  } else {
+    setStatus('emailVerifyStatus', lang==='bn' ? 'কোড ভুল — আবার চেষ্টা করুন' : 'Wrong code — try again', true);
+  }
 }
 
 function handleUpload(input, slot){
@@ -703,7 +684,7 @@ document.getElementById('consentCheck').addEventListener('change', function(){
   document.getElementById('submitBtn').disabled = !this.checked;
 });
 
-// ── OTP box auto-advance & backspace ──
+// OTP box auto-advance, backspace, paste
 document.addEventListener('DOMContentLoaded', function(){
   ['phoneOtpRow','emailOtpRow'].forEach(function(rowId){
     var row = document.getElementById(rowId);
@@ -711,20 +692,19 @@ document.addEventListener('DOMContentLoaded', function(){
     var boxes = row.querySelectorAll('.otp-box');
     boxes.forEach(function(box, i){
       box.addEventListener('input', function(){
-        var v = box.value.replace(/[^0-9]/g,'');
-        box.value = v.slice(-1);
+        box.value = box.value.replace(/[^0-9]/g,'').slice(-1);
         box.classList.toggle('filled', !!box.value);
-        if(box.value && i < boxes.length - 1) boxes[i+1].focus();
+        if(box.value && i < boxes.length-1) boxes[i+1].focus();
       });
       box.addEventListener('keydown', function(e){
-        if(e.key === 'Backspace' && !box.value && i > 0){ boxes[i-1].focus(); boxes[i-1].value=''; boxes[i-1].classList.remove('filled'); }
+        if(e.key==='Backspace' && !box.value && i>0){ boxes[i-1].focus(); boxes[i-1].value=''; boxes[i-1].classList.remove('filled'); }
       });
       box.addEventListener('paste', function(e){
         e.preventDefault();
-        var txt = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g,'');
-        boxes.forEach(function(b,j){ b.value = txt[j] || ''; b.classList.toggle('filled', !!b.value); });
-        var last = Math.min(txt.length, boxes.length) - 1;
-        if(last >= 0) boxes[last].focus();
+        var txt = (e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+        boxes.forEach(function(b,j){ b.value=txt[j]||''; b.classList.toggle('filled',!!b.value); });
+        var last = Math.min(txt.length, boxes.length)-1;
+        if(last>=0) boxes[last].focus();
       });
     });
   });
