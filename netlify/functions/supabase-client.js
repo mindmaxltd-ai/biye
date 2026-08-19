@@ -59,44 +59,62 @@ const BiyeDB = {
 
   // ---- Auth ----
 
-  // ---- Email + Password Auth ----
-  async registerWithEmail(email, password, phone, name, gender){
-    if (BIYE_DEMO_MODE) {
-      window.__BIYE_DEMO_STORE.session = { userId: 'demo-user-001', phone, email };
-      return { user: window.__BIYE_DEMO_STORE.session, error: null };
-    }
-    const { data, error } = await _supaClient.auth.signUp({ email, password });
-    if (!error && data.user) {
+  // ── Email + Password Registration ──
+  async registerWithEmail(email, password, extras){
+    if(BIYE_DEMO_MODE){ window.__BIYE_DEMO_STORE.session={userId:'demo-001',email}; return {user:{id:'demo-001'},error:null}; }
+    const {data,error} = await _supaClient.auth.signUp({email, password});
+    if(!error && data.user && extras){
       await _supaClient.from('profiles').upsert({
-        id: data.user.id, email, phone: phone||null, name: name||null,
-        gender_hint: gender||null, is_active: true
-      }, { onConflict: 'id' });
+        id: data.user.id,
+        email: email,
+        name: extras.name||null,
+        phone: extras.phone||null,
+        gender_hint: extras.gender||null,
+        is_active: true
+      },{onConflict:'id'});
+      if(extras.age){
+        await _supaClient.from('metrics_answers').upsert([
+          {user_id:data.user.id, metric_id:'m001', value:extras.age},
+          {user_id:data.user.id, metric_id:'m002', value:extras.gender||null}
+        ],{onConflict:'user_id,metric_id'});
+      }
     }
-    return { user: data ? data.user : null, error };
+    return {user: data?data.user:null, error};
   },
 
+  // ── Email Login ──
   async loginWithEmail(email, password){
-    if (BIYE_DEMO_MODE) return { user: window.__BIYE_DEMO_STORE.session, error: null };
-    const { data, error } = await _supaClient.auth.signInWithPassword({ email, password });
-    return { user: data ? data.user : null, error };
+    if(BIYE_DEMO_MODE) return {user:window.__BIYE_DEMO_STORE.session, error:null};
+    const {data,error} = await _supaClient.auth.signInWithPassword({email,password});
+    return {user:data?data.user:null, error};
   },
 
+  // ── Phone Login (email lookup থেকে) ──
   async loginWithPhone(phone, password){
-    if (BIYE_DEMO_MODE) return { user: window.__BIYE_DEMO_STORE.session, error: null };
-    const { data: prof } = await _supaClient.from('profiles').select('email').eq('phone', phone).single();
-    if (!prof || !prof.email) return { user: null, error: { message: 'এই ফোন নম্বরে কোনো অ্যাকাউন্ট নেই' } };
+    if(BIYE_DEMO_MODE) return {user:window.__BIYE_DEMO_STORE.session, error:null};
+    const {data:prof} = await _supaClient.from('profiles').select('email').eq('phone',phone).single();
+    if(!prof||!prof.email) return {user:null, error:{message:'এই ফোন নম্বরে কোনো অ্যাকাউন্ট নেই'}};
     return this.loginWithEmail(prof.email, password);
   },
 
+  // ── Password Reset ──
   async resetPassword(email){
-    if (BIYE_DEMO_MODE) return { error: null };
-    return await _supaClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://biye.ltd/reset-password.html' });
+    if(BIYE_DEMO_MODE) return {error:null};
+    return await _supaClient.auth.resetPasswordForEmail(email,{redirectTo:'https://biye.ltd/reset-password.html'});
   },
 
+  // ── Get Session ──
   async getSession(){
-    if (BIYE_DEMO_MODE) return { session: { user: window.__BIYE_DEMO_STORE.session }, error: null };
-    const { data, error } = await _supaClient.auth.getSession();
-    return { session: data ? data.session : null, error };
+    if(BIYE_DEMO_MODE) return {session:{user:window.__BIYE_DEMO_STORE.session},error:null};
+    const {data,error} = await _supaClient.auth.getSession();
+    return {session:data?data.session:null,error};
+  },
+
+  // ── Sign Out ──
+  async logout(){
+    if(BIYE_DEMO_MODE){ window.__BIYE_DEMO_STORE.session=null; return; }
+    await _supaClient.auth.signOut();
+    window.location.href='index.html';
   },
 
   async signUpWithPhone(phone){
