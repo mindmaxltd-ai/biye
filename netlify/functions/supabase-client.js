@@ -15,8 +15,8 @@
 // but nothing is actually persisted between page loads or devices.
 // ============================================================================
 
-const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://hjbvmzashhzazlpgjhof.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqYnZtemFzaGh6YXpscGdqaG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTQ4OTYsImV4cCI6MjA5OTU5MDg5Nn0.vneEXDY2P2MOnFdFJtPAms_qGq_OGU3xQeHInD5k75E';
 
 const BIYE_DEMO_MODE = SUPABASE_URL.indexOf('YOUR_') === 0 || SUPABASE_ANON_KEY.indexOf('YOUR_') === 0;
 
@@ -58,6 +58,47 @@ const BiyeDB = {
   demoMode: BIYE_DEMO_MODE,
 
   // ---- Auth ----
+
+  // ---- Email + Password Auth ----
+  async registerWithEmail(email, password, phone, name, gender){
+    if (BIYE_DEMO_MODE) {
+      window.__BIYE_DEMO_STORE.session = { userId: 'demo-user-001', phone, email };
+      return { user: window.__BIYE_DEMO_STORE.session, error: null };
+    }
+    const { data, error } = await _supaClient.auth.signUp({ email, password });
+    if (!error && data.user) {
+      await _supaClient.from('profiles').upsert({
+        id: data.user.id, email, phone: phone||null, name: name||null,
+        gender_hint: gender||null, is_active: true
+      }, { onConflict: 'id' });
+    }
+    return { user: data ? data.user : null, error };
+  },
+
+  async loginWithEmail(email, password){
+    if (BIYE_DEMO_MODE) return { user: window.__BIYE_DEMO_STORE.session, error: null };
+    const { data, error } = await _supaClient.auth.signInWithPassword({ email, password });
+    return { user: data ? data.user : null, error };
+  },
+
+  async loginWithPhone(phone, password){
+    if (BIYE_DEMO_MODE) return { user: window.__BIYE_DEMO_STORE.session, error: null };
+    const { data: prof } = await _supaClient.from('profiles').select('email').eq('phone', phone).single();
+    if (!prof || !prof.email) return { user: null, error: { message: 'এই ফোন নম্বরে কোনো অ্যাকাউন্ট নেই' } };
+    return this.loginWithEmail(prof.email, password);
+  },
+
+  async resetPassword(email){
+    if (BIYE_DEMO_MODE) return { error: null };
+    return await _supaClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://biye.ltd/reset-password.html' });
+  },
+
+  async getSession(){
+    if (BIYE_DEMO_MODE) return { session: { user: window.__BIYE_DEMO_STORE.session }, error: null };
+    const { data, error } = await _supaClient.auth.getSession();
+    return { session: data ? data.session : null, error };
+  },
+
   async signUpWithPhone(phone){
     if (BIYE_DEMO_MODE) {
       window.__BIYE_DEMO_STORE.session.phone = phone;
