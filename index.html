@@ -403,9 +403,9 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
   <div id="fReg">
     <!-- Step 1 -->
     <div id="rs1">
-      <div class="step-dot-row"><div class="step-dot on"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+      <div class="step-dot-row"><div class="step-dot on"></div><div class="step-dot"></div></div>
       <p class="auth-title">নতুন অ্যাকাউন্ট</p>
-      <p class="auth-sub">ধাপ ১/৩ — মৌলিক তথ্য ও পাসওয়ার্ড</p>
+      <p class="auth-sub">ধাপ ১/২ — মৌলিক তথ্য ও পাসওয়ার্ড</p>
       <div class="af"><label>পুরো নাম *</label><input id="rName" type="text" placeholder="আপনার নাম"></div>
       <div class="af"><label>ফোন নম্বর * (User ID)</label><input id="rPhone" type="tel" placeholder="+8801XXXXXXXXX"></div>
       <div class="af"><label>বয়স *</label><input id="rAge" type="number" min="18" max="70" placeholder="18-70"></div>
@@ -414,15 +414,15 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
       <div class="af"><label>পাসওয়ার্ড * (৮+ অক্ষর)</label><div class="pw-row"><input id="rPw" type="password" placeholder="••••••••"><button class="pw-eye" onclick="tpw('rPw',this)" type="button">দেখুন</button></div></div>
       <div class="af"><label>পাসওয়ার্ড নিশ্চিত করুন *</label><div class="pw-row"><input id="rPw2" type="password" placeholder="••••••••"><button class="pw-eye" onclick="tpw('rPw2',this)" type="button">দেখুন</button></div></div>
       <p class="auth-msg" id="rm1"></p>
-      <button class="auth-btn" id="rb1" onclick="regS1()">পরবর্তী — SMS OTP →</button>
+      <button class="auth-btn" id="rb1" onclick="regS1()">পরবর্তী — SMS যাচাই →</button>
       <p class="auth-switch">আগেই অ্যাকাউন্ট আছে? <b onclick="switchTab('login')">লগইন করুন</b></p>
     </div>
 
     <!-- Step 2: SMS OTP -->
     <div id="rs2" style="display:none">
-      <div class="step-dot-row"><div class="step-dot done"></div><div class="step-dot on"></div><div class="step-dot"></div></div>
+      <div class="step-dot-row"><div class="step-dot done"></div><div class="step-dot on"></div></div>
       <p class="auth-title">📱 SMS যাচাই</p>
-      <p class="auth-sub" id="smsHint">ধাপ ২/৩ — ফোনে কোড পাঠানো হয়েছে</p>
+      <p class="auth-sub" id="smsHint">ধাপ ২/২ — ফোনে কোড পাঠানো হয়েছে</p>
       <div class="otp-mini-row" id="smsRow">
         <input class="otp-mini" maxlength="1" inputmode="numeric">
         <input class="otp-mini" maxlength="1" inputmode="numeric">
@@ -435,39 +435,9 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
       <button class="auth-btn" id="rb2" onclick="regS2()">কোড যাচাই করুন</button>
       <button class="auth-btn-ghost" onclick="retrySms()">আবার SMS পাঠান</button>
     </div>
-
-    <!-- Step 3: Email OTP -->
-    <div id="rs3" style="display:none">
-      <div class="step-dot-row"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot on"></div></div>
-      <p class="auth-title">✉️ ইমেইল যাচাই</p>
-      <p class="auth-sub" id="emailHint">ধাপ ৩/৩ — ইমেইলে কোড পাঠানো হয়েছে</p>
-      <div class="otp-mini-row" id="emailRow">
-        <input class="otp-mini" maxlength="1" inputmode="numeric">
-        <input class="otp-mini" maxlength="1" inputmode="numeric">
-        <input class="otp-mini" maxlength="1" inputmode="numeric">
-        <input class="otp-mini" maxlength="1" inputmode="numeric">
-        <input class="otp-mini" maxlength="1" inputmode="numeric">
-        <input class="otp-mini" maxlength="1" inputmode="numeric">
-      </div>
-      <p class="auth-msg" id="rm3"></p>
-      <button class="auth-btn" id="rb3" onclick="regS3()">সম্পন্ন করুন</button>
-      <button class="auth-btn-ghost" onclick="retryEmail()">আবার ইমেইল পাঠান</button>
-    </div>
   </div>
 
-  <!-- LOGIN -->
-  <div id="fLogin" style="display:none">
-    <p class="auth-title">আবার স্বাগতম!</p>
-    <p class="auth-sub">ইমেইল বা ফোন ও পাসওয়ার্ড দিয়ে লগইন করুন</p>
-    <div class="af"><label>ইমেইল অথবা ফোন</label><input id="lId" type="text" placeholder="you@example.com বা +8801XXXXXXXXX" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="af"><label>পাসওয়ার্ড</label><div class="pw-row"><input id="lPw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"><button class="pw-eye" onclick="tpw('lPw',this)" type="button">দেখুন</button></div></div>
-    <p class="auth-msg" id="lMsg"></p>
-    <button class="auth-btn" id="lBtn" onclick="doLogin()">লগইন করুন</button>
-    <p class="auth-switch"><b onclick="doForgot()">পাসওয়ার্ড ভুলে গেছেন?</b></p>
-    <p class="auth-switch">নতুন? <b onclick="switchTab('register')">রেজিস্টার করুন</b></p>
   </div>
-</div>
-</div>
 
 <script>
 var _SB = supabase.createClient(
@@ -559,26 +529,12 @@ async function regS2(){
     var er=await fetch('/.netlify/functions/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:_em,subject:'BIYE যাচাই কোড: '+_ec,html:html})});
     var ed=await er.json();
     if(!ed.sent){msg('rm2','ইমেইল পাঠাতে সমস্যা',true);document.getElementById('rb2').disabled=false;return;}
-    document.getElementById('rs2').style.display='none';
-    document.getElementById('rs3').style.display='block';
-    document.getElementById('emailHint').textContent='ধাপ ৩/৩ — '+_em+'-এ কোড পাঠানো হয়েছে';
-    initOtp('emailRow');
-    msg('rm3','✓ SMS যাচাই সফল!',false);
+    if(_uid){
+      await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}}).catch(function(){});
+    }
+    msg('rm2','✓ SMS যাচাই সফল! যাচ্ছেন...',false);
+    setTimeout(function(){window.location.href='onboarding.html';},800);
   }catch(e){msg('rm2',e.message||'Error',true);document.getElementById('rb2').disabled=false;}
-}
-
-async function regS3(){
-  var code=otp('emailRow');
-  if(code.length<6){msg('rm3','৬ সংখ্যার কোড দিন',true);return;}
-  var stored=sessionStorage.getItem('biye_ec');
-  var exp=parseInt(sessionStorage.getItem('biye_ec_exp')||'0');
-  if(Date.now()>exp){msg('rm3','কোডের মেয়াদ শেষ — আবার পাঠান',true);return;}
-  if(code!==stored){msg('rm3','কোড ভুল',true);return;}
-  document.getElementById('rb3').disabled=true;
-  if(_uid){await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}}).catch(function(){});}
-  sessionStorage.removeItem('biye_ec');
-  msg('rm3','✓ সম্পূর্ণ যাচাই সফল! যাচ্ছেন...',false);
-  setTimeout(function(){window.location.href='onboarding.html';},800);
 }
 
 async function retrySms(){
@@ -586,16 +542,6 @@ async function retrySms(){
   var r=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send',phone:_ph})});
   var d=await r.json();
   msg('rm2',d.sent?'✓ নতুন SMS পাঠানো হয়েছে':'পাঠানো যায়নি: '+(d.error||''),!d.sent);
-}
-
-async function retryEmail(){
-  _ec=String(Math.floor(100000+Math.random()*900000));
-  sessionStorage.setItem('biye_ec',_ec);
-  sessionStorage.setItem('biye_ec_exp',Date.now()+10*60*1000);
-  var html='<div style="font-family:sans-serif;padding:24px"><h2 style="color:#E2136E">BIYE যাচাই</h2><div style="font-size:2rem;font-weight:800;text-align:center;background:#f5f5f5;padding:16px;border-radius:12px;margin:12px 0">'+_ec+'</div><p style="color:#666;font-size:.85rem">১০ মিনিট বৈধ।</p></div>';
-  var er=await fetch('/.netlify/functions/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:_em,subject:'BIYE যাচাই কোড: '+_ec,html:html})});
-  var ed=await er.json();
-  msg('rm3',ed.sent?'✓ নতুন ইমেইল পাঠানো হয়েছে':'পাঠানো যায়নি',!ed.sent);
 }
 
 async function doLogin(){
