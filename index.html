@@ -189,19 +189,19 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
 .af input{width:100%;padding:.75rem .9rem;border-radius:12px;border:1.5px solid rgba(20,20,20,.14);font-size:.88rem;outline:none;font-family:inherit;background:#fff;color:#1A1A1A}
 .af input:focus{border-color:#6A2DA8;box-shadow:0 0 0 3px rgba(106,45,168,.12)}
 .pw-row{position:relative}.pw-row input{padding-right:3.2rem}
-.pw-eye{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#6A2DA8;font-size:.7rem;font-weight:700;white-space:nowrap}
+.pw-eye{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#6A2DA8;font-size:.7rem;font-weight:700}
 .auth-btn{width:100%;padding:.82rem;border-radius:14px;background:linear-gradient(120deg,#E2136E,#6A2DA8,#1565C0);color:#fff;font-size:.88rem;font-weight:700;border:2px solid #D4AF37;cursor:pointer;margin-top:.3rem;box-shadow:0 8px 18px -8px rgba(106,45,168,.5)}
 .auth-btn:disabled{opacity:.45;pointer-events:none}
-.auth-msg{font-size:.75rem;font-weight:600;text-align:center;margin:.45rem 0;min-height:1.1rem}
+.auth-msg{font-size:.75rem;font-weight:600;text-align:center;margin:.45rem 0;min-height:1rem}
 .auth-switch{font-size:.75rem;color:rgba(20,20,20,.5);text-align:center;margin-top:.6rem}
 .auth-switch b{color:#6A2DA8;cursor:pointer;text-decoration:underline}
 .gender-row{display:flex;gap:.6rem;margin-top:.3rem}
 .gender-opt{flex:1;padding:.6rem;border-radius:10px;border:1.5px solid rgba(20,20,20,.14);text-align:center;cursor:pointer;font-size:.82rem;font-weight:600;transition:all .15s;color:#1A1A1A}
 .gender-opt.on{border-color:#6A2DA8;background:rgba(106,45,168,.08);color:#6A2DA8}
 .topbar-auth{display:flex;gap:.4rem;align-items:center}
-.tb-btn{font-size:.72rem;font-weight:700;padding:.38rem .78rem;border-radius:50px;cursor:pointer;border:none}
+.tb-btn{font-size:.72rem;font-weight:700;padding:.38rem .78rem;border-radius:50px;cursor:pointer;border:none;font-family:inherit}
 .tb-login{background:#fff;border:1.5px solid rgba(20,20,20,.16)!important;color:#1A1A1A}
-.tb-reg{background:linear-gradient(120deg,#E2136E,#6A2DA8);border:1.5px solid #D4AF37!important;color:#fff}
+.tb-reg{background:linear-gradient(120deg,#E2136E,#6A2DA8);color:#fff;border:1.5px solid #D4AF37!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -236,7 +236,7 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
     </div>
 
     <div class="hero-actions">
-      <button class="hero-action-btn" onclick="location.href='onboarding.html'" data-bn="যাচাই করে শুরু করুন" data-en="Start, verified">Start, verified</button>
+      <button class="hero-action-btn" onclick="openAuth('register')" data-bn="যাচাই করে শুরু করুন" data-en="Start, verified">Start, verified</button>
       <button class="hero-action-btn ghost" onclick="document.getElementById('process').scrollIntoView({behavior:'smooth'})" data-bn="কীভাবে কাজ করে" data-en="How it works">How it works</button>
     </div>
   </div>
@@ -319,7 +319,7 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
   <div class="ctaband" id="cta">
     <h2 data-bn="বিশ্বাস দিয়ে শুরু হোক" data-en="Start with trust">Start with trust</h2>
     <p data-bn="কাকতালীয়ভাবে না, বিজ্ঞানসম্মতভাবে সম্পর্ক গড়ুন।" data-en="Build a relationship by science, not by chance.">Build a relationship by science, not by chance.</p>
-    <button onclick="location.href='onboarding.html'" data-bn="এখনই যোগ দিন" data-en="Join now">Join now</button>
+    <button onclick="openAuth('register')" data-bn="এখনই যোগ দিন" data-en="Join now">Join now</button>
   </div>
 
   <div class="foot">
@@ -384,7 +384,6 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
 })();
 </script>
 
-<!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay" onclick="closeBg(event)">
 <div class="auth-sheet" onclick="event.stopPropagation()">
   <div class="auth-handle"></div>
@@ -393,13 +392,12 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
     <div class="auth-tab" id="tabLogin" onclick="switchTab('login')" data-bn="লগইন" data-en="Login">Login</div>
   </div>
 
-  <!-- REGISTER PANEL -->
   <div id="fReg">
     <p class="auth-title" data-bn="নতুন অ্যাকাউন্ট তৈরি করুন" data-en="Create your account">Create your account</p>
-    <p class="auth-sub" data-bn="ফোন = আপনার User ID। ইমেইল ও পাসওয়ার্ড দিয়ে পরে লগইন করবেন।" data-en="Phone = your User ID. You'll login with email & password.">Phone = your User ID. You'll login with email & password.</p>
+    <p class="auth-sub" data-bn="ফোন = User ID। ইমেইল ও পাসওয়ার্ড দিয়ে পরে লগইন করবেন।" data-en="Phone = User ID. Login later with email & password.">Phone = User ID. Login later with email & password.</p>
     <div class="af"><label data-bn="পুরো নাম *" data-en="Full name *">Full name *</label>
-      <input id="rName" type="text" placeholder="আপনার নাম লিখুন"></div>
-    <div class="af"><label data-bn="ফোন নম্বর * (User ID)" data-en="Phone number * (User ID)">Phone number * (User ID)</label>
+      <input id="rName" type="text" placeholder="আপনার নাম"></div>
+    <div class="af"><label data-bn="ফোন নম্বর * (User ID)" data-en="Phone * (User ID)">Phone * (User ID)</label>
       <input id="rPhone" type="tel" placeholder="+8801XXXXXXXXX"></div>
     <div class="af"><label data-bn="বয়স *" data-en="Age *">Age *</label>
       <input id="rAge" type="number" min="18" max="70" placeholder="18–70"></div>
@@ -408,203 +406,158 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
         <div class="gender-opt" id="gM" onclick="selG('Male')" data-bn="পুরুষ" data-en="Male">Male</div>
         <div class="gender-opt" id="gF" onclick="selG('Female')" data-bn="নারী" data-en="Female">Female</div>
       </div></div>
-    <div class="af"><label data-bn="ইমেইল * (লগইন করতে ব্যবহার হবে)" data-en="Email * (used to login)">Email * (used to login)</label>
+    <div class="af"><label data-bn="ইমেইল * (লগইন ID)" data-en="Email * (Login ID)">Email * (Login ID)</label>
       <input id="rEmail" type="email" placeholder="you@example.com"></div>
-    <div class="af"><label data-bn="পাসওয়ার্ড * (কমপক্ষে ৮ অক্ষর)" data-en="Password * (min 8 chars)">Password * (min 8 chars)</label>
+    <div class="af"><label data-bn="পাসওয়ার্ড * (৮+ অক্ষর)" data-en="Password * (8+ chars)">Password * (8+ chars)</label>
       <div class="pw-row"><input id="rPw" type="password" placeholder="••••••••">
-      <button class="pw-eye" onclick="tpw('rPw',this)" type="button">দেখুন</button></div></div>
+        <button class="pw-eye" onclick="tpw('rPw',this)" type="button">দেখুন</button></div></div>
     <div class="af"><label data-bn="পাসওয়ার্ড নিশ্চিত করুন *" data-en="Confirm password *">Confirm password *</label>
       <div class="pw-row"><input id="rPw2" type="password" placeholder="••••••••">
-      <button class="pw-eye" onclick="tpw('rPw2',this)" type="button">দেখুন</button></div></div>
+        <button class="pw-eye" onclick="tpw('rPw2',this)" type="button">দেখুন</button></div></div>
     <p class="auth-msg" id="rMsg"></p>
     <button class="auth-btn" id="rBtn" onclick="doRegister()" data-bn="অ্যাকাউন্ট তৈরি করুন" data-en="Create account">Create account</button>
     <p class="auth-switch"><span data-bn="আগেই অ্যাকাউন্ট আছে?" data-en="Already have an account?">Already have an account?</span>
-      <b onclick="switchTab('login')" data-bn="লগইন করুন" data-en="Login here">Login here</b></p>
+      <b onclick="switchTab('login')" data-bn="লগইন করুন" data-en="Login">Login</b></p>
   </div>
 
-  <!-- LOGIN PANEL -->
   <div id="fLogin" style="display:none">
     <p class="auth-title" data-bn="আবার স্বাগতম!" data-en="Welcome back!">Welcome back!</p>
-    <p class="auth-sub" data-bn="ইমেইল বা ফোন নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন" data-en="Login with your email or phone and password">Login with your email or phone and password</p>
-    <div class="af"><label data-bn="ইমেইল অথবা ফোন নম্বর" data-en="Email or phone number">Email or phone number</label>
+    <p class="auth-sub" data-bn="ইমেইল বা ফোন ও পাসওয়ার্ড দিয়ে লগইন করুন" data-en="Login with email or phone and password">Login with email or phone and password</p>
+    <div class="af"><label data-bn="ইমেইল অথবা ফোন" data-en="Email or phone">Email or phone</label>
       <input id="lId" type="text" placeholder="you@example.com বা +8801XXXXXXXXX"
         onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="af"><label data-bn="পাসওয়ার্ড" data-en="Password">Password</label>
       <div class="pw-row"><input id="lPw" type="password" placeholder="••••••••"
         onkeydown="if(event.key==='Enter')doLogin()">
-      <button class="pw-eye" onclick="tpw('lPw',this)" type="button">দেখুন</button></div></div>
+        <button class="pw-eye" onclick="tpw('lPw',this)" type="button">দেখুন</button></div></div>
     <p class="auth-msg" id="lMsg"></p>
     <button class="auth-btn" id="lBtn" onclick="doLogin()" data-bn="লগইন করুন" data-en="Login">Login</button>
     <p class="auth-switch"><b onclick="doForgot()" data-bn="পাসওয়ার্ড ভুলে গেছেন?" data-en="Forgot password?">Forgot password?</b></p>
-    <p class="auth-switch"><span data-bn="নতুন ব্যবহারকারী?" data-en="New user?">New user?</span>
+    <p class="auth-switch"><span data-bn="নতুন?" data-en="New user?">New user?</span>
       <b onclick="switchTab('register')" data-bn="রেজিস্টার করুন" data-en="Register">Register</b></p>
   </div>
 </div>
 </div>
 
 <script>
-// ── Supabase client ──
 var _SB = supabase.createClient(
   'https://hjbvmzashhzazlpgjhof.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqYnZtemFzaGh6YXpscGdqaG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTQ4OTYsImV4cCI6MjA5OTU5MDg5Nn0.vneEXDY2P2MOnFdFJtPAms_qGq_OGU3xQeHInD5k75E'
 );
 var _gender = '';
 
-// ── Modal controls ──
-function openAuth(tab){
-  document.getElementById('authOverlay').classList.add('open');
-  switchTab(tab || 'register');
-}
+function openAuth(tab){ document.getElementById('authOverlay').classList.add('open'); switchTab(tab||'register'); }
 function closeAuth(){ document.getElementById('authOverlay').classList.remove('open'); }
 function closeBg(e){ if(e.target.id==='authOverlay') closeAuth(); }
 function switchTab(t){
-  var r = t==='register';
-  document.getElementById('tabReg').classList.toggle('on', r);
-  document.getElementById('tabLogin').classList.toggle('on', !r);
-  document.getElementById('fReg').style.display = r ? '' : 'none';
-  document.getElementById('fLogin').style.display = r ? 'none' : '';
+  var r=t==='register';
+  document.getElementById('tabReg').classList.toggle('on',r);
+  document.getElementById('tabLogin').classList.toggle('on',!r);
+  document.getElementById('fReg').style.display=r?'':'none';
+  document.getElementById('fLogin').style.display=r?'none':'';
 }
-function tpw(id, btn){
-  var el = document.getElementById(id);
-  var show = el.type === 'password';
-  el.type = show ? 'text' : 'password';
-  btn.textContent = show ? 'লুকান' : 'দেখুন';
+function tpw(id,btn){
+  var el=document.getElementById(id);
+  var show=el.type==='password';
+  el.type=show?'text':'password';
+  btn.textContent=show?'লুকান':'দেখুন';
 }
 function selG(v){
-  _gender = v;
-  document.getElementById('gM').classList.toggle('on', v==='Male');
-  document.getElementById('gF').classList.toggle('on', v==='Female');
+  _gender=v;
+  document.getElementById('gM').classList.toggle('on',v==='Male');
+  document.getElementById('gF').classList.toggle('on',v==='Female');
 }
-function msg(id, text, err){
-  var el = document.getElementById(id);
-  el.textContent = text;
-  el.style.color = err ? '#C2570A' : '#00A651';
+function setMsg(id,text,err){
+  var el=document.getElementById(id);
+  el.textContent=text;
+  el.style.color=err?'#C2570A':'#00A651';
 }
 
-// ── Register → Supabase Auth + profiles save ──
 async function doRegister(){
-  var lang = document.documentElement.getAttribute('lang') || 'en';
-  var name  = document.getElementById('rName').value.trim();
-  var phone = document.getElementById('rPhone').value.trim();
-  var age   = parseInt(document.getElementById('rAge').value) || 0;
-  var email = document.getElementById('rEmail').value.trim();
-  var pw    = document.getElementById('rPw').value;
-  var pw2   = document.getElementById('rPw2').value;
+  var lang=document.documentElement.getAttribute('lang')||'en';
+  var name=document.getElementById('rName').value.trim();
+  var phone=document.getElementById('rPhone').value.trim();
+  var age=parseInt(document.getElementById('rAge').value)||0;
+  var email=document.getElementById('rEmail').value.trim();
+  var pw=document.getElementById('rPw').value;
+  var pw2=document.getElementById('rPw2').value;
 
-  if(!name)  { msg('rMsg', lang==='bn'?'নাম দিন':'Enter your name', true); return; }
-  if(!phone) { msg('rMsg', lang==='bn'?'ফোন নম্বর দিন':'Enter phone number', true); return; }
-  if(age<18||age>70){ msg('rMsg', lang==='bn'?'বয়স ১৮–৭০ হতে হবে':'Age must be 18–70', true); return; }
-  if(!_gender){ msg('rMsg', lang==='bn'?'লিঙ্গ বেছে নিন':'Select gender', true); return; }
-  if(!email) { msg('rMsg', lang==='bn'?'ইমেইল দিন':'Enter email', true); return; }
-  if(pw.length<8){ msg('rMsg', lang==='bn'?'পাসওয়ার্ড কমপক্ষে ৮ অক্ষর':'Min 8 characters', true); return; }
-  if(pw!==pw2){ msg('rMsg', lang==='bn'?'পাসওয়ার্ড মিলছে না':'Passwords do not match', true); return; }
+  if(!name){setMsg('rMsg',lang==='bn'?'নাম দিন':'Enter name',true);return;}
+  if(!phone){setMsg('rMsg',lang==='bn'?'ফোন দিন':'Enter phone',true);return;}
+  if(age<18||age>70){setMsg('rMsg',lang==='bn'?'বয়স ১৮–৭০':'Age 18–70',true);return;}
+  if(!_gender){setMsg('rMsg',lang==='bn'?'লিঙ্গ বেছে নিন':'Select gender',true);return;}
+  if(!email){setMsg('rMsg',lang==='bn'?'ইমেইল দিন':'Enter email',true);return;}
+  if(pw.length<8){setMsg('rMsg',lang==='bn'?'৮+ অক্ষর':'Min 8 chars',true);return;}
+  if(pw!==pw2){setMsg('rMsg',lang==='bn'?'পাসওয়ার্ড মিলছে না':'Passwords do not match',true);return;}
 
-  var btn = document.getElementById('rBtn');
-  btn.disabled = true;
-  msg('rMsg', lang==='bn'?'অ্যাকাউন্ট তৈরি হচ্ছে...':'Creating account...', false);
+  var btn=document.getElementById('rBtn');
+  btn.disabled=true;
+  setMsg('rMsg',lang==='bn'?'তৈরি হচ্ছে...':'Creating...',false);
 
-  try {
-    // Supabase Auth signup
-    var r = await _SB.auth.signUp({ email: email, password: pw });
-    if(r.error){ msg('rMsg', r.error.message, true); btn.disabled=false; return; }
-
-    var uid = r.data.user && r.data.user.id;
+  try{
+    var r=await _SB.auth.signUp({email:email,password:pw});
+    if(r.error){setMsg('rMsg',r.error.message,true);btn.disabled=false;return;}
+    var uid=r.data.user&&r.data.user.id;
     if(uid){
-      // profiles টেবিলে save
-      await _SB.from('profiles').upsert({
-        id: uid, name: name, phone: phone, email: email,
-        gender_hint: _gender, is_active: true
-      }, { onConflict: 'id' });
-
-      // metrics_answers-এ বয়স ও gender
+      await _SB.from('profiles').upsert({id:uid,name:name,phone:phone,email:email,gender_hint:_gender,is_active:true},{onConflict:'id'});
       await _SB.from('metrics_answers').upsert([
-        { user_id: uid, metric_id: 'm001', value: age },
-        { user_id: uid, metric_id: 'm002', value: _gender }
-      ], { onConflict: 'user_id,metric_id' });
-
-      sessionStorage.setItem('biye_uid', uid);
-      sessionStorage.setItem('biye_name', name);
+        {user_id:uid,metric_id:'m001',value:age},
+        {user_id:uid,metric_id:'m002',value:_gender}
+      ],{onConflict:'user_id,metric_id'});
+      sessionStorage.setItem('biye_uid',uid);
+      sessionStorage.setItem('biye_name',name);
     }
-
-    msg('rMsg', lang==='bn'?'✓ সফল! Onboarding-এ যাচ্ছেন...':'✓ Success! Redirecting...', false);
-    setTimeout(function(){ window.location.href = 'onboarding.html'; }, 800);
-  } catch(e) {
-    msg('rMsg', e.message || 'Error', true);
-    btn.disabled = false;
-  }
+    setMsg('rMsg',lang==='bn'?'✓ সফল! যাচ্ছেন...':'✓ Success!',false);
+    setTimeout(function(){window.location.href='onboarding.html';},800);
+  }catch(e){setMsg('rMsg',e.message||'Error',true);btn.disabled=false;}
 }
 
-// ── Login → retrieve from Supabase ──
 async function doLogin(){
-  var lang = document.documentElement.getAttribute('lang') || 'en';
-  var id = document.getElementById('lId').value.trim();
-  var pw = document.getElementById('lPw').value;
+  var lang=document.documentElement.getAttribute('lang')||'en';
+  var id=document.getElementById('lId').value.trim();
+  var pw=document.getElementById('lPw').value;
+  if(!id){setMsg('lMsg',lang==='bn'?'ইমেইল বা ফোন দিন':'Enter email or phone',true);return;}
+  if(!pw){setMsg('lMsg',lang==='bn'?'পাসওয়ার্ড দিন':'Enter password',true);return;}
 
-  if(!id){ msg('lMsg', lang==='bn'?'ইমেইল বা ফোন দিন':'Enter email or phone', true); return; }
-  if(!pw){ msg('lMsg', lang==='bn'?'পাসওয়ার্ড দিন':'Enter password', true); return; }
+  var btn=document.getElementById('lBtn');
+  btn.disabled=true;
+  setMsg('lMsg',lang==='bn'?'যাচাই হচ্ছে...':'Verifying...',false);
 
-  var btn = document.getElementById('lBtn');
-  btn.disabled = true;
-  msg('lMsg', lang==='bn'?'যাচাই হচ্ছে...':'Verifying...', false);
-
-  try {
-    var loginEmail = id;
-
-    // ফোন নম্বর দিলে profiles থেকে email খুঁজি
+  try{
+    var loginEmail=id;
     if(!id.includes('@')){
-      var phone = id.replace(/[^0-9]/g,'');
-      if(phone.startsWith('0'))    phone = '88' + phone;
-      else if(phone.startsWith('1')) phone = '880' + phone;
-
-      var pRes = await _SB.from('profiles').select('email').eq('phone', phone).single();
-      if(!pRes.data || !pRes.data.email){
-        msg('lMsg', lang==='bn'?'এই ফোনে কোনো অ্যাকাউন্ট নেই':'No account found for this phone', true);
-        btn.disabled = false; return;
-      }
-      loginEmail = pRes.data.email;
+      var ph=id.replace(/[^0-9]/g,'');
+      if(ph.startsWith('0'))ph='88'+ph;
+      else if(ph.startsWith('1'))ph='880'+ph;
+      var pR=await _SB.from('profiles').select('email').eq('phone',ph).single();
+      if(!pR.data||!pR.data.email){setMsg('lMsg',lang==='bn'?'এই নম্বরে অ্যাকাউন্ট নেই':'No account for this phone',true);btn.disabled=false;return;}
+      loginEmail=pR.data.email;
     }
-
-    // Supabase email+password login
-    var r = await _SB.auth.signInWithPassword({ email: loginEmail, password: pw });
-    if(r.error){
-      msg('lMsg', lang==='bn'?'ইমেইল বা পাসওয়ার্ড ভুল':'Wrong email or password', true);
-      btn.disabled = false; return;
-    }
-
-    msg('lMsg', lang==='bn'?'✓ লগইন সফল! Dashboard-এ যাচ্ছেন...':'✓ Logged in! Redirecting...', false);
-    setTimeout(function(){ window.location.href = 'dashboard.html'; }, 700);
-  } catch(e) {
-    msg('lMsg', e.message || 'Error', true);
-    btn.disabled = false;
-  }
+    var r=await _SB.auth.signInWithPassword({email:loginEmail,password:pw});
+    if(r.error){setMsg('lMsg',lang==='bn'?'ইমেইল বা পাসওয়ার্ড ভুল':'Wrong email or password',true);btn.disabled=false;return;}
+    setMsg('lMsg',lang==='bn'?'✓ লগইন সফল!':'✓ Logged in!',false);
+    setTimeout(function(){window.location.href='dashboard.html';},700);
+  }catch(e){setMsg('lMsg',e.message||'Error',true);btn.disabled=false;}
 }
 
-// ── Forgot password ──
 async function doForgot(){
-  var lang = document.documentElement.getAttribute('lang') || 'en';
-  var email = prompt(lang==='bn'?'আপনার ইমেইল ঠিকানা দিন:':'Enter your email address:');
-  if(!email) return;
-  var r = await _SB.auth.resetPasswordForEmail(email, { redirectTo: 'https://biye.ltd/index.html' });
-  alert(r.error ? r.error.message : (lang==='bn'?'রিসেট লিংক পাঠানো হয়েছে — ইনবক্স চেক করুন':'Reset link sent — check your inbox'));
+  var lang=document.documentElement.getAttribute('lang')||'en';
+  var email=prompt(lang==='bn'?'ইমেইল ঠিকানা দিন:':'Enter your email:');
+  if(!email)return;
+  var r=await _SB.auth.resetPasswordForEmail(email,{redirectTo:'https://biye.ltd/index.html'});
+  alert(r.error?r.error.message:(lang==='bn'?'রিসেট লিংক পাঠানো হয়েছে':'Reset link sent'));
 }
 
-// ── Session check on page load ──
-document.addEventListener('DOMContentLoaded', async function(){
-  try {
-    var s = await _SB.auth.getSession();
-    if(s.data && s.data.session && s.data.session.user){
-      var el = document.getElementById('topbarAuth');
-      if(el) el.innerHTML =
-        '<button class="tb-btn tb-login" onclick="window.location.href='dashboard.html'">Dashboard →</button>' +
-        '<button class="tb-btn tb-login" onclick="doLogout()" data-bn="লগআউট" data-en="Logout">Logout</button>';
+document.addEventListener('DOMContentLoaded',async function(){
+  try{
+    var s=await _SB.auth.getSession();
+    if(s.data&&s.data.session&&s.data.session.user){
+      var el=document.getElementById('topbarAuth');
+      if(el)el.innerHTML='<button class="tb-btn tb-login" onclick="location.href='dashboard.html'">Dashboard →</button><button class="tb-btn tb-login" onclick="doLogout()">Logout</button>';
     }
-  } catch(e){}
+  }catch(e){}
 });
-
-async function doLogout(){
-  await _SB.auth.signOut();
-  window.location.reload();
-}
+async function doLogout(){await _SB.auth.signOut();window.location.reload();}
 </script>
 
 </body>
