@@ -493,7 +493,10 @@ async function regS1(){
   document.getElementById('rb1').disabled=true;
   msg('rm1','অ্যাকাউন্ট তৈরি হচ্ছে...',false);
   try{
-    var r=await _SB.auth.signUp({email:email,password:pw});
+    // Phone number ke fake email হিসেবে ব্যবহার করি — Supabase confirmation email পাঠাবে না
+    var ph2 = phone.replace(/[^0-9]/g,'');
+    var fakeEmail = ph2 + '@biye.ltd';
+    var r=await _SB.auth.signUp({email:fakeEmail,password:pw});
     if(r.error){msg('rm1',r.error.message,true);document.getElementById('rb1').disabled=false;return;}
     _uid=r.data.user&&r.data.user.id;_ph=phone;_em=email;
     if(_uid){
@@ -554,12 +557,11 @@ async function doLogin(){
   try{
     var loginEmail=id;
     if(!id.includes('@')){
+      // ফোন দিলে fake email বানিয়ে login
       var ph=id.replace(/[^0-9]/g,'');
       if(ph.startsWith('0'))ph='88'+ph;
       else if(ph.startsWith('1'))ph='880'+ph;
-      var pR=await _SB.from('profiles').select('email').eq('phone',ph).single();
-      if(!pR.data||!pR.data.email){msg('lMsg','এই নম্বরে অ্যাকাউন্ট নেই',true);document.getElementById('lBtn').disabled=false;return;}
-      loginEmail=pR.data.email;
+      loginEmail=ph+'@biye.ltd';
     }
     var r=await _SB.auth.signInWithPassword({email:loginEmail,password:pw});
     if(r.error){msg('lMsg','ইমেইল বা পাসওয়ার্ড ভুল',true);document.getElementById('lBtn').disabled=false;return;}
