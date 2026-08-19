@@ -184,14 +184,14 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
 .auth-tab.on{background:#fff;color:#1A1A1A;box-shadow:0 2px 8px -2px rgba(20,20,20,.15)}
 .auth-title{font-size:1.05rem;font-weight:800;text-align:center;margin-bottom:.2rem}
 .auth-sub{font-size:.76rem;color:rgba(20,20,20,.5);text-align:center;margin-bottom:1rem;line-height:1.5}
-.af{margin-bottom:.72rem}
-.af label{font-size:.72rem;font-weight:600;color:rgba(20,20,20,.5);display:block;margin-bottom:.3rem}
+.af{margin-bottom:.72rem}.af label{font-size:.72rem;font-weight:600;color:rgba(20,20,20,.5);display:block;margin-bottom:.3rem}
 .af input{width:100%;padding:.75rem .9rem;border-radius:12px;border:1.5px solid rgba(20,20,20,.14);font-size:.88rem;outline:none;font-family:inherit;background:#fff;color:#1A1A1A}
 .af input:focus{border-color:#6A2DA8;box-shadow:0 0 0 3px rgba(106,45,168,.12)}
 .pw-row{position:relative}.pw-row input{padding-right:3.2rem}
 .pw-eye{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#6A2DA8;font-size:.7rem;font-weight:700;font-family:inherit}
 .auth-btn{width:100%;padding:.82rem;border-radius:14px;background:linear-gradient(120deg,#E2136E,#6A2DA8,#1565C0);color:#fff;font-size:.88rem;font-weight:700;border:2px solid #D4AF37;cursor:pointer;margin-top:.3rem;box-shadow:0 8px 18px -8px rgba(106,45,168,.5)}
 .auth-btn:disabled{opacity:.45;pointer-events:none}
+.auth-btn-ghost{width:100%;padding:.75rem;border-radius:14px;background:#fff;color:#6A2DA8;font-size:.85rem;font-weight:700;border:1.5px solid #6A2DA8;cursor:pointer;margin-top:.5rem;font-family:inherit}
 .auth-msg{font-size:.75rem;font-weight:600;text-align:center;margin:.45rem 0;min-height:1rem}
 .auth-switch{font-size:.75rem;color:rgba(20,20,20,.5);text-align:center;margin-top:.6rem}
 .auth-switch b{color:#6A2DA8;cursor:pointer;text-decoration:underline}
@@ -202,6 +202,14 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
 .tb-btn{font-size:.72rem;font-weight:700;padding:.38rem .78rem;border-radius:50px;cursor:pointer;border:1.5px solid transparent;font-family:inherit}
 .tb-login{background:#fff;border-color:rgba(20,20,20,.16);color:#1A1A1A}
 .tb-reg{background:linear-gradient(120deg,#E2136E,#6A2DA8);color:#fff;border-color:#D4AF37}
+.step-dot-row{display:flex;gap:.4rem;justify-content:center;margin-bottom:.9rem}
+.step-dot{width:8px;height:8px;border-radius:50%;background:rgba(20,20,20,.15);transition:all .3s}
+.step-dot.on{background:#6A2DA8;width:20px;border-radius:4px}
+.step-dot.done{background:#00A651}
+.otp-mini-row{display:flex;gap:.4rem;justify-content:center;margin:.7rem 0}
+.otp-mini{width:40px;height:48px;border-radius:10px;border:1.5px solid rgba(20,20,20,.14);text-align:center;font-size:1.2rem;font-weight:700;font-family:inherit;color:#1A1A1A;outline:none}
+.otp-mini:focus{border-color:#6A2DA8;box-shadow:0 0 0 3px rgba(106,45,168,.1)}
+.otp-mini.filled{border-color:#00A651}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -391,36 +399,68 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
     <div class="auth-tab on" id="tabReg" onclick="switchTab('register')">Register</div>
     <div class="auth-tab" id="tabLogin" onclick="switchTab('login')">Login</div>
   </div>
+
   <div id="fReg">
-    <p class="auth-title">নতুন অ্যাকাউন্ট তৈরি করুন</p>
-    <p class="auth-sub">ফোন = User ID। ইমেইল ও পাসওয়ার্ড দিয়ে পরে লগইন করবেন।</p>
-    <div class="af"><label>পুরো নাম *</label><input id="rName" type="text" placeholder="আপনার নাম"></div>
-    <div class="af"><label>ফোন নম্বর * (User ID)</label><input id="rPhone" type="tel" placeholder="+8801XXXXXXXXX"></div>
-    <div class="af"><label>বয়স *</label><input id="rAge" type="number" min="18" max="70" placeholder="18-70"></div>
-    <div class="af"><label>লিঙ্গ *</label>
-      <div class="gender-row">
-        <div class="gender-opt" id="gM" onclick="selG('Male')">পুরুষ / Male</div>
-        <div class="gender-opt" id="gF" onclick="selG('Female')">নারী / Female</div>
-      </div></div>
-    <div class="af"><label>ইমেইল * (লগইন ID)</label><input id="rEmail" type="email" placeholder="you@example.com"></div>
-    <div class="af"><label>পাসওয়ার্ড * (৮+ অক্ষর)</label>
-      <div class="pw-row"><input id="rPw" type="password" placeholder="••••••••">
-      <button class="pw-eye" onclick="tpw('rPw',this)" type="button">দেখুন</button></div></div>
-    <div class="af"><label>পাসওয়ার্ড নিশ্চিত করুন *</label>
-      <div class="pw-row"><input id="rPw2" type="password" placeholder="••••••••">
-      <button class="pw-eye" onclick="tpw('rPw2',this)" type="button">দেখুন</button></div></div>
-    <p class="auth-msg" id="rMsg"></p>
-    <button class="auth-btn" id="rBtn" onclick="doRegister()">অ্যাকাউন্ট তৈরি করুন</button>
-    <p class="auth-switch">আগেই অ্যাকাউন্ট আছে? <b onclick="switchTab('login')">লগইন করুন</b></p>
+    <!-- Step 1 -->
+    <div id="rs1">
+      <div class="step-dot-row"><div class="step-dot on"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+      <p class="auth-title">নতুন অ্যাকাউন্ট</p>
+      <p class="auth-sub">ধাপ ১/৩ — মৌলিক তথ্য ও পাসওয়ার্ড</p>
+      <div class="af"><label>পুরো নাম *</label><input id="rName" type="text" placeholder="আপনার নাম"></div>
+      <div class="af"><label>ফোন নম্বর * (User ID)</label><input id="rPhone" type="tel" placeholder="+8801XXXXXXXXX"></div>
+      <div class="af"><label>বয়স *</label><input id="rAge" type="number" min="18" max="70" placeholder="18-70"></div>
+      <div class="af"><label>লিঙ্গ *</label><div class="gender-row"><div class="gender-opt" id="gM" onclick="selG('Male')">পুরুষ</div><div class="gender-opt" id="gF" onclick="selG('Female')">নারী</div></div></div>
+      <div class="af"><label>ইমেইল * (লগইন ID)</label><input id="rEmail" type="email" placeholder="you@example.com"></div>
+      <div class="af"><label>পাসওয়ার্ড * (৮+ অক্ষর)</label><div class="pw-row"><input id="rPw" type="password" placeholder="••••••••"><button class="pw-eye" onclick="tpw('rPw',this)" type="button">দেখুন</button></div></div>
+      <div class="af"><label>পাসওয়ার্ড নিশ্চিত করুন *</label><div class="pw-row"><input id="rPw2" type="password" placeholder="••••••••"><button class="pw-eye" onclick="tpw('rPw2',this)" type="button">দেখুন</button></div></div>
+      <p class="auth-msg" id="rm1"></p>
+      <button class="auth-btn" id="rb1" onclick="regS1()">পরবর্তী — SMS OTP →</button>
+      <p class="auth-switch">আগেই অ্যাকাউন্ট আছে? <b onclick="switchTab('login')">লগইন করুন</b></p>
+    </div>
+
+    <!-- Step 2: SMS OTP -->
+    <div id="rs2" style="display:none">
+      <div class="step-dot-row"><div class="step-dot done"></div><div class="step-dot on"></div><div class="step-dot"></div></div>
+      <p class="auth-title">📱 SMS যাচাই</p>
+      <p class="auth-sub" id="smsHint">ধাপ ২/৩ — ফোনে কোড পাঠানো হয়েছে</p>
+      <div class="otp-mini-row" id="smsRow">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+      </div>
+      <p class="auth-msg" id="rm2"></p>
+      <button class="auth-btn" id="rb2" onclick="regS2()">কোড যাচাই করুন</button>
+      <button class="auth-btn-ghost" onclick="retrySms()">আবার SMS পাঠান</button>
+    </div>
+
+    <!-- Step 3: Email OTP -->
+    <div id="rs3" style="display:none">
+      <div class="step-dot-row"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot on"></div></div>
+      <p class="auth-title">✉️ ইমেইল যাচাই</p>
+      <p class="auth-sub" id="emailHint">ধাপ ৩/৩ — ইমেইলে কোড পাঠানো হয়েছে</p>
+      <div class="otp-mini-row" id="emailRow">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+        <input class="otp-mini" maxlength="1" inputmode="numeric">
+      </div>
+      <p class="auth-msg" id="rm3"></p>
+      <button class="auth-btn" id="rb3" onclick="regS3()">সম্পন্ন করুন</button>
+      <button class="auth-btn-ghost" onclick="retryEmail()">আবার ইমেইল পাঠান</button>
+    </div>
   </div>
+
+  <!-- LOGIN -->
   <div id="fLogin" style="display:none">
     <p class="auth-title">আবার স্বাগতম!</p>
     <p class="auth-sub">ইমেইল বা ফোন ও পাসওয়ার্ড দিয়ে লগইন করুন</p>
-    <div class="af"><label>ইমেইল অথবা ফোন</label>
-      <input id="lId" type="text" placeholder="you@example.com বা +8801XXXXXXXXX" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="af"><label>পাসওয়ার্ড</label>
-      <div class="pw-row"><input id="lPw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-      <button class="pw-eye" onclick="tpw('lPw',this)" type="button">দেখুন</button></div></div>
+    <div class="af"><label>ইমেইল অথবা ফোন</label><input id="lId" type="text" placeholder="you@example.com বা +8801XXXXXXXXX" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="af"><label>পাসওয়ার্ড</label><div class="pw-row"><input id="lPw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"><button class="pw-eye" onclick="tpw('lPw',this)" type="button">দেখুন</button></div></div>
     <p class="auth-msg" id="lMsg"></p>
     <button class="auth-btn" id="lBtn" onclick="doLogin()">লগইন করুন</button>
     <p class="auth-switch"><b onclick="doForgot()">পাসওয়ার্ড ভুলে গেছেন?</b></p>
@@ -434,8 +474,9 @@ var _SB = supabase.createClient(
   'https://hjbvmzashhzazlpgjhof.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqYnZtemFzaGh6YXpscGdqaG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTQ4OTYsImV4cCI6MjA5OTU5MDg5Nn0.vneEXDY2P2MOnFdFJtPAms_qGq_OGU3xQeHInD5k75E'
 );
-var _gender='';
-function openAuth(tab){document.getElementById('authOverlay').classList.add('open');switchTab(tab||'register');}
+var _g='', _uid=null, _ph='', _em='', _ec='';
+
+function openAuth(t){document.getElementById('authOverlay').classList.add('open');switchTab(t||'register');}
 function closeAuth(){document.getElementById('authOverlay').classList.remove('open');}
 function closeBg(e){if(e.target.id==='authOverlay')closeAuth();}
 function switchTab(t){
@@ -445,61 +486,125 @@ function switchTab(t){
   document.getElementById('fReg').style.display=r?'':'none';
   document.getElementById('fLogin').style.display=r?'none':'';
 }
-function tpw(id,btn){
-  var el=document.getElementById(id);
-  el.type=el.type==='password'?'text':'password';
-  btn.textContent=el.type==='text'?'লুকান':'দেখুন';
+function tpw(id,btn){var el=document.getElementById(id);el.type=el.type==='password'?'text':'password';btn.textContent=el.type==='text'?'লুকান':'দেখুন';}
+function selG(v){_g=v;document.getElementById('gM').classList.toggle('on',v==='Male');document.getElementById('gF').classList.toggle('on',v==='Female');}
+function msg(id,t,e){var el=document.getElementById(id);el.textContent=t;el.style.color=e?'#C2570A':'#00A651';}
+function otp(rowId){return Array.from(document.querySelectorAll('#'+rowId+' .otp-mini')).map(function(b){return b.value;}).join('');}
+function initOtp(rowId){
+  var boxes=document.querySelectorAll('#'+rowId+' .otp-mini');
+  boxes.forEach(function(b){b.value='';b.classList.remove('filled');});
+  boxes.forEach(function(box,i){
+    box.addEventListener('input',function(){
+      box.value=box.value.replace(/[^0-9]/g,'').slice(-1);
+      box.classList.toggle('filled',!!box.value);
+      if(box.value&&i<boxes.length-1)boxes[i+1].focus();
+    });
+    box.addEventListener('keydown',function(e){
+      if(e.key==='Backspace'&&!box.value&&i>0){boxes[i-1].focus();boxes[i-1].value='';boxes[i-1].classList.remove('filled');}
+    });
+  });
+  if(boxes.length)boxes[0].focus();
 }
-function selG(v){
-  _gender=v;
-  document.getElementById('gM').classList.toggle('on',v==='Male');
-  document.getElementById('gF').classList.toggle('on',v==='Female');
-}
-function setMsg(id,text,err){
-  var el=document.getElementById(id);
-  el.textContent=text;
-  el.style.color=err?'#C2570A':'#00A651';
-}
-async function doRegister(){
+
+async function regS1(){
   var name=document.getElementById('rName').value.trim();
   var phone=document.getElementById('rPhone').value.trim();
   var age=parseInt(document.getElementById('rAge').value)||0;
   var email=document.getElementById('rEmail').value.trim();
   var pw=document.getElementById('rPw').value;
   var pw2=document.getElementById('rPw2').value;
-  if(!name){setMsg('rMsg','নাম দিন',true);return;}
-  if(!phone){setMsg('rMsg','ফোন নম্বর দিন',true);return;}
-  if(age<18||age>70){setMsg('rMsg','বয়স ১৮–৭০ হতে হবে',true);return;}
-  if(!_gender){setMsg('rMsg','লিঙ্গ বেছে নিন',true);return;}
-  if(!email){setMsg('rMsg','ইমেইল দিন',true);return;}
-  if(pw.length<8){setMsg('rMsg','পাসওয়ার্ড কমপক্ষে ৮ অক্ষর',true);return;}
-  if(pw!==pw2){setMsg('rMsg','পাসওয়ার্ড মিলছে না',true);return;}
-  var btn=document.getElementById('rBtn');
-  btn.disabled=true;
-  setMsg('rMsg','অ্যাকাউন্ট তৈরি হচ্ছে...',false);
+  if(!name){msg('rm1','নাম দিন',true);return;}
+  if(!phone){msg('rm1','ফোন নম্বর দিন',true);return;}
+  if(age<18||age>70){msg('rm1','বয়স ১৮–৭০ হতে হবে',true);return;}
+  if(!_g){msg('rm1','লিঙ্গ বেছে নিন',true);return;}
+  if(!email){msg('rm1','ইমেইল দিন',true);return;}
+  if(pw.length<8){msg('rm1','পাসওয়ার্ড কমপক্ষে ৮ অক্ষর',true);return;}
+  if(pw!==pw2){msg('rm1','পাসওয়ার্ড মিলছে না',true);return;}
+  document.getElementById('rb1').disabled=true;
+  msg('rm1','অ্যাকাউন্ট তৈরি হচ্ছে...',false);
   try{
     var r=await _SB.auth.signUp({email:email,password:pw});
-    if(r.error){setMsg('rMsg',r.error.message,true);btn.disabled=false;return;}
-    var uid=r.data.user&&r.data.user.id;
-    if(uid){
-      await _SB.from('profiles').upsert({id:uid,name:name,phone:phone,email:email,gender_hint:_gender,is_active:true},{onConflict:'id'});
-      await _SB.from('metrics_answers').upsert([
-        {user_id:uid,metric_id:'m001',value:age},
-        {user_id:uid,metric_id:'m002',value:_gender}
-      ],{onConflict:'user_id,metric_id'});
+    if(r.error){msg('rm1',r.error.message,true);document.getElementById('rb1').disabled=false;return;}
+    _uid=r.data.user&&r.data.user.id;_ph=phone;_em=email;
+    if(_uid){
+      await _SB.from('profiles').upsert({id:_uid,name:name,phone:phone,email:email,gender_hint:_g,is_active:true},{onConflict:'id'});
+      await _SB.from('metrics_answers').upsert([{user_id:_uid,metric_id:'m001',value:age},{user_id:_uid,metric_id:'m002',value:_g}],{onConflict:'user_id,metric_id'});
     }
-    setMsg('rMsg','✓ সফল! Onboarding-এ যাচ্ছেন...',false);
-    setTimeout(function(){window.location.href='onboarding.html';},800);
-  }catch(e){setMsg('rMsg',e.message||'Error',true);btn.disabled=false;}
+    msg('rm1','SMS পাঠানো হচ্ছে...',false);
+    var sr=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send',phone:phone})});
+    var sd=await sr.json();
+    if(!sd.sent){msg('rm1','SMS পাঠাতে সমস্যা: '+(sd.error||''),true);document.getElementById('rb1').disabled=false;return;}
+    document.getElementById('rs1').style.display='none';
+    document.getElementById('rs2').style.display='block';
+    document.getElementById('smsHint').textContent='ধাপ ২/৩ — '+phone+'-এ কোড পাঠানো হয়েছে';
+    initOtp('smsRow');
+  }catch(e){msg('rm1',e.message||'Error',true);document.getElementById('rb1').disabled=false;}
 }
+
+async function regS2(){
+  var code=otp('smsRow');
+  if(code.length<6){msg('rm2','৬ সংখ্যার কোড দিন',true);return;}
+  document.getElementById('rb2').disabled=true;
+  msg('rm2','যাচাই হচ্ছে...',false);
+  try{
+    var r=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',phone:_ph,code:code})});
+    var d=await r.json();
+    if(!d.verified){msg('rm2',(d.error||'কোড ভুল'),true);document.getElementById('rb2').disabled=false;return;}
+    if(_uid)await _SB.from('profiles').update({kyc_level:1}).eq('id',_uid);
+    msg('rm2','ইমেইল পাঠানো হচ্ছে...',false);
+    _ec=String(Math.floor(100000+Math.random()*900000));
+    sessionStorage.setItem('biye_ec',_ec);
+    sessionStorage.setItem('biye_ec_exp',Date.now()+10*60*1000);
+    var html='<div style="font-family:sans-serif;padding:24px"><h2 style="color:#E2136E">BIYE যাচাই</h2><div style="font-size:2rem;font-weight:800;text-align:center;background:#f5f5f5;padding:16px;border-radius:12px;margin:12px 0">'+_ec+'</div><p style="color:#666;font-size:.85rem">১০ মিনিট বৈধ।</p></div>';
+    var er=await fetch('/.netlify/functions/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:_em,subject:'BIYE যাচাই কোড: '+_ec,html:html})});
+    var ed=await er.json();
+    if(!ed.sent){msg('rm2','ইমেইল পাঠাতে সমস্যা',true);document.getElementById('rb2').disabled=false;return;}
+    document.getElementById('rs2').style.display='none';
+    document.getElementById('rs3').style.display='block';
+    document.getElementById('emailHint').textContent='ধাপ ৩/৩ — '+_em+'-এ কোড পাঠানো হয়েছে';
+    initOtp('emailRow');
+    msg('rm3','✓ SMS যাচাই সফল!',false);
+  }catch(e){msg('rm2',e.message||'Error',true);document.getElementById('rb2').disabled=false;}
+}
+
+async function regS3(){
+  var code=otp('emailRow');
+  if(code.length<6){msg('rm3','৬ সংখ্যার কোড দিন',true);return;}
+  var stored=sessionStorage.getItem('biye_ec');
+  var exp=parseInt(sessionStorage.getItem('biye_ec_exp')||'0');
+  if(Date.now()>exp){msg('rm3','কোডের মেয়াদ শেষ — আবার পাঠান',true);return;}
+  if(code!==stored){msg('rm3','কোড ভুল',true);return;}
+  document.getElementById('rb3').disabled=true;
+  if(_uid){await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}}).catch(function(){});}
+  sessionStorage.removeItem('biye_ec');
+  msg('rm3','✓ সম্পূর্ণ যাচাই সফল! যাচ্ছেন...',false);
+  setTimeout(function(){window.location.href='onboarding.html';},800);
+}
+
+async function retrySms(){
+  msg('rm2','আবার পাঠানো হচ্ছে...',false);
+  var r=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send',phone:_ph})});
+  var d=await r.json();
+  msg('rm2',d.sent?'✓ নতুন SMS পাঠানো হয়েছে':'পাঠানো যায়নি: '+(d.error||''),!d.sent);
+}
+
+async function retryEmail(){
+  _ec=String(Math.floor(100000+Math.random()*900000));
+  sessionStorage.setItem('biye_ec',_ec);
+  sessionStorage.setItem('biye_ec_exp',Date.now()+10*60*1000);
+  var html='<div style="font-family:sans-serif;padding:24px"><h2 style="color:#E2136E">BIYE যাচাই</h2><div style="font-size:2rem;font-weight:800;text-align:center;background:#f5f5f5;padding:16px;border-radius:12px;margin:12px 0">'+_ec+'</div><p style="color:#666;font-size:.85rem">১০ মিনিট বৈধ।</p></div>';
+  var er=await fetch('/.netlify/functions/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:_em,subject:'BIYE যাচাই কোড: '+_ec,html:html})});
+  var ed=await er.json();
+  msg('rm3',ed.sent?'✓ নতুন ইমেইল পাঠানো হয়েছে':'পাঠানো যায়নি',!ed.sent);
+}
+
 async function doLogin(){
   var id=document.getElementById('lId').value.trim();
   var pw=document.getElementById('lPw').value;
-  if(!id){setMsg('lMsg','ইমেইল বা ফোন দিন',true);return;}
-  if(!pw){setMsg('lMsg','পাসওয়ার্ড দিন',true);return;}
-  var btn=document.getElementById('lBtn');
-  btn.disabled=true;
-  setMsg('lMsg','যাচাই হচ্ছে...',false);
+  if(!id){msg('lMsg','ইমেইল বা ফোন দিন',true);return;}
+  if(!pw){msg('lMsg','পাসওয়ার্ড দিন',true);return;}
+  document.getElementById('lBtn').disabled=true;
+  msg('lMsg','যাচাই হচ্ছে...',false);
   try{
     var loginEmail=id;
     if(!id.includes('@')){
@@ -507,27 +612,29 @@ async function doLogin(){
       if(ph.startsWith('0'))ph='88'+ph;
       else if(ph.startsWith('1'))ph='880'+ph;
       var pR=await _SB.from('profiles').select('email').eq('phone',ph).single();
-      if(!pR.data||!pR.data.email){setMsg('lMsg','এই নম্বরে অ্যাকাউন্ট নেই',true);btn.disabled=false;return;}
+      if(!pR.data||!pR.data.email){msg('lMsg','এই নম্বরে অ্যাকাউন্ট নেই',true);document.getElementById('lBtn').disabled=false;return;}
       loginEmail=pR.data.email;
     }
     var r=await _SB.auth.signInWithPassword({email:loginEmail,password:pw});
-    if(r.error){setMsg('lMsg','ইমেইল বা পাসওয়ার্ড ভুল',true);btn.disabled=false;return;}
-    setMsg('lMsg','✓ লগইন সফল!',false);
+    if(r.error){msg('lMsg','ইমেইল বা পাসওয়ার্ড ভুল',true);document.getElementById('lBtn').disabled=false;return;}
+    msg('lMsg','✓ লগইন সফল!',false);
     setTimeout(function(){window.location.href='dashboard.html';},700);
-  }catch(e){setMsg('lMsg',e.message||'Error',true);btn.disabled=false;}
+  }catch(e){msg('lMsg',e.message||'Error',true);document.getElementById('lBtn').disabled=false;}
 }
+
 async function doForgot(){
   var email=prompt('আপনার ইমেইল ঠিকানা দিন:');
   if(!email)return;
   var r=await _SB.auth.resetPasswordForEmail(email,{redirectTo:'https://biye.ltd/index.html'});
   alert(r.error?r.error.message:'রিসেট লিংক পাঠানো হয়েছে — ইনবক্স চেক করুন');
 }
+
 document.addEventListener('DOMContentLoaded',async function(){
   try{
     var s=await _SB.auth.getSession();
     if(s.data&&s.data.session&&s.data.session.user){
       var el=document.getElementById('topbarAuth');
-      if(el){el.innerHTML='<button class="tb-btn tb-login" onclick="location.href=\'dashboard.html\'">Dashboard →</button><button class="tb-btn tb-login" onclick="doLogout()">Logout</button>';}
+      if(el)el.innerHTML='<button class="tb-btn tb-login" onclick="location.href=\'dashboard.html\'">Dashboard →</button><button class="tb-btn tb-login" onclick="doLogout()">Logout</button>';
     }
   }catch(e){}
 });
