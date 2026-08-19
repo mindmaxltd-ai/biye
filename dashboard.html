@@ -199,6 +199,7 @@ button{font-family:inherit}
 <script src="metrics-config.js"></script>
 <script src="mock-data.js"></script>
 <script src="scoring.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="supabase-client.js"></script>
 <script>
 var KYC_COLORS = ['pink','pink-dark','purple','blue','teal','green','gold'];
@@ -321,5 +322,44 @@ async function loadDashboard(){
   });
 })();
 </script>
+
+<script>
+(async function(){
+  var SUPA_URL  = 'https://hjbvmzashhzazlpgjhof.supabase.co';
+  var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqYnZtemFzaGh6YXpscGdqaG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTQ4OTYsImV4cCI6MjA5OTU5MDg5Nn0.vneEXDY2P2MOnFdFJtPAms_qGq_OGU3xQeHInD5k75E';
+  var _sb = supabase.createClient(SUPA_URL, SUPA_ANON);
+
+  try {
+    var sess = await _sb.auth.getSession();
+    var user = sess.data && sess.data.session && sess.data.session.user;
+    if(!user){ return; }
+
+    var prof = await _sb.from('profiles').select('name,phone,email,kyc_level,membership_tier,mis_avg').eq('id', user.id).single();
+    var p = prof.data || {};
+
+    // নাম
+    var nameEl = document.querySelector('.prof-name, [data-dash="name"]');
+    if(nameEl && p.name) nameEl.textContent = p.name;
+
+    // Welcome text
+    var welcomeEl = document.querySelector('.dash-welcome, h2');
+    if(welcomeEl && p.name) welcomeEl.textContent = 'স্বাগতম, ' + p.name + '!';
+
+    // User ID chip
+    var idEl = document.querySelector('.user-id-chip, [data-dash="uid"]');
+    if(idEl) idEl.textContent = 'ID: ' + user.id.slice(0,8).toUpperCase();
+
+    // KYC level
+    var kycEl = document.querySelector('[data-dash="kyc"]');
+    if(kycEl) kycEl.textContent = (p.kyc_level||0) + '/7';
+
+    // Membership
+    var tierEl = document.querySelector('[data-dash="tier"]');
+    if(tierEl) tierEl.textContent = p.membership_tier || 'Free';
+
+  } catch(e){ console.warn('dashboard load error', e); }
+})();
+</script>
+
 </body>
 </html>
