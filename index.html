@@ -535,8 +535,8 @@ async function regS2(){
     if(_uid){
       try{await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}});}catch(e){}
     }
-    msg('rm2','✓ SMS যাচাই সফল! যাচ্ছেন...',false);
-    setTimeout(function(){window.location.href='onboarding.html';},800);
+    msg('rm2','✓ রেজিস্ট্রেশন সম্পন্ন! Dashboard-এ যাচ্ছেন...',false);
+    setTimeout(function(){window.location.href='dashboard.html';},800);
   }catch(e){msg('rm2',e.message||'Error',true);document.getElementById('rb2').disabled=false;}
 }
 
