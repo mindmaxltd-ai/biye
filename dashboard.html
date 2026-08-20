@@ -353,21 +353,18 @@ async function loadDashboard(){
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqYnZtemFzaGh6YXpscGdqaG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTQ4OTYsImV4cCI6MjA5OTU5MDg5Nn0.vneEXDY2P2MOnFdFJtPAms_qGq_OGU3xQeHInD5k75E'
   );
 
-  // Session check
-  var sess = await _SB.auth.getSession();
-  var user = sess.data && sess.data.session && sess.data.session.user;
-  if(!user){
-    // Not logged in — show demo mode
-    document.getElementById('demoBanner') && (document.getElementById('demoBanner').style.display='flex');
-    return;
-  }
+  // Session from localStorage
+  var sessRaw = localStorage.getItem('biye_session');
+  if(!sessRaw){ document.getElementById('demoBanner')&&(document.getElementById('demoBanner').style.display='flex'); return; }
+  var sess; try{ sess=JSON.parse(sessRaw); }catch(e){ return; }
+  if(!sess||!sess.uid){ document.getElementById('demoBanner')&&(document.getElementById('demoBanner').style.display='flex'); return; }
 
   // Load profile from Supabase
   var pr = await _SB.from('profiles')
     .select('name,phone,email,kyc_level,membership_tier,mis_avg,gender_hint')
-    .eq('id', user.id).single();
+    .eq('id', sess.uid).single();
   var p = pr.data || {};
-  var name = p.name || user.email || 'BIYE User';
+  var name = p.name || sess.email || 'BIYE User';
 
   // Update greeting
   var greet = document.getElementById('greetName');
@@ -398,7 +395,7 @@ async function loadDashboard(){
 
   // User ID chip
   var uidEl = document.getElementById('userIdChip');
-  if(uidEl) uidEl.textContent = 'ID: ' + user.id.slice(0,8).toUpperCase();
+  if(uidEl) uidEl.textContent = 'ID: ' + sess.uid.slice(0,8).toUpperCase();
 
   // KYC ladder dots
   for(var i=1;i<=7;i++){
@@ -432,10 +429,7 @@ async function loadDashboard(){
   }
 
   // Logout button
-  window.doLogout = async function(){
-    await _SB.auth.signOut();
-    window.location.href='index.html';
-  };
+  window.doLogout = function(){ localStorage.removeItem('biye_session'); window.location.href='index.html'; };
 })();
 </script>
 
@@ -596,14 +590,8 @@ function closeKyc(e){ if(e.target.id==='kycOverlay') closeKycOverlay(); }
 document.addEventListener('DOMContentLoaded', function(){
   // Get uid from session
   if(_KSB){
-    _KSB.auth.getSession().then(function(s){
-      if(s.data&&s.data.session&&s.data.session.user){
-        _kycUid = s.data.session.user.id;
-        _KSB.from('profiles').select('kyc_level').eq('id',_kycUid).single().then(function(r){
-          if(r.data) _kycLevel = r.data.kyc_level||0;
-        });
-      }
-    });
+    var _kSess=localStorage.getItem('biye_session'); if(_kSess){ try{ var _kS=JSON.parse(_kSess); _kycUid=_kS.uid; 
+        _KSB.from('profiles').select('kyc_level').eq('id',_kycUid).single().then(function(r){ if(r.data)_kycLevel=r.data.kyc_level||0; }); }catch(e){} }
   }
 
   // Re-render kyc grid with click handlers
