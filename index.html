@@ -498,6 +498,12 @@ function initOtp(rowId){
   if(boxes.length)boxes[0].focus();
 }
 
+
+async function sha256(str){
+  var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+}
+
 async function regS1(){
   var name=document.getElementById('rName').value.trim();
   var phone=document.getElementById('rPhone').value.trim();
@@ -513,27 +519,48 @@ async function regS1(){
   if(pw.length<8){msg('rm1','পাসওয়ার্ড কমপক্ষে ৮ অক্ষর',true);return;}
   if(pw!==pw2){msg('rm1','পাসওয়ার্ড মিলছে না',true);return;}
   document.getElementById('rb1').disabled=true;
-  msg('rm1','অ্যাকাউন্ট তৈরি হচ্ছে...',false);
-  try{
-    // Phone number ke fake email হিসেবে ব্যবহার করি — Supabase confirmation email পাঠাবে না
-    var ph2 = phone.replace(/[^0-9]/g,'');
-    var fakeEmail = ph2 + '@biye.ltd';
-    var r=await _SB.auth.signUp({email:fakeEmail,password:pw,options:{emailRedirectTo:null,data:{phone:phone,name:name}}});
-    if(r.error){msg('rm1',r.error.message,true);document.getElementById('rb1').disabled=false;return;}
-    _uid=r.data.user&&r.data.user.id;_ph=phone;_em=email;
-    if(_uid){
-      await _SB.from('profiles').upsert({id:_uid,name:name,phone:phone,email:email,gender_hint:_g,is_active:true},{onConflict:'id'});
-      await _SB.from('metrics_answers').upsert([{user_id:_uid,metric_id:'m001',value:age},{user_id:_uid,metric_id:'m002',value:_g}],{onConflict:'user_id,metric_id'});
-    }
-    msg('rm1','SMS পাঠানো হচ্ছে...',false);
-    var sr=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send',phone:phone})});
-    var sd=await sr.json();
-    if(!sd.sent){msg('rm1','SMS পাঠাতে সমস্যা: '+(sd.error||''),true);document.getElementById('rb1').disabled=false;return;}
-    document.getElementById('rs1').style.display='none';
-    document.getElementById('rs2').style.display='block';
-    document.getElementById('smsHint').textContent='ধাপ ২/৩ — '+phone+'-এ কোড পাঠানো হয়েছে';
-    initOtp('smsRow');
-  }catch(e){msg('rm1',e.message||'Error',true);document.getElementById('rb1').disabled=false;}
+  msg('rm1','চেক করা হচ্ছে...',false);
+
+  // Check if phone already exists
+  var chk=await _SB.from('profiles').select('id').eq('phone',phone).maybeSingle();
+  if(chk.data){msg('rm1','এই ফোন নম্বরে আগেই অ্যাকাউন্ট আছে',true);document.getElementById('rb1').disabled=false;return;}
+
+  // Simple password hash (SHA-256 via SubtleCrypto)
+  var pwHash = await sha256(pw);
+
+  // Generate UUID
+  var uid = crypto.randomUUID ? crypto.randomUUID() : 'u-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+  _uid=uid; _ph=phone; _em=email;
+
+  // Save to profiles directly — no Supabase Auth, no email sent
+  var ins=await _SB.from('profiles').insert({
+    id: uid,
+    name: name,
+    phone: phone,
+    email: email,
+    gender_hint: _g,
+    is_active: true,
+    kyc_level: 0
+  });
+  if(ins.error){msg('rm1',ins.error.message,true);document.getElementById('rb1').disabled=false;return;}
+
+  // Save password hash in metrics_answers (m_pw field)
+  await _SB.from('metrics_answers').upsert([
+    {user_id:uid,metric_id:'m001',value:age},
+    {user_id:uid,metric_id:'m002',value:_g},
+    {user_id:uid,metric_id:'m_pw',value:pwHash}
+  ],{onConflict:'user_id,metric_id'});
+
+  // Send SMS OTP
+  msg('rm1','SMS পাঠানো হচ্ছে...',false);
+  var sr=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send',phone:phone})});
+  var sd=await sr.json();
+  if(!sd.sent){msg('rm1','SMS পাঠাতে সমস্যা: '+(sd.error||''),true);document.getElementById('rb1').disabled=false;return;}
+
+  document.getElementById('rs1').style.display='none';
+  document.getElementById('rs2').style.display='block';
+  document.getElementById('smsHint').textContent='ধাপ ২/২ — '+phone+'-এ কোড পাঠানো হয়েছে';
+  initOtp('smsRow');
 }
 
 async function regS2(){
@@ -545,8 +572,16 @@ async function regS2(){
     var r=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',phone:_ph,code:code})});
     var d=await r.json();
     if(!d.verified){msg('rm2',(d.error||'কোড ভুল'),true);document.getElementById('rb2').disabled=false;return;}
-    if(_uid)await _SB.from('profiles').update({kyc_level:1}).eq('id',_uid);
-    msg('rm2','ইমেইল পাঠানো হচ্ছে...',false);
+    // SMS verified — save and redirect
+        // Update KYC level 1
+    await _SB.from('profiles').update({kyc_level:1}).eq('id',_uid);
+    // Log consent
+    try{await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}});}catch(e){}
+    // Store session in localStorage
+    localStorage.setItem('biye_session', JSON.stringify({uid:_uid,phone:_ph,email:_em,name:document.getElementById('rName').value.trim()}));
+    msg('rm2','✓ রেজিস্ট্রেশন সম্পন্ন! Dashboard-এ যাচ্ছেন...',false);
+    setTimeout(function(){window.location.href='dashboard.html';},800);
+    return;
     _ec=String(Math.floor(100000+Math.random()*900000));
     sessionStorage.setItem('biye_ec',_ec);
     sessionStorage.setItem('biye_ec_exp',Date.now()+10*60*1000);
@@ -572,26 +607,32 @@ async function retrySms(){
 async function doLogin(){
   var id=document.getElementById('lId').value.trim();
   var pw=document.getElementById('lPw').value;
-  if(!id){msg('lMsg','ইমেইল বা ফোন দিন',true);return;}
+  if(!id){msg('lMsg','ফোন নম্বর দিন',true);return;}
   if(!pw){msg('lMsg','পাসওয়ার্ড দিন',true);return;}
   document.getElementById('lBtn').disabled=true;
   msg('lMsg','যাচাই হচ্ছে...',false);
   try{
-    var loginEmail=id;
-    if(!id.includes('@')){
-      // ফোন দিলে fake email বানিয়ে login
-      var ph=id.replace(/[^0-9]/g,'');
-      if(ph.startsWith('0'))ph='88'+ph;
-      else if(ph.startsWith('1'))ph='880'+ph;
-      loginEmail=ph+'@biye.ltd';
-    }
-    var r=await _SB.auth.signInWithPassword({email:loginEmail,password:pw});
-    if(r.error){msg('lMsg','ইমেইল বা পাসওয়ার্ড ভুল',true);document.getElementById('lBtn').disabled=false;return;}
+    // Normalize phone
+    var ph=id.replace(/[^0-9+]/g,'');
+    if(ph.startsWith('0'))ph='+88'+ph;
+    else if(ph.startsWith('1'))ph='+880'+ph;
+    else if(ph.startsWith('880'))ph='+'+ph;
+
+    // Get profile by phone
+    var pR=await _SB.from('profiles').select('id,name,email,kyc_level').eq('phone',ph).maybeSingle();
+    if(!pR.data){msg('lMsg','এই নম্বরে কোনো অ্যাকাউন্ট নেই',true);document.getElementById('lBtn').disabled=false;return;}
+
+    // Check password hash
+    var pwHash=await sha256(pw);
+    var pwR=await _SB.from('metrics_answers').select('value').eq('user_id',pR.data.id).eq('metric_id','m_pw').maybeSingle();
+    if(!pwR.data||pwR.data.value!==pwHash){msg('lMsg','পাসওয়ার্ড ভুল',true);document.getElementById('lBtn').disabled=false;return;}
+
+    // Store session
+    localStorage.setItem('biye_session',JSON.stringify({uid:pR.data.id,phone:ph,email:pR.data.email,name:pR.data.name}));
     msg('lMsg','✓ লগইন সফল!',false);
     setTimeout(function(){window.location.href='dashboard.html';},700);
   }catch(e){msg('lMsg',e.message||'Error',true);document.getElementById('lBtn').disabled=false;}
 }
-
 async function doForgot(){
   var email=prompt('আপনার ইমেইল ঠিকানা দিন:');
   if(!email)return;
@@ -599,16 +640,19 @@ async function doForgot(){
   alert(r.error?r.error.message:'রিসেট লিংক পাঠানো হয়েছে — ইনবক্স চেক করুন');
 }
 
-document.addEventListener('DOMContentLoaded',async function(){
-  try{
-    var s=await _SB.auth.getSession();
-    if(s.data&&s.data.session&&s.data.session.user){
-      var el=document.getElementById('topbarAuth');
-      if(el)el.innerHTML='<button class="tb-btn tb-login" onclick="location.href=\'dashboard.html\'">Dashboard →</button><button class="tb-btn tb-login" onclick="doLogout()">Logout</button>';
-    }
-  }catch(e){}
+document.addEventListener('DOMContentLoaded',function(){
+  var sess=localStorage.getItem('biye_session');
+  if(sess){
+    try{
+      var s=JSON.parse(sess);
+      if(s&&s.uid){
+        var el=document.getElementById('topbarAuth');
+        if(el)el.innerHTML='<button class="tb-btn tb-login" onclick="location.href=\'dashboard.html\'">Dashboard →</button><button class="tb-btn tb-login" onclick="doLogout()">Logout</button>';
+      }
+    }catch(e){}
+  }
 });
-async function doLogout(){await _SB.auth.signOut();window.location.reload();}
+function doLogout(){localStorage.removeItem('biye_session');window.location.reload();}
 </script>
 
 </body>
