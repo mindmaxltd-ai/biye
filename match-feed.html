@@ -86,6 +86,10 @@ button{font-family:inherit}
   <button class="langpill" id="langPill">বাং</button>
 </div>
 
+<div id="previewBanner" style="display:none;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);border-radius:12px;padding:.7rem 1rem;margin:0 1rem .8rem;font-size:.78rem;color:var(--ink-soft)">
+  ⚠️ <span data-bn="এখনো আপনার নিজের ম্যাচ তৈরি হয়নি — নমুনা ম্যাচ দেখানো হচ্ছে। প্রশ্নমালা সম্পূর্ণ করলে real ম্যাচ আসবে।" data-en="Your real matches haven't been computed yet — showing sample matches. Complete the questionnaire to get real matches.">Your real matches haven't been computed yet — showing sample matches. Complete the questionnaire to get real matches.</span>
+</div>
+
 <div class="summary-bar">
   <p class="summary-title" id="summaryTitle">—</p>
   <p class="summary-sub" id="summarySub">—</p>
@@ -105,12 +109,15 @@ button{font-family:inherit}
   <button class="tab-item" onclick="location.href='dashboard.html'"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.5-4 5-5 7-5s5.5 1 7 5"/></svg><span data-bn="প্রোফাইল" data-en="Profile">Profile</span></button>
 </nav>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="biye-core.js"></script>
 <script src="metrics-config.js"></script>
 <script src="mock-data.js"></script>
 <script src="scoring.js"></script>
 <script>
 var lang = 'en';
 var ranked = [];
+var usingRealData = false;
 var currentFilter = 'all';
 var showExcluded = false;
 
@@ -215,11 +222,43 @@ function renderExcluded(allResults){
 
 var allResults = [];
 
-function computeMatches(){
+// ── আসল Supabase ম্যাচ (analyze.js সার্ভার-সাইড লেখে matches টেবিলে) ──
+async function computeMatchesReal(uid){
+  var realMatches = await BIYE.db.getMatches(uid);
+  if(!realMatches.length) return false;
+
+  allResults = realMatches.map(function(m){
+    return {
+      passed: m.rulePass !== false,
+      profile: { id:m.id, name:m.name, age:m.age||0, city:m.city||'', verified:m.verified },
+      score: m.score,
+      band: BiyeScoring.scoreBand(m.score),
+      breakdown: m.breakdown || [],
+      ruleFailures: []
+    };
+  });
+  ranked = allResults.filter(function(r){ return r.passed; });
+  usingRealData = true;
+  return true;
+}
+
+// ── এখনো কোনো real ম্যাচ না থাকলে (analyze.js এখনো চলেনি) preview হিসেবে mock data দেখাই ──
+function computeMatchesMockFallback(){
   var user = (typeof MOCK_CURRENT_USER !== 'undefined') ? MOCK_CURRENT_USER : null;
   var candidates = (typeof MOCK_PROFILES !== 'undefined') ? MOCK_PROFILES : [];
   allResults = BiyeScoring.rankMatches(user, candidates, { includeFailed: true });
   ranked = allResults.filter(function(r){ return r.passed; });
+  usingRealData = false;
+}
+
+async function computeMatches(){
+  if(!BIYE.requireLogin()) return;
+  var sess = BIYE.getSession();
+  var gotReal = await computeMatchesReal(sess.uid);
+  if(!gotReal) computeMatchesMockFallback();
+
+  var banner = document.getElementById('previewBanner');
+  if(banner) banner.style.display = usingRealData ? 'none' : 'block';
 }
 
 function updateSummary(){
@@ -251,8 +290,8 @@ function updateSummary(){
     renderFeed();
     renderExcluded(allResults);
   }
-  document.addEventListener('DOMContentLoaded', function(){
-    computeMatches();
+  document.addEventListener('DOMContentLoaded', async function(){
+    await computeMatches();
     applyLang(detectLang());
     document.getElementById('langPill').addEventListener('click', function(){ applyLang(lang==='bn'?'en':'bn'); });
   });
