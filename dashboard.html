@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="biye-core.js"></script>
 <style>
 :root{
   --pink:#E2136E;--pink-dark:#C20F5E;--pink-light:#FF4D94;
@@ -189,7 +190,7 @@ button{font-family:inherit}
 <div class="main">
 
   <div class="demo-banner" id="demoBanner" style="display:none">
-    ⚠️ <span data-bn="ডেমো মোড: এই ড্যাশবোর্ড এখনো কোনো real Supabase প্রজেক্টের সাথে যুক্ত না — সব ডেটা সাময়িক ও ব্রাউজার মেমরিতে। supabase-client.js-এ আপনার প্রজেক্ট কী বসালে real ডেটা লোড হবে।" data-en="Demo mode: this dashboard isn't connected to a real Supabase project yet — all data is temporary, in-memory. Add your project keys in supabase-client.js to load real data.">Demo mode: this dashboard isn't connected to a real Supabase project yet — all data is temporary, in-memory. Add your project keys in supabase-client.js to load real data.</span>
+    ⚠️ <span data-bn="আপনি লগইন করেননি — নমুনা ড্যাশবোর্ড দেখানো হচ্ছে। লগইন করলে আপনার আসল তথ্য দেখাবে।" data-en="You're not logged in — showing a sample dashboard. Log in to see your real data.">You're not logged in — showing a sample dashboard. Log in to see your real data.</span>
   </div>
 
   <div class="stats-row">
@@ -217,9 +218,6 @@ button{font-family:inherit}
 </nav>
 
 <script src="metrics-config.js"></script>
-<script src="mock-data.js"></script>
-<script src="scoring.js"></script>
-<script src="supabase-client.js"></script>
 <script>
 var KYC_COLORS = ['pink','pink-dark','purple','blue','teal','green','gold'];
 var KYC_LABELS_BN = ['ফোন','NID','মুখ','শিক্ষা','চাকরি','পরিবার','স্বাস্থ্য'];
@@ -274,85 +272,55 @@ function renderStats(){
   var avgScore = STATE.matches.length ? Math.round(STATE.matches.reduce(function(s,m){return s+m.score;},0)/STATE.matches.length) : 0;
   document.getElementById('statMis').textContent = avgScore + '%';
 
-  document.getElementById('cardKyc').textContent = (STATE.kyc?STATE.kyc.level:0) + ' / 7';
-  document.getElementById('cardMatches').textContent = STATE.matches.length;
-  var totalMetrics = (typeof BIYE_METRICS !== 'undefined') ? BIYE_METRICS.metrics.length : 137;
-  document.getElementById('cardAnswers').textContent = Object.keys(STATE.answers).length + ' / ' + totalMetrics;
-
   var verifyChipText = document.getElementById('verifyChipText');
   verifyChipText.textContent = (lang==='bn' ? 'লেভেল ' + (STATE.kyc?STATE.kyc.level:0) + ' যাচাইকৃত' : 'Level ' + (STATE.kyc?STATE.kyc.level:0) + ' verified');
 }
 
 async function loadDashboard(){
-  // ── Supabase init ──
-  var _SB = (typeof supabase!=='undefined') ? supabase.createClient(
-    'https://hjbvmzashhzazlpgjhof.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqYnZtemFzaGh6YXpscGdqaG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTQ4OTYsImV4cCI6MjA5OTU5MDg5Nn0.vneEXDY2P2MOnFdFJtPAms_qGq_OGU3xQeHInD5k75E'
-  ) : null;
-  window._SB = _SB;
-
   // ── Session check ──
-  var sessRaw = localStorage.getItem('biye_session');
-  if(!sessRaw){ document.getElementById('demoBanner').style.display='flex'; renderKycLadder(); renderMatches(); renderStats(); return; }
-  var sess; try{ sess=JSON.parse(sessRaw); }catch(e){ return; }
-  if(!sess||!sess.uid){ document.getElementById('demoBanner').style.display='flex'; renderKycLadder(); renderMatches(); renderStats(); return; }
+  var sess = BIYE.getSession();
+  if(!sess || !sess.uid){
+    document.getElementById('demoBanner').style.display='flex';
+    renderKycLadder(); renderMatches(); renderStats();
+    return;
+  }
   window._sessUid = sess.uid;
-
-  // Show logout
   document.getElementById('logoutBtn').style.display='inline-block';
 
-  if(!_SB){ renderKycLadder(); renderMatches(); renderStats(); return; }
-
-  // ── Load profile ──
-  var pr = await _SB.from('profiles').select('name,phone,email,kyc_level,membership_tier,mis_avg').eq('id',sess.uid).single();
-  var p = pr.data||{};
+  // ── Load profile (real Supabase data) ──
+  var p = await BIYE.db.getProfile(sess.uid);
+  if(!p){ BIYE.logout(); return; }
   var name = p.name||sess.name||'BIYE User';
 
   STATE.profile = {id:sess.uid, name:name, kycLevel:p.kyc_level||0, kycTotal:7, misAvg:p.mis_avg||0, membershipTier:p.membership_tier||'Free', phone:p.phone||'', email:p.email||''};
   STATE.kyc = {level:p.kyc_level||0, total:7};
   window._kycLevel = p.kyc_level||0;
 
-  // ── Update greeting ──
+  // ── Greeting ──
   var greet = document.getElementById('greetName');
   greet.textContent = (lang==='bn'?'স্বাগতম, ':'Welcome, ')+name;
   greet.removeAttribute('data-bn');
   document.getElementById('avatarInit').textContent = initials(name);
 
-  // ── Load answers ──
-  var ar = await _SB.from('metrics_answers').select('metric_id,value').eq('user_id',sess.uid);
-  STATE.answers = {};
-  var ansCount = 0;
-  if(ar.data) ar.data.forEach(function(r){
-    if(r.metric_id.startsWith('m0')||r.metric_id.startsWith('m1')){ STATE.answers[r.metric_id]=r.value; ansCount++; }
-  });
+  // ── Answers (m_pw বাদ দিয়ে ফেরত আসে) ──
+  STATE.answers = await BIYE.db.getAnswers(sess.uid);
+  var ansCount = Object.keys(STATE.answers).length;
 
-  // ── Load matches ──
-  var mr = await _SB.from('matches').select('score,matched_user_id').eq('user_id',sess.uid).order('score',{ascending:false}).limit(10);
-  if(mr.data&&mr.data.length>0){
-    var ids=mr.data.map(function(m){return m.matched_user_id;});
-    var mpr=await _SB.from('profiles').select('id,name,kyc_level').in('id',ids);
-    var mpMap={}; if(mpr.data) mpr.data.forEach(function(p){mpMap[p.id]=p;});
-    STATE.matches=mr.data.map(function(m){
-      var mp=mpMap[m.matched_user_id]||{};
-      return {id:m.matched_user_id,name:mp.name||'User',age:0,city:'',score:m.score||0,verified:(mp.kyc_level||0)>=2};
-    });
-  } else {
-    STATE.matches = [];
-  }
+  // ── Real matches (analyze.js এই টেবিলে লেখে) ──
+  STATE.matches = await BIYE.db.getMatches(sess.uid);
 
-  // ── Load verifications ──
-  var vr=await _SB.from('verifications').select('doc_type,status').eq('user_id',sess.uid);
-  window._verifs = vr.data||[];
+  // ── KYC verifications ──
+  window._verifs = await BIYE.db.getVerifications(sess.uid);
 
-  // ── Stats ──
+  // ── Stats UI ──
   document.getElementById('statKyc').textContent   = (p.kyc_level||0)+'/7';
   document.getElementById('statMatches').textContent = STATE.matches.length||0;
   document.getElementById('statMis').textContent   = p.mis_avg?Math.round(p.mis_avg)+'%':'—';
   document.getElementById('cardKyc').textContent   = (p.kyc_level||0)+'/7';
   document.getElementById('cardMatches').textContent = STATE.matches.length||0;
-  document.getElementById('cardAnswers').textContent = ansCount+'/137';
+  var totalMetrics = (typeof BIYE_METRICS!=='undefined') ? BIYE_METRICS.metrics.length : 137;
+  document.getElementById('cardAnswers').textContent = ansCount+'/'+totalMetrics;
 
-  // ── Hide demo banner ──
   document.getElementById('demoBanner').style.display='none';
 
   renderKycLadder();
@@ -455,24 +423,18 @@ async function saveKyc(level){
   btn.disabled=true;
   msg.textContent='আপলোড হচ্ছে...';msg.style.color='var(--ink-soft)';
   try{
-    var _SB=window._SB;
     for(var key in _up){
-      var f=_up[key];
-      var path=uid+'/'+key+'-'+Date.now()+'.'+((f.name.split('.').pop())||'jpg');
-      if(_SB){
-        await _SB.storage.from('kyc-documents').upload(path,f,{upsert:true});
-        await _SB.from('verifications').upsert({user_id:uid,doc_type:key,storage_path:path,status:'pending'},{onConflict:'user_id,doc_type'});
-      }
+      await BIYE.db.uploadKycDoc(uid, key, _up[key]);
     }
-    if(_SB&&level>(window._kycLevel||0)){
-      await _SB.from('profiles').update({kyc_level:level}).eq('id',uid);
+    if(level>(window._kycLevel||0)){
+      await BIYE.db.updateKycLevel(uid, level);
+      await BIYE.db.logConsent(uid, 'kyc_level_'+level+'_submitted', {level:level});
       window._kycLevel=level;
       STATE.kyc={level:level,total:7};
       document.getElementById('statKyc').textContent=level+'/7';
       document.getElementById('cardKyc').textContent=level+'/7';
     }
-    var vr=await _SB.from('verifications').select('doc_type,status').eq('user_id',uid);
-    window._verifs=vr.data||[];
+    window._verifs = await BIYE.db.getVerifications(uid);
     msg.textContent='✓ জমা হয়েছে! ২৪ ঘণ্টার মধ্যে যাচাই হবে।';msg.style.color='#00A651';
     renderKycLadder();
     setTimeout(closeKyc,1800);
@@ -482,7 +444,7 @@ async function saveKyc(level){
 }
 
 function closeKyc(){document.getElementById('kycOv').classList.remove('on');}
-function doLogout(){localStorage.removeItem('biye_session');window.location.href='index.html';}
+function doLogout(){ BIYE.logout(); }
 </script>
 
 </body>
