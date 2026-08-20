@@ -106,6 +106,8 @@ button{font-family:inherit}
   <div id="content"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="biye-core.js"></script>
 <script src="metrics-config.js"></script>
 <script src="mock-data.js"></script>
 <script src="scoring.js"></script>
@@ -132,12 +134,36 @@ function getParam(name){
   return m ? decodeURIComponent(m[1]) : null;
 }
 
-function loadMatch(){
+async function loadMatch(){
+  if(!BIYE.requireLogin()) return false;
+  var sess = BIYE.getSession();
   var id = getParam('id');
+
+  // ── আগে আসল Supabase ম্যাচ চেষ্টা করি ──
+  var detail = id ? await BIYE.db.getMatchDetail(sess.uid, id) : null;
+
+  if(detail){
+    var mp = await BIYE.db.getProfile(id);
+    candidate = {
+      id: id, name: detail.name, verified: detail.verified,
+      age: (detail.answers && detail.answers.m001) || 0,
+      city: (detail.answers && detail.answers.m008) || '',
+      kycLevel: (mp && mp.kyc_level) || 0
+    };
+    result = {
+      candidateId: id, passed: detail.rulePass !== false,
+      ruleFailures: [], score: detail.score,
+      band: BiyeScoring.scoreBand(detail.score), breakdown: detail.breakdown || []
+    };
+    return true;
+  }
+
+  // ── real ম্যাচ না পেলে mock preview ──
   var user = (typeof MOCK_CURRENT_USER !== 'undefined') ? MOCK_CURRENT_USER : null;
   var candidates = (typeof MOCK_PROFILES !== 'undefined') ? MOCK_PROFILES : [];
   candidate = candidates.find(function(c){ return c.id === id; }) || candidates[0];
   result = BiyeScoring.computeMatch(user, candidate);
+  return false;
 }
 
 function render(){
@@ -237,8 +263,7 @@ function render(){
     '<h2 data-bn="আগ্রহী?" data-en="Interested?">Interested?</h2>'+
     '<p data-bn="সম্মতি দিলে একটা নিরাপদ, ব্লকচেইনে লগ হওয়া চ্যাট শুরু হবে।" data-en="Give consent to start a secure chat, logged on the blockchain.">Give consent to start a secure chat, logged on the blockchain.</p>'+
     '<div class="cta-row">'+
-      '<button class="cta-btn primary" data-bn="সম্মতি দিন ও চ্যাট করুন" data-en="Consent & chat">Consent & chat</button>'+
-      '<button class="cta-btn ghost" onclick="location.href=\'document-viewer.html\'" data-bn="ডকুমেন্ট দেখুন" data-en="View documents">View documents</button>'+
+      '<button class="cta-btn primary" onclick="giveConsent(\''+candidate.id+'\')" data-bn="সম্মতি দিন ও চ্যাট করুন" data-en="Consent & chat">Consent & chat</button>'+
     '</div>';
   wrap.appendChild(cta);
 
@@ -275,12 +300,19 @@ function renderNotPassed(wrap){
     if(pill) pill.textContent = l==='bn'?'EN':'বাং';
     render();
   }
-  document.addEventListener('DOMContentLoaded', function(){
-    loadMatch();
+  document.addEventListener('DOMContentLoaded', async function(){
+    await loadMatch();
     applyLang(detectLang());
     document.getElementById('langPill').addEventListener('click', function(){ applyLang(lang==='bn'?'en':'bn'); });
   });
 })();
+
+async function giveConsent(matchedId){
+  var sess = BIYE.getSession();
+  if(!sess) return;
+  await BIYE.db.logConsent(sess.uid, 'match_consent_given', {matched_user_id: matchedId});
+  alert(lang==='bn' ? '✓ সম্মতি রেকর্ড করা হয়েছে। Messenger শীঘ্রই আসছে!' : '✓ Consent recorded. Messenger coming soon!');
+}
 </script>
 </body>
 </html>
