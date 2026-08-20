@@ -212,6 +212,7 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
 .otp-mini.filled{border-color:#00A651}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="biye-core.js"></script>
 </head>
 <body>
 
@@ -272,8 +273,8 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
   <p class="section-title" data-bn="মডিউল" data-en="Modules">Modules</p>
   <div class="tn-buttons">
     <div class="tn-btn tn-c1"><span class="tn-btn-icon">AI</span><span data-bn="ম্যাচ AI" data-en="Match AI">Match AI</span></div>
-    <div class="tn-btn tn-c2" onclick="location.href='onboarding.html'" style="cursor:pointer"><span class="tn-btn-icon">✓</span><span data-bn="ভেরিফাই" data-en="Verify">Verify</span></div>
-    <div class="tn-btn tn-c3" onclick="location.href='questionnaire.html'" style="cursor:pointer"><span class="tn-btn-icon">☰</span><span data-bn="মেট্রিক্স" data-en="Metrics">Metrics</span></div>
+    <div class="tn-btn tn-c2" onclick="openAuth('register')" style="cursor:pointer"><span class="tn-btn-icon">✓</span><span data-bn="ভেরিফাই" data-en="Verify">Verify</span></div>
+    <div class="tn-btn tn-c3" onclick="openAuth('register')" style="cursor:pointer"><span class="tn-btn-icon">☰</span><span data-bn="মেট্রিক্স" data-en="Metrics">Metrics</span></div>
     <div class="tn-btn tn-c4"><span class="tn-btn-icon">◎</span><span data-bn="পার্সোনালিটি" data-en="Personality">Personality</span></div>
     <div class="tn-btn tn-c5"><span class="tn-btn-icon">⛓</span><span data-bn="ট্রাস্ট" data-en="Trust">Trust</span></div>
     <div class="tn-btn tn-c6"><span class="tn-btn-icon">💬</span><span data-bn="মেসেঞ্জার" data-en="Messenger">Messenger</span></div>
@@ -454,7 +455,7 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
     </div>
     <p class="auth-msg" id="lMsg"></p>
     <button class="auth-btn" id="lBtn" onclick="doLogin()">লগইন করুন</button>
-    <p class="auth-switch"><b onclick="doForgot()">পাসওয়ার্ড ভুলে গেছেন?</b></p>
+    <p class="auth-switch"><b onclick="alert('পাসওয়ার্ড রিসেটের জন্য সাপোর্টে যোগাযোগ করুন: support@biye.ltd')">পাসওয়ার্ড ভুলে গেছেন?</b></p>
     <p class="auth-switch">নতুন? <b onclick="switchTab('register')">রেজিস্টার করুন</b></p>
   </div>
 
@@ -462,11 +463,7 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
 </div>
 
 <script>
-var _SB = supabase.createClient(
-  'https://hjbvmzashhzazlpgjhof.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqYnZtemFzaGh6YXpscGdqaG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTQ4OTYsImV4cCI6MjA5OTU5MDg5Nn0.vneEXDY2P2MOnFdFJtPAms_qGq_OGU3xQeHInD5k75E'
-);
-var _g='', _uid=null, _ph='', _em='', _ec='';
+var _g='', _regPhone='';
 
 function openAuth(t){document.getElementById('authOverlay').classList.add('open');switchTab(t||'register');}
 function closeAuth(){document.getElementById('authOverlay').classList.remove('open');}
@@ -498,12 +495,7 @@ function initOtp(rowId){
   if(boxes.length)boxes[0].focus();
 }
 
-
-async function sha256(str){
-  var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
-}
-
+// ── ধাপ ১: প্রোফাইল তৈরি + SMS OTP পাঠানো ──
 async function regS1(){
   var name=document.getElementById('rName').value.trim();
   var phone=document.getElementById('rPhone').value.trim();
@@ -518,141 +510,79 @@ async function regS1(){
   if(!email){msg('rm1','ইমেইল দিন',true);return;}
   if(pw.length<8){msg('rm1','পাসওয়ার্ড কমপক্ষে ৮ অক্ষর',true);return;}
   if(pw!==pw2){msg('rm1','পাসওয়ার্ড মিলছে না',true);return;}
-  document.getElementById('rb1').disabled=true;
-  msg('rm1','চেক করা হচ্ছে...',false);
 
-  // Check if phone already exists
-  var chk=await _SB.from('profiles').select('id').eq('phone',phone).maybeSingle();
-  if(chk.data){msg('rm1','এই ফোন নম্বরে আগেই অ্যাকাউন্ট আছে',true);document.getElementById('rb1').disabled=false;return;}
+  var btn=document.getElementById('rb1');
+  btn.disabled=true;
+  msg('rm1','অ্যাকাউন্ট তৈরি হচ্ছে...',false);
 
-  // Simple password hash (SHA-256 via SubtleCrypto)
-  var pwHash = await sha256(pw);
+  var res = await BIYE.auth.register({name:name, phone:phone, age:age, gender:_g, email:email, password:pw});
+  if(res.error){ msg('rm1', res.error.message, true); btn.disabled=false; return; }
+  _regPhone = res.phone;
 
-  // Generate UUID
-  var uid = crypto.randomUUID ? crypto.randomUUID() : 'u-'+Date.now()+'-'+Math.random().toString(36).slice(2);
-  _uid=uid; _ph=phone; _em=email;
-
-  // Save to profiles directly — no Supabase Auth, no email sent
-  var ins=await _SB.from('profiles').insert({
-    id: uid,
-    name: name,
-    phone: phone,
-    email: email,
-    gender_hint: _g,
-    is_active: true,
-    kyc_level: 0
-  });
-  if(ins.error){msg('rm1',ins.error.message,true);document.getElementById('rb1').disabled=false;return;}
-
-  // Save password hash in metrics_answers (m_pw field)
-  await _SB.from('metrics_answers').upsert([
-    {user_id:uid,metric_id:'m001',value:age},
-    {user_id:uid,metric_id:'m002',value:_g},
-    {user_id:uid,metric_id:'m_pw',value:pwHash}
-  ],{onConflict:'user_id,metric_id'});
-
-  // Send SMS OTP
   msg('rm1','SMS পাঠানো হচ্ছে...',false);
-  var sr=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send',phone:phone})});
-  var sd=await sr.json();
-  if(!sd.sent){msg('rm1','SMS পাঠাতে সমস্যা: '+(sd.error||''),true);document.getElementById('rb1').disabled=false;return;}
+  var sd = await BIYE.auth.sendPhoneOtp(_regPhone);
+  if(!sd.sent){ msg('rm1','SMS পাঠাতে সমস্যা: '+(sd.error||''), true); btn.disabled=false; return; }
 
   document.getElementById('rs1').style.display='none';
   document.getElementById('rs2').style.display='block';
-  document.getElementById('smsHint').textContent='ধাপ ২/২ — '+phone+'-এ কোড পাঠানো হয়েছে';
+  document.getElementById('smsHint').textContent='ধাপ ২/২ — '+_regPhone+'-এ কোড পাঠানো হয়েছে';
   initOtp('smsRow');
 }
 
+// ── ধাপ ২: SMS OTP যাচাই → লগইন সেশন তৈরি → dashboard ──
 async function regS2(){
   var code=otp('smsRow');
   if(code.length<6){msg('rm2','৬ সংখ্যার কোড দিন',true);return;}
-  document.getElementById('rb2').disabled=true;
+  var btn=document.getElementById('rb2');
+  btn.disabled=true;
   msg('rm2','যাচাই হচ্ছে...',false);
-  try{
-    var r=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',phone:_ph,code:code})});
-    var d=await r.json();
-    if(!d.verified){msg('rm2',(d.error||'কোড ভুল'),true);document.getElementById('rb2').disabled=false;return;}
-    // SMS verified — save and redirect
-        // Update KYC level 1
-    await _SB.from('profiles').update({kyc_level:1}).eq('id',_uid);
-    // Log consent
-    try{await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}});}catch(e){}
-    // Store session in localStorage
-    localStorage.setItem('biye_session', JSON.stringify({uid:_uid,phone:_ph,email:_em,name:document.getElementById('rName').value.trim()}));
-    msg('rm2','✓ রেজিস্ট্রেশন সম্পন্ন! Dashboard-এ যাচ্ছেন...',false);
-    setTimeout(function(){window.location.href='dashboard.html';},800);
-    return;
-    _ec=String(Math.floor(100000+Math.random()*900000));
-    sessionStorage.setItem('biye_ec',_ec);
-    sessionStorage.setItem('biye_ec_exp',Date.now()+10*60*1000);
-    var html='<div style="font-family:sans-serif;padding:24px"><h2 style="color:#E2136E">BIYE যাচাই</h2><div style="font-size:2rem;font-weight:800;text-align:center;background:#f5f5f5;padding:16px;border-radius:12px;margin:12px 0">'+_ec+'</div><p style="color:#666;font-size:.85rem">১০ মিনিট বৈধ।</p></div>';
-    var er=await fetch('/.netlify/functions/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:_em,subject:'BIYE যাচাই কোড: '+_ec,html:html})});
-    var ed=await er.json();
-    if(!ed.sent){msg('rm2','ইমেইল পাঠাতে সমস্যা',true);document.getElementById('rb2').disabled=false;return;}
-    if(_uid){
-      try{await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}});}catch(e){}
-    }
-    msg('rm2','✓ রেজিস্ট্রেশন সম্পন্ন! Dashboard-এ যাচ্ছেন...',false);
-    setTimeout(function(){window.location.href='dashboard.html';},800);
-  }catch(e){msg('rm2',e.message||'Error',true);document.getElementById('rb2').disabled=false;}
+
+  var d = await BIYE.auth.verifyPhoneOtp(_regPhone, code);
+  if(!d.verified){ msg('rm2', d.error||'কোড ভুল', true); btn.disabled=false; return; }
+
+  // OTP verified → login করে session বসানো
+  var pw = document.getElementById('rPw').value;
+  var loginRes = await BIYE.auth.login(_regPhone, pw);
+  if(loginRes.error){ msg('rm2', loginRes.error.message, true); btn.disabled=false; return; }
+
+  await BIYE.db.updateKycLevel(loginRes.session.uid, 1);
+  await BIYE.db.logConsent(loginRes.session.uid, 'registration_verified', {phone:_regPhone});
+
+  msg('rm2','✓ রেজিস্ট্রেশন সম্পন্ন! Dashboard-এ যাচ্ছেন...',false);
+  setTimeout(function(){ window.location.href='dashboard.html'; }, 800);
 }
 
 async function retrySms(){
   msg('rm2','আবার পাঠানো হচ্ছে...',false);
-  var r=await fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send',phone:_ph})});
-  var d=await r.json();
-  msg('rm2',d.sent?'✓ নতুন SMS পাঠানো হয়েছে':'পাঠানো যায়নি: '+(d.error||''),!d.sent);
+  var d = await BIYE.auth.sendPhoneOtp(_regPhone);
+  msg('rm2', d.sent?'✓ নতুন SMS পাঠানো হয়েছে':'পাঠানো যায়নি: '+(d.error||''), !d.sent);
 }
 
+// ── লগইন ──
 async function doLogin(){
   var id=document.getElementById('lId').value.trim();
   var pw=document.getElementById('lPw').value;
   if(!id){msg('lMsg','ফোন নম্বর দিন',true);return;}
   if(!pw){msg('lMsg','পাসওয়ার্ড দিন',true);return;}
-  document.getElementById('lBtn').disabled=true;
+  var btn=document.getElementById('lBtn');
+  btn.disabled=true;
   msg('lMsg','যাচাই হচ্ছে...',false);
-  try{
-    // Normalize phone
-    var ph=id.replace(/[^0-9+]/g,'');
-    if(ph.startsWith('0'))ph='+88'+ph;
-    else if(ph.startsWith('1'))ph='+880'+ph;
-    else if(ph.startsWith('880'))ph='+'+ph;
 
-    // Get profile by phone
-    var pR=await _SB.from('profiles').select('id,name,email,kyc_level').eq('phone',ph).maybeSingle();
-    if(!pR.data){msg('lMsg','এই নম্বরে কোনো অ্যাকাউন্ট নেই',true);document.getElementById('lBtn').disabled=false;return;}
+  var res = await BIYE.auth.login(id, pw);
+  if(res.error){ msg('lMsg', res.error.message, true); btn.disabled=false; return; }
 
-    // Check password hash
-    var pwHash=await sha256(pw);
-    var pwR=await _SB.from('metrics_answers').select('value').eq('user_id',pR.data.id).eq('metric_id','m_pw').maybeSingle();
-    if(!pwR.data||pwR.data.value!==pwHash){msg('lMsg','পাসওয়ার্ড ভুল',true);document.getElementById('lBtn').disabled=false;return;}
-
-    // Store session
-    localStorage.setItem('biye_session',JSON.stringify({uid:pR.data.id,phone:ph,email:pR.data.email,name:pR.data.name}));
-    msg('lMsg','✓ লগইন সফল!',false);
-    setTimeout(function(){window.location.href='dashboard.html';},700);
-  }catch(e){msg('lMsg',e.message||'Error',true);document.getElementById('lBtn').disabled=false;}
-}
-async function doForgot(){
-  var email=prompt('আপনার ইমেইল ঠিকানা দিন:');
-  if(!email)return;
-  var r=await _SB.auth.resetPasswordForEmail(email,{redirectTo:'https://biye.ltd/index.html'});
-  alert(r.error?r.error.message:'রিসেট লিংক পাঠানো হয়েছে — ইনবক্স চেক করুন');
+  msg('lMsg','✓ লগইন সফল!',false);
+  setTimeout(function(){ window.location.href='dashboard.html'; }, 700);
 }
 
+// ── ইতিমধ্যে লগইন থাকলে টপবারে Dashboard/Logout দেখাও ──
 document.addEventListener('DOMContentLoaded',function(){
-  var sess=localStorage.getItem('biye_session');
-  if(sess){
-    try{
-      var s=JSON.parse(sess);
-      if(s&&s.uid){
-        var el=document.getElementById('topbarAuth');
-        if(el)el.innerHTML='<button class="tb-btn tb-login" onclick="location.href=\'dashboard.html\'">Dashboard →</button><button class="tb-btn tb-login" onclick="doLogout()">Logout</button>';
-      }
-    }catch(e){}
+  var sess = BIYE.getSession();
+  if(sess && sess.uid){
+    var el=document.getElementById('topbarAuth');
+    if(el) el.innerHTML='<button class="tb-btn tb-login" onclick="location.href=\'dashboard.html\'">Dashboard →</button><button class="tb-btn tb-login" onclick="BIYE.logout()">Logout</button>';
   }
 });
-function doLogout(){localStorage.removeItem('biye_session');window.location.reload();}
 </script>
 
 </body>
