@@ -533,7 +533,7 @@ async function regS2(){
     var ed=await er.json();
     if(!ed.sent){msg('rm2','ইমেইল পাঠাতে সমস্যা',true);document.getElementById('rb2').disabled=false;return;}
     if(_uid){
-      await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}}).catch(function(){});
+      try{await _SB.from('consent_logs').insert({user_id:_uid,action:'registration_verified',meta:{phone:_ph,email:_em}});}catch(e){}
     }
     msg('rm2','✓ SMS যাচাই সফল! যাচ্ছেন...',false);
     setTimeout(function(){window.location.href='onboarding.html';},800);
