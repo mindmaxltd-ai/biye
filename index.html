@@ -437,7 +437,29 @@ html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
     </div>
   </div>
 
+  <!-- LOGIN PANEL -->
+  <div id="fLogin" style="display:none">
+    <p class="auth-title">আবার স্বাগতম! 👋</p>
+    <p class="auth-sub">রেজিস্ট্রেশনের ফোন নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন</p>
+    <div class="af">
+      <label>ফোন নম্বর (User ID)</label>
+      <input id="lId" type="tel" placeholder="+8801XXXXXXXXX" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="af">
+      <label>পাসওয়ার্ড</label>
+      <div class="pw-row">
+        <input id="lPw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="pw-eye" onclick="tpw('lPw',this)" type="button">দেখুন</button>
+      </div>
+    </div>
+    <p class="auth-msg" id="lMsg"></p>
+    <button class="auth-btn" id="lBtn" onclick="doLogin()">লগইন করুন</button>
+    <p class="auth-switch"><b onclick="doForgot()">পাসওয়ার্ড ভুলে গেছেন?</b></p>
+    <p class="auth-switch">নতুন? <b onclick="switchTab('register')">রেজিস্টার করুন</b></p>
   </div>
+
+</div>
+</div>
 
 <script>
 var _SB = supabase.createClient(
