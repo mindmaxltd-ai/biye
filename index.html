@@ -518,7 +518,7 @@ async function regS1(){
     // Phone number ke fake email হিসেবে ব্যবহার করি — Supabase confirmation email পাঠাবে না
     var ph2 = phone.replace(/[^0-9]/g,'');
     var fakeEmail = ph2 + '@biye.ltd';
-    var r=await _SB.auth.signUp({email:fakeEmail,password:pw});
+    var r=await _SB.auth.signUp({email:fakeEmail,password:pw,options:{emailRedirectTo:null,data:{phone:phone,name:name}}});
     if(r.error){msg('rm1',r.error.message,true);document.getElementById('rb1').disabled=false;return;}
     _uid=r.data.user&&r.data.user.id;_ph=phone;_em=email;
     if(_uid){
