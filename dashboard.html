@@ -350,7 +350,7 @@ async function loadDashboard(){
   document.getElementById('statMis').textContent   = p.mis_avg?Math.round(p.mis_avg)+'%':'—';
   document.getElementById('cardKyc').textContent   = (p.kyc_level||0)+'/7';
   document.getElementById('cardMatches').textContent = STATE.matches.length||0;
-  document.getElementById('cardMetrics').textContent = ansCount+'/137';
+  document.getElementById('cardAnswers').textContent = ansCount+'/137';
 
   // ── Hide demo banner ──
   document.getElementById('demoBanner').style.display='none';
