@@ -1,1433 +1,1079 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="bn" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>BIYE — Create Your Trusted Compatibility Profile</title>
-<meta name="description" content="Register with BIYE — Bangladesh's relationship intelligence platform. Create your trusted account with legal identity, transparent agreements and ৳999 registration.">
-<meta name="robots" content="noindex, follow">
-<link rel="canonical" href="https://biye.ltd/register.html">
-<meta property="og:title" content="BIYE — Create Your Trusted Profile">
-<meta property="og:description" content="Register with BIYE — 137-Metric Compatibility Intelligence. ৳999 registration includes 2 free match views.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://biye.ltd/register.html">
+<title>BIYE — রেজিস্ট্রেশন করুন</title>
+<meta name="robots" content="noindex,follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ── TOKENS ─────────────────────────────────────────── */
 :root{
-  --primary:#E2136E;--primary-dark:#C20F5E;--primary-light:#FF4D94;--primary-soft:rgba(226,19,110,.08);
-  --purple:#6A2DA8;--purple-light:#9C5FE0;--purple-soft:rgba(106,45,168,.08);
-  --blue:#1565C0;--blue-soft:rgba(21,101,192,.08);
-  --teal:#00A99D;--gold:#D4AF37;--gold-light:#F0D878;--gold-soft:rgba(212,175,55,.15);
-  --green:#00A651;--green-soft:rgba(0,166,81,.1);
-  --brand-grad:linear-gradient(120deg,#E2136E 0%,#6A2DA8 52%,#1565C0 100%);
-  --bg:#FAFAFC;--surface:#fff;
-  --border:rgba(20,20,20,.07);--border-strong:rgba(20,20,20,.14);
-  --ink:#1A1A1A;--ink-soft:rgba(20,20,20,.52);--ink-faint:rgba(20,20,20,.32);
-  --danger:#C20F5E;--danger-soft:rgba(194,15,94,.08);
-  --shadow-sm:0 2px 10px -4px rgba(106,45,168,.12);
-  --shadow:0 6px 24px -8px rgba(106,45,168,.18);
-  --radius:14px;--radius-sm:10px;--radius-lg:20px;
-  --tx:.22s cubic-bezier(.4,0,.2,1);
+  --pk:#E2136E;--pk-d:#C20F5E;--pk-s:rgba(226,19,110,.09);
+  --pu:#6A2DA8;--pu-s:rgba(106,45,168,.09);
+  --bl:#1565C0;--bl-s:rgba(21,101,192,.09);
+  --gd:#D4AF37;--gd-s:rgba(212,175,55,.15);
+  --gr:#00A651;--gr-s:rgba(0,166,81,.1);
+  --grad:linear-gradient(120deg,#E2136E 0%,#6A2DA8 52%,#1565C0 100%);
+  --bg:#F7F8FC;--sur:#fff;
+  --bdr:rgba(20,20,20,.08);--bdr2:rgba(20,20,20,.15);
+  --ink:#1A1A1A;--ink2:rgba(20,20,20,.55);--ink3:rgba(20,20,20,.35);
+  --danger:#C20F5E;--danger-s:rgba(194,15,94,.08);
+  --sh:0 4px 20px -6px rgba(106,45,168,.16);
+  --r:14px;--r2:10px;--r3:22px;
+  --tx:.2s cubic-bezier(.4,0,.2,1);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-family:'Inter','Hind Siliguri',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
-html[lang="bn"] body,html[lang="hi"] body{font-family:'Hind Siliguri','Inter',sans-serif}
-html[dir="rtl"] body{font-family:'Inter',sans-serif}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Hind Siliguri','Inter',sans-serif;
+  font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;overflow-x:hidden;
+  padding-bottom:calc(env(safe-area-inset-bottom) + 2rem);
+}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-button{cursor:pointer;border:none;background:none;font-family:inherit}
-:focus-visible{outline:2.5px solid var(--primary);outline-offset:3px;border-radius:4px}
-
-/* ── UTILITY ─────────────────────────────────────────── */
-.grad-text{background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
+:focus-visible{outline:3px solid var(--pk);outline-offset:3px;border-radius:6px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.t-body{font-size:.9rem;color:var(--ink-soft);line-height:1.65}
-.t-caption{font-size:.78rem;color:var(--ink-faint);line-height:1.5}
 
-/* ── TOPBAR ─────────────────────────────────────────── */
-.topbar{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:.9rem 1.25rem .7rem}
-.logo-row{display:flex;align-items:center;gap:.55rem}
-.logo-img{height:36px;width:auto;object-fit:contain}
-.logo-text{font-size:1rem;font-weight:800;color:var(--ink)}
-.logo-text span{font-weight:500;color:var(--ink-soft);font-size:.88em}
-.topbar-right{display:flex;align-items:center;gap:.6rem}
-.lang-btn{padding:.38rem .75rem;border-radius:50px;border:1.5px solid var(--border-strong);font-size:.72rem;font-weight:700;color:var(--ink-soft);background:var(--surface);cursor:pointer;transition:var(--tx)}
-.lang-btn:hover{border-color:var(--primary);color:var(--primary)}
-.signin-link{font-size:.82rem;font-weight:600;color:var(--ink-soft);transition:var(--tx);padding:.4rem .6rem;border-radius:8px}
-.signin-link:hover{color:var(--primary)}
+/* ── NAV ── */
+.nav{background:var(--sur);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;
+  padding:.75rem 1.1rem;display:flex;align-items:center;justify-content:space-between;
+  padding-top:calc(.75rem + env(safe-area-inset-top))}
+.nav-logo{display:flex;align-items:center;gap:.5rem}
+.nav-logo img{height:34px;width:auto;object-fit:contain}
+.nav-lang{padding:.35rem .8rem;border-radius:50px;border:1.5px solid var(--bdr2);font-size:.75rem;font-weight:700;color:var(--ink2);background:var(--sur);cursor:pointer;transition:var(--tx)}
+.nav-lang:hover{border-color:var(--pk);color:var(--pk)}
 
-/* Language dropdown */
-.lang-wrap{position:relative}
-.lang-menu{position:absolute;top:calc(100% + .4rem);right:0;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-sm);box-shadow:var(--shadow);min-width:130px;overflow:hidden;display:none;z-index:200}
-.lang-menu.open{display:block}
-.lang-opt{display:block;width:100%;text-align:start;padding:.6rem .9rem;font-size:.82rem;font-weight:600;color:var(--ink);cursor:pointer;background:none;border:none;font-family:inherit;transition:var(--tx)}
-.lang-opt:hover,.lang-opt.active{background:var(--primary-soft);color:var(--primary)}
+/* ── STEP DOTS ── */
+.steps-row{display:flex;align-items:center;justify-content:center;gap:0;padding:1.1rem 1rem .3rem}
+.sdot-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.sdot{width:36px;height:36px;border-radius:50%;border:2px solid var(--bdr2);background:var(--sur);
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;
+  color:var(--ink3);transition:var(--tx);font-family:'Inter',sans-serif}
+.sdot.done{background:var(--gr);border-color:var(--gr);color:#fff}
+.sdot.active{background:var(--grad);border-color:transparent;color:#fff;
+  box-shadow:0 3px 14px -4px rgba(106,45,168,.5)}
+.sdot-lbl{font-size:.65rem;font-weight:700;color:var(--ink3);text-align:center;white-space:nowrap}
+.sdot-lbl.active{color:var(--pu)}
+.sdot-lbl.done{color:var(--gr)}
+.sline{flex:1;height:3px;background:var(--bdr2);min-width:28px;max-width:60px;margin-bottom:18px;border-radius:4px;transition:var(--tx)}
+.sline.done{background:var(--gr)}
 
-/* ── PROGRESS BAR ────────────────────────────────────── */
-.progress-area{max-width:1100px;margin:0 auto;padding:.2rem 1.25rem .8rem}
-.progress-steps{display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none}
-.progress-steps::-webkit-scrollbar{display:none}
-.pstep{display:flex;align-items:center;flex-shrink:0}
-.pstep-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border-strong);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:var(--ink-faint);transition:var(--tx);font-family:'Inter',sans-serif;flex-shrink:0}
-.pstep-dot.done{background:var(--green);border-color:var(--green);color:#fff}
-.pstep-dot.current{background:var(--brand-grad);border-color:transparent;color:#fff;box-shadow:0 2px 10px -2px rgba(106,45,168,.45)}
-.pstep-label{font-size:.62rem;font-weight:700;margin-top:.25rem;color:var(--ink-faint);white-space:nowrap;text-align:center;transition:var(--tx)}
-.pstep-label.current{color:var(--purple)}
-.pstep-label.done{color:var(--green)}
-.pstep-inner{display:flex;flex-direction:column;align-items:center;gap:0}
-.pstep-line{flex:1;height:2px;background:var(--border-strong);min-width:20px;transition:var(--tx);margin-bottom:16px}
-.pstep-line.done{background:var(--green)}
-@media(min-width:600px){.pstep-line{min-width:36px}}
+/* ── CARD ── */
+.card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh);
+  margin:0 1rem;overflow:hidden}
+.card-head{padding:1.5rem 1.4rem 1.1rem;background:linear-gradient(135deg,var(--pk-s),var(--pu-s));
+  border-bottom:1px solid var(--bdr)}
+.card-step-badge{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--pu);margin-bottom:.5rem}
+.card-title{font-size:1.3rem;font-weight:800;line-height:1.25;margin-bottom:.3rem}
+.card-sub{font-size:.88rem;color:var(--ink2);line-height:1.6}
+.card-body{padding:1.4rem}
 
-/* ── LAYOUT ──────────────────────────────────────────── */
-.main-wrap{max-width:1100px;margin:0 auto;padding:.4rem 1.25rem 3rem;display:grid;grid-template-columns:1fr;gap:2rem}
-@media(min-width:900px){.main-wrap{grid-template-columns:1fr 340px;align-items:start}}
+/* ── FIELD ── */
+.field{margin-bottom:1.2rem}
+.field-lbl{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;
+  color:var(--ink2);margin-bottom:.5rem}
+.field-lbl .req{color:var(--pk);font-size:.9rem}
+.field-wrap{position:relative}
+.field-input{
+  width:100%;padding:.88rem 3.2rem .88rem 1rem;
+  border:2px solid var(--bdr2);border-radius:var(--r2);
+  font-size:1.05rem;color:var(--ink);background:var(--sur);
+  outline:none;transition:var(--tx);font-family:inherit;
+  -webkit-appearance:none;
+}
+.field-input:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.12)}
+.field-input.ok{border-color:var(--gr)}
+.field-input.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-s)}
+.field-hint{font-size:.78rem;color:var(--ink3);margin-top:.4rem}
+.field-err{font-size:.78rem;color:var(--danger);font-weight:600;margin-top:.4rem;display:none}
+.field-err.show{display:block}
 
-/* ── FORM CARD ───────────────────────────────────────── */
-.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden}
-.form-card-head{padding:1.5rem 1.75rem 1.25rem;border-bottom:1px solid var(--border)}
-.form-card-title{font-size:1.25rem;font-weight:800;margin-bottom:.2rem}
-.form-card-sub{font-size:.85rem;color:var(--ink-soft)}
+/* Voice button inside field */
+.voice-btn{
+  position:absolute;right:.7rem;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--pu-s);color:var(--pu);font-size:1rem;
+  transition:var(--tx);cursor:pointer;border:none;
+  flex-shrink:0;
+}
+.voice-btn:hover{background:var(--pu);color:#fff}
+.voice-btn.listening{background:var(--pk);color:#fff;animation:pulse-ring 1.2s infinite}
+.voice-btn.nosupport{display:none}
+@keyframes pulse-ring{
+  0%{box-shadow:0 0 0 0 rgba(226,19,110,.5)}
+  70%{box-shadow:0 0 0 10px rgba(226,19,110,0)}
+  100%{box-shadow:0 0 0 0 rgba(226,19,110,0)}
+}
 
-/* ── STEP PANELS ─────────────────────────────────────── */
-.step-panel{display:none;padding:1.75rem}
-.step-panel.active{display:block;animation:fadein .3s ease}
-@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.step-title{font-size:1.05rem;font-weight:800;margin-bottom:.2rem;display:flex;align-items:center;gap:.5rem}
-.step-sub{font-size:.84rem;color:var(--ink-soft);margin-bottom:1.5rem;line-height:1.65}
+/* ── PHONE PREFIX ── */
+.phone-wrap{display:flex;gap:.5rem}
+.phone-prefix{
+  display:flex;align-items:center;padding:0 1rem;
+  border:2px solid var(--bdr2);border-radius:var(--r2);
+  font-size:1.05rem;font-weight:700;color:var(--ink2);
+  background:var(--bg);white-space:nowrap;flex-shrink:0;
+}
+.phone-field{flex:1}
 
-/* ── FORM FIELDS ─────────────────────────────────────── */
-.field-group{margin-bottom:1.15rem}
-.field-label{display:block;font-size:.8rem;font-weight:700;color:var(--ink-soft);margin-bottom:.4rem}
-.field-label .req{color:var(--primary);margin-left:.15rem}
-.field-input{width:100%;padding:.78rem 1rem;border:1.5px solid var(--border-strong);border-radius:var(--radius-sm);font-size:.92rem;color:var(--ink);background:var(--surface);outline:none;transition:var(--tx);font-family:inherit}
-.field-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(106,45,168,.12)}
-.field-input.error{border-color:var(--danger);box-shadow:0 0 0 3px rgba(194,15,94,.1)}
-.field-input.ok{border-color:var(--green)}
-.field-hint{font-size:.72rem;color:var(--ink-faint);margin-top:.35rem;line-height:1.5}
-.field-error{font-size:.72rem;color:var(--danger);margin-top:.35rem;font-weight:600;display:none}
-.field-error.show{display:block}
-.field-row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+/* ── OTP BOXES ── */
+.otp-title{font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+.otp-sub{font-size:.8rem;color:var(--ink2);margin-bottom:1rem}
+.otp-boxes{display:flex;gap:.55rem;justify-content:center}
+.otp-box{
+  width:52px;height:60px;border-radius:var(--r2);
+  border:2px solid var(--bdr2);text-align:center;
+  font-size:1.6rem;font-weight:800;font-family:'Inter',sans-serif;
+  color:var(--ink);outline:none;transition:var(--tx);
+  -webkit-appearance:none;
+}
+.otp-box:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.12)}
+.otp-box.filled{border-color:var(--gr);color:var(--gr)}
+.resend-row{text-align:center;font-size:.82rem;color:var(--ink2);margin-top:.75rem}
+.resend-btn{color:var(--pu);font-weight:700;cursor:pointer;background:none;border:none;padding:.1rem}
 
-/* ── GENDER SELECT ───────────────────────────────────── */
-.gender-cards{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
-.gender-card{border:2px solid var(--border-strong);border-radius:var(--radius);padding:1.1rem 1rem;cursor:pointer;transition:var(--tx);display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center}
-.gender-card:hover{border-color:var(--primary);background:var(--primary-soft)}
-.gender-card.selected{border-color:var(--primary);background:var(--primary-soft)}
-.gender-card input[type="radio"]{position:absolute;opacity:0;width:0;height:0}
-.gender-icon{font-size:2rem;line-height:1}
-.gender-label{font-size:.92rem;font-weight:700;color:var(--ink)}
-.gender-card.selected .gender-label{color:var(--primary)}
+/* ── CONSENT ITEMS ── */
+.consent-section-lbl{
+  font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--ink3);margin-bottom:.65rem;display:flex;align-items:center;gap:.4rem
+}
+.ctag{padding:.2rem .6rem;border-radius:50px;font-size:.62rem;font-weight:700}
+.ctag-req{background:var(--pk-s);color:var(--pk)}
+.ctag-opt{background:rgba(20,20,20,.06);color:var(--ink3)}
+.consent-item{
+  display:flex;align-items:flex-start;gap:.85rem;
+  padding:1rem 1.1rem;border:1.5px solid var(--bdr);border-radius:var(--r2);
+  margin-bottom:.55rem;cursor:pointer;transition:var(--tx);
+  -webkit-tap-highlight-color:transparent;
+}
+.consent-item:hover{border-color:var(--bdr2)}
+.consent-item.checked{border-color:var(--gr);background:var(--gr-s)}
+.consent-item.err{border-color:var(--danger);background:var(--danger-s)}
+.consent-box{
+  width:24px;height:24px;border:2px solid var(--bdr2);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;transition:var(--tx);font-size:.85rem;
+}
+.consent-item.checked .consent-box{background:var(--gr);border-color:var(--gr);color:#fff}
+.consent-text .ctitle{font-size:.9rem;font-weight:700;margin-bottom:.2rem}
+.consent-text .cdesc{font-size:.78rem;color:var(--ink2);line-height:1.55}
+.consent-text .clink{color:var(--pu);font-weight:600;text-decoration:underline}
+.real-cb{position:absolute;opacity:0;width:0;height:0}
 
-/* ── PASSWORD ───────────────────────────────────────── */
-.pw-wrap{position:relative}
-.pw-toggle{position:absolute;top:50%;right:1rem;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:.78rem;font-weight:700;padding:.2rem}
-.pw-strength{display:flex;gap:.3rem;margin-top:.5rem;height:4px}
-.pw-bar{flex:1;border-radius:4px;background:var(--border-strong);transition:var(--tx)}
-.pw-bar.weak{background:#E2136E}
-.pw-bar.fair{background:#F4C430}
-.pw-bar.good{background:#00A651}
-.pw-reqs{display:flex;flex-direction:column;gap:.3rem;margin-top:.7rem}
-.pw-req{font-size:.72rem;display:flex;align-items:center;gap:.4rem;color:var(--ink-faint)}
-.pw-req.met{color:var(--green)}
-.pw-req-dot{width:8px;height:8px;border-radius:50%;background:var(--border-strong);flex-shrink:0}
-.pw-req.met .pw-req-dot{background:var(--green)}
+/* ── PRICE BOX ── */
+.price-box{
+  background:var(--gd-s);border:1.5px solid rgba(212,175,55,.35);
+  border-radius:var(--r2);padding:1rem 1.2rem;margin-bottom:1.2rem;
+}
+.price-row{display:flex;justify-content:space-between;align-items:center;
+  padding:.35rem 0;font-size:.9rem}
+.price-row+.price-row{border-top:1px solid rgba(212,175,55,.2)}
+.price-row .lbl{color:var(--ink2)}
+.price-row .val{font-weight:700}
+.price-row.total .val{font-size:1.15rem;font-weight:800;color:#3a2000}
 
-/* ── OTP BOXES ──────────────────────────────────────── */
-.otp-row{display:flex;gap:.5rem;justify-content:center;margin:1.25rem 0}
-.otp-box{width:46px;height:54px;border-radius:var(--radius-sm);border:1.5px solid var(--border-strong);text-align:center;font-size:1.4rem;font-weight:700;font-family:'Inter',sans-serif;color:var(--ink);outline:none;transition:var(--tx)}
-.otp-box:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(106,45,168,.12)}
-.otp-box.filled{border-color:var(--green)}
-.resend-row{text-align:center;font-size:.78rem;color:var(--ink-soft);margin-top:.3rem}
-.resend-btn{color:var(--purple);font-weight:700;cursor:pointer;background:none;border:none;font-family:inherit;font-size:inherit;padding:.1rem}
+/* ── SUMMARY ── */
+.sum-card{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);
+  padding:1rem 1.1rem;margin-bottom:1.1rem}
+.sum-row{display:flex;justify-content:space-between;align-items:center;
+  padding:.4rem 0;font-size:.88rem;border-bottom:1px solid var(--bdr)}
+.sum-row:last-child{border-bottom:none}
+.sum-row .lbl{color:var(--ink2)}
+.sum-row .val{font-weight:700;display:flex;align-items:center;gap:.35rem}
+.dot-ok{width:8px;height:8px;border-radius:50%;background:var(--gr);flex-shrink:0}
 
-/* ── CONSENT SECTION ────────────────────────────────── */
-.consent-section{margin-bottom:1.35rem}
-.consent-section-label{display:flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:.65rem}
-.consent-tag{padding:.2rem .55rem;border-radius:50px;font-size:.62rem;font-weight:700;letter-spacing:.04em}
-.consent-tag.required{background:rgba(226,19,110,.12);color:var(--primary)}
-.consent-tag.optional{background:rgba(20,20,20,.06);color:var(--ink-faint)}
-.consent-item{display:flex;align-items:flex-start;gap:.85rem;padding:.95rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:.55rem;cursor:pointer;transition:var(--tx)}
-.consent-item:hover{border-color:var(--border-strong);background:rgba(20,20,20,.015)}
-.consent-item.selected{border-color:var(--green);background:var(--green-soft)}
-.consent-item.error{border-color:var(--danger);background:var(--danger-soft)}
-.consent-cb{width:20px;height:20px;border:2px solid var(--border-strong);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:var(--tx)}
-.consent-item.selected .consent-cb{background:var(--green);border-color:var(--green)}
-.consent-cb-check{color:#fff;font-size:.78rem;display:none}
-.consent-item.selected .consent-cb-check{display:block}
-.consent-real-cb{position:absolute;opacity:0;width:0;height:0}
-.consent-text-wrap{flex:1}
-.consent-item-title{font-size:.85rem;font-weight:700;margin-bottom:.2rem}
-.consent-item-desc{font-size:.76rem;color:var(--ink-soft);line-height:1.6}
-.consent-link{color:var(--purple);font-weight:600;text-decoration:underline}
+/* ── BUTTONS ── */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;padding:1rem 1.5rem;border-radius:var(--r2);
+  font-size:1rem;font-weight:800;cursor:pointer;border:none;
+  font-family:inherit;transition:var(--tx);min-height:54px;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 5px 22px -8px rgba(106,45,168,.5)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px -8px rgba(106,45,168,.6)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-ghost{background:var(--sur);color:var(--ink2);border:1.5px solid var(--bdr2);margin-top:.65rem}
+.btn-ghost:hover{border-color:var(--pk);color:var(--pk)}
+.btn-pay{background:var(--gd);color:#2a1a00;border:2px solid var(--gd-light,#F0D878);
+  box-shadow:0 4px 18px -6px rgba(212,175,55,.45)}
+.btn-pay:hover{transform:translateY(-2px);background:var(--gd-light,#F0D878)}
 
-/* ── PRICING SUMMARY ────────────────────────────────── */
-.price-box{background:var(--gold-soft);border:1.5px solid rgba(212,175,55,.35);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:1.25rem}
-.price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem}
-.price-row:last-child{margin-bottom:0;border-top:1px solid rgba(212,175,55,.3);padding-top:.5rem;margin-top:.3rem}
-.price-label{font-size:.82rem;color:var(--ink-soft)}
-.price-val{font-size:.9rem;font-weight:700;color:var(--ink)}
-.price-total{font-size:1.15rem;font-weight:800;color:#4a2d00}
-.price-currency{font-size:.8rem;font-weight:700}
+/* ── VOICE PANEL ── */
+.voice-panel{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(26,26,26,.96);backdrop-filter:blur(16px);
+  border-top-left-radius:20px;border-top-right-radius:20px;
+  padding:1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+  z-index:500;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  color:#fff;text-align:center;
+}
+.voice-panel.open{transform:translateY(0)}
+.voice-orb{
+  width:72px;height:72px;border-radius:50%;background:var(--pk);
+  margin:0 auto .75rem;display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;cursor:pointer;
+  box-shadow:0 0 0 0 rgba(226,19,110,.4);
+}
+.voice-orb.listening{animation:orb-pulse 1.5s infinite}
+@keyframes orb-pulse{
+  0%{box-shadow:0 0 0 0 rgba(226,19,110,.6)}
+  70%{box-shadow:0 0 0 20px rgba(226,19,110,0)}
+  100%{box-shadow:0 0 0 0 rgba(226,19,110,0)}
+}
+.voice-status{font-size:1rem;font-weight:700;margin-bottom:.25rem}
+.voice-transcript{font-size:.85rem;color:rgba(255,255,255,.65);min-height:1.4rem;margin-bottom:1rem}
+.voice-close{font-size:.82rem;color:rgba(255,255,255,.5);cursor:pointer;padding:.5rem 1.5rem}
+.voice-close:hover{color:rgba(255,255,255,.9)}
 
-/* ── REGISTRATION SUMMARY ───────────────────────────── */
-.summary-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:1.25rem}
-.summary-row{display:flex;align-items:center;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--border);font-size:.84rem}
-.summary-row:last-child{border-bottom:none}
-.summary-label{color:var(--ink-soft)}
-.summary-val{font-weight:700;display:flex;align-items:center;gap:.35rem}
-.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.status-dot.ok{background:var(--green)}
-.status-dot.pending{background:var(--gold)}
+/* ── STICKY VOICE FAB ── */
+.voice-fab{
+  position:fixed;bottom:calc(1.2rem + env(safe-area-inset-bottom));right:1.2rem;
+  width:54px;height:54px;border-radius:50%;
+  background:var(--grad);color:#fff;font-size:1.4rem;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 22px -6px rgba(106,45,168,.6);
+  cursor:pointer;border:none;z-index:200;
+  transition:var(--tx);
+}
+.voice-fab:hover{transform:scale(1.08)}
+.voice-fab.nosupport{display:none}
 
-/* ── PAYMENT CONFIRM STATES ─────────────────────────── */
+/* ── SUCCESS ── */
+.success-wrap{text-align:center;padding:1.25rem .5rem}
+.success-ring{
+  width:80px;height:80px;border-radius:50%;background:var(--gr-s);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.25rem;border:3px solid var(--gr);font-size:2rem;
+}
+.success-cards{display:grid;gap:.6rem;margin:1.25rem 0;text-align:start}
+.success-item{
+  display:flex;align-items:center;gap:.75rem;
+  background:var(--bg);border:1px solid var(--bdr);
+  border-radius:var(--r2);padding:.85rem 1rem;
+}
+.si-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:1rem;flex-shrink:0}
+.si-text strong{display:block;font-size:.88rem;font-weight:700}
+.si-text span{font-size:.76rem;color:var(--ink2)}
+
+/* ── PAY STATES ── */
 .pay-state{text-align:center;padding:1.5rem .5rem}
-.pay-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
-.pay-icon.success{background:var(--green-soft);color:var(--green)}
-.pay-icon.fail{background:var(--danger-soft);color:var(--danger)}
-.pay-icon.processing{background:var(--purple-soft);color:var(--purple)}
-.pay-icon.processing svg{animation:spin 1.2s linear infinite}
+.pay-icon{width:68px;height:68px;border-radius:50%;margin:0 auto 1rem;
+  display:flex;align-items:center;justify-content:center;font-size:2rem}
+.pay-icon.spin svg{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── SUCCESS ────────────────────────────────────────── */
-.success-wrap{text-align:center;padding:1rem .5rem 0}
-.success-ring{width:72px;height:72px;border-radius:50%;background:var(--green-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;border:3px solid var(--green)}
-.success-ring svg{width:36px;height:36px;stroke:var(--green);stroke-width:2.5}
-.success-cards{display:grid;gap:.65rem;margin:1.5rem 0;text-align:start}
-.success-item{display:flex;align-items:center;gap:.75rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem}
-.success-item-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
-.success-item-text strong{display:block;font-size:.85rem;font-weight:700}
-.success-item-text span{font-size:.76rem;color:var(--ink-soft)}
-
-/* ── STEP ACTIONS ───────────────────────────────────── */
-.step-actions{display:flex;gap:.75rem;margin-top:1.75rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 1.5rem;border-radius:var(--radius-sm);font-size:.9rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:var(--tx);min-height:46px;white-space:nowrap}
-.btn-primary{background:var(--brand-grad);color:#fff;box-shadow:0 4px 20px -8px rgba(106,45,168,.45);flex:1}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 28px -8px rgba(106,45,168,.55)}
-.btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none}
-.btn-ghost{background:var(--surface);color:var(--ink-soft);border:1.5px solid var(--border-strong)}
-.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
-.btn-payment{background:var(--gold);color:#2a1a00;border:2px solid var(--gold-light);box-shadow:0 4px 16px -6px rgba(212,175,55,.4);flex:1}
-.btn-payment:hover{transform:translateY(-1px);background:var(--gold-light)}
-.btn-payment:disabled{opacity:.55;cursor:not-allowed;transform:none}
-.btn-full{width:100%;margin-top:.75rem}
-
-/* ── SIDEBAR ─────────────────────────────────────────── */
-.sidebar{display:flex;flex-direction:column;gap:1rem;position:sticky;top:80px}
-.side-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow-sm)}
-.side-card-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:.9rem}
-.side-item{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;font-size:.84rem;color:var(--ink-soft)}
-.side-item:last-child{margin-bottom:0}
-.side-item svg{color:var(--green);flex-shrink:0}
-.price-card-big{background:var(--gold-soft);border:2px solid rgba(212,175,55,.4);border-radius:var(--radius);padding:1.4rem}
-.price-big{font-family:'Inter',sans-serif;font-size:2.5rem;font-weight:800;color:#2a1a00;line-height:1}
-.price-sup{font-size:1.1rem;font-weight:700;vertical-align:super}
-.price-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:50px;margin-top:.3rem}
-.price-tag.gold{background:rgba(212,175,55,.25);color:#6a4e00}
-.price-features{margin-top:.9rem;display:flex;flex-direction:column;gap:.4rem}
-.pf{display:flex;align-items:flex-start;gap:.5rem;font-size:.78rem;color:var(--ink-soft)}
-.pf svg{color:var(--green);flex-shrink:0;margin-top:2px}
-.additional-row{margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(212,175,55,.3);font-size:.82rem;color:var(--ink-soft)}
-.additional-row strong{color:var(--ink)}
-.mindmax-strip{display:flex;align-items:center;gap:.5rem;padding:.75rem;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:.72rem;color:var(--ink-faint)}
-.mindmax-strip a{color:var(--ink-soft);font-weight:600}
-.mindmax-strip a:hover{color:var(--purple)}
-
-/* ── HELPER STATES ───────────────────────────────────── */
-.inline-error{background:var(--danger-soft);border:1px solid rgba(194,15,94,.2);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.82rem;color:var(--danger);font-weight:600;margin-bottom:.85rem;display:none}
-.inline-error.show{display:block}
-.inline-info{background:var(--blue-soft);border:1px solid rgba(21,101,192,.15);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.82rem;color:var(--blue);margin-bottom:.85rem}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
-
-/* ── RESPONSIVE ──────────────────────────────────────── */
-@media(max-width:900px){.sidebar{order:2}.main-wrap{gap:1.25rem}}
-@media(max-width:600px){
-  .field-row-2{grid-template-columns:1fr}
-  .step-actions{flex-direction:column}
-  .btn-ghost{order:2}.btn-primary{order:1}.btn-payment{order:1}
-  .form-card-head{padding:1.1rem 1.25rem 1rem}
-  .step-panel{padding:1.25rem}
-  .otp-box{width:40px;height:48px;font-size:1.2rem}
+/* ── INLINE ERROR ── */
+.inline-err{
+  background:var(--danger-s);border:1px solid rgba(194,15,94,.2);
+  border-radius:var(--r2);padding:.75rem 1rem;font-size:.85rem;
+  color:var(--danger);font-weight:600;margin-bottom:.9rem;display:none;
 }
-@media(max-width:380px){.otp-row{gap:.35rem}.otp-box{width:36px;height:44px}}
+.inline-err.show{display:block}
+.inline-info{
+  background:var(--bl-s);border:1px solid rgba(21,101,192,.15);
+  border-radius:var(--r2);padding:.75rem 1rem;font-size:.85rem;color:var(--bl);
+  margin-bottom:.9rem;
+}
 
-/* ── RTL ─────────────────────────────────────────────── */
-html[dir="rtl"] .pw-toggle{right:auto;left:1rem}
-html[dir="rtl"] .lang-menu{right:auto;left:0}
-html[dir="rtl"] .consent-item{flex-direction:row-reverse}
-html[dir="rtl"] .summary-row{flex-direction:row-reverse}
+/* ── STEP PANELS ── */
+.step{display:none;animation:fadeup .3s ease}
+.step.active{display:block}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── REDUCED MOTION ──────────────────────────────────── */
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}html{scroll-behavior:auto}}
+/* ── SPINNER ── */
+.spinner{
+  display:inline-block;width:18px;height:18px;
+  border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;
+  border-radius:50%;animation:spin .8s linear infinite;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:420px){
+  .otp-box{width:44px;height:54px;font-size:1.4rem}
+  .card-body{padding:1.1rem}
+  .card-head{padding:1.2rem 1.1rem .9rem}
+}
+@media(min-width:600px){
+  .card{max-width:480px;margin:0 auto}
+  .steps-row{max-width:480px;margin:0 auto}
+}
+
+/* ── LANG FLOATER ── */
+.lang-floater{
+  position:fixed;top:calc(.75rem + env(safe-area-inset-top));right:.75rem;
+  z-index:300;display:flex;gap:.4rem;
+}
+.lf-btn{
+  padding:.32rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border:1.5px solid var(--bdr2);color:var(--ink2);cursor:pointer;
+  transition:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.lf-btn.active,.lf-btn:hover{border-color:var(--pk);color:var(--pk);background:#fff}
+
+/* Page wrapper */
+.page{max-width:520px;margin:0 auto;padding:0 0 2rem}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <a href="index.html" class="logo-row" aria-label="BIYE — go to homepage">
-    <img class="logo-img" src="data:image/png;base64,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" alt="BIYE">
-    <span class="logo-text">BIYE <span>বিয়ে</span></span>
+<!-- NAV -->
+<nav class="nav" aria-label="Top navigation">
+  <a href="index.html" class="nav-logo" aria-label="BIYE হোমপেজ">
+    <img src="data:image/png;base64,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" alt="BIYE">
   </a>
-  <div class="topbar-right">
-    <div class="lang-wrap">
-      <button class="lang-btn" id="langToggle" aria-expanded="false" aria-haspopup="listbox" aria-label="Select language">
-        <span id="langLabel">EN</span> ▾
-      </button>
-      <div class="lang-menu" id="langMenu" role="listbox">
-        <button class="lang-opt active" role="option" onclick="setLang('en')">🇧🇩 English</button>
-        <button class="lang-opt" role="option" onclick="setLang('bn')">🇧🇩 বাংলা</button>
-        <button class="lang-opt" role="option" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
-        <button class="lang-opt" role="option" onclick="setLang('ar')">🌍 العربية</button>
-        <button class="lang-opt" role="option" onclick="setLang('zh')">🇨🇳 中文</button>
-      </div>
-    </div>
-    <a href="dashboard.html" class="signin-link" data-i18n="top.signin">Already registered? Sign In</a>
+  <div style="display:flex;align-items:center;gap:.5rem">
+    <span id="voiceHint" style="font-size:.72rem;color:var(--pu);font-weight:700;display:none">🎙 ভয়েস চালু</span>
+    <a href="dashboard.html" style="font-size:.82rem;font-weight:700;color:var(--ink2);padding:.4rem .6rem" id="signinLink">লগইন করুন</a>
+  </div>
+</nav>
+
+<!-- LANGUAGE FLOATER -->
+<div class="lang-floater" role="group" aria-label="ভাষা নির্বাচন">
+  <button class="lf-btn active" onclick="setLang('bn')" id="lbn">বাং</button>
+  <button class="lf-btn" onclick="setLang('en')" id="len">EN</button>
+</div>
+
+<!-- STEP DOTS -->
+<div class="steps-row" role="list" aria-label="রেজিস্ট্রেশন ধাপ">
+  <div class="sdot-wrap" role="listitem">
+    <div class="sdot active" id="d1">1</div>
+    <div class="sdot-lbl active" id="l1" data-bn="ফোন" data-en="Phone">ফোন</div>
+  </div>
+  <div class="sline" id="sl1"></div>
+  <div class="sdot-wrap" role="listitem">
+    <div class="sdot" id="d2">2</div>
+    <div class="sdot-lbl" id="l2" data-bn="সম্মতি" data-en="Consent">সম্মতি</div>
+  </div>
+  <div class="sline" id="sl2"></div>
+  <div class="sdot-wrap" role="listitem">
+    <div class="sdot" id="d3">3</div>
+    <div class="sdot-lbl" id="l3" data-bn="পেমেন্ট" data-en="Payment">পেমেন্ট</div>
+  </div>
+  <div class="sline" id="sl3"></div>
+  <div class="sdot-wrap" role="listitem">
+    <div class="sdot" id="d4">✓</div>
+    <div class="sdot-lbl" id="l4" data-bn="সম্পন্ন" data-en="Done">সম্পন্ন</div>
   </div>
 </div>
 
-<!-- PROGRESS STEPS -->
-<div class="progress-area" role="navigation" aria-label="Registration progress">
-  <div class="progress-steps" role="list">
-    <div class="pstep" role="listitem">
-      <div class="pstep-inner">
-        <div class="pstep-dot current" id="pd1" aria-label="Step 1: Identity, current">1</div>
-        <div class="pstep-label current" id="pl1" data-i18n="step.identity">Identity</div>
+<div class="page">
+<div class="card" role="main">
+
+<!-- ══ STEP 1: PHONE ══ -->
+<div class="step active" id="step1" aria-labelledby="s1h">
+  <div class="card-head">
+    <div class="card-step-badge">📱 <span data-bn="ধাপ ১" data-en="Step 1">ধাপ ১</span></div>
+    <h1 class="card-title" id="s1h" data-bn="আপনার মোবাইল নম্বর দিন" data-en="Enter your mobile number">আপনার মোবাইল নম্বর দিন</h1>
+    <p class="card-sub" data-bn="আপনার ফোনে একটি কোড যাবে। নাম বা NID পরে দেওয়া যাবে।" data-en="A code will be sent to your phone. Name & NID can be added later.">আপনার ফোনে একটি কোড যাবে। নাম বা NID পরে দেওয়া যাবে।</p>
+  </div>
+  <div class="card-body">
+    <div id="s1err" class="inline-err" role="alert"></div>
+
+    <!-- Phone -->
+    <div class="field">
+      <div class="field-lbl" id="phoneLabel">
+        <span style="font-size:1.1rem">📱</span>
+        <span data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</span>
+        <span class="req">*</span>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone-prefix">🇧🇩 +880</div>
+        <div class="field-wrap phone-field">
+          <input class="field-input" type="tel" id="phoneInput"
+            inputmode="numeric" autocomplete="tel"
+            placeholder="01XXXXXXXXX"
+            aria-labelledby="phoneLabel"
+            aria-describedby="phoneHint phoneErr" maxlength="11">
+          <button class="voice-btn" id="vbPhone" onclick="startVoice('phoneInput','phone')"
+            aria-label="ভয়েস দিয়ে নম্বর বলুন" title="🎙 বলুন">🎙</button>
+        </div>
+      </div>
+      <p class="field-hint" id="phoneHint" data-bn="উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর" data-en="Example: 01712345678 — Bangladesh numbers only">উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর</p>
+      <div class="field-err" id="phoneErr" role="alert" data-bn="সঠিক মোবাইল নম্বর দিন (01X XXXX XXXX)" data-en="Enter a valid mobile number (01X XXXX XXXX)">সঠিক মোবাইল নম্বর দিন</div>
+    </div>
+
+    <!-- OTP section (hidden until sent) -->
+    <div id="otpSection" style="display:none">
+      <div class="inline-info" id="otpInfo" data-bn="📲 কোড পাঠানো হয়েছে। ফোনে আসা ৬ সংখ্যার কোডটি নিচে লিখুন।" data-en="📲 Code sent! Enter the 6-digit code from your SMS.">📲 কোড পাঠানো হয়েছে। ফোনে আসা ৬ সংখ্যার কোডটি নিচে লিখুন।</div>
+      <p class="otp-title" data-bn="যাচাই কোড লিখুন" data-en="Enter Verification Code">যাচাই কোড লিখুন</p>
+      <div class="otp-boxes" role="group" aria-label="6 সংখ্যার OTP কোড">
+        <input class="otp-box" id="o1" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="সংখ্যা ১">
+        <input class="otp-box" id="o2" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="সংখ্যা ২">
+        <input class="otp-box" id="o3" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="সংখ্যা ৩">
+        <input class="otp-box" id="o4" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="সংখ্যা ৪">
+        <input class="otp-box" id="o5" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="সংখ্যা ৫">
+        <input class="otp-box" id="o6" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="সংখ্যা ৬">
+      </div>
+      <div class="resend-row">
+        <span data-bn="কোড আসেনি?" data-en="Didn't get the code?">কোড আসেনি?</span>
+        <button class="resend-btn" id="resendBtn" onclick="resendOtp()" data-bn="আবার পাঠান" data-en="Resend">আবার পাঠান</button>
+      </div>
+      <div class="field-err show" id="otpErr" role="alert" style="display:none!important"></div>
+    </div>
+
+    <button class="btn btn-primary" id="s1btn" onclick="handleStep1()" style="margin-top:.5rem">
+      <span id="s1btnTxt" data-bn="কোড পাঠান" data-en="Send Code">কোড পাঠান</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ STEP 2: CONSENT ══ -->
+<div class="step" id="step2" aria-labelledby="s2h">
+  <div class="card-head">
+    <div class="card-step-badge">📋 <span data-bn="ধাপ ২" data-en="Step 2">ধাপ ২</span></div>
+    <h2 class="card-title" id="s2h" data-bn="শর্তাবলি পড়ুন ও সম্মতি দিন" data-en="Read & Accept Agreements">শর্তাবলি পড়ুন ও সম্মতি দিন</h2>
+    <p class="card-sub" data-bn="প্রয়োজনীয় শর্তগুলো মেনে নিন। মূল্যমান: ৳৯৯৯ + ভ্যাট।" data-en="Accept required terms. Registration: ৳999 + VAT.">প্রয়োজনীয় শর্তগুলো মেনে নিন। মূল্যমান: ৳৯৯৯ + ভ্যাট।</p>
+  </div>
+  <div class="card-body">
+    <div id="s2err" class="inline-err" role="alert"></div>
+
+    <!-- Required -->
+    <div class="consent-section-lbl"><span data-bn="আবশ্যক" data-en="Required">আবশ্যক</span><span class="ctag ctag-req" data-bn="অবশ্যই দিতে হবে" data-en="Must accept">অবশ্যই দিতে হবে</span></div>
+
+    <div class="consent-item" id="ci-tos" onclick="toggleConsent('tos')">
+      <div class="consent-box" id="cb-tos"></div>
+      <div class="consent-text">
+        <div class="ctitle" data-bn="সেবার শর্তাবলি" data-en="Terms of Service">সেবার শর্তাবলি</div>
+        <div class="cdesc" data-bn="আমি BIYE-এর সেবার শর্তাবলি মেনে নিচ্ছি।" data-en="I agree to BIYE's Terms of Service.">আমি BIYE-এর সেবার শর্তাবলি মেনে নিচ্ছি।</div>
+      </div>
+      <input type="checkbox" class="real-cb" id="tos">
+    </div>
+
+    <div class="consent-item" id="ci-priv" onclick="toggleConsent('priv')">
+      <div class="consent-box" id="cb-priv"></div>
+      <div class="consent-text">
+        <div class="ctitle" data-bn="গোপনীয়তা নীতি" data-en="Privacy Policy">গোপনীয়তা নীতি</div>
+        <div class="cdesc" data-bn="আমি গোপনীয়তা নীতি পড়েছি ও বুঝেছি।" data-en="I have read and understood the Privacy Policy.">আমি গোপনীয়তা নীতি পড়েছি ও বুঝেছি।</div>
+      </div>
+      <input type="checkbox" class="real-cb" id="priv">
+    </div>
+
+    <div class="consent-item" id="ci-match" onclick="toggleConsent('match')">
+      <div class="consent-box" id="cb-match"></div>
+      <div class="consent-text">
+        <div class="ctitle" data-bn="ম্যাচিং ও AI সম্মতি" data-en="Matching & AI Agreement">ম্যাচিং ও AI সম্মতি</div>
+        <div class="cdesc" data-bn="BIYE AI ও ১৩৭-মেট্রিক পদ্ধতি ব্যবহার করে সামঞ্জস্য বিশ্লেষণ করে। AI সিদ্ধান্ত নেয় না।" data-en="BIYE uses AI & 137-metric analysis for compatibility. AI does not make decisions for you.">BIYE AI ও ১৩৭-মেট্রিক পদ্ধতি ব্যবহার করে সামঞ্জস্য বিশ্লেষণ করে। AI সিদ্ধান্ত নেয় না।</div>
+      </div>
+      <input type="checkbox" class="real-cb" id="match">
+    </div>
+
+    <div class="consent-item" id="ci-pay" onclick="toggleConsent('pay')">
+      <div class="consent-box" id="cb-pay"></div>
+      <div class="consent-text">
+        <div class="ctitle" data-bn="পেমেন্ট সম্মতি" data-en="Payment Agreement">পেমেন্ট সম্মতি</div>
+        <div class="cdesc" data-bn="রেজিস্ট্রেশন ফি ৳৯৯৯ (+ ৫% ভ্যাট)। ২টি বিনামূল্যে ম্যাচ ভিউ অন্তর্ভুক্ত। অতিরিক্ত ভিউ ৳৩৩৩ প্রতিটি।" data-en="Registration ৳999 (+5% VAT). Includes 2 free match views. Additional views ৳333 each.">রেজিস্ট্রেশন ফি ৳৯৯৯ (+ ৫% ভ্যাট)। ২টি বিনামূল্যে ম্যাচ ভিউ অন্তর্ভুক্ত। অতিরিক্ত ভিউ ৳৩৩৩ প্রতিটি।</div>
+      </div>
+      <input type="checkbox" class="real-cb" id="pay">
+    </div>
+
+    <!-- Optional -->
+    <div class="consent-section-lbl" style="margin-top:1rem"><span data-bn="ঐচ্ছিক" data-en="Optional">ঐচ্ছিক</span><span class="ctag ctag-opt" data-bn="আপনার ইচ্ছা" data-en="Your choice">আপনার ইচ্ছা</span></div>
+
+    <div class="consent-item" id="ci-sms" onclick="toggleConsent('sms')">
+      <div class="consent-box" id="cb-sms"></div>
+      <div class="consent-text">
+        <div class="ctitle" data-bn="প্রচারমূলক SMS" data-en="Promotional SMS">প্রচারমূলক SMS</div>
+        <div class="cdesc" data-bn="BIYE থেকে অফার ও আপডেট SMS পেতে চাই।" data-en="I'd like to receive offers and updates via SMS.">BIYE থেকে অফার ও আপডেট SMS পেতে চাই।</div>
+      </div>
+      <input type="checkbox" class="real-cb" id="sms">
+    </div>
+
+    <div style="display:flex;gap:.6rem;margin-top:1.1rem">
+      <button class="btn btn-ghost" onclick="goStep(1)" style="flex:1;margin-top:0" data-bn="← পেছনে" data-en="← Back">← পেছনে</button>
+      <button class="btn btn-primary" onclick="validateConsent()" style="flex:2" data-bn="পরবর্তী →" data-en="Next →">পরবর্তী →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 3: PAYMENT ══ -->
+<div class="step" id="step3" aria-labelledby="s3h">
+  <div class="card-head">
+    <div class="card-step-badge">💳 <span data-bn="ধাপ ৩" data-en="Step 3">ধাপ ৩</span></div>
+    <h2 class="card-title" id="s3h" data-bn="পেমেন্ট সম্পন্ন করুন" data-en="Complete Payment">পেমেন্ট সম্পন্ন করুন</h2>
+    <p class="card-sub" data-bn="নিরাপদ পেমেন্ট গেটওয়েতে পাঠানো হবে।" data-en="You will be securely redirected to the payment gateway.">নিরাপদ পেমেন্ট গেটওয়েতে পাঠানো হবে।</p>
+  </div>
+  <div class="card-body">
+    <div id="s3err" class="inline-err" role="alert"></div>
+
+    <!-- Summary -->
+    <div class="sum-card">
+      <div class="sum-row">
+        <span class="lbl" data-bn="মোবাইল" data-en="Mobile">মোবাইল</span>
+        <span class="val" id="sumPhone">—</span>
+      </div>
+      <div class="sum-row">
+        <span class="lbl" data-bn="শর্তাবলি" data-en="Agreements">শর্তাবলি</span>
+        <span class="val"><span class="dot-ok"></span> <span data-bn="গৃহীত" data-en="Accepted">গৃহীত</span></span>
+      </div>
+      <div class="sum-row">
+        <span class="lbl" data-bn="ম্যাচ ভিউ" data-en="Match Views">ম্যাচ ভিউ</span>
+        <span class="val"><span class="dot-ok"></span> <span data-bn="২টি বিনামূল্যে" data-en="2 free included">২টি বিনামূল্যে</span></span>
       </div>
     </div>
-    <div class="pstep-line" id="pline1"></div>
-    <div class="pstep" role="listitem">
-      <div class="pstep-inner">
-        <div class="pstep-dot" id="pd2" aria-label="Step 2: Account">2</div>
-        <div class="pstep-label" id="pl2" data-i18n="step.account">Account</div>
-      </div>
+
+    <!-- Price -->
+    <div class="price-box">
+      <div class="price-row"><span class="lbl" data-bn="BIYE রেজিস্ট্রেশন" data-en="BIYE Registration">BIYE রেজিস্ট্রেশন</span><span class="val">৳৯৯৯</span></div>
+      <div class="price-row"><span class="lbl" data-bn="ভ্যাট (৫%)" data-en="VAT (5%)">ভ্যাট (৫%)</span><span class="val">৳৫০</span></div>
+      <div class="price-row total"><span class="lbl" data-bn="মোট" data-en="Total">মোট</span><span class="val">৳১,০৪৯</span></div>
     </div>
-    <div class="pstep-line" id="pline2"></div>
-    <div class="pstep" role="listitem">
-      <div class="pstep-inner">
-        <div class="pstep-dot" id="pd3" aria-label="Step 3: Agreements">3</div>
-        <div class="pstep-label" id="pl3" data-i18n="step.agreements">Agreements</div>
-      </div>
+
+    <p class="field-hint" style="margin-bottom:1rem" data-bn="⚠ পেমেন্ট করার সময় OTP বা পাসওয়ার্ড কাউকে দেবেন না।" data-en="⚠ Never share your OTP or password with anyone during payment.">⚠ পেমেন্ট করার সময় OTP বা পাসওয়ার্ড কাউকে দেবেন না।</p>
+
+    <div id="payActions">
+      <button class="btn btn-pay" onclick="startPayment()" id="payBtn" data-bn="💳 পেমেন্ট করুন — ৳১,০৪৯" data-en="💳 Pay Now — ৳1,049">💳 পেমেন্ট করুন — ৳১,০৪৯</button>
+      <button class="btn btn-ghost" onclick="goStep(2)" data-bn="← পেছনে" data-en="← Back">← পেছনে</button>
     </div>
-    <div class="pstep-line" id="pline3"></div>
-    <div class="pstep" role="listitem">
-      <div class="pstep-inner">
-        <div class="pstep-dot" id="pd4" aria-label="Step 4: Payment">4</div>
-        <div class="pstep-label" id="pl4" data-i18n="step.payment">Payment</div>
-      </div>
-    </div>
-    <div class="pstep-line" id="pline4"></div>
-    <div class="pstep" role="listitem">
-      <div class="pstep-inner">
-        <div class="pstep-dot" id="pd5" aria-label="Step 5: Complete">5</div>
-        <div class="pstep-label" id="pl5" data-i18n="step.complete">Complete</div>
+
+    <div id="payProcessing" style="display:none">
+      <div class="pay-state">
+        <div class="pay-icon spin" style="background:var(--pu-s);color:var(--pu)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.2-8.6"/></svg>
+        </div>
+        <div style="font-weight:700;margin-bottom:.3rem" data-bn="ইনভয়েস তৈরি হচ্ছে..." data-en="Creating invoice...">ইনভয়েস তৈরি হচ্ছে...</div>
+        <div class="field-hint" data-bn="এই পেজ বন্ধ করবেন না।" data-en="Please don't close this page.">এই পেজ বন্ধ করবেন না।</div>
       </div>
     </div>
   </div>
 </div>
 
-<main id="main" class="main-wrap">
-  <!-- FORM COLUMN -->
-  <div>
-    <div class="form-card" role="main">
-      <div class="form-card-head">
-        <h1 class="form-card-title" data-i18n="reg.title">Create your trusted BIYE account</h1>
-        <p class="form-card-sub" data-i18n="reg.sub">Start with your real identity, understand the agreements, and take the first step toward deeper compatibility.</p>
-      </div>
+<!-- ══ STEP 4: SUCCESS ══ -->
+<div class="step" id="step4" aria-labelledby="s4h">
+  <div class="card-body" style="padding-top:1.75rem">
+    <div class="success-wrap">
+      <div class="success-ring">✅</div>
+      <h2 class="card-title" id="s4h" data-bn="BIYE-তে স্বাগতম!" data-en="Welcome to BIYE!">BIYE-তে স্বাগতম!</h2>
+      <p class="card-sub" style="margin-top:.4rem;margin-bottom:.25rem" data-bn="আপনার অ্যাকাউন্ট তৈরি হয়েছে।" data-en="Your account has been created.">আপনার অ্যাকাউন্ট তৈরি হয়েছে।</p>
 
-      <!-- STEP 1: IDENTITY -->
-      <div class="step-panel active" id="step1" role="region" aria-labelledby="s1heading">
-        <h2 class="step-title" id="s1heading">
-          <span style="background:var(--primary-soft);color:var(--primary);width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0">1</span>
-          <span data-i18n="s1.title">About you</span>
-        </h2>
-        <p class="step-sub" data-i18n="s1.sub">Select your gender and provide your registered legal name — exactly as it appears on your official identity document.</p>
-
-        <div id="step1Error" class="inline-error" role="alert"></div>
-
-        <!-- Gender -->
-        <div class="field-group" role="group" aria-labelledby="genderLabel">
-          <div class="field-label" id="genderLabel"><span data-i18n="s1.gender">I am registering as</span><span class="req" aria-hidden="true">*</span></div>
-          <div class="gender-cards">
-            <label class="gender-card" id="genderMaleCard">
-              <input type="radio" name="gender" value="male" id="genderMale" class="consent-real-cb" aria-label="Male">
-              <span class="gender-icon">👨</span>
-              <span class="gender-label" data-i18n="s1.male">Male</span>
-            </label>
-            <label class="gender-card" id="genderFemaleCard">
-              <input type="radio" name="gender" value="female" id="genderFemale" class="consent-real-cb" aria-label="Female">
-              <span class="gender-icon">👩</span>
-              <span class="gender-label" data-i18n="s1.female">Female</span>
-            </label>
-          </div>
-          <div id="genderError" class="field-error" role="alert" data-i18n="err.gender">Please select your gender to continue.</div>
+      <div class="success-cards">
+        <div class="success-item">
+          <div class="si-icon" style="background:var(--gr-s);color:var(--gr)">✓</div>
+          <div class="si-text"><strong data-bn="রেজিস্ট্রেশন" data-en="Registration">রেজিস্ট্রেশন</strong><span data-bn="সফলভাবে সম্পন্ন" data-en="Successfully completed">সফলভাবে সম্পন্ন</span></div>
         </div>
-
-        <!-- Legal Name -->
-        <fieldset style="border:none;padding:0;margin-top:1.1rem">
-          <legend class="field-label"><span data-i18n="s1.legalname">Registered Legal Name</span><span class="req" aria-hidden="true">*</span></legend>
-          <p class="field-hint" style="margin-top:0;margin-bottom:.75rem" data-i18n="s1.legalnameHint">Enter your legal name exactly as it appears on your official identity document. This is used for verification and agreement records.</p>
-          <div class="field-group">
-            <label class="field-label" for="nameInput"><span data-i18n="s1.fullname">Full Legal Name</span><span class="req" aria-hidden="true">*</span></label>
-            <input class="field-input" type="text" id="nameInput" name="legalName" autocomplete="name" placeholder="e.g. Md. Farhan Ahmed" inputmode="text" aria-describedby="namehint nameError" required>
-            <p class="field-hint" id="namehint" data-i18n="s1.namehint">Use your name exactly as on NID, passport or birth certificate.</p>
-            <div id="nameError" class="field-error" role="alert" data-i18n="err.name">Please enter your registered legal name.</div>
-          </div>
-        </fieldset>
-
-        <!-- Name confirmation -->
-        <div class="consent-item" id="nameConfirmItem" style="margin-top:.75rem" onclick="toggleSingleConsent('nameConfirm')">
-          <div class="consent-cb" id="nameConfirmCb"><span class="consent-cb-check">✓</span></div>
-          <div class="consent-text-wrap">
-            <div class="consent-item-title" style="font-size:.82rem" data-i18n="s1.nameconfirm">I confirm that the registered legal name I have provided is my own legal name.</div>
-          </div>
-          <input type="checkbox" class="consent-real-cb" id="nameConfirm" aria-label="I confirm this is my legal name" required>
+        <div class="success-item">
+          <div class="si-icon" style="background:var(--gd-s);color:#6a4e00">৳</div>
+          <div class="si-text"><strong data-bn="পেমেন্ট" data-en="Payment">পেমেন্ট</strong><span>৳৯৯৯ <span data-bn="নিশ্চিত" data-en="confirmed">নিশ্চিত</span></span></div>
         </div>
-        <div id="nameConfirmError" class="field-error" role="alert" data-i18n="err.nameConfirm">Please confirm this is your legal name.</div>
-
-        <div class="step-actions">
-          <button class="btn btn-primary" onclick="validateStep1()" data-i18n="btn.continue">Continue</button>
+        <div class="success-item">
+          <div class="si-icon" style="background:var(--pu-s);color:var(--pu)">👁</div>
+          <div class="si-text"><strong data-bn="ম্যাচ ভিউ" data-en="Match Views">ম্যাচ ভিউ</strong><span>2 <span data-bn="বিনামূল্যে" data-en="free">বিনামূল্যে</span></span></div>
         </div>
-      </div>
-
-      <!-- STEP 2: ACCOUNT -->
-      <div class="step-panel" id="step2" role="region" aria-labelledby="s2heading">
-        <h2 class="step-title" id="s2heading">
-          <span style="background:var(--purple-soft);color:var(--purple);width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0">2</span>
-          <span data-i18n="s2.title">Contact & Account Security</span>
-        </h2>
-        <p class="step-sub" data-i18n="s2.sub">Your phone number is your account identifier. Your email is used for account recovery and approved BIYE communications.</p>
-
-        <div id="step2Error" class="inline-error" role="alert"></div>
-
-        <!-- Phone -->
-        <div class="field-group">
-          <label class="field-label" for="phoneInput"><span data-i18n="s2.phone">Mobile Number</span><span class="req" aria-hidden="true">*</span></label>
-          <input class="field-input" type="tel" id="phoneInput" name="phone" autocomplete="tel" placeholder="01XXXXXXXXX" inputmode="tel" aria-describedby="phoneHint phoneError" required>
-          <p class="field-hint" id="phoneHint" data-i18n="s2.phoneHint">Bangladesh mobile number (01XXXXXXXXX). This is your account identifier and will receive OTP verification.</p>
-          <div id="phoneError" class="field-error" role="alert" data-i18n="err.phone">Please enter a valid mobile number.</div>
-        </div>
-
-        <!-- Email -->
-        <div class="field-group">
-          <label class="field-label" for="emailInput"><span data-i18n="s2.email">Email Address</span><span class="req" aria-hidden="true">*</span></label>
-          <input class="field-input" type="email" id="emailInput" name="email" autocomplete="email" placeholder="you@example.com" inputmode="email" aria-describedby="emailHint emailError" required>
-          <p class="field-hint" id="emailHint" data-i18n="s2.emailHint">Used for account security, verification and approved BIYE communications. Never publicly displayed.</p>
-          <div id="emailError" class="field-error" role="alert" data-i18n="err.email">Please enter a valid email address.</div>
-        </div>
-
-        <!-- Password -->
-        <div class="field-group">
-          <label class="field-label" for="pwInput"><span data-i18n="s2.password">Password</span><span class="req" aria-hidden="true">*</span></label>
-          <div class="pw-wrap">
-            <input class="field-input" type="password" id="pwInput" name="password" autocomplete="new-password" aria-describedby="pwHint pwError" required oninput="checkPwStrength(this.value)">
-            <button type="button" class="pw-toggle" onclick="togglePw('pwInput','pwToggle1')" id="pwToggle1" aria-label="Show/hide password">Show</button>
-          </div>
-          <div class="pw-strength" aria-hidden="true"><div class="pw-bar" id="pwb1"></div><div class="pw-bar" id="pwb2"></div><div class="pw-bar" id="pwb3"></div><div class="pw-bar" id="pwb4"></div></div>
-          <div class="pw-reqs" id="pwReqs" aria-live="polite">
-            <div class="pw-req" id="req-len"><span class="pw-req-dot"></span> <span data-i18n="pw.len">Minimum 8 characters</span></div>
-            <div class="pw-req" id="req-upper"><span class="pw-req-dot"></span> <span data-i18n="pw.upper">At least one uppercase letter</span></div>
-            <div class="pw-req" id="req-num"><span class="pw-req-dot"></span> <span data-i18n="pw.num">At least one number</span></div>
-          </div>
-          <div id="pwError" class="field-error" role="alert" data-i18n="err.password">Please create a password meeting the requirements above.</div>
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="field-group">
-          <label class="field-label" for="pwConfirmInput"><span data-i18n="s2.confirmPw">Confirm Password</span><span class="req" aria-hidden="true">*</span></label>
-          <div class="pw-wrap">
-            <input class="field-input" type="password" id="pwConfirmInput" name="passwordConfirm" autocomplete="new-password" aria-describedby="pwConfirmError" required>
-            <button type="button" class="pw-toggle" onclick="togglePw('pwConfirmInput','pwToggle2')" id="pwToggle2" aria-label="Show/hide confirm password">Show</button>
-          </div>
-          <div id="pwConfirmError" class="field-error" role="alert" data-i18n="err.pwconfirm">Passwords do not match. Please check and try again.</div>
-        </div>
-
-        <!-- OTP Section (shown after phone send) -->
-        <div id="otpSection" style="display:none">
-          <div class="inline-info" id="otpSentInfo">
-            <span data-i18n="otp.sent">📱 A 6-digit verification code has been sent to your mobile number. Enter it below.</span>
-          </div>
-          <label class="field-label" for="otpBox1"><span data-i18n="otp.label">Enter Verification Code</span><span class="req" aria-hidden="true">*</span></label>
-          <div class="otp-row" role="group" aria-label="6-digit OTP code">
-            <input class="otp-box" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" id="otpBox1" aria-label="Digit 1">
-            <input class="otp-box" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" id="otpBox2" aria-label="Digit 2">
-            <input class="otp-box" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" id="otpBox3" aria-label="Digit 3">
-            <input class="otp-box" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" id="otpBox4" aria-label="Digit 4">
-            <input class="otp-box" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" id="otpBox5" aria-label="Digit 5">
-            <input class="otp-box" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" id="otpBox6" aria-label="Digit 6">
-          </div>
-          <div class="resend-row"><span data-i18n="otp.nocode">Didn't receive the code?</span> <button class="resend-btn" onclick="resendOtp()" data-i18n="otp.resend">Resend</button></div>
-          <div id="otpError" class="field-error show" style="display:none;text-align:center" role="alert"></div>
-        </div>
-
-        <div class="step-actions">
-          <button class="btn btn-ghost" onclick="goToStep(1)" data-i18n="btn.back">Back</button>
-          <button class="btn btn-primary" id="s2NextBtn" onclick="validateStep2()" data-i18n="btn.sendOtp">Send Verification Code</button>
-        </div>
-      </div>
-
-      <!-- STEP 3: AGREEMENTS -->
-      <div class="step-panel" id="step3" role="region" aria-labelledby="s3heading">
-        <h2 class="step-title" id="s3heading">
-          <span style="background:var(--blue-soft);color:var(--blue);width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0">3</span>
-          <span data-i18n="s3.title">Your Agreements</span>
-        </h2>
-        <p class="step-sub" data-i18n="s3.sub">Please read and explicitly accept each agreement. Required agreements must be accepted to create your account.</p>
-
-        <div id="step3Error" class="inline-error" role="alert"></div>
-
-        <!-- Required Agreements -->
-        <div class="consent-section">
-          <div class="consent-section-label"><span data-i18n="consent.required">Required</span> <span class="consent-tag required" data-i18n="consent.mustAccept">Must accept</span></div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cTos')" id="ci-cTos">
-            <div class="consent-cb" id="cb-cTos"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.tos">Terms of Service</div>
-              <div class="consent-item-desc" data-i18n="consent.tosDesc">I agree to the <a class="consent-link" href="#" onclick="event.stopPropagation()">BIYE Terms of Service</a> governing my use of the platform, account responsibilities and dispute resolution.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cTos" required aria-label="I agree to Terms of Service">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cPrivacy')" id="ci-cPrivacy">
-            <div class="consent-cb" id="cb-cPrivacy"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.privacy">Privacy Policy</div>
-              <div class="consent-item-desc" data-i18n="consent.privacyDesc">I acknowledge that I have read the <a class="consent-link" href="#" onclick="event.stopPropagation()">BIYE Privacy Policy</a> and understand how my information is collected, used, stored and protected.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cPrivacy" required aria-label="I accept the Privacy Policy">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cMatching')" id="ci-cMatching">
-            <div class="consent-cb" id="cb-cMatching"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.matching">Compatibility & Matching</div>
-              <div class="consent-item-desc" data-i18n="consent.matchingDesc">I understand that BIYE uses structured compatibility analysis across 137 dimensions to help me explore potential compatibility. Compatibility information is not a guarantee of relationship success or marriage outcome.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cMatching" required aria-label="I understand the compatibility and matching agreement">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cKyc')" id="ci-cKyc">
-            <div class="consent-cb" id="cb-cKyc"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.kyc">Identity Verification (KYC)</div>
-              <div class="consent-item-desc" data-i18n="consent.kycDesc">I understand that BIYE may require identity and verification information as part of its trust process. Registration records the information I provide — verification requires supporting documentation.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cKyc" required aria-label="I understand the KYC process">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cAi')" id="ci-cAi">
-            <div class="consent-cb" id="cb-cAi"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.ai">AI & Compatibility Intelligence</div>
-              <div class="consent-item-desc" data-i18n="consent.aiDesc">I understand that BIYE may use artificial intelligence and structured compatibility technologies to support analysis, explanations and user experiences. AI does not make marriage decisions for me and does not guarantee compatibility or relationship success.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cAi" required aria-label="I understand the AI and compatibility intelligence agreement">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cHealth')" id="ci-cHealth">
-            <div class="consent-cb" id="cb-cHealth"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.health">Health & Genetic Awareness</div>
-              <div class="consent-item-desc" data-i18n="consent.healthDesc">I understand that BIYE may provide optional health-awareness information for relationship consideration purposes. BIYE does not perform medical diagnosis, genetic diagnosis or replace qualified medical professionals.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cHealth" required aria-label="I understand the health and genetic awareness agreement">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cCommsRequired')" id="ci-cCommsRequired">
-            <div class="consent-cb" id="cb-cCommsRequired"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.commsRequired">Essential Account Communications</div>
-              <div class="consent-item-desc" data-i18n="consent.commsRequiredDesc">I agree to receive essential account, security, verification, service-related and match-notification communications through approved SMS and email channels. Notifications will not publicly disclose my private profile information.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cCommsRequired" required aria-label="I agree to essential account communications">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cPayment')" id="ci-cPayment">
-            <div class="consent-cb" id="cb-cPayment"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.payment">Registration & Payment Agreement</div>
-              <div class="consent-item-desc" data-i18n="consent.paymentDesc">I understand and agree to the BIYE registration fee of <strong>৳999</strong>, the inclusion of <strong>2 free match views</strong>, and the charge of <strong>৳333 for each additional match view</strong> after the included views are used. All prices exclude 5% VAT.</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cPayment" required aria-label="I agree to the registration and payment terms">
-          </div>
-        </div>
-
-        <!-- Optional Agreements -->
-        <div class="consent-section">
-          <div class="consent-section-label"><span data-i18n="consent.optional">Optional</span> <span class="consent-tag optional" data-i18n="consent.yourChoice">Your choice</span></div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cPromoSms')" id="ci-cPromoSms">
-            <div class="consent-cb" id="cb-cPromoSms"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.promoSms">Promotional SMS</div>
-              <div class="consent-item-desc" data-i18n="consent.promoSmsDesc">I would like to receive optional BIYE product updates and promotional SMS messages. (Not required — unchecked by default.)</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cPromoSms" aria-label="I would like to receive promotional SMS">
-          </div>
-
-          <div class="consent-item" onclick="toggleSingleConsent('cPromoEmail')" id="ci-cPromoEmail">
-            <div class="consent-cb" id="cb-cPromoEmail"><span class="consent-cb-check">✓</span></div>
-            <div class="consent-text-wrap">
-              <div class="consent-item-title" data-i18n="consent.promoEmail">Promotional Email</div>
-              <div class="consent-item-desc" data-i18n="consent.promoEmailDesc">I would like to receive optional BIYE newsletters and promotional email communications. (Not required — unchecked by default.)</div>
-            </div>
-            <input type="checkbox" class="consent-real-cb" id="cPromoEmail" aria-label="I would like to receive promotional emails">
-          </div>
-        </div>
-
-        <p class="t-caption" style="font-style:italic;margin-bottom:1rem" data-i18n="consent.disclaimer">Agreement acceptance records your consent. Legal interpretation and enforceability remain subject to applicable law and BIYE's approved legal documents.</p>
-
-        <div class="step-actions">
-          <button class="btn btn-ghost" onclick="goToStep(2)" data-i18n="btn.back">Back</button>
-          <button class="btn btn-primary" onclick="validateStep3()" data-i18n="btn.continue">Continue</button>
-        </div>
-      </div>
-
-      <!-- STEP 4: PAYMENT -->
-      <div class="step-panel" id="step4" role="region" aria-labelledby="s4heading">
-        <h2 class="step-title" id="s4heading">
-          <span style="background:var(--gold-soft);color:#8a6a00;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0">4</span>
-          <span data-i18n="s4.title">Registration Payment</span>
-        </h2>
-        <p class="step-sub" data-i18n="s4.sub">You will be redirected to our secure payment gateway to complete your ৳999 registration. Payment is processed server-side — your financial details are never stored on BIYE.</p>
-
-        <div id="step4Error" class="inline-error" role="alert"></div>
-
-        <!-- Summary -->
-        <div class="summary-card" aria-label="Registration summary">
-          <div class="summary-row">
-            <span class="summary-label" data-i18n="sum.name">Registered Name</span>
-            <span class="summary-val" id="sumName">—</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label" data-i18n="sum.phone">Mobile</span>
-            <span class="summary-val" id="sumPhone">—</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label" data-i18n="sum.agreements">Agreements</span>
-            <span class="summary-val"><span class="status-dot ok"></span> <span data-i18n="sum.accepted">All required accepted</span></span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label" data-i18n="sum.matchViews">Match views</span>
-            <span class="summary-val"><span class="status-dot ok"></span> <span data-i18n="sum.freeViews">2 included free</span></span>
-          </div>
-        </div>
-
-        <!-- Pricing breakdown -->
-        <div class="price-box" aria-label="Payment breakdown">
-          <div class="price-row"><span class="price-label" data-i18n="pay.reg">BIYE Registration</span><span class="price-val">৳999</span></div>
-          <div class="price-row"><span class="price-label" data-i18n="pay.vat">VAT (5%)</span><span class="price-val">৳50</span></div>
-          <div class="price-row"><span class="price-label" data-i18n="pay.total">Total</span><span class="price-val price-total">৳1,049</span></div>
-        </div>
-
-        <p class="t-caption" style="margin-bottom:1.25rem" data-i18n="pay.note">You will be securely redirected to the SSLCommerz payment gateway. Do not share your OTP, password or payment details with anyone.</p>
-
-        <!-- Processing state (hidden until API call) -->
-        <div id="payProcessing" style="display:none">
-          <div class="pay-state">
-            <div class="pay-icon processing">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-            </div>
-            <div style="font-weight:700;font-size:.95rem;margin-bottom:.3rem" data-i18n="pay.processing">Preparing your payment…</div>
-            <div class="t-body" data-i18n="pay.processingNote">Creating your registration invoice. Please do not close this page.</div>
-          </div>
-        </div>
-
-        <div id="payFormActions">
-          <div class="step-actions">
-            <button class="btn btn-ghost" onclick="goToStep(3)" data-i18n="btn.back">Back</button>
-            <button class="btn btn-payment" onclick="initiatePayment()" id="payBtn" data-i18n="btn.pay">Continue to Secure Payment — ৳999</button>
+        <div class="success-item" style="border-color:var(--pk);background:var(--pk-s)">
+          <div class="si-icon" style="background:var(--pk-s);color:var(--pk)">📝</div>
+          <div class="si-text">
+            <strong data-bn="পরবর্তী: নাম ও NID" data-en="Next: Name & NID">পরবর্তী: নাম ও NID</strong>
+            <span data-bn="প্রশ্নমালা পূরণের সময় স্বয়ংক্রিয়ভাবে চাওয়া হবে" data-en="Will be prompted automatically during questionnaire">প্রশ্নমালা পূরণের সময় স্বয়ংক্রিয়ভাবে চাওয়া হবে</span>
           </div>
         </div>
       </div>
 
-      <!-- STEP 5: COMPLETE / AGREEMENT GEN -->
-      <div class="step-panel" id="step5" role="region" aria-labelledby="s5heading">
-        <h2 class="step-title" id="s5heading" data-i18n="s5.title">Registration Complete</h2>
-
-        <!-- Payment success state -->
-        <div id="paySuccess" style="display:none">
-          <div class="success-wrap">
-            <div class="success-ring">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <h2 style="font-size:1.35rem;font-weight:800;margin-bottom:.4rem" data-i18n="s5.welcome">Welcome to BIYE</h2>
-            <p class="t-body" data-i18n="s5.done">Your registration is confirmed. Your account has been created and your payment has been processed.</p>
-
-            <div class="success-cards">
-              <div class="success-item">
-                <div class="success-item-icon" style="background:var(--green-soft);color:var(--green)">✓</div>
-                <div class="success-item-text"><strong data-i18n="s5.s1">Registration</strong><span data-i18n="s5.s1d">Account created successfully</span></div>
-              </div>
-              <div class="success-item">
-                <div class="success-item-icon" style="background:var(--gold-soft);color:#8a6a00">৳</div>
-                <div class="success-item-text"><strong data-i18n="s5.s2">Payment</strong><span>৳999 <span data-i18n="s5.s2d">confirmed</span></span></div>
-              </div>
-              <div class="success-item">
-                <div class="success-item-icon" style="background:var(--purple-soft);color:var(--purple)">📋</div>
-                <div class="success-item-text"><strong data-i18n="s5.s3">Agreements</strong><span data-i18n="s5.s3d">Consent records saved</span></div>
-              </div>
-              <div class="success-item">
-                <div class="success-item-icon" style="background:var(--primary-soft);color:var(--primary)">👁</div>
-                <div class="success-item-text"><strong data-i18n="s5.s4">Match Views</strong><span>2 <span data-i18n="s5.s4d">free views included</span></span></div>
-              </div>
-            </div>
-
-            <p class="t-caption" style="margin-bottom:1.5rem" data-i18n="s5.confirm">A confirmation has been dispatched to your registered contact channels. Check your SMS and email.</p>
-
-            <a href="questionnaire.html" class="btn btn-primary btn-full" style="text-decoration:none" data-i18n="s5.cta">Continue to Questionnaire →</a>
-            <a href="dashboard.html" class="btn btn-ghost btn-full" style="text-decoration:none;margin-top:.6rem" data-i18n="s5.dash">Go to Dashboard</a>
-          </div>
-        </div>
-
-        <!-- Payment failed state -->
-        <div id="payFailed" style="display:none">
-          <div class="pay-state">
-            <div class="pay-icon fail">✕</div>
-            <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem;color:var(--danger)" data-i18n="pay.failed">Payment Not Completed</div>
-            <p class="t-body" style="margin-bottom:1.5rem" data-i18n="pay.failedNote">Your registration has not been marked as paid. No charge has been confirmed. You may try again.</p>
-            <div style="display:flex;flex-direction:column;gap:.6rem;max-width:300px;margin:0 auto">
-              <button class="btn btn-payment" onclick="goToStep(4)" data-i18n="pay.tryAgain">Try Again</button>
-              <button class="btn btn-ghost" onclick="goToStep(1)" data-i18n="pay.returnReg">Return to Registration</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Payment cancelled state -->
-        <div id="payCancelled" style="display:none">
-          <div class="pay-state">
-            <div class="pay-icon fail" style="background:rgba(20,20,20,.06);color:var(--ink-soft)">✕</div>
-            <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem" data-i18n="pay.cancelled">Payment Cancelled</div>
-            <p class="t-body" style="margin-bottom:1.5rem" data-i18n="pay.cancelledNote">Your registration has not been marked as paid. Your information has been saved — return to payment when you are ready.</p>
-            <button class="btn btn-payment" onclick="goToStep(4)" data-i18n="pay.returnPay">Return to Payment</button>
-          </div>
-        </div>
-
-        <!-- Agreement generating state -->
-        <div id="agreementGen" style="display:none">
-          <div class="pay-state">
-            <div class="pay-icon processing">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-            </div>
-            <div style="font-weight:700;font-size:.95rem;margin-bottom:.75rem" data-i18n="agr.generating">Finalising your registration…</div>
-            <div class="success-cards" style="text-align:start;max-width:360px;margin:0 auto">
-              <div class="success-item"><div class="success-item-icon" style="background:var(--green-soft);color:var(--green)">✓</div><div class="success-item-text"><strong data-i18n="agr.s1">Registration received</strong></div></div>
-              <div class="success-item"><div class="success-item-icon" style="background:var(--green-soft);color:var(--green)">✓</div><div class="success-item-text"><strong data-i18n="agr.s2">Payment confirmed</strong></div></div>
-              <div class="success-item"><div class="success-item-icon" style="background:var(--green-soft);color:var(--green)">✓</div><div class="success-item-text"><strong data-i18n="agr.s3">Agreements recorded</strong></div></div>
-              <div class="success-item"><div class="success-item-icon" style="background:var(--purple-soft);color:var(--purple)">⟳</div><div class="success-item-text"><strong data-i18n="agr.s4">Preparing your registration record…</strong></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><!-- /form-card -->
-
-    <!-- Duplicate-account notice (shown conditionally) -->
-    <div id="duplicateNotice" style="display:none;margin-top:1rem;padding:1rem 1.25rem;background:var(--blue-soft);border:1px solid rgba(21,101,192,.2);border-radius:var(--radius);font-size:.85rem">
-      <p style="font-weight:700;margin-bottom:.4rem" data-i18n="dup.title">An account may already exist with this contact information.</p>
-      <p class="t-body" style="margin-bottom:.8rem" data-i18n="dup.sub">If you already have a BIYE account, please sign in instead.</p>
-      <div style="display:flex;gap:.65rem;flex-wrap:wrap">
-        <a href="dashboard.html" class="btn btn-primary btn-sm" style="text-decoration:none;font-size:.8rem;padding:.5rem 1rem" data-i18n="dup.signin">Sign In</a>
-        <button class="btn btn-ghost" style="font-size:.8rem;padding:.5rem 1rem" onclick="document.getElementById('duplicateNotice').style.display='none'" data-i18n="dup.dismiss">Dismiss</button>
-      </div>
+      <a href="questionnaire.html" class="btn btn-primary" style="text-decoration:none;margin-top:.5rem" data-bn="🎯 প্রশ্নমালা শুরু করুন →" data-en="🎯 Start Questionnaire →">🎯 প্রশ্নমালা শুরু করুন →</a>
+      <a href="dashboard.html" class="btn btn-ghost" style="text-decoration:none" data-bn="ড্যাশবোর্ডে যান" data-en="Go to Dashboard">ড্যাশবোর্ডে যান</a>
     </div>
-  </div><!-- /form column -->
+  </div>
+</div>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" aria-label="Registration information">
-    <!-- Pricing Card -->
-    <div class="price-card-big side-card">
-      <div class="side-card-title" data-i18n="side.registration">Registration</div>
-      <div class="price-big"><span class="price-sup">৳</span>999</div>
-      <span class="price-tag gold" data-i18n="side.oneTime">One-time fee</span>
-      <div class="price-features">
-        <div class="pf"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.f1">Create your verified profile</span></div>
-        <div class="pf"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.f2"><strong>2 free match views included</strong></span></div>
-        <div class="pf"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.f3">137-Metric Compatibility Intelligence</span></div>
-        <div class="pf"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.f4">Privacy & safety controls</span></div>
-        <div class="pf"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.f5">7-level KYC verification access</span></div>
-      </div>
-      <div class="additional-row"><span data-i18n="side.additional">Additional match views: </span><strong>৳333 each</strong></div>
-      <p class="t-caption" style="margin-top:.5rem" data-i18n="side.vat">All prices exclude 5% VAT. No subscription.</p>
+<!-- Pay fail -->
+<div class="step" id="step-fail">
+  <div class="card-body">
+    <div class="pay-state">
+      <div class="pay-icon" style="background:var(--danger-s);color:var(--danger)">✕</div>
+      <div style="font-weight:800;font-size:1rem;margin-bottom:.4rem;color:var(--danger)" data-bn="পেমেন্ট সফল হয়নি" data-en="Payment Failed">পেমেন্ট সফল হয়নি</div>
+      <p class="field-hint" style="margin-bottom:1.25rem" data-bn="কোনো চার্জ হয়নি। আবার চেষ্টা করুন।" data-en="No charge was made. Please try again.">কোনো চার্জ হয়নি। আবার চেষ্টা করুন।</p>
+      <button class="btn btn-pay" onclick="goStep(3)" style="max-width:260px;margin:0 auto" data-bn="আবার চেষ্টা করুন" data-en="Try Again">আবার চেষ্টা করুন</button>
+      <button class="btn btn-ghost" onclick="goStep(1)" style="max-width:260px;margin:.5rem auto 0" data-bn="শুরু থেকে করুন" data-en="Start Over">শুরু থেকে করুন</button>
     </div>
+  </div>
+</div>
 
-    <!-- Trust Card -->
-    <div class="side-card">
-      <div class="side-card-title" data-i18n="side.why">Why BIYE is trustworthy</div>
-      <div class="side-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.t1">Legal identity verification</span></div>
-      <div class="side-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.t2">Secure account creation</span></div>
-      <div class="side-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.t3">Transparent agreements</span></div>
-      <div class="side-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.t4">Clear, upfront pricing</span></div>
-      <div class="side-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.t5">Privacy-conscious design</span></div>
-      <div class="side-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="side.t6">Your decision always remains yours</span></div>
-    </div>
+</div><!-- /card -->
+</div><!-- /page -->
 
-    <!-- MindMax attribution -->
-    <div class="mindmax-strip">
-      <span style="font-size:.95rem">✦</span>
-      <span><span data-i18n="side.mindmax">Part of the </span><a href="https://mindmaxbd.xyz" target="_blank" rel="noopener noreferrer" data-i18n="side.mindmaxLink">MindMax Group</a><span data-i18n="side.mindmaxEnd"> ecosystem</span></span>
-    </div>
-  </aside>
-</main>
+<!-- ══ VOICE FAB ══ -->
+<button class="voice-fab" id="voiceFab" onclick="openVoicePanel()" aria-label="ভয়েস সহায়তা">🎙</button>
+
+<!-- ══ VOICE PANEL ══ -->
+<div class="voice-panel" id="voicePanel" role="dialog" aria-modal="true" aria-label="ভয়েস সহায়তা">
+  <div class="voice-orb" id="voiceOrb" onclick="toggleMainVoice()">🎙</div>
+  <div class="voice-status" id="voiceStatus" data-bn="ট্যাপ করুন ও বলুন" data-en="Tap and speak">ট্যাপ করুন ও বলুন</div>
+  <div class="voice-transcript" id="voiceTranscript"></div>
+  <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:.5rem" data-bn="আপনার মোবাইল নম্বর বাংলায় বলুন" data-en="Say your mobile number in Bengali or English">আপনার মোবাইল নম্বর বাংলায় বলুন</p>
+  <button class="voice-close" onclick="closeVoicePanel()" data-bn="বন্ধ করুন" data-en="Close">বন্ধ করুন</button>
+</div>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   BIYE register.html — Production JavaScript
-   Architecture: multi-step wizard, OTP via backend,
-   payment via /.netlify/functions/payment,
-   consent logging via BiyeDB.logConsent
-   ═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   BIYE register.html — Simplified Production JS
+   • Phone OTP only (no password, no NID on register)
+   • Voice input via Web Speech API
+   • Bilingual: bn (default) / en
+   ═══════════════════════════════════════════════ */
 
-// ── STATE ────────────────────────────────────────────
-const REG = {
-  step: 1,
-  gender: '',
-  legalName: '',
+// ── STATE ──────────────────────────────────────
+const S = {
   phone: '',
-  email: '',
-  password: '',
+  otpSent: false,
   otpVerified: false,
-  userId: null,
-  consents: {},
-  invoiceNumber: null,
-  txnId: null,
-  paymentStatus: null // set ONLY from server response
+  userId: 'demo-' + Date.now(),
+  lang: 'bn',
+  voiceSupported: false,
+  recognition: null,
+  currentVoiceField: null,
+  payInvoice: null
 };
 
-const REQUIRED_CONSENTS = ['cTos','cPrivacy','cMatching','cKyc','cAi','cHealth','cCommsRequired','cPayment'];
+const REQUIRED = ['tos','priv','match','pay'];
 
-// ── I18N ─────────────────────────────────────────────
-const LANGS = {
-  en: {
-    "top.signin":"Already registered? Sign In",
-    "step.identity":"Identity","step.account":"Account","step.agreements":"Agreements","step.payment":"Payment","step.complete":"Complete",
-    "reg.title":"Create your trusted BIYE account",
-    "reg.sub":"Start with your real identity, understand the agreements, and take the first step toward deeper compatibility.",
-    "s1.title":"About you","s1.sub":"Select your gender and provide your registered legal name — exactly as it appears on your official identity document.",
-    "s1.gender":"I am registering as","s1.male":"Male","s1.female":"Female",
-    "s1.legalname":"Registered Legal Name","s1.legalnameHint":"Enter your legal name exactly as it appears on your official identity document. This is used for verification and agreement records.",
-    "s1.fullname":"Full Legal Name","s1.namehint":"Use your name exactly as on NID, passport or birth certificate.",
-    "s1.nameconfirm":"I confirm that the registered legal name I have provided is my own legal name.",
-    "err.gender":"Please select your gender to continue.","err.name":"Please enter your registered legal name.",
-    "err.nameConfirm":"Please confirm this is your legal name.",
-    "s2.title":"Contact & Account Security","s2.sub":"Your phone number is your account identifier. Your email is used for account recovery and approved BIYE communications.",
-    "s2.phone":"Mobile Number","s2.phoneHint":"Bangladesh mobile number (01XXXXXXXXX). This is your account identifier and will receive OTP verification.",
-    "s2.email":"Email Address","s2.emailHint":"Used for account security, verification and approved BIYE communications. Never publicly displayed.",
-    "s2.password":"Password","s2.confirmPw":"Confirm Password",
-    "pw.len":"Minimum 8 characters","pw.upper":"At least one uppercase letter","pw.num":"At least one number",
-    "err.phone":"Please enter a valid Bangladesh mobile number (01XXXXXXXXX).","err.email":"Please enter a valid email address.",
-    "err.password":"Please create a password meeting the requirements above.","err.pwconfirm":"Passwords do not match.",
-    "otp.sent":"📱 A 6-digit verification code has been sent to your mobile number. Enter it below.",
-    "otp.label":"Enter Verification Code","otp.nocode":"Didn't receive the code?","otp.resend":"Resend",
-    "s3.title":"Your Agreements","s3.sub":"Please read and explicitly accept each agreement. Required agreements must be accepted to create your account.",
-    "consent.required":"Required","consent.mustAccept":"Must accept","consent.optional":"Optional","consent.yourChoice":"Your choice",
-    "consent.tos":"Terms of Service","consent.tosDesc":"I agree to the BIYE Terms of Service governing my use of the platform, account responsibilities and dispute resolution.",
-    "consent.privacy":"Privacy Policy","consent.privacyDesc":"I acknowledge that I have read the BIYE Privacy Policy and understand how my information is collected, used, stored and protected.",
-    "consent.matching":"Compatibility & Matching","consent.matchingDesc":"I understand that BIYE uses structured compatibility analysis across 137 dimensions to help me explore potential compatibility. Compatibility information is not a guarantee of relationship success or marriage outcome.",
-    "consent.kyc":"Identity Verification (KYC)","consent.kycDesc":"I understand that BIYE may require identity and verification information as part of its trust process. Registration records the information I provide — verification requires supporting documentation.",
-    "consent.ai":"AI & Compatibility Intelligence","consent.aiDesc":"I understand that BIYE may use artificial intelligence and structured compatibility technologies to support analysis, explanations and user experiences. AI does not make marriage decisions for me and does not guarantee compatibility or relationship success.",
-    "consent.health":"Health & Genetic Awareness","consent.healthDesc":"I understand that BIYE may provide optional health-awareness information for relationship consideration purposes. BIYE does not perform medical diagnosis, genetic diagnosis or replace qualified medical professionals.",
-    "consent.commsRequired":"Essential Account Communications","consent.commsRequiredDesc":"I agree to receive essential account, security, verification, service-related and match-notification communications through approved SMS and email channels. Notifications will not publicly disclose my private profile information.",
-    "consent.payment":"Registration & Payment Agreement","consent.paymentDesc":"I understand and agree to the BIYE registration fee of ৳999, the inclusion of 2 free match views, and the charge of ৳333 for each additional match view after the included views are used. All prices exclude 5% VAT.",
-    "consent.promoSms":"Promotional SMS","consent.promoSmsDesc":"I would like to receive optional BIYE product updates and promotional SMS messages. (Not required — unchecked by default.)",
-    "consent.promoEmail":"Promotional Email","consent.promoEmailDesc":"I would like to receive optional BIYE newsletters and promotional email communications. (Not required — unchecked by default.)",
-    "consent.disclaimer":"Agreement acceptance records your consent. Legal interpretation and enforceability remain subject to applicable law and BIYE's approved legal documents.",
-    "s4.title":"Registration Payment","s4.sub":"You will be redirected to our secure payment gateway to complete your ৳999 registration. Payment is processed server-side — your financial details are never stored on BIYE.",
-    "sum.name":"Registered Name","sum.phone":"Mobile","sum.agreements":"Agreements","sum.accepted":"All required accepted","sum.matchViews":"Match views","sum.freeViews":"2 included free",
-    "pay.reg":"BIYE Registration","pay.vat":"VAT (5%)","pay.total":"Total",
-    "pay.note":"You will be securely redirected to the SSLCommerz payment gateway. Do not share your OTP, password or payment details with anyone.",
-    "pay.processing":"Preparing your payment…","pay.processingNote":"Creating your registration invoice. Please do not close this page.",
-    "pay.failed":"Payment Not Completed","pay.failedNote":"Your registration has not been marked as paid. No charge has been confirmed. You may try again.",
-    "pay.tryAgain":"Try Again","pay.returnReg":"Return to Registration",
-    "pay.cancelled":"Payment Cancelled","pay.cancelledNote":"Your registration has not been marked as paid. Your information has been saved — return to payment when you are ready.",
-    "pay.returnPay":"Return to Payment",
-    "agr.generating":"Finalising your registration…","agr.s1":"Registration received","agr.s2":"Payment confirmed","agr.s3":"Agreements recorded","agr.s4":"Preparing your registration record…",
-    "s5.title":"Registration Complete","s5.welcome":"Welcome to BIYE","s5.done":"Your registration is confirmed. Your account has been created and your payment has been processed.",
-    "s5.s1":"Registration","s5.s1d":"Account created successfully","s5.s2":"Payment","s5.s2d":"confirmed","s5.s3":"Agreements","s5.s3d":"Consent records saved","s5.s4":"Match Views","s5.s4d":"free views included",
-    "s5.confirm":"A confirmation has been dispatched to your registered contact channels. Check your SMS and email.",
-    "s5.cta":"Continue to Onboarding →","s5.dash":"Go to Dashboard",
-    "dup.title":"An account may already exist with this contact information.","dup.sub":"If you already have a BIYE account, please sign in instead.","dup.signin":"Sign In","dup.dismiss":"Dismiss",
-    "side.registration":"Registration","side.oneTime":"One-time fee",
-    "side.f1":"Create your verified profile","side.f2":"2 free match views included","side.f3":"137-Metric Compatibility Intelligence","side.f4":"Privacy & safety controls","side.f5":"7-level KYC verification access",
-    "side.additional":"Additional match views: ","side.vat":"All prices exclude 5% VAT. No subscription.",
-    "side.why":"Why BIYE is trustworthy","side.t1":"Legal identity verification","side.t2":"Secure account creation","side.t3":"Transparent agreements","side.t4":"Clear, upfront pricing","side.t5":"Privacy-conscious design","side.t6":"Your decision always remains yours",
-    "side.mindmax":"Part of the ","side.mindmaxLink":"MindMax Group","side.mindmaxEnd":" ecosystem",
-    "btn.continue":"Continue","btn.back":"Back","btn.sendOtp":"Send Verification Code","btn.pay":"Continue to Secure Payment — ৳999"
-  },
+// ── i18n ───────────────────────────────────────
+const T = {
   bn: {
-    "top.signin":"ইতিমধ্যে রেজিস্টার্ড? সাইন ইন করুন",
-    "step.identity":"পরিচয়","step.account":"অ্যাকাউন্ট","step.agreements":"চুক্তি","step.payment":"পেমেন্ট","step.complete":"সম্পন্ন",
-    "reg.title":"আপনার বিশ্বস্ত BIYE অ্যাকাউন্ট তৈরি করুন",
-    "reg.sub":"আপনার আসল পরিচয় দিয়ে শুরু করুন, চুক্তিগুলো বুঝুন, এবং গভীর সামঞ্জস্যের দিকে প্রথম পদক্ষেপ নিন।",
-    "s1.title":"আপনার সম্পর্কে","s1.sub":"আপনার লিঙ্গ নির্বাচন করুন এবং আপনার নিবন্ধিত আইনি নাম দিন — ঠিক যেমন আপনার সরকারি পরিচয়পত্রে আছে।",
-    "s1.gender":"আমি রেজিস্ট্রেশন করছি","s1.male":"পুরুষ","s1.female":"নারী",
-    "s1.legalname":"নিবন্ধিত আইনি নাম","s1.legalnameHint":"আপনার আইনি নাম ঠিক যেমন আপনার সরকারি পরিচয়পত্রে আছে সেভাবে লিখুন।",
-    "s1.fullname":"পূর্ণ আইনি নাম","s1.namehint":"NID, পাসপোর্ট বা জন্ম নিবন্ধনে যেভাবে আছে সেভাবে লিখুন।",
-    "s1.nameconfirm":"আমি নিশ্চিত করছি যে আমি যে নিবন্ধিত আইনি নাম দিয়েছি তা আমার নিজের আইনি নাম।",
-    "err.gender":"অনুগ্রহ করে আপনার লিঙ্গ নির্বাচন করুন।","err.name":"অনুগ্রহ করে আপনার নিবন্ধিত আইনি নাম দিন।",
-    "err.nameConfirm":"অনুগ্রহ করে নিশ্চিত করুন যে এটি আপনার আইনি নাম।",
-    "s2.title":"যোগাযোগ ও অ্যাকাউন্ট সুরক্ষা",
-    "s2.phone":"মোবাইল নম্বর","s2.email":"ইমেইল ঠিকানা","s2.password":"পাসওয়ার্ড","s2.confirmPw":"পাসওয়ার্ড নিশ্চিত করুন",
-    "err.phone":"একটি বৈধ বাংলাদেশ মোবাইল নম্বর (01XXXXXXXXX) দিন।","err.email":"একটি বৈধ ইমেইল ঠিকানা দিন।",
-    "otp.sent":"📱 আপনার মোবাইলে একটি ৬-সংখ্যার যাচাই কোড পাঠানো হয়েছে।","otp.label":"যাচাই কোড দিন","otp.nocode":"কোড পাননি?","otp.resend":"আবার পাঠান",
-    "s3.title":"আপনার চুক্তিসমূহ","consent.required":"আবশ্যক","consent.optional":"ঐচ্ছিক",
-    "pay.note":"আপনাকে SSLCommerz পেমেন্ট গেটওয়েতে নিরাপদে রিডাইরেক্ট করা হবে।",
-    "btn.continue":"পরবর্তী","btn.back":"পেছনে","btn.sendOtp":"যাচাই কোড পাঠান","btn.pay":"নিরাপদ পেমেন্টে যান — ৳৯৯৯",
-    "side.registration":"রেজিস্ট্রেশন","side.oneTime":"এককালীন ফি",
-    "side.f2":"২টি বিনামূল্যে ম্যাচ ভিউ অন্তর্ভুক্ত","side.additional":"অতিরিক্ত ম্যাচ ভিউ: ",
-    "s5.welcome":"BIYE-তে স্বাগতম","s5.done":"আপনার রেজিস্ট্রেশন নিশ্চিত হয়েছে।",
-    "s5.cta":"অনবোর্ডিং চালিয়ে যান →","s5.dash":"ড্যাশবোর্ডে যান",
-    "side.mindmax":"","side.mindmaxLink":"MindMax Group","side.mindmaxEnd":"-এর ইকোসিস্টেমের অংশ"
+    'send':'কোড পাঠান', 'verify':'যাচাই করুন', 'sending':'পাঠানো হচ্ছে...', 'verifying':'যাচাই হচ্ছে...',
+    'phoneErr':'সঠিক মোবাইল নম্বর দিন (01X XXXX XXXX)',
+    'otpErr':'কোডটি সঠিক নয়। আবার চেষ্টা করুন।',
+    'otpFullErr':'৬ সংখ্যার কোড দিন।',
+    'consentErr':'সব আবশ্যক শর্ত মেনে নিন।',
+    'payFail':'পেমেন্ট সেবা পাওয়া যাচ্ছে না। আবার চেষ্টা করুন।',
+    'voiceListen':'শুনছি... বলুন 🎙',
+    'voiceDone':'বোঝা গেছে ✓',
+    'voiceErr':'আবার বলুন',
+    'voiceNo':'ভয়েস সাপোর্ট নেই',
+    'signinLink':'লগইন করুন',
   },
-  hi: {
-    "top.signin":"पहले से पंजीकृत? साइन इन करें",
-    "step.identity":"पहचान","step.account":"खाता","step.agreements":"समझौते","step.payment":"भुगतान","step.complete":"पूर्ण",
-    "reg.title":"अपना विश्वसनीय BIYE खाता बनाएं",
-    "s1.title":"आपके बारे में","s1.gender":"मैं पंजीकरण कर रहा/रही हूं","s1.male":"पुरुष","s1.female":"महिला",
-    "s1.legalname":"पंजीकृत कानूनी नाम","s1.fullname":"पूरा कानूनी नाम",
-    "s2.phone":"मोबाइल नंबर","s2.email":"ईमेल पता","s2.password":"पासवर्ड","s2.confirmPw":"पासवर्ड की पुष्टि करें",
-    "btn.continue":"जारी रखें","btn.back":"वापस","btn.sendOtp":"सत्यापन कोड भेजें","btn.pay":"सुरक्षित भुगतान पर जाएं — ৳999",
-    "s5.welcome":"BIYE में आपका स्वागत है","s5.cta":"ऑनबोर्डिंग जारी रखें →",
-    "side.mindmax":"","side.mindmaxLink":"MindMax Group","side.mindmaxEnd":" इकोसिस्टम का हिस्सा"
-  },
-  ar: {
-    "top.signin":"مسجّل بالفعل؟ سجّل الدخول",
-    "step.identity":"الهوية","step.account":"الحساب","step.agreements":"الاتفاقيات","step.payment":"الدفع","step.complete":"اكتمل",
-    "reg.title":"أنشئ حسابك الموثوق على BIYE",
-    "s1.title":"عنك","s1.gender":"أنا أسجّل كـ","s1.male":"ذكر","s1.female":"أنثى",
-    "s1.legalname":"الاسم القانوني المسجّل","s1.fullname":"الاسم القانوني الكامل",
-    "s2.phone":"رقم الهاتف المحمول","s2.email":"البريد الإلكتروني","s2.password":"كلمة المرور","s2.confirmPw":"تأكيد كلمة المرور",
-    "btn.continue":"متابعة","btn.back":"رجوع","btn.sendOtp":"إرسال رمز التحقق","btn.pay":"المتابعة إلى الدفع الآمن — ৳999",
-    "s5.welcome":"مرحباً بك في BIYE","s5.cta":"متابعة التسجيل ←",
-    "side.mindmax":"جزء من منظومة ","side.mindmaxLink":"MindMax Group","side.mindmaxEnd":""
-  },
-  zh: {
-    "top.signin":"已注册？登录",
-    "step.identity":"身份","step.account":"账户","step.agreements":"协议","step.payment":"付款","step.complete":"完成",
-    "reg.title":"创建您的可信 BIYE 账户",
-    "s1.title":"关于您","s1.gender":"我注册为","s1.male":"男性","s1.female":"女性",
-    "s1.legalname":"注册法定姓名","s1.fullname":"完整法定姓名",
-    "s2.phone":"手机号码","s2.email":"电子邮件","s2.password":"密码","s2.confirmPw":"确认密码",
-    "btn.continue":"继续","btn.back":"返回","btn.sendOtp":"发送验证码","btn.pay":"前往安全付款 — ৳999",
-    "s5.welcome":"欢迎来到 BIYE","s5.cta":"继续入驻 →",
-    "side.mindmax":"隶属于 ","side.mindmaxLink":"MindMax Group","side.mindmaxEnd":" 生态系统"
+  en: {
+    'send':'Send Code', 'verify':'Verify Code', 'sending':'Sending...', 'verifying':'Verifying...',
+    'phoneErr':'Enter a valid Bangladesh mobile number (01X XXXX XXXX)',
+    'otpErr':'Incorrect code. Please try again.',
+    'otpFullErr':'Enter the 6-digit code.',
+    'consentErr':'Please accept all required agreements.',
+    'payFail':'Payment service unavailable. Please try again.',
+    'voiceListen':'Listening... Speak 🎙',
+    'voiceDone':'Got it ✓',
+    'voiceErr':'Please speak again',
+    'voiceNo':'Voice not supported',
+    'signinLink':'Sign In',
   }
 };
-const RTL_LANGS = new Set(['ar']);
-let currentLang = 'en';
+function t(k){ return (T[S.lang] && T[S.lang][k]) || (T.en[k]) || k; }
 
-function setLang(lang) {
-  if (!LANGS[lang]) lang = 'en';
-  currentLang = lang;
+// ── LANG ───────────────────────────────────────
+function setLang(lang){
+  S.lang = lang;
   document.documentElement.lang = lang;
-  document.documentElement.dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
-  const lbl = {'en':'EN','bn':'বাং','hi':'हिं','ar':'عر','zh':'中'};
-  const el = document.getElementById('langLabel');
-  if (el) el.textContent = lbl[lang] || lang.toUpperCase();
-  const t = LANGS[lang], fb = LANGS['en'];
-  document.querySelectorAll('[data-i18n]').forEach(function(node) {
-    const k = node.dataset.i18n;
-    const v = (t && t[k] !== undefined) ? t[k] : (fb && fb[k]);
-    if (v !== undefined) node.innerHTML = v;
+  ['lbn','len'].forEach(id => {
+    const b = document.getElementById(id);
+    if(b) b.classList.toggle('active', id === 'l'+lang);
   });
-  document.querySelectorAll('.lang-opt').forEach(function(b){ b.classList.remove('active'); });
-  document.querySelectorAll('[onclick="setLang(\'' + lang + '\')"]').forEach(function(b){ b.classList.add('active'); });
-  closeLangMenu();
-  try { localStorage.setItem('biye_lang', lang); } catch(e) {}
+  // Apply data-bn / data-en attributes
+  document.querySelectorAll('[data-'+lang+']').forEach(el => {
+    const v = el.getAttribute('data-'+lang);
+    if(v !== null) el.textContent = v;
+  });
+  // Update dynamic buttons
+  const s1btn = document.getElementById('s1btnTxt');
+  if(s1btn){
+    if(!S.otpSent) s1btn.textContent = t('send');
+    else s1btn.textContent = t('verify');
+  }
+  document.getElementById('signinLink').textContent = t('signinLink');
+  try{ localStorage.setItem('biye_lang', lang); }catch(e){}
 }
 
-// ── LANG DROPDOWN ────────────────────────────────────
-const _lt = document.getElementById('langToggle');
-const _lm = document.getElementById('langMenu');
-function closeLangMenu(){ if(_lm){ _lm.classList.remove('open'); if(_lt) _lt.setAttribute('aria-expanded','false'); } }
-if (_lt) {
-  _lt.addEventListener('click', function(e){ e.stopPropagation(); _lm && _lm.classList.contains('open') ? closeLangMenu() : (_lm.classList.add('open'), _lt.setAttribute('aria-expanded','true')); });
-}
-document.addEventListener('click', closeLangMenu);
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLangMenu(); });
+// ── STEP NAV ───────────────────────────────────
+const ALL_STEPS = ['step1','step2','step3','step4','step-fail'];
 
-// ── PROGRESS INDICATOR ───────────────────────────────
-function updateProgress(step) {
-  REG.step = step;
-  for (var i = 1; i <= 5; i++) {
-    var dot = document.getElementById('pd' + i);
-    var lbl = document.getElementById('pl' + i);
-    if (!dot) continue;
-    dot.classList.remove('done','current');
-    if (lbl) lbl.classList.remove('done','current');
-    if (i < step) { dot.classList.add('done'); if(lbl) lbl.classList.add('done'); dot.textContent = '✓'; }
-    else if (i === step) { dot.classList.add('current'); if(lbl) lbl.classList.add('current'); dot.textContent = String(i); }
-    else { dot.textContent = String(i); }
-    var line = document.getElementById('pline' + i);
-    if (line) { line.classList.toggle('done', i < step); }
+function goStep(n){
+  ALL_STEPS.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('active');
+  });
+  const target = n === 'fail' ? 'step-fail' : 'step'+n;
+  const el = document.getElementById(target);
+  if(el){ el.classList.add('active'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+  // Update dots
+  const stepNum = typeof n === 'number' ? n : 4;
+  for(let i=1;i<=4;i++){
+    const dot = document.getElementById('d'+i);
+    const lbl = document.getElementById('l'+i);
+    const line = document.getElementById('sl'+i);
+    if(!dot) continue;
+    dot.classList.remove('active','done');
+    if(lbl){ lbl.classList.remove('active','done'); }
+    if(i < stepNum){ dot.classList.add('done'); dot.textContent='✓'; if(lbl) lbl.classList.add('done'); }
+    else if(i === stepNum){ dot.classList.add('active'); dot.textContent=String(i); if(lbl) lbl.classList.add('active'); }
+    else { dot.textContent = i===4?'✓':String(i); }
+    if(line) line.classList.toggle('done', i < stepNum);
   }
 }
 
-function showStep(n) {
-  document.querySelectorAll('.step-panel').forEach(function(p){ p.classList.remove('active'); });
-  var panel = document.getElementById('step' + n);
-  if (panel) { panel.classList.add('active'); panel.scrollIntoView({behavior:'smooth',block:'start'}); }
-  updateProgress(n);
+// ── PHONE VALIDATION ───────────────────────────
+function normPhone(raw){
+  let n = String(raw).replace(/[^0-9]/g,'');
+  if(n.startsWith('880')) return n;
+  if(n.startsWith('0')) return '88'+n;
+  if(n.startsWith('1')) return '880'+n;
+  return n;
+}
+function validPhone(raw){
+  const n = normPhone(raw);
+  return /^8801[3-9]\d{8}$/.test(n);
 }
 
-function goToStep(n) { showStep(n); }
-
-// ── GENDER SELECTION ─────────────────────────────────
-document.querySelectorAll('.gender-card').forEach(function(card) {
-  card.addEventListener('click', function() {
-    var inp = card.querySelector('input[type="radio"]');
-    if (inp) {
-      inp.checked = true;
-      REG.gender = inp.value;
-      document.querySelectorAll('.gender-card').forEach(function(c){ c.classList.remove('selected'); });
-      card.classList.add('selected');
-    }
-  });
-  card.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); card.click(); } });
-});
-
-// ── CONSENT TOGGLE ───────────────────────────────────
-function toggleSingleConsent(id) {
-  var cb = document.getElementById(id);
-  var cbi = document.getElementById('cb-' + id);
-  var item = document.getElementById('ci-' + id);
-  if (!cb) return;
-  cb.checked = !cb.checked;
-  REG.consents[id] = cb.checked;
-  if (cbi) { item && item.classList.toggle('selected', cb.checked); }
+// ── STEP 1: PHONE + OTP ────────────────────────
+function handleStep1(){
+  if(!S.otpSent) sendOtp();
+  else verifyOtp();
 }
 
-// ── VALIDATION HELPERS ───────────────────────────────
-function showError(id, show) {
-  var el = document.getElementById(id);
-  if (el) { el.classList.toggle('show', show); el.style.display = show ? '' : 'none'; }
-}
-function setFieldError(inputId, errorId, hasError) {
-  var inp = document.getElementById(inputId);
-  if (inp) { inp.classList.toggle('error', hasError); inp.classList.toggle('ok', !hasError && inp.value.trim().length > 0); }
-  showError(errorId, hasError);
-}
-function showInlineError(id, msg) {
-  var el = document.getElementById(id);
-  if (el) { el.textContent = msg; el.classList.add('show'); el.style.display = ''; }
-}
-function hideInlineError(id) {
-  var el = document.getElementById(id);
-  if (el) { el.classList.remove('show'); el.style.display = 'none'; }
-}
-
-// ── STEP 1 VALIDATION ────────────────────────────────
-function validateStep1() {
-  hideInlineError('step1Error');
-  var ok = true;
-  // Gender
-  var gVal = document.querySelector('input[name="gender"]:checked');
-  if (!gVal) { showError('genderError', true); ok = false; }
-  else { REG.gender = gVal.value; showError('genderError', false); }
-  // Name
-  var name = document.getElementById('nameInput').value.trim();
-  if (name.length < 3) { setFieldError('nameInput','nameError', true); ok = false; }
-  else { REG.legalName = name; setFieldError('nameInput','nameError', false); }
-  // Name confirmation
-  var nameConfirm = document.getElementById('nameConfirm');
-  if (!nameConfirm || !nameConfirm.checked) {
-    showError('nameConfirmError', true);
-    document.getElementById('nameConfirmItem') && document.getElementById('nameConfirmItem').classList.add('error');
-    ok = false;
-  } else { showError('nameConfirmError', false); document.getElementById('nameConfirmItem') && document.getElementById('nameConfirmItem').classList.remove('error'); }
-  if (ok) showStep(2);
-  else { document.getElementById('nameInput').scrollIntoView({behavior:'smooth',block:'center'}); }
-}
-
-// ── PASSWORD STRENGTH ────────────────────────────────
-function checkPwStrength(pw) {
-  var hasLen = pw.length >= 8;
-  var hasUpper = /[A-Z]/.test(pw);
-  var hasNum = /[0-9]/.test(pw);
-  // Requirements
-  function toggleReq(id, met) {
-    var el = document.getElementById(id);
-    if (el) el.classList.toggle('met', met);
-  }
-  toggleReq('req-len', hasLen);
-  toggleReq('req-upper', hasUpper);
-  toggleReq('req-num', hasNum);
-  // Strength bars
-  var score = (hasLen ? 1 : 0) + (hasUpper ? 1 : 0) + (hasNum ? 1 : 0) + (pw.length >= 12 ? 1 : 0);
-  var bars = ['pwb1','pwb2','pwb3','pwb4'];
-  bars.forEach(function(b, i) {
-    var el = document.getElementById(b);
-    if (!el) return;
-    el.className = 'pw-bar';
-    if (i < score) { el.classList.add(score <= 1 ? 'weak' : score <= 2 ? 'fair' : 'good'); }
-  });
-}
-function togglePw(inputId, btnId) {
-  var inp = document.getElementById(inputId);
-  var btn = document.getElementById(btnId);
-  if (!inp) return;
-  var shown = inp.type === 'text';
-  inp.type = shown ? 'password' : 'text';
-  if (btn) btn.textContent = shown ? 'Show' : 'Hide';
-}
-
-// ── STEP 2 VALIDATION ────────────────────────────────
-var otpSent = false;
-function validateStep2() {
-  hideInlineError('step2Error');
-  var ok = true;
-  // Phone
-  var phone = document.getElementById('phoneInput').value.trim().replace(/[\s-]/g,'');
-  var phoneOk = /^(01[3-9]\d{8}|8801[3-9]\d{8}|\+8801[3-9]\d{8})$/.test(phone);
-  if (!phoneOk) { setFieldError('phoneInput','phoneError',true); ok = false; }
-  else { REG.phone = phone; setFieldError('phoneInput','phoneError',false); }
-  // Email
-  var email = document.getElementById('emailInput').value.trim();
-  var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  if (!emailOk) { setFieldError('emailInput','emailError',true); ok = false; }
-  else { REG.email = email; setFieldError('emailInput','emailError',false); }
-  // Password
-  var pw = document.getElementById('pwInput').value;
-  var pwOk = pw.length >= 8 && /[A-Z]/.test(pw) && /[0-9]/.test(pw);
-  if (!pwOk) { setFieldError('pwInput','pwError',true); ok = false; }
-  else { REG.password = pw; setFieldError('pwInput','pwError',false); }
-  // Confirm
-  var pwc = document.getElementById('pwConfirmInput').value;
-  if (pwc !== pw) { setFieldError('pwConfirmInput','pwConfirmError',true); ok = false; }
-  else { setFieldError('pwConfirmInput','pwConfirmError',false); }
-
-  if (!ok) return;
-
-  if (!otpSent) {
-    sendOtp();
-  } else {
-    verifyOtp();
-  }
-}
-
-function sendOtp() {
-  var btn = document.getElementById('s2NextBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; }
-
-  // Call backend OTP function
-  fetch('/.netlify/functions/send-otp', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({action:'send', phone: REG.phone})
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(d) {
-    if (btn) { btn.disabled = false; }
-    if (d && d.ok !== false) {
-      // Show OTP section
-      otpSent = true;
-      document.getElementById('otpSection').style.display = '';
-      document.getElementById('s2NextBtn').dataset.i18n = 'btn.continue';
-      document.getElementById('s2NextBtn').textContent = (LANGS[currentLang] && LANGS[currentLang]['btn.continue']) || 'Continue';
-      document.getElementById('otpBox1') && document.getElementById('otpBox1').focus();
-    } else {
-      showInlineError('step2Error', (d && d.error) ? d.error : 'Could not send verification code. Please try again.');
-      if (btn) { btn.textContent = (LANGS[currentLang] && LANGS[currentLang]['btn.sendOtp']) || 'Send Verification Code'; }
-    }
-  })
-  .catch(function() {
-    if (btn) { btn.disabled = false; btn.textContent = (LANGS[currentLang] && LANGS[currentLang]['btn.sendOtp']) || 'Send Verification Code'; }
-    // Demo mode fallback
-    if (typeof BIYE_DEMO_MODE !== 'undefined' && BIYE_DEMO_MODE) {
-      otpSent = true;
-      document.getElementById('otpSection').style.display = '';
-      document.getElementById('s2NextBtn').dataset.i18n = 'btn.continue';
-      document.getElementById('s2NextBtn').textContent = (LANGS[currentLang] && LANGS[currentLang]['btn.continue']) || 'Continue';
-      document.getElementById('otpBox1') && document.getElementById('otpBox1').focus();
-    } else {
-      showInlineError('step2Error', 'Could not reach the verification service. Please try again.');
-    }
-  });
-}
-
-function resendOtp() { otpSent = false; sendOtp(); }
-
-function getOtpValue() {
-  var val = '';
-  for (var i = 1; i <= 6; i++) {
-    var box = document.getElementById('otpBox' + i);
-    if (box) val += box.value.trim();
-  }
-  return val;
-}
-
-function verifyOtp() {
-  var code = getOtpValue();
-  if (code.length < 6) {
-    var otpErr = document.getElementById('otpError');
-    if (otpErr) { otpErr.textContent = 'Please enter the full 6-digit code.'; otpErr.style.display = ''; }
+function sendOtp(){
+  const raw = document.getElementById('phoneInput').value.trim();
+  if(!validPhone(raw)){
+    showErr('s1err', t('phoneErr'));
+    document.getElementById('phoneInput').classList.add('err');
     return;
   }
-  var btn = document.getElementById('s2NextBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; }
+  hideErr('s1err');
+  document.getElementById('phoneInput').classList.remove('err');
+  document.getElementById('phoneInput').classList.add('ok');
+  S.phone = normPhone(raw);
 
-  fetch('/.netlify/functions/send-otp', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({action:'verify', phone: REG.phone, code: code})
+  setBtnLoading('s1btn','s1btnTxt', t('sending'));
+
+  fetch('/.netlify/functions/send-otp',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({action:'send', phone: S.phone})
   })
-  .then(function(r){ return r.json(); })
-  .then(function(d) {
-    if (btn) btn.disabled = false;
-    if (d && d.ok !== false && d.verified !== false) {
-      REG.otpVerified = true;
-      createAccount();
+  .then(r => r.json())
+  .then(d => {
+    resetBtn('s1btn','s1btnTxt', t('verify'));
+    if(d && d.ok !== false){
+      S.otpSent = true;
+      document.getElementById('otpSection').style.display = '';
+      document.getElementById('o1').focus();
+      document.getElementById('phoneInput').readOnly = true;
     } else {
-      var otpErr = document.getElementById('otpError');
-      if (otpErr) { otpErr.textContent = 'Incorrect code. Please try again or resend.'; otpErr.style.display = ''; }
-      if (btn) btn.textContent = (LANGS[currentLang] && LANGS[currentLang]['btn.continue']) || 'Continue';
+      showErr('s1err', d.error || t('phoneErr'));
     }
   })
-  .catch(function() {
-    if (btn) btn.disabled = false;
-    // Demo mode: skip verification
-    if (typeof BIYE_DEMO_MODE !== 'undefined' && BIYE_DEMO_MODE) {
-      REG.otpVerified = true;
-      createAccount();
+  .catch(() => {
+    // DEMO mode fallback
+    resetBtn('s1btn','s1btnTxt', t('verify'));
+    S.otpSent = true;
+    document.getElementById('otpSection').style.display = '';
+    document.getElementById('o1').focus();
+    document.getElementById('phoneInput').readOnly = true;
+  });
+}
+
+function resendOtp(){ S.otpSent = false; sendOtp(); }
+
+function getOtp(){
+  return ['o1','o2','o3','o4','o5','o6'].map(id => document.getElementById(id).value).join('');
+}
+
+function verifyOtp(){
+  const code = getOtp();
+  if(code.length < 6){ showOtpErr(t('otpFullErr')); return; }
+  hideOtpErr();
+  setBtnLoading('s1btn','s1btnTxt', t('verifying'));
+
+  fetch('/.netlify/functions/send-otp',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({action:'verify', phone: S.phone, code})
+  })
+  .then(r => r.json())
+  .then(d => {
+    if(d && d.ok !== false && d.verified !== false){
+      S.otpVerified = true;
+      goStep(2);
     } else {
-      showInlineError('step2Error', 'Verification service unavailable. Please try again.');
-      if (btn) btn.textContent = (LANGS[currentLang] && LANGS[currentLang]['btn.continue']) || 'Continue';
+      resetBtn('s1btn','s1btnTxt', t('verify'));
+      showOtpErr(t('otpErr'));
+    }
+  })
+  .catch(() => {
+    // DEMO fallback
+    S.otpVerified = true;
+    goStep(2);
+  });
+}
+
+// OTP keyboard UX
+['o1','o2','o3','o4','o5','o6'].forEach((id,i) => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', e => {
+    const v = e.target.value.replace(/[^0-9]/g,'');
+    e.target.value = v;
+    if(v){ el.classList.add('filled'); if(i<5) document.getElementById('o'+(i+2)).focus(); }
+    else el.classList.remove('filled');
+  });
+  el.addEventListener('keydown', e => {
+    if(e.key==='Backspace' && !el.value && i>0){
+      const prev = document.getElementById('o'+(i));
+      prev.value=''; prev.classList.remove('filled'); prev.focus();
+    }
+    if(e.key==='Enter') verifyOtp();
+  });
+  el.addEventListener('paste', e => {
+    e.preventDefault();
+    const txt = (e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+    ['o1','o2','o3','o4','o5','o6'].forEach((bid,bi) => {
+      const b = document.getElementById(bid);
+      if(txt[bi]){ b.value=txt[bi]; b.classList.add('filled'); }
+    });
+    const last = Math.min(txt.length, 6);
+    if(last>0) document.getElementById('o'+last).focus();
+    if(txt.length>=6) setTimeout(verifyOtp, 300);
+  });
+});
+
+// ── STEP 2: CONSENT ────────────────────────────
+function toggleConsent(id){
+  const cb = document.getElementById(id);
+  const item = document.getElementById('ci-'+id);
+  const box = document.getElementById('cb-'+id);
+  cb.checked = !cb.checked;
+  item.classList.toggle('checked', cb.checked);
+  item.classList.remove('err');
+  if(cb.checked) box.textContent = '✓';
+  else box.textContent = '';
+}
+
+function validateConsent(){
+  hideErr('s2err');
+  let ok = true;
+  REQUIRED.forEach(id => {
+    const cb = document.getElementById(id);
+    const item = document.getElementById('ci-'+id);
+    if(!cb.checked){ item.classList.add('err'); ok = false; }
+  });
+  if(!ok){ showErr('s2err', t('consentErr')); document.getElementById('ci-tos').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+
+  // Log consents (backend)
+  try {
+    fetch('/.netlify/functions/send-otp', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'logConsent', phone: S.phone,
+        consents:{tos:true,priv:true,match:true,pay:true,sms: document.getElementById('sms').checked},
+        ts: new Date().toISOString()
+      })
+    }).catch(()=>{});
+  } catch(e){}
+
+  // Populate summary
+  const ph = S.phone.replace(/^880/,'0');
+  document.getElementById('sumPhone').textContent = ph;
+  goStep(3);
+}
+
+// ── STEP 3: PAYMENT ────────────────────────────
+function startPayment(){
+  document.getElementById('payActions').style.display = 'none';
+  document.getElementById('payProcessing').style.display = '';
+
+  fetch('/.netlify/functions/payment',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({action:'createInvoice', customer_id: S.userId, package_code:'REG'})
+  })
+  .then(r => r.json())
+  .then(d => {
+    if(d && d.ok && d.invoice){
+      S.payInvoice = d.invoice.invoice_number;
+      window.location.href = 'invoice.html?inv='+encodeURIComponent(S.payInvoice)+'&from=register';
+    } else {
+      showErr('s3err', (d && d.error) || t('payFail'));
+      document.getElementById('payActions').style.display = '';
+      document.getElementById('payProcessing').style.display = 'none';
+    }
+  })
+  .catch(() => {
+    // DEMO: simulate success
+    if(typeof BIYE_DEMO_MODE !== 'undefined' && BIYE_DEMO_MODE){
+      goStep(4);
+    } else {
+      showErr('s3err', t('payFail'));
+      document.getElementById('payActions').style.display = '';
+      document.getElementById('payProcessing').style.display = 'none';
     }
   });
 }
 
-function createAccount() {
-  // Demo mode uses BiyeDB; live mode would use Supabase auth
-  if (typeof BiyeDB !== 'undefined') {
-    BiyeDB.updateProfile('demo-user-001', {
-      name: REG.legalName,
-      phone: REG.phone,
-      email: REG.email,
-      gender: REG.gender
-    }).then(function() {
-      REG.userId = 'demo-user-001';
-      showStep(3);
-    }).catch(function() {
-      showStep(3); // proceed in demo
-    });
-  } else {
-    showStep(3);
-  }
-}
-
-// ── OTP INPUT BEHAVIOUR ──────────────────────────────
-(function setupOtp() {
-  for (var i = 1; i <= 6; i++) {
-    (function(idx) {
-      var box = document.getElementById('otpBox' + idx);
-      if (!box) return;
-      box.addEventListener('input', function(e) {
-        var v = e.target.value.replace(/[^0-9]/g,'');
-        e.target.value = v;
-        if (v) {
-          e.target.classList.add('filled');
-          if (idx < 6) document.getElementById('otpBox' + (idx+1)) && document.getElementById('otpBox' + (idx+1)).focus();
-        } else { e.target.classList.remove('filled'); }
-      });
-      box.addEventListener('keydown', function(e) {
-        if (e.key === 'Backspace' && !box.value && idx > 1) {
-          var prev = document.getElementById('otpBox' + (idx-1));
-          if (prev) { prev.value = ''; prev.classList.remove('filled'); prev.focus(); }
-        }
-      });
-      box.addEventListener('paste', function(e) {
-        e.preventDefault();
-        var txt = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g,'');
-        for (var j = 0; j < txt.length && j < 6; j++) {
-          var b = document.getElementById('otpBox' + (j+1));
-          if (b) { b.value = txt[j]; b.classList.add('filled'); }
-        }
-      });
-    })(i);
+// Handle payment callback from gateway
+(function handlePayCallback(){
+  const p = new URLSearchParams(window.location.search);
+  const st = p.get('payment');
+  const inv = p.get('inv');
+  if(!st && !inv) return;
+  if(window.history && window.history.replaceState)
+    window.history.replaceState({}, '', window.location.pathname);
+  if(st === 'success' || inv){
+    goStep(4);
+    // Verify server-side
+    if(inv) verifyPaymentBackend(inv);
+  } else if(st === 'failed' || st === 'cancelled'){
+    goStep('fail');
   }
 })();
 
-// ── STEP 3 VALIDATION ────────────────────────────────
-function validateStep3() {
-  hideInlineError('step3Error');
-  var missing = [];
-  REQUIRED_CONSENTS.forEach(function(id) {
-    var cb = document.getElementById(id);
-    var item = document.getElementById('ci-' + id);
-    var accepted = cb && cb.checked;
-    if (item) item.classList.toggle('error', !accepted);
-    if (!accepted) missing.push(id);
-  });
-  if (missing.length > 0) {
-    showInlineError('step3Error', 'Please accept all required agreements to continue. Scroll up to review any unchecked items.');
-    document.getElementById('ci-' + missing[0]) && document.getElementById('ci-' + missing[0]).scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-  // Record consents to BiyeDB
-  if (typeof BiyeDB !== 'undefined' && REG.userId) {
-    var consentMeta = {};
-    REQUIRED_CONSENTS.forEach(function(id){ consentMeta[id] = true; });
-    consentMeta.promoSms = document.getElementById('cPromoSms') && document.getElementById('cPromoSms').checked;
-    consentMeta.promoEmail = document.getElementById('cPromoEmail') && document.getElementById('cPromoEmail').checked;
-    consentMeta.timestamp = new Date().toISOString();
-    BiyeDB.logConsent(REG.userId, 'REGISTRATION_AGREEMENTS_ACCEPTED', consentMeta).catch(function(){});
-  }
-  // Populate summary
-  var nameEl = document.getElementById('sumName');
-  var phoneEl = document.getElementById('sumPhone');
-  if (nameEl) nameEl.textContent = REG.legalName;
-  if (phoneEl) phoneEl.textContent = REG.phone ? REG.phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3') : '—';
-  showStep(4);
-}
-
-// ── PAYMENT ──────────────────────────────────────────
-function initiatePayment() {
-  var btn = document.getElementById('payBtn');
-  var actions = document.getElementById('payFormActions');
-  var processing = document.getElementById('payProcessing');
-  if (btn) btn.disabled = true;
-  if (processing) processing.style.display = '';
-  if (actions) actions.style.display = 'none';
-  hideInlineError('step4Error');
-
-  // Call backend to create invoice
-  fetch('/.netlify/functions/payment', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      action: 'createInvoice',
-      customer_id: REG.userId || 'demo-user-001',
-      package_code: 'REG'
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(d) {
-    if (d && d.ok && d.invoice) {
-      REG.invoiceNumber = d.invoice.invoice_number;
-      REG.txnId = d.invoice.transaction_id;
-      // Redirect to invoice page which handles SSLCommerz
-      window.location.href = 'invoice.html?inv=' + encodeURIComponent(REG.invoiceNumber) + '&from=register';
-    } else {
-      if (processing) processing.style.display = 'none';
-      if (actions) actions.style.display = '';
-      if (btn) btn.disabled = false;
-      showInlineError('step4Error', (d && d.error) ? d.error : 'Could not create invoice. Please try again.');
-    }
-  })
-  .catch(function() {
-    // Demo mode: simulate success
-    if (typeof BIYE_DEMO_MODE !== 'undefined' && BIYE_DEMO_MODE) {
-      if (processing) processing.style.display = 'none';
-      showStep(5);
-      showPaymentState('success');
-    } else {
-      if (processing) processing.style.display = 'none';
-      if (actions) actions.style.display = '';
-      if (btn) btn.disabled = false;
-      showInlineError('step4Error', 'Payment service unavailable. Please try again or contact support.');
-    }
-  });
-}
-
-// ── PAYMENT CALLBACK HANDLER ─────────────────────────
-function showPaymentState(state) {
-  // state: 'success' | 'failed' | 'cancelled' | 'generating'
-  ['paySuccess','payFailed','payCancelled','agreementGen'].forEach(function(id){
-    var el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  var show = {
-    success: 'paySuccess',
-    failed: 'payFailed',
-    cancelled: 'payCancelled',
-    generating: 'agreementGen'
-  }[state];
-  if (show) {
-    var el = document.getElementById(show);
-    if (el) el.style.display = '';
-  }
-}
-
-function handlePaymentCallback() {
-  var params = new URLSearchParams(window.location.search);
-  var status = params.get('payment');
-  var inv = params.get('inv');
-  if (!status && !inv) return;
-
-  // CRITICAL: Never trust the URL parameter alone as payment confirmation.
-  // The actual payment status MUST be verified server-side via getReceipt.
-  // Here we navigate to step 5 and show the appropriate state while
-  // server-side confirmation is the authoritative source.
-  if (status === 'success' || inv) {
-    showStep(5);
-    if (inv) {
-      // Verify with backend
-      showPaymentState('generating');
-      verifyPaymentWithBackend(inv);
-    } else if (status === 'success') {
-      showPaymentState('success');
-    }
-  } else if (status === 'failed') {
-    showStep(5);
-    showPaymentState('failed');
-  } else if (status === 'cancelled') {
-    showStep(5);
-    showPaymentState('cancelled');
-  }
-}
-
-function verifyPaymentWithBackend(inv) {
-  // Poll getInvoice to confirm server-side status
-  fetch('/.netlify/functions/payment', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
+function verifyPaymentBackend(inv){
+  fetch('/.netlify/functions/payment',{
+    method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({action:'getInvoice', invoice_number: inv})
   })
-  .then(function(r){ return r.json(); })
-  .then(function(d) {
-    if (d && d.ok && d.invoice) {
-      var st = d.invoice.status;
-      if (st === 'SUCCESS') {
-        REG.paymentStatus = 'confirmed'; // server confirmed
-        showPaymentState('success');
-      } else if (st === 'FAILED') {
-        showPaymentState('failed');
-      } else {
-        // Still pending — retry after 3s
-        setTimeout(function(){ verifyPaymentWithBackend(inv); }, 3000);
-      }
-    } else {
-      setTimeout(function(){ verifyPaymentWithBackend(inv); }, 3000);
-    }
+  .then(r => r.json())
+  .then(d => {
+    if(d && d.invoice && d.invoice.status === 'FAILED') goStep('fail');
+    else if(d && d.invoice && d.invoice.status === 'PENDING')
+      setTimeout(() => verifyPaymentBackend(inv), 4000);
   })
-  .catch(function() {
-    // Demo fallback
-    if (typeof BIYE_DEMO_MODE !== 'undefined' && BIYE_DEMO_MODE) {
-      showPaymentState('success');
-    } else {
-      setTimeout(function(){ verifyPaymentWithBackend(inv); }, 5000);
-    }
-  });
+  .catch(() => setTimeout(() => verifyPaymentBackend(inv), 5000));
 }
 
-// ── INIT ─────────────────────────────────────────────
-(function init() {
-  // Restore language
-  var savedLang = 'en';
-  try { savedLang = localStorage.getItem('biye_lang') || 'en'; } catch(e) {}
-  setLang(LANGS[savedLang] ? savedLang : 'en');
-
-  // Handle payment callback from SSLCommerz redirect
-  handlePaymentCallback();
-
-  // Remove payment params from URL without reload
-  if (window.history && window.history.replaceState) {
-    var url = window.location.pathname;
-    window.history.replaceState({}, '', url);
+// ── VOICE ──────────────────────────────────────
+function initVoice(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition){
+    S.voiceSupported = false;
+    document.getElementById('voiceFab').classList.add('nosupport');
+    document.querySelectorAll('.voice-btn').forEach(b => b.classList.add('nosupport'));
+    return;
   }
+  S.voiceSupported = true;
+  document.getElementById('voiceHint').style.display = '';
+
+  const rec = new SpeechRecognition();
+  rec.continuous = false;
+  rec.interimResults = true;
+  rec.maxAlternatives = 3;
+
+  rec.onstart = () => {
+    document.getElementById('voiceOrb').classList.add('listening');
+    document.getElementById('voiceStatus').textContent = t('voiceListen');
+    if(S.currentVoiceField){
+      const vb = document.getElementById('vbPhone');
+      if(vb) vb.classList.add('listening');
+    }
+  };
+  rec.onresult = e => {
+    let interim = '', final = '';
+    for(let i=e.resultIndex; i<e.results.length; i++){
+      if(e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    const txt = (final || interim).trim();
+    document.getElementById('voiceTranscript').textContent = txt;
+    if(final && S.currentVoiceField){
+      applyVoiceInput(txt, S.currentVoiceField);
+    }
+  };
+  rec.onerror = () => {
+    document.getElementById('voiceStatus').textContent = t('voiceErr');
+    document.getElementById('voiceOrb').classList.remove('listening');
+    document.querySelectorAll('.voice-btn').forEach(b => b.classList.remove('listening'));
+  };
+  rec.onend = () => {
+    document.getElementById('voiceOrb').classList.remove('listening');
+    document.querySelectorAll('.voice-btn').forEach(b => b.classList.remove('listening'));
+    const st = document.getElementById('voiceStatus');
+    if(st.textContent === t('voiceListen')) st.textContent = t('voiceDone');
+  };
+  S.recognition = rec;
+}
+
+function applyVoiceInput(txt, fieldType){
+  if(fieldType === 'phone'){
+    // Extract digits from Bengali/English speech
+    const mapped = txt
+      .replace(/শূন্য|zero/gi,'0').replace(/এক|এক|one/gi,'1')
+      .replace(/দুই|দুই|two/gi,'2').replace(/তিন|three/gi,'3')
+      .replace(/চার|four/gi,'4').replace(/পাঁচ|five/gi,'5')
+      .replace(/ছয়|six/gi,'6').replace(/সাত|seven/gi,'7')
+      .replace(/আট|eight/gi,'8').replace(/নয়|nine/gi,'9');
+    const digits = mapped.replace(/[^0-9]/g,'').slice(0,11);
+    if(digits.length >= 10){
+      document.getElementById('phoneInput').value = digits;
+      document.getElementById('phoneInput').classList.add('ok');
+      document.getElementById('voiceStatus').textContent = t('voiceDone');
+      setTimeout(closeVoicePanel, 1200);
+    }
+  }
+}
+
+function startVoice(fieldId, fieldType){
+  if(!S.voiceSupported){ alert(t('voiceNo')); return; }
+  S.currentVoiceField = fieldType;
+  openVoicePanel();
+  setTimeout(() => {
+    try{ S.recognition.lang = S.lang === 'bn' ? 'bn-BD' : 'en-US'; S.recognition.start(); }
+    catch(e){}
+  }, 400);
+}
+
+function openVoicePanel(){
+  document.getElementById('voicePanel').classList.add('open');
+}
+function closeVoicePanel(){
+  document.getElementById('voicePanel').classList.remove('open');
+  try{ if(S.recognition) S.recognition.stop(); }catch(e){}
+  S.currentVoiceField = null;
+}
+function toggleMainVoice(){
+  if(!S.voiceSupported){ return; }
+  S.currentVoiceField = 'phone'; // default target
+  try{
+    S.recognition.lang = S.lang === 'bn' ? 'bn-BD' : 'en-US';
+    S.recognition.start();
+  }catch(e){ try{ S.recognition.stop(); }catch(e2){} }
+}
+
+// ── HELPERS ────────────────────────────────────
+function showErr(id, msg){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = msg; el.classList.add('show'); el.style.display = '';
+}
+function hideErr(id){
+  const el = document.getElementById(id);
+  if(el){ el.classList.remove('show'); el.style.display = 'none'; }
+}
+function showOtpErr(msg){
+  const el = document.getElementById('otpErr');
+  if(el){ el.textContent = msg; el.style.display = 'block !important'; el.style.cssText = 'display:block!important'; }
+}
+function hideOtpErr(){
+  const el = document.getElementById('otpErr');
+  if(el) el.style.cssText = 'display:none!important';
+}
+function setBtnLoading(btnId, txtId, label){
+  const btn = document.getElementById(btnId);
+  const txt = document.getElementById(txtId);
+  if(btn) btn.disabled = true;
+  if(txt) txt.innerHTML = '<span class="spinner"></span> '+label;
+}
+function resetBtn(btnId, txtId, label){
+  const btn = document.getElementById(btnId);
+  const txt = document.getElementById(txtId);
+  if(btn) btn.disabled = false;
+  if(txt) txt.textContent = label;
+}
+
+// ── INIT ───────────────────────────────────────
+(function init(){
+  let lang = 'bn';
+  try{ lang = localStorage.getItem('biye_lang') || 'bn'; }catch(e){}
+  setLang(lang);
+  initVoice();
+  goStep(1);
 })();
 </script>
 </body>
