@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>BIYE — Meaningful Compatibility for Meaningful Relationships</title>
+<meta name="description" content="BIYE helps people explore meaningful relationship compatibility across personality, values, family expectations, lifestyle and future goals using a 137-metric compatibility framework.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://biye.ltd/">
+<!-- Open Graph -->
+<meta property="og:title" content="BIYE — Meaningful Compatibility for Meaningful Relationships">
+<meta property="og:description" content="BIYE analyzes 137 dimensions of compatibility — personality, values, emotional intelligence, family expectations and future goals.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://biye.ltd/">
+<meta property="og:locale" content="en">
+<meta property="og:locale:alternate" content="bn_BD">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BIYE — Meaningful Compatibility for Meaningful Relationships">
+<meta name="twitter:description" content="137-Metric Compatibility Intelligence. Trusted profiles. Human decision.">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<!-- Structured Data -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"BIYE","url":"https://biye.ltd","description":"Meaningful compatibility intelligence for meaningful relationships — 137-metric framework.","parentOrganization":{"@type":"Organization","name":"MindMax Group","url":"https://mindmaxbd.xyz"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"BIYE","url":"https://biye.ltd","potentialAction":{"@type":"SearchAction","target":"https://biye.ltd/match-feed.html?q={search_term_string}","query-input":"required name=search_term_string"}}
+</script>
+<style>
+/* ==============================
+   BIYE DESIGN SYSTEM — TOKENS
+   ============================== */
+:root{
+  --primary:#E2136E; --primary-dark:#C20F5E; --primary-light:#FF4D94; --primary-soft:rgba(226,19,110,.08);
+  --purple:#6A2DA8; --purple-light:#9C5FE0; --purple-soft:rgba(106,45,168,.08);
+  --blue:#1565C0; --blue-light:#3B9CE8; --blue-soft:rgba(21,101,192,.08);
+  --teal:#00A99D; --teal-light:#3FD6C4;
+  --gold:#D4AF37; --gold-light:#F0D878; --gold-soft:rgba(212,175,55,.15);
+  --green:#00A651; --green-soft:rgba(0,166,81,.1);
+  --brand-grad:linear-gradient(120deg,#E2136E 0%,#6A2DA8 52%,#1565C0 100%);
+  --brand-grad-soft:linear-gradient(120deg,rgba(226,19,110,.12) 0%,rgba(106,45,168,.12) 52%,rgba(21,101,192,.12) 100%);
+  --bg:#FAFAFC; --surface:#FFFFFF; --surface-elevated:#FFFFFF;
+  --border:rgba(20,20,20,.07); --border-strong:rgba(20,20,20,.14);
+  --ink:#1A1A1A; --ink-soft:rgba(20,20,20,.52); --ink-faint:rgba(20,20,20,.35);
+  --shadow-sm:0 2px 8px -2px rgba(106,45,168,.1);
+  --shadow:0 4px 20px -6px rgba(106,45,168,.15);
+  --shadow-lg:0 12px 40px -12px rgba(106,45,168,.2);
+  --radius-sm:10px; --radius:16px; --radius-lg:24px;
+  --container:1200px;
+  --font-body:'Inter','Hind Siliguri',sans-serif;
+  --font-bn:'Hind Siliguri','Inter',sans-serif;
+  --transition:.22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ==============================
+   RESET & BASE
+   ============================== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;tab-size:4}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+html[lang="bn"] body,html[lang="hi"] body{font-family:var(--font-bn)}
+html[dir="rtl"] body{font-family:'Inter',sans-serif}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+ul,ol{list-style:none}
+:focus-visible{outline:2.5px solid var(--primary);outline-offset:3px;border-radius:4px}
+
+/* ==============================
+   TYPOGRAPHY SCALE
+   ============================== */
+.t-display{font-size:clamp(2rem,5vw,3.25rem);font-weight:800;line-height:1.15;letter-spacing:-0.02em}
+.t-h1{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:800;line-height:1.2;letter-spacing:-0.015em}
+.t-h2{font-size:clamp(1.35rem,3vw,2rem);font-weight:700;line-height:1.28;letter-spacing:-0.01em}
+.t-h3{font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;line-height:1.35}
+.t-body{font-size:clamp(.92rem,1.5vw,1.05rem);line-height:1.7;color:var(--ink-soft)}
+.t-caption{font-size:.8rem;color:var(--ink-faint);line-height:1.5}
+.t-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+
+/* ==============================
+   UTILITY
+   ============================== */
+.grad-text{background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:clamp(1rem,4vw,2.5rem)}
+.section{padding-block:clamp(3rem,6vw,5rem)}
+.section-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:var(--primary-soft);color:var(--primary);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.35rem .85rem;border-radius:50px;margin-bottom:1.25rem}
+.section-eyebrow.purple{background:var(--purple-soft);color:var(--purple)}
+.section-eyebrow.blue{background:var(--blue-soft);color:var(--blue)}
+.section-eyebrow.gold{background:var(--gold-soft);color:#8a6a00}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:1.5rem}
+.card:hover{box-shadow:var(--shadow);border-color:var(--border-strong);transform:translateY(-2px)}
+.card{transition:var(--transition)}
+.tag{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .7rem;border-radius:50px;font-size:.72rem;font-weight:600;border:1px solid transparent}
+.tag.green{background:var(--green-soft);color:#006633;border-color:rgba(0,166,81,.2)}
+.tag.gold{background:var(--gold-soft);color:#6a4e00;border-color:rgba(212,175,55,.3)}
+.tag.primary{background:var(--primary-soft);color:var(--primary);border-color:rgba(226,19,110,.2)}
+
+/* ==============================
+   BUTTONS
+   ============================== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.82rem 1.75rem;border-radius:var(--radius-sm);
+  font-size:.95rem;font-weight:700;
+  transition:var(--transition);white-space:nowrap;min-height:48px;
+}
+.btn-primary{
+  background:var(--brand-grad);color:#fff;
+  box-shadow:0 6px 24px -8px rgba(106,45,168,.45);
+  border:2px solid transparent;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px -8px rgba(106,45,168,.55)}
+.btn-primary:active{transform:translateY(0)}
+.btn-outline{
+  background:transparent;color:var(--ink);
+  border:2px solid var(--border-strong);
+}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+.btn-gold{
+  background:var(--gold);color:#2a1a00;border:2px solid var(--gold-light);
+  box-shadow:0 4px 16px -6px rgba(212,175,55,.4);
+}
+.btn-gold:hover{transform:translateY(-2px);background:var(--gold-light)}
+.btn-sm{padding:.55rem 1.1rem;font-size:.82rem;min-height:38px}
+
+/* ==============================
+   ANNOUNCEMENT BAR
+   ============================== */
+.announce-bar{
+  background:var(--brand-grad);
+  color:#fff;font-size:.78rem;font-weight:600;
+  text-align:center;padding:.6rem 1rem;
+  letter-spacing:.01em;
+}
+.announce-bar a{color:#fff;text-decoration:underline;opacity:.9}
+
+/* ==============================
+   NAVIGATION
+   ============================== */
+.nav-wrap{
+  position:sticky;top:0;z-index:900;
+  background:rgba(250,250,252,.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  display:flex;align-items:center;gap:1rem;
+  height:64px;
+}
+.nav-logo{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.nav-logo-img{width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--gold)}
+.nav-logo-text{font-size:1.1rem;font-weight:800;color:var(--ink)}
+.nav-logo-text span{font-weight:500;color:var(--ink-soft);font-size:.85em}
+.nav-links{display:none;align-items:center;gap:.1rem;margin-inline-start:2rem;flex:1}
+.nav-link{padding:.5rem .85rem;font-size:.875rem;font-weight:600;color:var(--ink-soft);border-radius:8px;transition:var(--transition)}
+.nav-link:hover{color:var(--primary);background:var(--primary-soft)}
+.nav-right{display:flex;align-items:center;gap:.6rem;margin-inline-start:auto}
+.nav-lang-btn{
+  display:flex;align-items:center;gap:.3rem;
+  padding:.4rem .7rem;border-radius:8px;
+  font-size:.78rem;font-weight:700;
+  background:var(--surface);border:1.5px solid var(--border-strong);
+  color:var(--ink-soft);transition:var(--transition);
+}
+.nav-lang-btn:hover{border-color:var(--primary);color:var(--primary)}
+.nav-signin{font-size:.875rem;font-weight:600;color:var(--ink-soft);padding:.5rem .75rem;transition:var(--transition);border-radius:8px}
+.nav-signin:hover{color:var(--primary)}
+.nav-register{font-size:.875rem}
+/* Language dropdown */
+.lang-dropdown{position:relative;display:inline-block}
+.lang-menu{
+  position:absolute;top:calc(100% + .5rem);right:0;
+  background:var(--surface);border:1px solid var(--border-strong);
+  border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);
+  min-width:140px;overflow:hidden;
+  display:none;z-index:1000;
+}
+.lang-menu.open{display:block}
+.lang-opt{display:flex;align-items:center;gap:.6rem;padding:.65rem 1rem;font-size:.85rem;font-weight:600;color:var(--ink);transition:var(--transition);cursor:pointer;width:100%;text-align:start}
+.lang-opt:hover{background:var(--primary-soft);color:var(--primary)}
+.lang-opt.active{color:var(--primary);background:var(--primary-soft)}
+/* Mobile menu */
+.nav-hamburger{display:flex;flex-direction:column;gap:5px;padding:.5rem;cursor:pointer}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:var(--transition)}
+.mobile-nav{
+  position:fixed;inset:0;z-index:950;
+  background:#fff;
+  transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;padding:1.5rem;
+  overflow-y:auto;
+}
+.mobile-nav.open{transform:translateX(0)}
+html[dir="rtl"] .mobile-nav{transform:translateX(-100%)}
+html[dir="rtl"] .mobile-nav.open{transform:translateX(0)}
+.mobile-nav-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.mobile-nav-close{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg);font-size:1.2rem;color:var(--ink)}
+.mobile-nav-links{display:flex;flex-direction:column;gap:.3rem;flex:1}
+.mobile-nav-link{padding:1rem;font-size:1rem;font-weight:600;color:var(--ink);border-radius:var(--radius-sm);transition:var(--transition)}
+.mobile-nav-link:hover{background:var(--primary-soft);color:var(--primary)}
+.mobile-nav-footer{margin-top:2rem;display:flex;flex-direction:column;gap:.75rem}
+.mobile-nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:940;display:none}
+.mobile-nav-overlay.open{display:block}
+@media(min-width:960px){
+  .nav-links{display:flex}
+  .nav-hamburger{display:none}
+}
+
+/* ==============================
+   HERO
+   ============================== */
+.hero{
+  position:relative;overflow:hidden;
+  padding-block:clamp(3.5rem,7vw,5.5rem);
+}
+.hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 20%,rgba(226,19,110,.1),transparent 65%),
+    radial-gradient(ellipse 60% 50% at 90% 10%,rgba(21,101,192,.1),transparent 65%),
+    radial-gradient(ellipse 80% 50% at 50% 80%,rgba(106,45,168,.06),transparent 70%);
+}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center;position:relative;z-index:1}
+@media(min-width:900px){.hero-grid{grid-template-columns:1fr 1fr;gap:4rem}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:50px;background:var(--primary-soft);border:1px solid rgba(226,19,110,.2);font-size:.75rem;font-weight:700;color:var(--primary);margin-bottom:1.25rem;text-transform:uppercase;letter-spacing:.1em}
+.hero-title{margin-bottom:1.25rem}
+.hero-subtitle{font-size:clamp(1rem,1.5vw,1.15rem);color:var(--ink-soft);line-height:1.7;margin-bottom:2rem;max-width:520px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.75rem}
+.hero-trust{display:flex;flex-direction:column;gap:.6rem}
+.hero-trust-item{display:flex;align-items:center;gap:.55rem;font-size:.85rem;color:var(--ink-soft)}
+.hero-trust-item svg{color:var(--green);flex-shrink:0}
+.hero-pricing{display:inline-flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;background:var(--gold-soft);border:1px solid rgba(212,175,55,.35);border-radius:var(--radius-sm);font-size:.88rem;margin-top:.5rem}
+.hero-price-num{font-size:1.3rem;font-weight:800;color:#4a2d00;font-family:'Inter',sans-serif}
+
+/* Hero Visual — Compatibility Web */
+.hero-visual{display:flex;align-items:center;justify-content:center}
+.compat-web{width:100%;max-width:480px;aspect-ratio:1}
+
+/* ==============================
+   TRUST STRIP
+   ============================== */
+.trust-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding-block:.1rem}
+.trust-strip-inner{display:flex;flex-wrap:wrap;justify-content:center;gap:0}
+.trust-item{display:flex;align-items:center;gap:.6rem;padding:1.1rem 1.5rem;font-size:.82rem;font-weight:600;color:var(--ink-soft)}
+.trust-item-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+
+/* ==============================
+   WHY BIYE — COMPARISON
+   ============================== */
+.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:640px){.comparison-grid{grid-template-columns:1fr}}
+.compare-card{border-radius:var(--radius);padding:1.75rem;border:1.5px solid var(--border)}
+.compare-card.biye{background:var(--brand-grad-soft);border-color:rgba(106,45,168,.2)}
+.compare-card-label{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:50px;font-size:.72rem;font-weight:700;margin-bottom:1.25rem}
+.compare-card.traditional .compare-card-label{background:#f3f4f6;color:#6b7280}
+.compare-card.biye .compare-card-label{background:rgba(255,255,255,.7);color:var(--purple)}
+.compare-list{display:flex;flex-direction:column;gap:.65rem}
+.compare-list-item{display:flex;align-items:center;gap:.6rem;font-size:.9rem;color:var(--ink-soft)}
+.compare-list-item .ci{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.72rem}
+.compare-card.traditional .ci{background:#f3f4f6;color:#9ca3af}
+.compare-card.biye .ci{background:rgba(106,45,168,.12);color:var(--purple)}
+
+/* ==============================
+   137 METRICS SECTION
+   ============================== */
+.metrics-hero-num{font-family:'Inter',sans-serif;font-size:clamp(5rem,12vw,9rem);font-weight:800;line-height:1;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
+.metric-categories{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem;margin-top:2.5rem}
+.metric-cat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;display:flex;align-items:center;gap:.75rem;transition:var(--transition)}
+.metric-cat:hover{border-color:var(--border-strong);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
+.metric-cat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.metric-cat-name{font-size:.83rem;font-weight:700;color:var(--ink)}
+
+/* ==============================
+   HOW IT WORKS — JOURNEY
+   ============================== */
+.journey-steps{display:grid;grid-template-columns:1fr;gap:1.25rem}
+@media(min-width:700px){.journey-steps{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.journey-steps{grid-template-columns:repeat(4,1fr)}}
+.journey-step{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:var(--transition)}
+.journey-step:hover{box-shadow:var(--shadow);border-color:var(--border-strong);transform:translateY(-3px)}
+.journey-step-num{font-family:'Inter',sans-serif;font-size:2rem;font-weight:800;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;margin-bottom:.75rem}
+.journey-step-title{font-size:.95rem;font-weight:700;margin-bottom:.4rem}
+.journey-step-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.6}
+
+/* ==============================
+   ARCHITECTURE LAYERS
+   ============================== */
+.arch-diagram{display:flex;flex-direction:column;gap:.5rem;max-width:680px;margin-inline:auto}
+.arch-layer{
+  display:flex;align-items:center;gap:1rem;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);padding:1rem 1.25rem;
+  transition:var(--transition);
+}
+.arch-layer:hover{border-color:var(--border-strong);box-shadow:var(--shadow-sm)}
+.arch-layer-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.arch-layer-info{flex:1}
+.arch-layer-name{font-size:.88rem;font-weight:700;color:var(--ink)}
+.arch-layer-desc{font-size:.76rem;color:var(--ink-soft);line-height:1.5}
+.arch-arrow{text-align:center;color:var(--ink-faint);font-size:1.1rem;line-height:1}
+.arch-final{text-align:center;padding:1.25rem;background:var(--brand-grad);border-radius:var(--radius-sm);color:#fff;font-weight:700;font-size:.95rem}
+
+/* ==============================
+   KYC LADDER
+   ============================== */
+.kyc-ladder{display:flex;flex-direction:column;gap:.5rem;max-width:560px}
+.kyc-rung{display:flex;align-items:center;gap:1rem;padding:.9rem 1.25rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);transition:var(--transition)}
+.kyc-rung:hover{box-shadow:var(--shadow-sm);border-color:var(--border-strong)}
+.kyc-rung-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:800;flex-shrink:0}
+.kyc-rung-name{flex:1;font-size:.88rem;font-weight:600}
+.kyc-rung-badge{font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:50px}
+
+/* ==============================
+   TRUST CARDS
+   ============================== */
+.trust-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem}
+.trust-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;transition:var(--transition)}
+.trust-card:hover{box-shadow:var(--shadow);border-color:var(--border-strong);transform:translateY(-2px)}
+.trust-card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:1rem}
+.trust-card-title{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.trust-card-desc{font-size:.85rem;color:var(--ink-soft);line-height:1.6}
+
+/* ==============================
+   PRICING / MEMBERSHIP
+   ============================== */
+.pricing-card{
+  background:var(--surface);border:2px solid var(--gold);border-radius:var(--radius-lg);
+  padding:2.5rem;box-shadow:0 8px 40px -12px rgba(212,175,55,.3);
+  max-width:520px;margin-inline:auto;text-align:center;
+}
+.pricing-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--gold-soft);color:#4a2d00;border:1px solid rgba(212,175,55,.4);padding:.4rem 1rem;border-radius:50px;font-size:.75rem;font-weight:700;margin-bottom:1.25rem;text-transform:uppercase;letter-spacing:.06em}
+.pricing-amount{font-family:'Inter',sans-serif;font-size:clamp(2.5rem,6vw,4rem);font-weight:800;color:var(--ink);line-height:1}
+.pricing-currency{font-size:1.5rem;font-weight:700;vertical-align:super;line-height:1}
+.pricing-period{font-size:.85rem;color:var(--ink-soft);margin-top:.25rem}
+.pricing-includes{display:flex;flex-direction:column;gap:.75rem;margin:1.75rem 0;text-align:start}
+.pricing-feature{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;color:var(--ink-soft)}
+.pricing-feature svg{color:var(--green);flex-shrink:0;margin-top:3px}
+.pricing-addons{background:var(--bg);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:1.5rem;text-align:start}
+.pricing-addons-title{font-size:.78rem;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.pricing-addon{display:flex;align-items:center;justify-content:space-between;font-size:.88rem;padding:.4rem 0;border-bottom:1px solid var(--border);color:var(--ink-soft)}
+.pricing-addon:last-child{border-bottom:none}
+.pricing-addon strong{color:var(--ink)}
+
+/* ==============================
+   MATCH FLOW VISUAL
+   ============================== */
+.match-flow{display:flex;flex-direction:column;gap:.5rem;max-width:440px}
+.match-flow-step{display:flex;align-items:center;gap:1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1.1rem}
+.match-flow-step-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.match-flow-step-text{font-size:.88rem;font-weight:600;color:var(--ink)}
+.match-flow-step-sub{font-size:.75rem;color:var(--ink-soft)}
+.match-flow-arrow{text-align:center;color:var(--ink-faint)}
+
+/* ==============================
+   FAQ
+   ============================== */
+.faq-list{display:flex;flex-direction:column;gap:.75rem}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:1.1rem 1.25rem;font-size:.93rem;font-weight:700;cursor:pointer;
+  transition:var(--transition);width:100%;text-align:start;
+}
+.faq-q:hover{background:var(--bg)}
+.faq-q[aria-expanded="true"]{color:var(--primary)}
+.faq-q-icon{width:24px;height:24px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .22s;font-size:.75rem;color:var(--ink-soft)}
+.faq-q[aria-expanded="true"] .faq-q-icon{transform:rotate(180deg);background:var(--primary-soft);color:var(--primary)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)}
+.faq-a-inner{padding:0 1.25rem 1.1rem;font-size:.88rem;color:var(--ink-soft);line-height:1.7}
+
+/* ==============================
+   FINAL CTA
+   ============================== */
+.cta-section{background:var(--brand-grad);position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 50%,rgba(255,255,255,.08),transparent 60%);pointer-events:none}
+.cta-inner{text-align:center;color:#fff;position:relative;z-index:1;padding-block:clamp(3.5rem,6vw,5rem)}
+.cta-title{color:#fff;margin-bottom:1rem}
+.cta-sub{color:rgba(255,255,255,.82);font-size:clamp(.95rem,1.5vw,1.1rem);margin-bottom:2rem;max-width:560px;margin-inline:auto;margin-bottom:2rem}
+.cta-actions{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center}
+.btn-white{background:#fff;color:var(--purple);font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.15)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,0,0,.2)}
+.btn-white-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-white-outline:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.7)}
+
+/* ==============================
+   FOOTER
+   ============================== */
+footer{background:#0f0a1a;color:rgba(255,255,255,.7);padding-block:3rem 2rem}
+.footer-grid{display:grid;grid-template-columns:1fr;gap:2.5rem;margin-bottom:2.5rem}
+@media(min-width:640px){.footer-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+.footer-brand p{font-size:.85rem;line-height:1.7;margin-top:.75rem;max-width:280px}
+.footer-logo-row{display:flex;align-items:center;gap:.6rem}
+.footer-logo-img{width:30px;height:30px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #fff2,0 0 0 3px rgba(212,175,55,.4)}
+.footer-logo-text{font-size:1.05rem;font-weight:800;color:#fff}
+.footer-col-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:1rem}
+.footer-col a{display:block;font-size:.85rem;color:rgba(255,255,255,.65);padding:.3rem 0;transition:var(--transition)}
+.footer-col a:hover{color:#fff}
+.footer-langs{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.footer-lang-btn{padding:.3rem .65rem;border-radius:50px;border:1px solid rgba(255,255,255,.15);font-size:.75rem;font-weight:600;color:rgba(255,255,255,.6);cursor:pointer;background:transparent;transition:var(--transition)}
+.footer-lang-btn:hover,.footer-lang-btn.active{border-color:var(--primary);color:#fff;background:rgba(226,19,110,.2)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between}
+.footer-bottom-links{display:flex;gap:1.25rem}
+.footer-bottom-links a{font-size:.78rem;color:rgba(255,255,255,.45);transition:var(--transition)}
+.footer-bottom-links a:hover{color:rgba(255,255,255,.8)}
+.footer-parent{font-size:.78rem;color:rgba(255,255,255,.4)}
+.footer-parent a{color:rgba(255,255,255,.6);transition:var(--transition)}
+.footer-parent a:hover{color:#fff}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.35)}
+
+/* ==============================
+   SECTION SPECIFIC
+   ============================== */
+.bg-surface{background:var(--surface)}
+.bg-soft{background:var(--bg)}
+.divider{height:1px;background:var(--border);margin-inline:var(--container)}
+.text-center{text-align:center}
+.text-balance{text-wrap:balance}
+.max-prose{max-width:680px;margin-inline:auto}
+.two-col{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center}
+@media(min-width:840px){.two-col{grid-template-columns:1fr 1fr}}
+.two-col.reverse-mobile{order:1}
+@media(min-width:840px){.two-col > :first-child.reverse-mobile{order:2}.two-col > :last-child.reverse-mobile{order:1}}
+
+/* ==============================
+   PHILOSOPHY FLOW
+   ============================== */
+.phil-flow{display:flex;flex-direction:column;align-items:center;gap:.4rem;max-width:520px;margin-inline:auto}
+.phil-node{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1.5rem;font-size:.9rem;font-weight:600;text-align:center;width:100%;transition:var(--transition)}
+.phil-node:hover{border-color:var(--border-strong)}
+.phil-node.accent{background:var(--brand-grad);color:#fff;border-color:transparent}
+.phil-arrow{color:var(--ink-faint);font-size:1rem}
+
+/* ==============================
+   SAFETY CARDS
+   ============================== */
+.safety-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.safety-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.25rem;display:flex;align-items:flex-start;gap:.75rem;transition:var(--transition)}
+.safety-card:hover{box-shadow:var(--shadow-sm);border-color:var(--border-strong)}
+.safety-card-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+
+/* ==============================
+   RTL SUPPORT
+   ============================== */
+html[dir="rtl"] .nav-right{margin-inline-start:unset;margin-inline-end:auto}
+html[dir="rtl"] .nav-links{margin-inline-start:unset;margin-inline-end:2rem}
+html[dir="rtl"] .hero-subtitle,.hero-trust-item{direction:rtl}
+html[dir="rtl"] .arch-layer{flex-direction:row-reverse}
+html[dir="rtl"] .kyc-rung{flex-direction:row-reverse}
+html[dir="rtl"] .match-flow-step{flex-direction:row-reverse}
+
+/* ==============================
+   REDUCED MOTION
+   ============================== */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+
+/* ==============================
+   RESPONSIVE HELPERS
+   ============================== */
+@media(max-width:640px){
+  .pricing-card{padding:1.75rem 1.25rem}
+  .hero-actions{flex-direction:column}
+  .hero-actions .btn{width:100%;justify-content:center}
+  .comparison-grid{grid-template-columns:1fr}
+  .trust-grid{grid-template-columns:1fr 1fr}
+  .cta-actions{flex-direction:column;align-items:center}
+  .cta-actions .btn{width:100%;max-width:320px;justify-content:center}
+}
+@media(max-width:360px){
+  .trust-grid{grid-template-columns:1fr}
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+</head>
+<body>
+
+<!-- OVERLAY for mobile nav -->
+<div class="mobile-nav-overlay" id="mobileOverlay" role="presentation" aria-hidden="true"></div>
+
+<!-- MOBILE NAV DRAWER -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="mobile-nav-head">
+    <div class="nav-logo">
+      <img class="nav-logo-img" src="data:image/webp;base64,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" alt="BIYE">
+      <span class="nav-logo-text">BIYE <span>বিয়ে</span></span>
+    </div>
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close navigation">✕</button>
+  </div>
+  <div class="mobile-nav-links">
+    <a href="#how-it-works" class="mobile-nav-link" data-i18n="nav.howItWorks">How BIYE Works</a>
+    <a href="#compatibility" class="mobile-nav-link" data-i18n="nav.compatibility">Compatibility</a>
+    <a href="#relationship-intelligence" class="mobile-nav-link" data-i18n="nav.relIntelligence">Relationship Intelligence</a>
+    <a href="#trust-safety" class="mobile-nav-link" data-i18n="nav.trustSafety">Trust &amp; Safety</a>
+    <a href="#membership" class="mobile-nav-link" data-i18n="nav.membership">Membership</a>
+  </div>
+  <div class="mobile-nav-footer">
+    <a href="onboarding.html" class="btn btn-primary" data-i18n="nav.createAccount">Create Account</a>
+    <a href="onboarding.html" class="btn btn-outline" data-i18n="nav.signIn">Sign In</a>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+      <button class="footer-lang-btn" onclick="setLang('en')">English</button>
+      <button class="footer-lang-btn" onclick="setLang('bn')">বাংলা</button>
+      <button class="footer-lang-btn" onclick="setLang('hi')">हिन्दी</button>
+      <button class="footer-lang-btn" onclick="setLang('ar')">العربية</button>
+      <button class="footer-lang-btn" onclick="setLang('zh')">中文</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar" role="banner" aria-label="Announcement">
+  <span data-i18n="announce.text">🌟 BIYE — Intelligent compatibility for meaningful relationships. Register for ৳999 and explore 137 compatibility dimensions.</span>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav-wrap" role="banner">
+  <div class="container">
+    <nav class="nav-inner" aria-label="Main navigation">
+      <a href="#" class="nav-logo" aria-label="BIYE — go to homepage">
+        <img class="nav-logo-img" src="data:image/webp;base64,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" alt="BIYE">
+        <span class="nav-logo-text">BIYE <span>বিয়ে</span></span>
+      </a>
+      <div class="nav-links" aria-label="Site sections">
+        <a href="#how-it-works" class="nav-link" data-i18n="nav.howItWorks">How BIYE Works</a>
+        <a href="#compatibility" class="nav-link" data-i18n="nav.compatibility">Compatibility</a>
+        <a href="#relationship-intelligence" class="nav-link" data-i18n="nav.relIntelligence">Relationship Intelligence</a>
+        <a href="#trust-safety" class="nav-link" data-i18n="nav.trustSafety">Trust &amp; Safety</a>
+        <a href="#membership" class="nav-link" data-i18n="nav.membership">Membership</a>
+      </div>
+      <div class="nav-right">
+        <div class="lang-dropdown">
+          <button class="nav-lang-btn" id="langToggle" aria-expanded="false" aria-haspopup="listbox" aria-controls="langMenu">
+            <span id="langLabel">EN</span> <span aria-hidden="true">▾</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language selection">
+            <button class="lang-opt active" role="option" onclick="setLang('en')">🇧🇩 English</button>
+            <button class="lang-opt" role="option" onclick="setLang('bn')">🇧🇩 বাংলা</button>
+            <button class="lang-opt" role="option" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+            <button class="lang-opt" role="option" onclick="setLang('ar')">🌍 العربية</button>
+            <button class="lang-opt" role="option" onclick="setLang('zh')">🇨🇳 中文</button>
+          </div>
+        </div>
+        <a href="onboarding.html" class="nav-signin" data-i18n="nav.signIn">Sign In</a>
+        <a href="onboarding.html" class="btn btn-primary btn-sm" data-i18n="nav.createAccount">Create Account</a>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileNav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<main id="main-content">
+
+<!-- ==============================
+     HERO
+     ============================== -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <!-- Left: Copy -->
+      <div>
+        <div class="hero-eyebrow" aria-label="BIYE platform tagline">
+          <span data-i18n="hero.eyebrow">Relationship Intelligence Platform</span>
+        </div>
+        <h1 class="t-display text-balance" id="hero-heading" data-i18n="hero.title">
+          Meaningful compatibility begins with <span class="grad-text">understanding</span>.
+        </h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">
+          Explore compatibility across personality, values, lifestyle, family expectations, emotional intelligence and future goals — not just a profile.
+        </p>
+        <div class="hero-actions">
+          <a href="onboarding.html" class="btn btn-primary" data-i18n="hero.primaryCta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Create Your BIYE Profile
+          </a>
+          <a href="#how-it-works" class="btn btn-outline" data-i18n="hero.secondaryCta">How BIYE Works</a>
+        </div>
+        <div class="hero-pricing">
+          <span data-i18n="hero.pricing.label">Registration</span>
+          <span class="hero-price-num">৳999</span>
+          <span style="color:var(--ink-soft);font-size:.8rem" data-i18n="hero.pricing.includes">· Includes 2 free match views</span>
+        </div>
+        <div class="hero-trust" style="margin-top:1.25rem">
+          <div class="hero-trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="hero.trust1">137 compatibility dimensions</span>
+          </div>
+          <div class="hero-trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="hero.trust2">Trust-centered profiles</span>
+          </div>
+          <div class="hero-trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="hero.trust3">Privacy-conscious design</span>
+          </div>
+          <div class="hero-trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="hero.trust4">The decision remains yours</span>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Compatibility Web SVG -->
+      <div class="hero-visual" aria-hidden="true">
+        <svg class="compat-web" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BIYE compatibility intelligence visualization">
+          <defs>
+            <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(106,45,168,0.06)"/>
+              <stop offset="100%" stop-color="rgba(226,19,110,0.02)"/>
+            </radialGradient>
+            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#E2136E" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#1565C0" stop-opacity="0.35"/>
+            </linearGradient>
+            <linearGradient id="centerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#E2136E"/>
+              <stop offset="52%" stop-color="#6A2DA8"/>
+              <stop offset="100%" stop-color="#1565C0"/>
+            </linearGradient>
+          </defs>
+          <!-- Background circles -->
+          <circle cx="240" cy="240" r="220" fill="url(#bgGrad)" stroke="rgba(106,45,168,0.08)" stroke-width="1"/>
+          <circle cx="240" cy="240" r="155" fill="none" stroke="rgba(106,45,168,0.06)" stroke-width="1" stroke-dasharray="4 6"/>
+          <circle cx="240" cy="240" r="90" fill="none" stroke="rgba(226,19,110,0.08)" stroke-width="1" stroke-dasharray="2 4"/>
+          <!-- Connector lines -->
+          <g stroke="url(#lineGrad)" stroke-width="1.2" opacity="0.6">
+            <line x1="240" y1="240" x2="240" y2="36"/>
+            <line x1="240" y1="240" x2="397" y2="101"/>
+            <line x1="240" y1="240" x2="430" y2="240"/>
+            <line x1="240" y1="240" x2="397" y2="379"/>
+            <line x1="240" y1="240" x2="240" y2="444"/>
+            <line x1="240" y1="240" x2="83" y2="379"/>
+            <line x1="240" y1="240" x2="50" y2="240"/>
+            <line x1="240" y1="240" x2="83" y2="101"/>
+          </g>
+          <!-- Center BIYE node -->
+          <circle cx="240" cy="240" r="52" fill="url(#centerGrad)"/>
+          <text x="240" y="234" text-anchor="middle" fill="white" font-family="Inter,sans-serif" font-weight="800" font-size="15">BIYE</text>
+          <text x="240" y="252" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-family="Inter,sans-serif" font-size="9">137 METRICS</text>
+          <!-- Satellite nodes -->
+          <g font-family="Inter,'Hind Siliguri',sans-serif" font-size="10" font-weight="700">
+            <!-- Top: Personality -->
+            <circle cx="240" cy="36" r="32" fill="#FFF0F6" stroke="#E2136E" stroke-width="1.5"/>
+            <text x="240" y="32" text-anchor="middle" fill="#E2136E" font-size="14">◎</text>
+            <text x="240" y="47" text-anchor="middle" fill="#C20F5E">Personality</text>
+            <!-- Top-right: Values -->
+            <circle cx="397" cy="101" r="30" fill="#F5F0FF" stroke="#6A2DA8" stroke-width="1.5"/>
+            <text x="397" y="97" text-anchor="middle" fill="#6A2DA8" font-size="13">✦</text>
+            <text x="397" y="112" text-anchor="middle" fill="#6A2DA8">Values</text>
+            <!-- Right: Future -->
+            <circle cx="430" cy="240" r="30" fill="#EFF5FF" stroke="#1565C0" stroke-width="1.5"/>
+            <text x="430" y="236" text-anchor="middle" fill="#1565C0" font-size="13">◈</text>
+            <text x="430" y="251" text-anchor="middle" fill="#1565C0">Future</text>
+            <!-- Bottom-right: EI -->
+            <circle cx="397" cy="379" r="30" fill="#F0FFF8" stroke="#00A651" stroke-width="1.5"/>
+            <text x="397" y="375" text-anchor="middle" fill="#00A651" font-size="13">♡</text>
+            <text x="397" y="390" text-anchor="middle" fill="#00875B">EI</text>
+            <!-- Bottom: Resilience -->
+            <circle cx="240" cy="444" r="32" fill="#FFFBF0" stroke="#D4AF37" stroke-width="1.5"/>
+            <text x="240" y="440" text-anchor="middle" fill="#8a6a00" font-size="13">⚡</text>
+            <text x="240" y="455" text-anchor="middle" fill="#8a6a00">Resilience</text>
+            <!-- Bottom-left: Trust -->
+            <circle cx="83" cy="379" r="30" fill="#FFF5F0" stroke="#E2136E" stroke-width="1.5"/>
+            <text x="83" y="375" text-anchor="middle" fill="#E2136E" font-size="13">🛡</text>
+            <text x="83" y="390" text-anchor="middle" fill="#C20F5E">Trust</text>
+            <!-- Left: Family -->
+            <circle cx="50" cy="240" r="30" fill="#F5F0FF" stroke="#6A2DA8" stroke-width="1.5"/>
+            <text x="50" y="236" text-anchor="middle" fill="#6A2DA8" font-size="13">🏠</text>
+            <text x="50" y="251" text-anchor="middle" fill="#6A2DA8">Family</text>
+            <!-- Top-left: Lifestyle -->
+            <circle cx="83" cy="101" r="30" fill="#F0FFFE" stroke="#00A99D" stroke-width="1.5"/>
+            <text x="83" y="97" text-anchor="middle" fill="#00A99D" font-size="13">☀</text>
+            <text x="83" y="112" text-anchor="middle" fill="#008880">Lifestyle</text>
+          </g>
+          <!-- Animated pulse on center -->
+          <circle cx="240" cy="240" r="52" fill="none" stroke="url(#centerGrad)" stroke-width="2" opacity="0.4">
+            <animate attributeName="r" from="52" to="72" dur="2.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" from="0.4" to="0" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip" aria-label="Platform trust indicators">
+  <div class="container">
+    <div class="trust-strip-inner">
+      <div class="trust-item">
+        <div class="trust-item-icon" style="background:var(--primary-soft)">🧠</div>
+        <span data-i18n="trust.metrics"><strong>137</strong>&nbsp;Compatibility Metrics</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-item-icon" style="background:var(--green-soft)">🛡</div>
+        <span data-i18n="trust.kyc"><strong>7</strong>-Level KYC</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-item-icon" style="background:var(--purple-soft)">💜</div>
+        <span data-i18n="trust.ei">Emotional Intelligence Layer</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-item-icon" style="background:var(--blue-soft)">🔒</div>
+        <span data-i18n="trust.privacy">Privacy-First Design</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-item-icon" style="background:var(--gold-soft)">👤</div>
+        <span data-i18n="trust.human">Human Decision Always</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==============================
+     WHY BIYE
+     ============================== -->
+<section class="section bg-surface" id="why-biye" aria-labelledby="why-heading">
+  <div class="container">
+    <div class="text-center max-prose" style="margin-bottom:3rem">
+      <div class="section-eyebrow">
+        <span data-i18n="why.eyebrow">Why BIYE</span>
+      </div>
+      <h2 class="t-h1 text-balance" id="why-heading" data-i18n="why.title">Marriage is bigger than a profile.</h2>
+      <p class="t-body" style="margin-top:.75rem" data-i18n="why.subtitle">Traditional profile search tells you who someone is. BIYE helps you explore how you may fit together — across what matters most in a lifelong relationship.</p>
+    </div>
+    <div class="comparison-grid">
+      <div class="compare-card traditional" role="region" aria-label="Traditional matrimonial approach">
+        <div class="compare-card-label">
+          <span>📋</span> <span data-i18n="why.traditional">Traditional Profile</span>
+        </div>
+        <ul class="compare-list">
+          <li class="compare-list-item"><div class="ci">→</div> <span data-i18n="why.trad1">Photo &amp; basic appearance</span></li>
+          <li class="compare-list-item"><div class="ci">→</div> <span data-i18n="why.trad2">Age &amp; height</span></li>
+          <li class="compare-list-item"><div class="ci">→</div> <span data-i18n="why.trad3">Education &amp; profession</span></li>
+          <li class="compare-list-item"><div class="ci">→</div> <span data-i18n="why.trad4">Income &amp; location</span></li>
+          <li class="compare-list-item"><div class="ci">→</div> <span data-i18n="why.trad5">Family religion</span></li>
+        </ul>
+      </div>
+      <div class="compare-card biye" role="region" aria-label="BIYE compatibility approach">
+        <div class="compare-card-label">
+          <span>✦</span> <span data-i18n="why.biye">BIYE Compatibility</span>
+        </div>
+        <ul class="compare-list">
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye1">Personality &amp; communication style</span></li>
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye2">Core values &amp; ethics</span></li>
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye3">Family expectations on both sides</span></li>
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye4">Lifestyle &amp; daily preferences</span></li>
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye5">Future goals &amp; life planning</span></li>
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye6">Emotional intelligence signals</span></li>
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye7">Relationship resilience indicators</span></li>
+          <li class="compare-list-item"><div class="ci">✓</div> <span data-i18n="why.biye8">Trust &amp; verified identity</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     137 METRICS
+     ============================== -->
+<section class="section" id="compatibility" aria-labelledby="metrics-heading">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow purple">
+          <span data-i18n="metrics.eyebrow">Compatibility Intelligence</span>
+        </div>
+        <span class="metrics-hero-num" aria-label="137">137</span>
+        <h2 class="t-h2" id="metrics-heading" style="margin-top:.5rem" data-i18n="metrics.title">dimensions. One deeper understanding.</h2>
+        <p class="t-body" style="margin-top:1rem" data-i18n="metrics.subtitle">People are more than age, education and photographs. BIYE analyzes 137 dimensions of compatibility — from personality and values to emotional intelligence and relationship resilience — to help you understand how you and another person may truly fit together.</p>
+        <p class="t-body" style="margin-top:.75rem;font-style:italic;font-size:.85rem" data-i18n="metrics.note">BIYE evaluates compatibility across all 137 dimensions and presents the results for your consideration. The decision always remains yours.</p>
+      </div>
+      <div>
+        <div class="metric-categories" role="list" aria-label="Compatibility metric categories">
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--primary-soft);color:var(--primary)">👤</div>
+            <span class="metric-cat-name" data-i18n="cat.identity">Identity</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--blue-soft);color:var(--blue)">🎓</div>
+            <span class="metric-cat-name" data-i18n="cat.education">Education &amp; Career</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--purple-soft);color:var(--purple)">◎</div>
+            <span class="metric-cat-name" data-i18n="cat.personality">Personality</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--primary-soft);color:var(--primary)">🏠</div>
+            <span class="metric-cat-name" data-i18n="cat.family">Family &amp; Relationship</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:rgba(0,169,157,.1);color:var(--teal)">☀</div>
+            <span class="metric-cat-name" data-i18n="cat.lifestyle">Lifestyle</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--green-soft);color:var(--green)">❤️</div>
+            <span class="metric-cat-name" data-i18n="cat.health">Health Awareness</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--purple-soft);color:var(--purple)">✦</div>
+            <span class="metric-cat-name" data-i18n="cat.values">Values &amp; Ethics</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--blue-soft);color:var(--blue)">◈</div>
+            <span class="metric-cat-name" data-i18n="cat.future">Future Planning</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--primary-soft);color:var(--primary)">⚠</div>
+            <span class="metric-cat-name" data-i18n="cat.critical">Marriage-Critical</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--gold-soft);color:#8a6a00">🎯</div>
+            <span class="metric-cat-name" data-i18n="cat.preference">Partner Preference</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:rgba(0,169,157,.1);color:var(--teal)">💬</div>
+            <span class="metric-cat-name" data-i18n="cat.ei">Emotional Intelligence</span>
+          </div>
+          <div class="metric-cat" role="listitem">
+            <div class="metric-cat-icon" style="background:var(--gold-soft);color:#8a6a00">⚡</div>
+            <span class="metric-cat-name" data-i18n="cat.resilience">Relationship Resilience</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     HOW IT WORKS — JOURNEY
+     ============================== -->
+<section class="section bg-surface" id="how-it-works" aria-labelledby="how-heading">
+  <div class="container">
+    <div class="text-center max-prose" style="margin-bottom:3rem">
+      <div class="section-eyebrow blue">
+        <span data-i18n="how.eyebrow">The Journey</span>
+      </div>
+      <h2 class="t-h1" id="how-heading" data-i18n="how.title">How BIYE Works</h2>
+      <p class="t-body" style="margin-top:.75rem" data-i18n="how.subtitle">A thoughtful seven-step journey from profile to compatibility understanding — at your own pace.</p>
+    </div>
+    <div class="journey-steps">
+      <article class="journey-step">
+        <div class="journey-step-num">01</div>
+        <h3 class="journey-step-title" data-i18n="step1.title">Create your profile</h3>
+        <p class="journey-step-desc" data-i18n="step1.desc">Register with your phone number and create your basic profile with verified personal information.</p>
+      </article>
+      <article class="journey-step">
+        <div class="journey-step-num">02</div>
+        <h3 class="journey-step-title" data-i18n="step2.title">Build your trusted identity</h3>
+        <p class="journey-step-desc" data-i18n="step2.desc">Complete KYC verification — from phone confirmation to education and employment documentation — at your own pace.</p>
+      </article>
+      <article class="journey-step">
+        <div class="journey-step-num">03</div>
+        <h3 class="journey-step-title" data-i18n="step3.title">Complete 137 compatibility metrics</h3>
+        <p class="journey-step-desc" data-i18n="step3.desc">Answer thoughtfully designed questions across 13 compatibility categories — personality, values, family, lifestyle and more.</p>
+      </article>
+      <article class="journey-step">
+        <div class="journey-step-num">04</div>
+        <h3 class="journey-step-title" data-i18n="step4.title">Build your compatibility profile</h3>
+        <p class="journey-step-desc" data-i18n="step4.desc">Your answers form a rich, multi-dimensional compatibility profile — far deeper than any photo or résumé.</p>
+      </article>
+      <article class="journey-step">
+        <div class="journey-step-num">05</div>
+        <h3 class="journey-step-title" data-i18n="step5.title">Rule Engine evaluates conditions</h3>
+        <p class="journey-step-desc" data-i18n="step5.desc">BIYE's Rule Engine identifies important compatibility conditions — distinguishing preferences from fundamentals.</p>
+      </article>
+      <article class="journey-step">
+        <div class="journey-step-num">06</div>
+        <h3 class="journey-step-title" data-i18n="step6.title">Compatibility Intelligence activates</h3>
+        <p class="journey-step-desc" data-i18n="step6.desc">A structured compatibility engine evaluates all 137 dimensions — weighted and analyzed to reveal meaningful compatibility signals.</p>
+      </article>
+      <article class="journey-step">
+        <div class="journey-step-num">07</div>
+        <h3 class="journey-step-title" data-i18n="step7.title">Explore, understand and connect</h3>
+        <p class="journey-step-desc" data-i18n="step7.desc">Review your compatibility findings, explore match profiles, and decide with intention. The choice is entirely yours.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     COMPATIBILITY ARCHITECTURE
+     ============================== -->
+<section class="section" id="relationship-intelligence" aria-labelledby="arch-heading">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow purple">
+          <span data-i18n="arch.eyebrow">Intelligence Architecture</span>
+        </div>
+        <h2 class="t-h1 text-balance" id="arch-heading" data-i18n="arch.title">Layers of intelligence, not a single score.</h2>
+        <p class="t-body" style="margin-top:1rem" data-i18n="arch.subtitle">BIYE combines structured compatibility analysis, emotional intelligence and AI-assisted insights to help you understand relationship potential more clearly — without reducing a person to a number.</p>
+        <div class="phil-flow" style="margin-top:2rem;margin-inline:0;align-items:flex-start;max-width:100%">
+          <div class="phil-node" style="text-align:start" data-i18n="arch.philosophy">
+            <strong>Core philosophy:</strong> Technology can help you discover. People make the decision.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="arch-diagram" role="list" aria-label="BIYE intelligence architecture layers">
+          <div class="arch-layer" role="listitem">
+            <div class="arch-layer-icon" style="background:var(--primary-soft);color:var(--primary)">👤</div>
+            <div class="arch-layer-info">
+              <div class="arch-layer-name" data-i18n="arch.l1.name">Layer 1 — Compatibility Data</div>
+              <div class="arch-layer-desc" data-i18n="arch.l1.desc">Your answers and verified profile information across 137 dimensions.</div>
+            </div>
+          </div>
+          <div class="arch-arrow" aria-hidden="true">↓</div>
+          <div class="arch-layer" role="listitem">
+            <div class="arch-layer-icon" style="background:var(--purple-soft);color:var(--purple)">📊</div>
+            <div class="arch-layer-info">
+              <div class="arch-layer-name" data-i18n="arch.l2.name">Layer 2 — Rule Engine</div>
+              <div class="arch-layer-desc" data-i18n="arch.l2.desc">Identifies important compatibility conditions — distinguishing fundamentals from flexible preferences.</div>
+            </div>
+          </div>
+          <div class="arch-arrow" aria-hidden="true">↓</div>
+          <div class="arch-layer" role="listitem">
+            <div class="arch-layer-icon" style="background:var(--blue-soft);color:var(--blue)">⚙</div>
+            <div class="arch-layer-info">
+              <div class="arch-layer-name" data-i18n="arch.l3.name">Layer 3 — Compatibility Engine</div>
+              <div class="arch-layer-desc" data-i18n="arch.l3.desc">Structured, deterministic analysis evaluating weighted similarity across all remaining dimensions.</div>
+            </div>
+          </div>
+          <div class="arch-arrow" aria-hidden="true">↓</div>
+          <div class="arch-layer" role="listitem">
+            <div class="arch-layer-icon" style="background:rgba(0,169,157,.1);color:var(--teal)">💜</div>
+            <div class="arch-layer-info">
+              <div class="arch-layer-name" data-i18n="arch.l4.name">Layer 4 — Emotional Intelligence</div>
+              <div class="arch-layer-desc" data-i18n="arch.l4.desc">Communication style, emotional awareness, empathy signals and relationship context.</div>
+            </div>
+          </div>
+          <div class="arch-arrow" aria-hidden="true">↓</div>
+          <div class="arch-layer" role="listitem">
+            <div class="arch-layer-icon" style="background:var(--gold-soft);color:#8a6a00">🤖</div>
+            <div class="arch-layer-info">
+              <div class="arch-layer-name" data-i18n="arch.l5.name">Layer 5 — AI Insight Layer</div>
+              <div class="arch-layer-desc" data-i18n="arch.l5.desc">AI helps explain compatibility findings, identify relationship themes and provide contextual understanding — it explains, it does not decide.</div>
+            </div>
+          </div>
+          <div class="arch-arrow" aria-hidden="true">↓</div>
+          <div class="arch-final" role="listitem">
+            <span data-i18n="arch.final">Your understanding → Your decision</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     EMOTIONAL INTELLIGENCE
+     ============================== -->
+<section class="section bg-surface" aria-labelledby="ei-heading">
+  <div class="container">
+    <div class="text-center max-prose" style="margin-bottom:3rem">
+      <div class="section-eyebrow">
+        <span data-i18n="ei.eyebrow">Emotional Intelligence</span>
+      </div>
+      <h2 class="t-h1" id="ei-heading" data-i18n="ei.title">Compatibility is more than numbers.</h2>
+      <p class="t-body" style="margin-top:.75rem" data-i18n="ei.subtitle">Relationships involve how people feel, communicate and understand each other. BIYE includes an Emotional Intelligence layer to capture dimensions that structured scoring alone cannot fully express.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--primary-soft);color:var(--primary)">💬</div>
+        <h3 class="trust-card-title" data-i18n="ei.c1.title">Communication Style</h3>
+        <p class="trust-card-desc" data-i18n="ei.c1.desc">How people express themselves, listen and respond — critical signals for long-term relationship health.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--purple-soft);color:var(--purple)">♡</div>
+        <h3 class="trust-card-title" data-i18n="ei.c2.title">Emotional Awareness</h3>
+        <p class="trust-card-desc" data-i18n="ei.c2.desc">Understanding one's own feelings and recognizing emotions in others — a foundation for empathetic connection.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--blue-soft);color:var(--blue)">🤝</div>
+        <h3 class="trust-card-title" data-i18n="ei.c3.title">Expectation Alignment</h3>
+        <p class="trust-card-desc" data-i18n="ei.c3.desc">Clarity around what each person expects from a relationship, partnership and family life.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--gold-soft);color:#8a6a00">⚡</div>
+        <h3 class="trust-card-title" data-i18n="ei.c4.title">Conflict Orientation</h3>
+        <p class="trust-card-desc" data-i18n="ei.c4.desc">How individuals approach disagreement — whether through avoidance, dialogue or constructive resolution.</p>
+      </div>
+    </div>
+    <p class="t-caption text-center" style="margin-top:1.5rem;font-style:italic" data-i18n="ei.disclaimer">BIYE does not make psychological diagnoses. EI signals are used only as compatibility exploration dimensions.</p>
+  </div>
+</section>
+
+<!-- ==============================
+     RELATIONSHIP RESILIENCE
+     ============================== -->
+<section class="section" aria-labelledby="resilience-heading">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow gold">
+          <span data-i18n="resilience.eyebrow">Relationship Resilience</span>
+        </div>
+        <h2 class="t-h1 text-balance" id="resilience-heading" data-i18n="resilience.title">Not just "do we match?" — but "how might we grow together?"</h2>
+        <p class="t-body" style="margin-top:1rem" data-i18n="resilience.subtitle">BIYE helps people explore compatibility and relationship resilience before making important personal decisions. Resilience is not about avoiding differences — it is about understanding how two people might navigate them.</p>
+        <p class="t-caption" style="margin-top:1rem;font-style:italic" data-i18n="resilience.disclaimer">BIYE does not promise successful marriages, predict relationship longevity or guarantee conflict resolution. These are dimensions for thoughtful personal consideration.</p>
+      </div>
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div class="card" style="padding:1.1rem">
+            <div style="font-size:1.3rem;margin-bottom:.5rem">🗣</div>
+            <div style="font-size:.85rem;font-weight:700;margin-bottom:.25rem" data-i18n="res.c1">Communication Resilience</div>
+            <div class="t-caption" data-i18n="res.c1d">How two people communicate under pressure</div>
+          </div>
+          <div class="card" style="padding:1.1rem">
+            <div style="font-size:1.3rem;margin-bottom:.5rem">🎯</div>
+            <div style="font-size:.85rem;font-weight:700;margin-bottom:.25rem" data-i18n="res.c2">Goal Alignment</div>
+            <div class="t-caption" data-i18n="res.c2d">Shared direction for life's key decisions</div>
+          </div>
+          <div class="card" style="padding:1.1rem">
+            <div style="font-size:1.3rem;margin-bottom:.5rem">🏠</div>
+            <div style="font-size:.85rem;font-weight:700;margin-bottom:.25rem" data-i18n="res.c3">Family Expectations</div>
+            <div class="t-caption" data-i18n="res.c3d">Understanding both families' values</div>
+          </div>
+          <div class="card" style="padding:1.1rem">
+            <div style="font-size:1.3rem;margin-bottom:.5rem">🌱</div>
+            <div style="font-size:.85rem;font-weight:700;margin-bottom:.25rem" data-i18n="res.c4">Adaptability</div>
+            <div class="t-caption" data-i18n="res.c4d">Openness to growth and mutual adjustment</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     AI INSIGHT LAYER
+     ============================== -->
+<section class="section bg-surface" aria-labelledby="ai-heading">
+  <div class="container">
+    <div class="text-center max-prose" style="margin-bottom:2rem">
+      <div class="section-eyebrow purple">
+        <span data-i18n="ai.eyebrow">AI Intelligence Layer</span>
+      </div>
+      <h2 class="t-h1" id="ai-heading" data-i18n="ai.title">Intelligence that explains, not decides.</h2>
+      <p class="t-body" style="margin-top:.75rem" data-i18n="ai.subtitle">BIYE combines structured compatibility intelligence, emotional intelligence and AI-assisted reasoning to help you understand relationship patterns more clearly. AI provides context and insight — the decision is always human.</p>
+    </div>
+    <div class="phil-flow" style="margin-inline:auto">
+      <div class="phil-node" data-i18n="ai.flow1">Human Profile &amp; 137 Compatibility Metrics</div>
+      <div class="phil-arrow" aria-hidden="true">↓</div>
+      <div class="phil-node" data-i18n="ai.flow2">Rule Engine Evaluation</div>
+      <div class="phil-arrow" aria-hidden="true">↓</div>
+      <div class="phil-node" data-i18n="ai.flow3">Deterministic Compatibility Analysis</div>
+      <div class="phil-arrow" aria-hidden="true">↓</div>
+      <div class="phil-node" data-i18n="ai.flow4">Emotional Intelligence Layer</div>
+      <div class="phil-arrow" aria-hidden="true">↓</div>
+      <div class="phil-node" style="border-color:var(--purple);background:var(--purple-soft)" data-i18n="ai.flow5">AI Insight — explains findings, identifies themes</div>
+      <div class="phil-arrow" aria-hidden="true">↓</div>
+      <div class="phil-node" data-i18n="ai.flow6">Relationship Resilience Understanding</div>
+      <div class="phil-arrow" aria-hidden="true">↓</div>
+      <div class="phil-node accent" data-i18n="ai.flow7">Human Understanding → Human Decision</div>
+    </div>
+    <p class="t-caption text-center" style="margin-top:1.5rem;font-style:italic" data-i18n="ai.note">AI explains and augments compatibility intelligence. BIYE never positions AI as the owner of a marriage decision.</p>
+  </div>
+</section>
+
+<!-- ==============================
+     HEALTH & PRIVACY
+     ============================== -->
+<section class="section" aria-labelledby="health-heading">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow">
+          <span data-i18n="health.eyebrow">Health Awareness</span>
+        </div>
+        <h2 class="t-h1 text-balance" id="health-heading" data-i18n="health.title">Health Awareness. Privacy First.</h2>
+        <p class="t-body" style="margin-top:1rem" data-i18n="health.subtitle">Some people may wish to consider health-related compatibility, family health history or hereditary awareness when exploring a lifelong relationship. BIYE treats this as a private, voluntary dimension — never as medical diagnosis.</p>
+        <div style="margin-top:1.5rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.25rem">
+          <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:.75rem" data-i18n="health.important">Important</div>
+          <ul style="display:flex;flex-direction:column;gap:.6rem">
+            <li class="t-caption" style="display:flex;gap:.5rem"><span style="color:var(--green)">✓</span> <span data-i18n="health.note1">Health information is shared privately and voluntarily</span></li>
+            <li class="t-caption" style="display:flex;gap:.5rem"><span style="color:var(--green)">✓</span> <span data-i18n="health.note2">BIYE does not perform medical diagnosis of any kind</span></li>
+            <li class="t-caption" style="display:flex;gap:.5rem"><span style="color:var(--green)">✓</span> <span data-i18n="health.note3">Genetic or health information is never publicly displayed</span></li>
+            <li class="t-caption" style="display:flex;gap:.5rem"><span style="color:var(--green)">✓</span> <span data-i18n="health.note4">Consult qualified professionals for health guidance</span></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="section-eyebrow" style="margin-top:0">
+          <span data-i18n="family.eyebrow">Family Compatibility</span>
+        </div>
+        <h2 class="t-h2" style="margin-bottom:1rem" data-i18n="family.title">Both families matter. The account belongs to you.</h2>
+        <p class="t-body" data-i18n="family.subtitle">BIYE recognizes that marriage in Bangladesh often involves families — their values, expectations and compatibility matter. BIYE includes family-compatibility dimensions across both profiles.</p>
+        <p class="t-body" style="margin-top:.75rem" data-i18n="family.note">At the same time, every BIYE account belongs to the individual. Privacy, consent and personal decision-making are always respected. Families are considered, never controlling.</p>
+        <div class="tag primary" style="margin-top:1.25rem;font-size:.8rem" data-i18n="family.tag">Respect the people involved. Keep the decision personal.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     TRUST & VERIFICATION
+     ============================== -->
+<section class="section bg-surface" id="trust-safety" aria-labelledby="trust-heading">
+  <div class="container">
+    <div class="text-center max-prose" style="margin-bottom:3rem">
+      <div class="section-eyebrow blue">
+        <span data-i18n="trust.eyebrow">Trust &amp; Safety</span>
+      </div>
+      <h2 class="t-h1" id="trust-heading" data-i18n="trust.title">Built around trust, privacy and meaningful compatibility.</h2>
+      <p class="t-body" style="margin-top:.75rem" data-i18n="trust.subtitle">Every design decision in BIYE is shaped by trust. We believe verification, privacy and safety are not features — they are foundations.</p>
+    </div>
+    <div class="trust-grid" style="margin-bottom:3rem">
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--green-soft);color:var(--green)">🛡</div>
+        <h3 class="trust-card-title" data-i18n="trustc.identity">Identity Verification</h3>
+        <p class="trust-card-desc" data-i18n="trustc.identityd">A multi-level verification system helps establish trusted identity — from phone confirmation to documentation review.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--purple-soft);color:var(--purple)">🧠</div>
+        <h3 class="trust-card-title" data-i18n="trustc.compat">Compatibility</h3>
+        <p class="trust-card-desc" data-i18n="trustc.compatd">137 dimensions of compatibility analysis — structured, thoughtful and human-centered.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--blue-soft);color:var(--blue)">🔒</div>
+        <h3 class="trust-card-title" data-i18n="trustc.privacy">Privacy</h3>
+        <p class="trust-card-desc" data-i18n="trustc.privacyd">You control what you share and who sees your profile. Sensitive verification information is never publicly displayed.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-card-icon" style="background:var(--primary-soft);color:var(--primary)">🚫</div>
+        <h3 class="trust-card-title" data-i18n="trustc.safety">Safety Controls</h3>
+        <p class="trust-card-desc" data-i18n="trustc.safetyd">Block and report controls give you the ability to maintain a safe and respectful experience at all times.</p>
+      </div>
+    </div>
+
+    <!-- KYC Ladder -->
+    <div class="two-col">
+      <div>
+        <h3 class="t-h2" data-i18n="kyc.title">7-Level Verification Ladder</h3>
+        <p class="t-body" style="margin-top:.75rem;margin-bottom:1.5rem" data-i18n="kyc.subtitle">BIYE uses a progressive verification system. Each level adds a layer of trust to your profile — completed at your own pace and entirely under your control.</p>
+        <div class="kyc-ladder" role="list" aria-label="KYC verification levels">
+          <div class="kyc-rung" role="listitem">
+            <div class="kyc-rung-num" style="background:var(--primary-soft);color:var(--primary)">1</div>
+            <span class="kyc-rung-name" data-i18n="kyc.l1">Phone Verification</span>
+            <span class="kyc-rung-badge tag green" data-i18n="kyc.s.verified">Verified</span>
+          </div>
+          <div class="kyc-rung" role="listitem">
+            <div class="kyc-rung-num" style="background:var(--purple-soft);color:var(--purple)">2</div>
+            <span class="kyc-rung-name" data-i18n="kyc.l2">National Identity (NID)</span>
+            <span class="kyc-rung-badge tag gold" data-i18n="kyc.s.pending">Pending</span>
+          </div>
+          <div class="kyc-rung" role="listitem">
+            <div class="kyc-rung-num" style="background:var(--blue-soft);color:var(--blue)">3</div>
+            <span class="kyc-rung-name" data-i18n="kyc.l3">Face / Selfie Match</span>
+            <span class="kyc-rung-badge tag gold" data-i18n="kyc.s.pending">Pending</span>
+          </div>
+          <div class="kyc-rung" role="listitem">
+            <div class="kyc-rung-num" style="background:rgba(0,169,157,.12);color:var(--teal)">4</div>
+            <span class="kyc-rung-name" data-i18n="kyc.l4">Education Documents</span>
+            <span class="kyc-rung-badge" style="background:#f3f4f6;color:#9ca3af;padding:.25rem .6rem;border-radius:50px;font-size:.7rem;font-weight:700" data-i18n="kyc.s.not">Not Yet</span>
+          </div>
+          <div class="kyc-rung" role="listitem">
+            <div class="kyc-rung-num" style="background:var(--green-soft);color:var(--green)">5</div>
+            <span class="kyc-rung-name" data-i18n="kyc.l5">Employment Verification</span>
+            <span class="kyc-rung-badge" style="background:#f3f4f6;color:#9ca3af;padding:.25rem .6rem;border-radius:50px;font-size:.7rem;font-weight:700" data-i18n="kyc.s.not">Not Yet</span>
+          </div>
+          <div class="kyc-rung" role="listitem">
+            <div class="kyc-rung-num" style="background:var(--primary-soft);color:var(--primary)">6</div>
+            <span class="kyc-rung-name" data-i18n="kyc.l6">Family Information</span>
+            <span class="kyc-rung-badge" style="background:#f3f4f6;color:#9ca3af;padding:.25rem .6rem;border-radius:50px;font-size:.7rem;font-weight:700" data-i18n="kyc.s.not">Not Yet</span>
+          </div>
+          <div class="kyc-rung" role="listitem">
+            <div class="kyc-rung-num" style="background:var(--gold-soft);color:#8a6a00">7</div>
+            <span class="kyc-rung-name" data-i18n="kyc.l7">Health Awareness (Optional)</span>
+            <span class="kyc-rung-badge" style="background:#f3f4f6;color:#9ca3af;padding:.25rem .6rem;border-radius:50px;font-size:.7rem;font-weight:700" data-i18n="kyc.s.not">Not Yet</span>
+          </div>
+        </div>
+        <p class="t-caption" style="margin-top:.75rem;font-style:italic" data-i18n="kyc.note">Status shown for illustration only. Your actual status is shown in your private dashboard.</p>
+      </div>
+      <div>
+        <h3 class="t-h2" data-i18n="safety.title">Safety &amp; Privacy Controls</h3>
+        <p class="t-body" style="margin-top:.75rem;margin-bottom:1.5rem" data-i18n="safety.subtitle">Connection should feel safe. BIYE is designed so you remain in control at every step.</p>
+        <div class="safety-row">
+          <div class="safety-card">
+            <div class="safety-card-icon" style="background:var(--primary-soft);color:var(--primary)">🚫</div>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;margin-bottom:.25rem" data-i18n="safety.block">Block</div>
+              <div class="t-caption" data-i18n="safety.blockd">Block any member immediately, with no explanation required.</div>
+            </div>
+          </div>
+          <div class="safety-card">
+            <div class="safety-card-icon" style="background:var(--blue-soft);color:var(--blue)">🚩</div>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;margin-bottom:.25rem" data-i18n="safety.report">Report</div>
+              <div class="t-caption" data-i18n="safety.reportd">Report inappropriate behavior for review and action.</div>
+            </div>
+          </div>
+          <div class="safety-card">
+            <div class="safety-card-icon" style="background:var(--green-soft);color:var(--green)">🔒</div>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;margin-bottom:.25rem" data-i18n="safety.privacy">Privacy</div>
+              <div class="t-caption" data-i18n="safety.privacyd">Control who sees your profile and information.</div>
+            </div>
+          </div>
+          <div class="safety-card">
+            <div class="safety-card-icon" style="background:var(--gold-soft);color:#8a6a00">💬</div>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;margin-bottom:.25rem" data-i18n="safety.comms">Respectful Communication</div>
+              <div class="t-caption" data-i18n="safety.commsd">Communication standards apply to every interaction on BIYE.</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem;padding:1rem 1.25rem;background:rgba(226,19,110,.06);border:1px solid rgba(226,19,110,.15);border-radius:var(--radius-sm)">
+          <p style="font-size:.85rem;font-weight:600;color:var(--primary)" data-i18n="safety.reminder">⚠ Never share passwords, OTPs or sensitive financial information with anyone — including people you meet on BIYE.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     MEMBERSHIP / PRICING
+     ============================== -->
+<section class="section" id="membership" aria-labelledby="pricing-heading">
+  <div class="container">
+    <div class="text-center max-prose" style="margin-bottom:3rem">
+      <div class="section-eyebrow gold">
+        <span data-i18n="pricing.eyebrow">Membership</span>
+      </div>
+      <h2 class="t-h1" id="pricing-heading" data-i18n="pricing.title">Simple, transparent pricing.</h2>
+      <p class="t-body" style="margin-top:.75rem" data-i18n="pricing.subtitle">No subscription traps. No hidden fees. Understand exactly what you get before you register.</p>
+    </div>
+    <div class="two-col" style="align-items:flex-start">
+      <div>
+        <div class="pricing-card" role="region" aria-label="BIYE registration pricing">
+          <div class="pricing-badge">✦ <span data-i18n="pricing.badge">BIYE Registration</span></div>
+          <div class="pricing-amount">
+            <span class="pricing-currency">৳</span>999
+          </div>
+          <p class="pricing-period" data-i18n="pricing.period">One-time registration</p>
+          <div class="pricing-includes">
+            <div class="pricing-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.f1">Complete your profile and compatibility metrics</span>
+            </div>
+            <div class="pricing-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.f2"><strong>2 free match views included</strong></span>
+            </div>
+            <div class="pricing-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.f3">Access 137-metric compatibility intelligence</span>
+            </div>
+            <div class="pricing-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.f4">Privacy controls and safety features</span>
+            </div>
+          </div>
+          <div class="pricing-addons">
+            <div class="pricing-addons-title" data-i18n="pricing.addon.title">After your 2 included match views</div>
+            <div class="pricing-addon">
+              <span data-i18n="pricing.addon.item">Additional match view</span>
+              <strong>৳333</strong>
+            </div>
+          </div>
+          <a href="onboarding.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:.75rem" data-i18n="pricing.cta">Register for ৳999</a>
+          <a href="#how-it-works" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem" data-i18n="pricing.secondary">See How Matching Works</a>
+          <p class="t-caption" style="margin-top:.75rem;text-align:center" data-i18n="pricing.tax">Price shown excludes 5% VAT. No recurring charges.</p>
+        </div>
+      </div>
+      <!-- Match flow explanation -->
+      <div>
+        <h3 class="t-h2" style="margin-bottom:1rem" data-i18n="matchflow.title">How match views work</h3>
+        <p class="t-body" style="margin-bottom:1.75rem" data-i18n="matchflow.subtitle">Your registration includes 2 match views to start your compatibility exploration. After that, each additional match view is available at ৳333.</p>
+        <div class="match-flow" role="list" aria-label="Match view process">
+          <div class="match-flow-step" role="listitem">
+            <div class="match-flow-step-icon" style="background:var(--brand-grad);color:#fff">✓</div>
+            <div>
+              <div class="match-flow-step-text" data-i18n="mf.s1">Register for ৳999</div>
+              <div class="match-flow-step-sub" data-i18n="mf.s1d">One-time registration, includes 2 free match views</div>
+            </div>
+          </div>
+          <div class="match-flow-arrow" aria-hidden="true">↓</div>
+          <div class="match-flow-step" role="listitem">
+            <div class="match-flow-step-icon" style="background:var(--purple-soft);color:var(--purple)">📊</div>
+            <div>
+              <div class="match-flow-step-text" data-i18n="mf.s2">Complete your compatibility metrics</div>
+              <div class="match-flow-step-sub" data-i18n="mf.s2d">137 dimensions across 13 categories</div>
+            </div>
+          </div>
+          <div class="match-flow-arrow" aria-hidden="true">↓</div>
+          <div class="match-flow-step" role="listitem">
+            <div class="match-flow-step-icon" style="background:var(--green-soft);color:var(--green)">👁</div>
+            <div>
+              <div class="match-flow-step-text" data-i18n="mf.s3">2 match views included</div>
+              <div class="match-flow-step-sub" data-i18n="mf.s3d">Explore compatibility with 2 matched profiles at no extra cost</div>
+            </div>
+          </div>
+          <div class="match-flow-arrow" aria-hidden="true">↓</div>
+          <div class="match-flow-step" role="listitem">
+            <div class="match-flow-step-icon" style="background:var(--gold-soft);color:#8a6a00">+</div>
+            <div>
+              <div class="match-flow-step-text" data-i18n="mf.s4">Additional views — ৳333 each</div>
+              <div class="match-flow-step-sub" data-i18n="mf.s4d">Each additional match view costs ৳333</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:2rem;padding:1.25rem;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+          <h4 style="font-size:.9rem;font-weight:700;margin-bottom:.6rem" data-i18n="notify.title">📱 Stay informed</h4>
+          <p class="t-body" style="font-size:.83rem" data-i18n="notify.desc">When relevant matches are identified, BIYE may notify you through approved SMS and email channels — with your consent. You control your notification preferences in your dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     FAQ
+     ============================== -->
+<section class="section bg-surface" aria-labelledby="faq-heading">
+  <div class="container">
+    <div class="text-center max-prose" style="margin-bottom:3rem">
+      <div class="section-eyebrow">
+        <span data-i18n="faq.eyebrow">Questions</span>
+      </div>
+      <h2 class="t-h1" id="faq-heading" data-i18n="faq.title">Frequently asked questions</h2>
+    </div>
+    <div class="faq-list max-prose" role="list">
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a1" id="faq-q1" data-i18n="faq.q1">What is BIYE?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a1" role="region" aria-labelledby="faq-q1">
+          <div class="faq-a-inner" data-i18n="faq.a1">BIYE is a relationship intelligence platform designed to help people explore meaningful compatibility before making one of life's most important personal decisions. BIYE analyzes 137 dimensions of compatibility — including personality, values, lifestyle, family expectations, emotional intelligence and future goals — to provide deeper understanding than a traditional profile search.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a2" id="faq-q2" data-i18n="faq.q2">How does the 137-metric system work?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a2" role="region" aria-labelledby="faq-q2">
+          <div class="faq-a-inner" data-i18n="faq.a2">BIYE's 137-metric compatibility framework covers 13 categories — from identity and personality to emotional intelligence and relationship resilience. You answer a thoughtfully designed questionnaire; your answers form a multi-dimensional compatibility profile. BIYE then compares your profile with candidate profiles across all dimensions using asymmetric matching — comparing what you want against what a candidate actually is, and vice versa.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a3" id="faq-q3" data-i18n="faq.q3">Is BIYE an AI matchmaking platform?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a3" role="region" aria-labelledby="faq-q3">
+          <div class="faq-a-inner" data-i18n="faq.a3">BIYE uses a layered intelligence architecture — a Rule Engine, a deterministic compatibility scoring engine, an Emotional Intelligence layer, and an AI insight layer. AI is used to explain compatibility findings and identify relationship themes — it does not decide who you should marry. The final decision always belongs to you.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a4" id="faq-q4" data-i18n="faq.q4">Does compatibility guarantee relationship success?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a4" role="region" aria-labelledby="faq-q4">
+          <div class="faq-a-inner" data-i18n="faq.a4">No. BIYE helps people explore compatibility signals and understand relationship dimensions more clearly — it does not guarantee relationship success, predict longevity or promise any particular outcome. Relationships are complex and deeply personal. BIYE provides intelligence to support a thoughtful, informed decision.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a5" id="faq-q5" data-i18n="faq.q5">Are profiles verified?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a5" role="region" aria-labelledby="faq-q5">
+          <div class="faq-a-inner" data-i18n="faq.a5">BIYE has a 7-level KYC (Know Your Customer) verification system — from phone confirmation through to education, employment, family and health documentation. Each profile shows which levels have been completed. Users complete verification at their own pace; not all profiles will have completed all levels.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a6" id="faq-q6" data-i18n="faq.q6">Can I control who sees my information?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a6" role="region" aria-labelledby="faq-q6">
+          <div class="faq-a-inner" data-i18n="faq.a6">Yes. BIYE is designed with privacy controls that let you manage your profile visibility. Sensitive verification information is never publicly displayed. You can block members and report inappropriate behavior at any time.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a7" id="faq-q7" data-i18n="faq.q7">What is Emotional Intelligence in BIYE?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a7" role="region" aria-labelledby="faq-q7">
+          <div class="faq-a-inner" data-i18n="faq.a7">BIYE's Emotional Intelligence (EI) layer evaluates compatibility dimensions related to communication style, emotional awareness, empathy, conflict orientation and expectation alignment. These signals complement the structural compatibility analysis. BIYE does not make psychological diagnoses — EI dimensions are used only as compatibility exploration signals.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a8" id="faq-q8" data-i18n="faq.q8">What is Relationship Resilience Intelligence?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a8" role="region" aria-labelledby="faq-q8">
+          <div class="faq-a-inner" data-i18n="faq.a8">Relationship Resilience Intelligence explores how two people might navigate differences, adapt to challenges and align on key life decisions over time. It goes beyond "do we match?" to help you understand "how might we grow together?" BIYE does not promise resilience or predict outcomes — it provides dimensions for thoughtful personal consideration.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a9" id="faq-q9" data-i18n="faq.q9">What is the ৳999 registration?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a9" role="region" aria-labelledby="faq-q9">
+          <div class="faq-a-inner" data-i18n="faq.a9">৳999 is a one-time registration fee that gives you access to the BIYE platform — including creating your profile, completing the 137-metric questionnaire and receiving 2 free match views. There is no subscription. Additional match views cost ৳333 each. All prices exclude 5% VAT.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a10" id="faq-q10" data-i18n="faq.q10">How are match notifications delivered?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a10" role="region" aria-labelledby="faq-q10">
+          <div class="faq-a-inner" data-i18n="faq.a10">When relevant matches are identified, BIYE may notify you through approved SMS and email channels — subject to your notification preferences. Your phone number and email address are never publicly displayed. Notification settings can be managed in your private dashboard.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a11" id="faq-q11" data-i18n="faq.q11">Does BIYE provide health or genetic diagnosis?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a11" role="region" aria-labelledby="faq-q11">
+          <div class="faq-a-inner" data-i18n="faq.a11">No. BIYE does not perform medical diagnoses of any kind. Health awareness is included as a private, voluntary compatibility dimension for those who wish to consider it. Any health-related information is handled with strict privacy. BIYE always recommends consulting qualified professionals for health guidance.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a12" id="faq-q12" data-i18n="faq.q12">What languages does BIYE support?
+          <span class="faq-q-icon" aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-a" id="faq-a12" role="region" aria-labelledby="faq-q12">
+          <div class="faq-a-inner" data-i18n="faq.a12">BIYE supports English, বাংলা (Bengali), हिन्दी (Hindi), العربية (Arabic, with right-to-left support), and 中文 (Chinese). Use the language selector in the navigation to switch. Bengali is the primary language for the Bangladesh market.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     FINAL CTA
+     ============================== -->
+<section class="cta-section" aria-labelledby="cta-heading">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="section-eyebrow" style="background:rgba(255,255,255,.15);color:#fff;border:none;margin-bottom:1.25rem">
+        <span data-i18n="cta.eyebrow">Begin your journey</span>
+      </div>
+      <h2 class="t-display cta-title text-balance" id="cta-heading" data-i18n="cta.title">Your future deserves more than a profile search.</h2>
+      <p class="cta-sub" data-i18n="cta.subtitle">Build a profile that reflects who you are. Discover compatibility that goes deeper. Connect with intention — at your own pace.</p>
+      <div class="cta-actions">
+        <a href="onboarding.html" class="btn btn-white" data-i18n="cta.primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Create Your BIYE Profile
+        </a>
+        <a href="#how-it-works" class="btn btn-white-outline" data-i18n="cta.secondary">Explore How BIYE Works</a>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:2rem;flex-wrap:wrap">
+        <span style="color:rgba(255,255,255,.75);font-size:.85rem" data-i18n="cta.price">Registration ৳999</span>
+        <span style="color:rgba(255,255,255,.3)">·</span>
+        <span style="color:rgba(255,255,255,.75);font-size:.85rem" data-i18n="cta.includes">Includes 2 free match views</span>
+        <span style="color:rgba(255,255,255,.3)">·</span>
+        <span style="color:rgba(255,255,255,.75);font-size:.85rem" data-i18n="cta.addl">৳333 per additional match view</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ==============================
+     FOOTER
+     ============================== -->
+<footer aria-label="BIYE footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-row">
+          <img class="footer-logo-img" src="data:image/webp;base64,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" alt="BIYE">
+          <span class="footer-logo-text">BIYE</span>
+        </div>
+        <p data-i18n="footer.tagline">Intelligent compatibility. Trusted connections.</p>
+        <div style="margin-top:1rem">
+          <p class="footer-parent">
+            <span data-i18n="footer.parent">Part of the </span>
+            <a href="https://mindmaxbd.xyz" target="_blank" rel="noopener noreferrer" data-i18n="footer.parentLink">MindMax Group</a>
+            <span data-i18n="footer.parentEnd"> ecosystem</span>
+          </p>
+        </div>
+        <div class="footer-langs" style="margin-top:1.25rem" aria-label="Language selection">
+          <button class="footer-lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="footer-lang-btn" onclick="setLang('bn')">বাং</button>
+          <button class="footer-lang-btn" onclick="setLang('hi')">हिं</button>
+          <button class="footer-lang-btn" onclick="setLang('ar')">عر</button>
+          <button class="footer-lang-btn" onclick="setLang('zh')">中</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title" data-i18n="footer.product">Product</div>
+        <a href="#how-it-works" data-i18n="footer.howItWorks">How BIYE Works</a>
+        <a href="#compatibility" data-i18n="footer.compatibility">Compatibility</a>
+        <a href="#relationship-intelligence" data-i18n="footer.relIntelligence">Relationship Intelligence</a>
+        <a href="#trust-safety" data-i18n="footer.trustSafety">Trust &amp; Safety</a>
+        <a href="#membership" data-i18n="footer.membership">Membership</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title" data-i18n="footer.platform">Platform</div>
+        <a href="onboarding.html" data-i18n="footer.register">Register</a>
+        <a href="onboarding.html" data-i18n="footer.signin">Sign In</a>
+        <a href="questionnaire.html" data-i18n="footer.questionnaire">Compatibility Questionnaire</a>
+        <a href="match-feed.html" data-i18n="footer.matches">Match Feed</a>
+        <a href="dashboard.html" data-i18n="footer.dashboard">Dashboard</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title" data-i18n="footer.legal">Legal</div>
+        <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
+        <a href="#" data-i18n="footer.terms">Terms of Service</a>
+        <a href="#" data-i18n="footer.about">About BIYE</a>
+        <a href="#" data-i18n="footer.contact">Contact</a>
+        <a href="#" data-i18n="footer.help">Help</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy" data-i18n="footer.copy">© 2025 BIYE.LTD — All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#" data-i18n="footer.privacyShort">Privacy</a>
+        <a href="#" data-i18n="footer.termsShort">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ==============================
+   BIYE — HOMEPAGE JAVASCRIPT
+   Production v1.0
+   ============================== */
+
+// ── TRANSLATIONS ────────────────────────────────────────────────────────────
+const TRANSLATIONS = {
+  en: {
+    "announce.text": "🌟 BIYE — Intelligent compatibility for meaningful relationships. Register for ৳999 and explore 137 compatibility dimensions.",
+    "nav.howItWorks": "How BIYE Works", "nav.compatibility": "Compatibility",
+    "nav.relIntelligence": "Relationship Intelligence", "nav.trustSafety": "Trust & Safety",
+    "nav.membership": "Membership", "nav.createAccount": "Create Account", "nav.signIn": "Sign In",
+    "hero.eyebrow": "Relationship Intelligence Platform",
+    "hero.title": "Meaningful compatibility begins with <span class=\"grad-text\">understanding</span>.",
+    "hero.subtitle": "Explore compatibility across personality, values, lifestyle, family expectations, emotional intelligence and future goals — not just a profile.",
+    "hero.primaryCta": "Create Your BIYE Profile", "hero.secondaryCta": "How BIYE Works",
+    "hero.pricing.label": "Registration", "hero.pricing.includes": "· Includes 2 free match views",
+    "hero.trust1": "137 compatibility dimensions", "hero.trust2": "Trust-centered profiles",
+    "hero.trust3": "Privacy-conscious design", "hero.trust4": "The decision remains yours",
+    "trust.metrics": "<strong>137</strong>&nbsp;Compatibility Metrics", "trust.kyc": "<strong>7</strong>-Level KYC",
+    "trust.ei": "Emotional Intelligence Layer", "trust.privacy": "Privacy-First Design", "trust.human": "Human Decision Always",
+    "why.eyebrow": "Why BIYE", "why.title": "Marriage is bigger than a profile.",
+    "why.subtitle": "Traditional profile search tells you who someone is. BIYE helps you explore how you may fit together — across what matters most in a lifelong relationship.",
+    "why.traditional": "Traditional Profile", "why.biye": "BIYE Compatibility",
+    "why.trad1": "Photo & basic appearance", "why.trad2": "Age & height", "why.trad3": "Education & profession", "why.trad4": "Income & location", "why.trad5": "Family religion",
+    "why.biye1": "Personality & communication style", "why.biye2": "Core values & ethics", "why.biye3": "Family expectations on both sides",
+    "why.biye4": "Lifestyle & daily preferences", "why.biye5": "Future goals & life planning", "why.biye6": "Emotional intelligence signals",
+    "why.biye7": "Relationship resilience indicators", "why.biye8": "Trust & verified identity",
+    "metrics.eyebrow": "Compatibility Intelligence", "metrics.title": "dimensions. One deeper understanding.",
+    "metrics.subtitle": "People are more than age, education and photographs. BIYE analyzes 137 dimensions of compatibility — from personality and values to emotional intelligence and relationship resilience — to help you understand how you and another person may truly fit together.",
+    "metrics.note": "BIYE evaluates compatibility across all 137 dimensions and presents the results for your consideration. The decision always remains yours.",
+    "cat.identity": "Identity", "cat.education": "Education & Career", "cat.personality": "Personality",
+    "cat.family": "Family & Relationship", "cat.lifestyle": "Lifestyle", "cat.health": "Health Awareness",
+    "cat.values": "Values & Ethics", "cat.future": "Future Planning", "cat.critical": "Marriage-Critical",
+    "cat.preference": "Partner Preference", "cat.ei": "Emotional Intelligence", "cat.resilience": "Relationship Resilience",
+    "how.eyebrow": "The Journey", "how.title": "How BIYE Works",
+    "how.subtitle": "A thoughtful seven-step journey from profile to compatibility understanding — at your own pace.",
+    "step1.title": "Create your profile", "step1.desc": "Register with your phone number and create your basic profile with verified personal information.",
+    "step2.title": "Build your trusted identity", "step2.desc": "Complete KYC verification — from phone confirmation to education and employment documentation — at your own pace.",
+    "step3.title": "Complete 137 compatibility metrics", "step3.desc": "Answer thoughtfully designed questions across 13 compatibility categories — personality, values, family, lifestyle and more.",
+    "step4.title": "Build your compatibility profile", "step4.desc": "Your answers form a rich, multi-dimensional compatibility profile — far deeper than any photo or résumé.",
+    "step5.title": "Rule Engine evaluates conditions", "step5.desc": "BIYE's Rule Engine identifies important compatibility conditions — distinguishing preferences from fundamentals.",
+    "step6.title": "Compatibility Intelligence activates", "step6.desc": "A structured compatibility engine evaluates all 137 dimensions — weighted and analyzed to reveal meaningful compatibility signals.",
+    "step7.title": "Explore, understand and connect", "step7.desc": "Review your compatibility findings, explore match profiles, and decide with intention. The choice is entirely yours.",
+    "arch.eyebrow": "Intelligence Architecture",
+    "arch.title": "Layers of intelligence, not a single score.",
+    "arch.subtitle": "BIYE combines structured compatibility analysis, emotional intelligence and AI-assisted insights to help you understand relationship potential more clearly — without reducing a person to a number.",
+    "arch.philosophy": "Core philosophy: Technology can help you discover. People make the decision.",
+    "arch.l1.name": "Layer 1 — Compatibility Data", "arch.l1.desc": "Your answers and verified profile information across 137 dimensions.",
+    "arch.l2.name": "Layer 2 — Rule Engine", "arch.l2.desc": "Identifies important compatibility conditions — distinguishing fundamentals from flexible preferences.",
+    "arch.l3.name": "Layer 3 — Compatibility Engine", "arch.l3.desc": "Structured, deterministic analysis evaluating weighted similarity across all remaining dimensions.",
+    "arch.l4.name": "Layer 4 — Emotional Intelligence", "arch.l4.desc": "Communication style, emotional awareness, empathy signals and relationship context.",
+    "arch.l5.name": "Layer 5 — AI Insight Layer", "arch.l5.desc": "AI helps explain compatibility findings, identify relationship themes and provide contextual understanding — it explains, it does not decide.",
+    "arch.final": "Your understanding → Your decision",
+    "ei.eyebrow": "Emotional Intelligence", "ei.title": "Compatibility is more than numbers.",
+    "ei.subtitle": "Relationships involve how people feel, communicate and understand each other. BIYE includes an Emotional Intelligence layer to capture dimensions that structured scoring alone cannot fully express.",
+    "ei.c1.title": "Communication Style", "ei.c1.desc": "How people express themselves, listen and respond — critical signals for long-term relationship health.",
+    "ei.c2.title": "Emotional Awareness", "ei.c2.desc": "Understanding one's own feelings and recognizing emotions in others — a foundation for empathetic connection.",
+    "ei.c3.title": "Expectation Alignment", "ei.c3.desc": "Clarity around what each person expects from a relationship, partnership and family life.",
+    "ei.c4.title": "Conflict Orientation", "ei.c4.desc": "How individuals approach disagreement — whether through avoidance, dialogue or constructive resolution.",
+    "ei.disclaimer": "BIYE does not make psychological diagnoses. EI signals are used only as compatibility exploration dimensions.",
+    "resilience.eyebrow": "Relationship Resilience",
+    "resilience.title": "Not just "do we match?" — but "how might we grow together?"",
+    "resilience.subtitle": "BIYE helps people explore compatibility and relationship resilience before making important personal decisions. Resilience is not about avoiding differences — it is about understanding how two people might navigate them.",
+    "resilience.disclaimer": "BIYE does not promise successful marriages, predict relationship longevity or guarantee conflict resolution. These are dimensions for thoughtful personal consideration.",
+    "res.c1": "Communication Resilience", "res.c1d": "How two people communicate under pressure",
+    "res.c2": "Goal Alignment", "res.c2d": "Shared direction for life's key decisions",
+    "res.c3": "Family Expectations", "res.c3d": "Understanding both families' values",
+    "res.c4": "Adaptability", "res.c4d": "Openness to growth and mutual adjustment",
+    "ai.eyebrow": "AI Intelligence Layer", "ai.title": "Intelligence that explains, not decides.",
+    "ai.subtitle": "BIYE combines structured compatibility intelligence, emotional intelligence and AI-assisted reasoning to help you understand relationship patterns more clearly. AI provides context and insight — the decision is always human.",
+    "ai.flow1": "Human Profile & 137 Compatibility Metrics", "ai.flow2": "Rule Engine Evaluation",
+    "ai.flow3": "Deterministic Compatibility Analysis", "ai.flow4": "Emotional Intelligence Layer",
+    "ai.flow5": "AI Insight — explains findings, identifies themes", "ai.flow6": "Relationship Resilience Understanding",
+    "ai.flow7": "Human Understanding → Human Decision",
+    "ai.note": "AI explains and augments compatibility intelligence. BIYE never positions AI as the owner of a marriage decision.",
+    "health.eyebrow": "Health Awareness", "health.title": "Health Awareness. Privacy First.",
+    "health.subtitle": "Some people may wish to consider health-related compatibility, family health history or hereditary awareness when exploring a lifelong relationship. BIYE treats this as a private, voluntary dimension — never as medical diagnosis.",
+    "health.important": "Important",
+    "health.note1": "Health information is shared privately and voluntarily", "health.note2": "BIYE does not perform medical diagnosis of any kind",
+    "health.note3": "Genetic or health information is never publicly displayed", "health.note4": "Consult qualified professionals for health guidance",
+    "family.eyebrow": "Family Compatibility", "family.title": "Both families matter. The account belongs to you.",
+    "family.subtitle": "BIYE recognizes that marriage in Bangladesh often involves families — their values, expectations and compatibility matter. BIYE includes family-compatibility dimensions across both profiles.",
+    "family.note": "At the same time, every BIYE account belongs to the individual. Privacy, consent and personal decision-making are always respected. Families are considered, never controlling.",
+    "family.tag": "Respect the people involved. Keep the decision personal.",
+    "trust.eyebrow": "Trust & Safety", "trust.title": "Built around trust, privacy and meaningful compatibility.",
+    "trust.subtitle": "Every design decision in BIYE is shaped by trust. We believe verification, privacy and safety are not features — they are foundations.",
+    "trustc.identity": "Identity Verification", "trustc.identityd": "A multi-level verification system helps establish trusted identity — from phone confirmation to documentation review.",
+    "trustc.compat": "Compatibility", "trustc.compatd": "137 dimensions of compatibility analysis — structured, thoughtful and human-centered.",
+    "trustc.privacy": "Privacy", "trustc.privacyd": "You control what you share and who sees your profile. Sensitive verification information is never publicly displayed.",
+    "trustc.safety": "Safety Controls", "trustc.safetyd": "Block and report controls give you the ability to maintain a safe and respectful experience at all times.",
+    "kyc.title": "7-Level Verification Ladder",
+    "kyc.subtitle": "BIYE uses a progressive verification system. Each level adds a layer of trust to your profile — completed at your own pace and entirely under your control.",
+    "kyc.l1": "Phone Verification", "kyc.l2": "National Identity (NID)", "kyc.l3": "Face / Selfie Match",
+    "kyc.l4": "Education Documents", "kyc.l5": "Employment Verification", "kyc.l6": "Family Information", "kyc.l7": "Health Awareness (Optional)",
+    "kyc.s.verified": "Verified", "kyc.s.pending": "Pending", "kyc.s.not": "Not Yet",
+    "kyc.note": "Status shown for illustration only. Your actual status is shown in your private dashboard.",
+    "safety.title": "Safety & Privacy Controls",
+    "safety.subtitle": "Connection should feel safe. BIYE is designed so you remain in control at every step.",
+    "safety.block": "Block", "safety.blockd": "Block any member immediately, with no explanation required.",
+    "safety.report": "Report", "safety.reportd": "Report inappropriate behavior for review and action.",
+    "safety.privacy": "Privacy", "safety.privacyd": "Control who sees your profile and information.",
+    "safety.comms": "Respectful Communication", "safety.commsd": "Communication standards apply to every interaction on BIYE.",
+    "safety.reminder": "⚠ Never share passwords, OTPs or sensitive financial information with anyone — including people you meet on BIYE.",
+    "pricing.eyebrow": "Membership", "pricing.title": "Simple, transparent pricing.",
+    "pricing.subtitle": "No subscription traps. No hidden fees. Understand exactly what you get before you register.",
+    "pricing.badge": "BIYE Registration", "pricing.period": "One-time registration",
+    "pricing.f1": "Complete your profile and compatibility metrics", "pricing.f2": "<strong>2 free match views included</strong>",
+    "pricing.f3": "Access 137-metric compatibility intelligence", "pricing.f4": "Privacy controls and safety features",
+    "pricing.addon.title": "After your 2 included match views", "pricing.addon.item": "Additional match view",
+    "pricing.cta": "Register for ৳999", "pricing.secondary": "See How Matching Works",
+    "pricing.tax": "Price shown excludes 5% VAT. No recurring charges.",
+    "matchflow.title": "How match views work",
+    "matchflow.subtitle": "Your registration includes 2 match views to start your compatibility exploration. After that, each additional match view is available at ৳333.",
+    "mf.s1": "Register for ৳999", "mf.s1d": "One-time registration, includes 2 free match views",
+    "mf.s2": "Complete your compatibility metrics", "mf.s2d": "137 dimensions across 13 categories",
+    "mf.s3": "2 match views included", "mf.s3d": "Explore compatibility with 2 matched profiles at no extra cost",
+    "mf.s4": "Additional views — ৳333 each", "mf.s4d": "Each additional match view costs ৳333",
+    "notify.title": "📱 Stay informed",
+    "notify.desc": "When relevant matches are identified, BIYE may notify you through approved SMS and email channels — with your consent. You control your notification preferences in your dashboard.",
+    "faq.eyebrow": "Questions", "faq.title": "Frequently asked questions",
+    "faq.q1": "What is BIYE?", "faq.q2": "How does the 137-metric system work?",
+    "faq.q3": "Is BIYE an AI matchmaking platform?", "faq.q4": "Does compatibility guarantee relationship success?",
+    "faq.q5": "Are profiles verified?", "faq.q6": "Can I control who sees my information?",
+    "faq.q7": "What is Emotional Intelligence in BIYE?", "faq.q8": "What is Relationship Resilience Intelligence?",
+    "faq.q9": "What is the ৳999 registration?", "faq.q10": "How are match notifications delivered?",
+    "faq.q11": "Does BIYE provide health or genetic diagnosis?", "faq.q12": "What languages does BIYE support?",
+    "faq.a1": "BIYE is a relationship intelligence platform designed to help people explore meaningful compatibility before making one of life's most important personal decisions. BIYE analyzes 137 dimensions of compatibility — including personality, values, lifestyle, family expectations, emotional intelligence and future goals.",
+    "faq.a2": "BIYE's 137-metric compatibility framework covers 13 categories. You answer a thoughtfully designed questionnaire; your answers form a multi-dimensional compatibility profile. BIYE then compares your profile with candidate profiles across all dimensions using asymmetric matching.",
+    "faq.a3": "BIYE uses a layered intelligence architecture — a Rule Engine, a deterministic compatibility scoring engine, an Emotional Intelligence layer, and an AI insight layer. AI is used to explain compatibility findings — it does not decide who you should marry.",
+    "faq.a4": "No. BIYE helps people explore compatibility signals and understand relationship dimensions more clearly — it does not guarantee relationship success, predict longevity or promise any particular outcome.",
+    "faq.a5": "BIYE has a 7-level KYC verification system. Each profile shows which levels have been completed. Users complete verification at their own pace.",
+    "faq.a6": "Yes. BIYE is designed with privacy controls that let you manage your profile visibility. Sensitive verification information is never publicly displayed.",
+    "faq.a7": "BIYE's Emotional Intelligence layer evaluates compatibility dimensions related to communication style, emotional awareness, empathy and conflict orientation. BIYE does not make psychological diagnoses.",
+    "faq.a8": "Relationship Resilience Intelligence explores how two people might navigate differences and align on key life decisions. It goes beyond 'do we match?' to help you understand 'how might we grow together?'",
+    "faq.a9": "৳999 is a one-time registration fee that gives you access to BIYE — including 2 free match views. Additional match views cost ৳333 each. All prices exclude 5% VAT.",
+    "faq.a10": "When relevant matches are identified, BIYE may notify you through approved SMS and email channels — subject to your notification preferences.",
+    "faq.a11": "No. BIYE does not perform medical diagnoses of any kind. Health awareness is included as a private, voluntary compatibility dimension.",
+    "faq.a12": "BIYE supports English, বাংলা (Bengali), हिन्दी (Hindi), العربية (Arabic), and 中文 (Chinese).",
+    "cta.eyebrow": "Begin your journey",
+    "cta.title": "Your future deserves more than a profile search.",
+    "cta.subtitle": "Build a profile that reflects who you are. Discover compatibility that goes deeper. Connect with intention — at your own pace.",
+    "cta.primary": "Create Your BIYE Profile", "cta.secondary": "Explore How BIYE Works",
+    "cta.price": "Registration ৳999", "cta.includes": "Includes 2 free match views", "cta.addl": "৳333 per additional match view",
+    "footer.tagline": "Intelligent compatibility. Trusted connections.",
+    "footer.parent": "Part of the ", "footer.parentLink": "MindMax Group", "footer.parentEnd": " ecosystem",
+    "footer.product": "Product", "footer.howItWorks": "How BIYE Works", "footer.compatibility": "Compatibility",
+    "footer.relIntelligence": "Relationship Intelligence", "footer.trustSafety": "Trust & Safety", "footer.membership": "Membership",
+    "footer.platform": "Platform", "footer.register": "Register", "footer.signin": "Sign In",
+    "footer.questionnaire": "Compatibility Questionnaire", "footer.matches": "Match Feed", "footer.dashboard": "Dashboard",
+    "footer.legal": "Legal", "footer.privacy": "Privacy Policy", "footer.terms": "Terms of Service",
+    "footer.about": "About BIYE", "footer.contact": "Contact", "footer.help": "Help",
+    "footer.copy": "© 2025 BIYE.LTD — All rights reserved.", "footer.privacyShort": "Privacy", "footer.termsShort": "Terms"
+  },
+  bn: {
+    "announce.text": "🌟 BIYE — অর্থপূর্ণ সম্পর্কের জন্য বুদ্ধিদীপ্ত সামঞ্জস্য। ৳৯৯৯ তে রেজিস্ট্রেশন করুন এবং ১৩৭টি সামঞ্জস্যের মাত্রা অন্বেষণ করুন।",
+    "nav.howItWorks": "BIYE কীভাবে কাজ করে", "nav.compatibility": "সামঞ্জস্য", "nav.relIntelligence": "সম্পর্ক বুদ্ধিমত্তা",
+    "nav.trustSafety": "বিশ্বাস ও নিরাপত্তা", "nav.membership": "সদস্যপদ", "nav.createAccount": "অ্যাকাউন্ট তৈরি করুন", "nav.signIn": "লগইন করুন",
+    "hero.eyebrow": "সম্পর্ক বুদ্ধিমত্তা প্ল্যাটফর্ম",
+    "hero.title": "অর্থপূর্ণ সামঞ্জস্য শুরু হয় <span class=\"grad-text\">বোঝাপড়া</span> দিয়ে।",
+    "hero.subtitle": "ব্যক্তিত্ব, মূল্যবোধ, জীবনধারা, পারিবারিক প্রত্যাশা, আবেগীয় বুদ্ধিমত্তা এবং ভবিষ্যৎ লক্ষ্য — শুধু একটি প্রোফাইল নয়।",
+    "hero.primaryCta": "আপনার BIYE প্রোফাইল তৈরি করুন", "hero.secondaryCta": "BIYE কীভাবে কাজ করে",
+    "hero.pricing.label": "রেজিস্ট্রেশন", "hero.pricing.includes": "· ২টি বিনামূল্যে ম্যাচ ভিউ অন্তর্ভুক্ত",
+    "hero.trust1": "১৩৭টি সামঞ্জস্যের মাত্রা", "hero.trust2": "বিশ্বাসযোগ্য প্রোফাইল",
+    "hero.trust3": "গোপনীয়তা-সচেতন ডিজাইন", "hero.trust4": "সিদ্ধান্ত সর্বদা আপনার",
+    "trust.metrics": "<strong>১৩৭</strong>&nbsp;সামঞ্জস্য মেট্রিক্স", "trust.kyc": "<strong>৭</strong>-স্তর KYC",
+    "trust.ei": "আবেগীয় বুদ্ধিমত্তা স্তর", "trust.privacy": "গোপনীয়তা-প্রথম ডিজাইন", "trust.human": "সিদ্ধান্ত সর্বদা মানবিক",
+    "why.eyebrow": "কেন BIYE", "why.title": "বিয়ে একটি প্রোফাইলের চেয়ে অনেক বড়।",
+    "why.subtitle": "প্রথাগত প্রোফাইল খোঁজ আপনাকে বলে কেউ কে। BIYE আপনাকে অন্বেষণ করতে সাহায্য করে আপনারা কিভাবে একসাথে মানানসই হতে পারেন।",
+    "metrics.eyebrow": "সামঞ্জস্য বুদ্ধিমত্তা", "metrics.title": "মাত্রা। একটি গভীর বোঝাপড়া।",
+    "how.eyebrow": "যাত্রা", "how.title": "BIYE কীভাবে কাজ করে",
+    "pricing.eyebrow": "সদস্যপদ", "pricing.title": "সহজ, স্বচ্ছ মূল্য।",
+    "pricing.badge": "BIYE রেজিস্ট্রেশন", "pricing.period": "এককালীন রেজিস্ট্রেশন",
+    "pricing.cta": "৳৯৯৯ তে রেজিস্ট্রেশন করুন",
+    "faq.eyebrow": "প্রশ্ন", "faq.title": "সচরাচর জিজ্ঞাসিত প্রশ্ন",
+    "cta.title": "আপনার ভবিষ্যৎ একটি প্রোফাইল সার্চের চেয়ে বেশি প্রাপ্য।",
+    "cta.primary": "আপনার BIYE প্রোফাইল তৈরি করুন",
+    "footer.tagline": "বুদ্ধিদীপ্ত সামঞ্জস্য। বিশ্বস্ত সংযোগ।",
+    "footer.parent": "", "footer.parentLink": "MindMax Group", "footer.parentEnd": " ইকোসিস্টেমের অংশ",
+    "footer.copy": "© ২০২৫ BIYE.LTD — সর্বস্বত্ব সংরক্ষিত।"
+  },
+  hi: {
+    "announce.text": "🌟 BIYE — सार्थक रिश्तों के लिए बुद्धिमान अनुकूलता। ৳999 में पंजीकरण करें और 137 अनुकूलता आयाम खोजें।",
+    "nav.howItWorks": "BIYE कैसे काम करता है", "nav.compatibility": "अनुकूलता",
+    "nav.relIntelligence": "रिश्ता बुद्धिमत्ता", "nav.trustSafety": "विश्वास और सुरक्षा",
+    "nav.membership": "सदस्यता", "nav.createAccount": "खाता बनाएं", "nav.signIn": "साइन इन",
+    "hero.title": "सार्थक अनुकूलता <span class=\"grad-text\">समझ</span> से शुरू होती है।",
+    "hero.subtitle": "व्यक्तित्व, मूल्यों, जीवनशैली, पारिवारिक अपेक्षाओं, भावनात्मक बुद्धिमत्ता और भविष्य के लक्ष्यों में अनुकूलता खोजें।",
+    "hero.primaryCta": "अपना BIYE प्रोफ़ाइल बनाएं",
+    "hero.trust1": "137 अनुकूलता आयाम", "hero.trust2": "विश्वसनीय प्रोफ़ाइल",
+    "hero.trust3": "गोपनीयता-सचेत डिज़ाइन", "hero.trust4": "निर्णय हमेशा आपका",
+    "why.title": "विवाह एक प्रोफ़ाइल से बड़ा है।",
+    "metrics.title": "आयाम। एक गहरी समझ।",
+    "pricing.title": "सरल, पारदर्शी मूल्य निर्धारण।",
+    "pricing.cta": "৳999 में पंजीकरण करें",
+    "cta.title": "आपके भविष्य में एक प्रोफ़ाइल खोज से अधिक की ज़रूरत है।",
+    "cta.primary": "अपना BIYE प्रोफ़ाइल बनाएं",
+    "footer.tagline": "बुद्धिमान अनुकूलता। विश्वसनीय संबंध।",
+    "footer.parent": "", "footer.parentLink": "MindMax Group", "footer.parentEnd": " इकोसिस्टम का हिस्सा",
+    "footer.copy": "© 2025 BIYE.LTD — सर्वाधिकार सुरक्षित।"
+  },
+  ar: {
+    "announce.text": "🌟 BIYE — توافق ذكي لعلاقات هادفة. سجّل مقابل ৳999 واستكشف 137 بُعدًا من أبعاد التوافق.",
+    "nav.howItWorks": "كيف يعمل BIYE", "nav.compatibility": "التوافق",
+    "nav.relIntelligence": "ذكاء العلاقات", "nav.trustSafety": "الثقة والأمان",
+    "nav.membership": "العضوية", "nav.createAccount": "إنشاء حساب", "nav.signIn": "تسجيل الدخول",
+    "hero.title": "يبدأ التوافق الحقيقي بـ<span class=\"grad-text\">الفهم</span>.",
+    "hero.subtitle": "استكشف التوافق في الشخصية والقيم وأسلوب الحياة والتوقعات الأسرية والذكاء العاطفي والأهداف المستقبلية.",
+    "hero.primaryCta": "أنشئ ملفك على BIYE",
+    "hero.trust1": "137 بُعدًا من أبعاد التوافق", "hero.trust2": "ملفات تعريف موثوقة",
+    "hero.trust3": "تصميم يراعي الخصوصية", "hero.trust4": "القرار دائمًا لك",
+    "why.title": "الزواج أكبر من مجرد ملف تعريف.",
+    "metrics.title": "بُعدًا. فهم أعمق.",
+    "pricing.title": "تسعير بسيط وشفاف.",
+    "pricing.cta": "سجّل مقابل ৳999",
+    "cta.title": "مستقبلك يستحق أكثر من مجرد بحث في الملفات.",
+    "cta.primary": "أنشئ ملفك على BIYE",
+    "footer.tagline": "توافق ذكي. روابط موثوقة.",
+    "footer.parent": "جزء من منظومة ", "footer.parentLink": "MindMax Group", "footer.parentEnd": "",
+    "footer.copy": "© 2025 BIYE.LTD — جميع الحقوق محفوظة."
+  },
+  zh: {
+    "announce.text": "🌟 BIYE — 为有意义的关系提供智能匹配。注册仅需 ৳999，探索137个兼容性维度。",
+    "nav.howItWorks": "BIYE 如何运作", "nav.compatibility": "兼容性",
+    "nav.relIntelligence": "关系智能", "nav.trustSafety": "信任与安全",
+    "nav.membership": "会员资格", "nav.createAccount": "创建账户", "nav.signIn": "登录",
+    "hero.title": "有意义的兼容性始于<span class=\"grad-text\">理解</span>。",
+    "hero.subtitle": "在性格、价值观、生活方式、家庭期望、情商和未来目标方面探索兼容性。",
+    "hero.primaryCta": "创建您的 BIYE 档案",
+    "hero.trust1": "137个兼容性维度", "hero.trust2": "以信任为中心的档案",
+    "hero.trust3": "注重隐私的设计", "hero.trust4": "决定权始终在您手中",
+    "why.title": "婚姻不仅仅是一个档案。",
+    "metrics.title": "维度。更深的理解。",
+    "pricing.title": "简单透明的定价。",
+    "pricing.cta": "注册仅需 ৳999",
+    "cta.title": "您的未来值得比档案搜索更多的东西。",
+    "cta.primary": "创建您的 BIYE 档案",
+    "footer.tagline": "智能兼容。可信连接。",
+    "footer.parent": "隶属于 ", "footer.parentLink": "MindMax Group", "footer.parentEnd": " 生态系统",
+    "footer.copy": "© 2025 BIYE.LTD — 保留所有权利。"
+  }
+};
+
+// RTL languages
+const RTL_LANGS = new Set(['ar']);
+const LANG_LABELS = {en:'EN',bn:'বাং',hi:'हिं',ar:'عر',zh:'中'};
+let currentLang = 'en';
+
+function setLang(lang) {
+  if (!TRANSLATIONS[lang]) lang = 'en';
+  currentLang = lang;
+
+  // Update html attributes
+  document.documentElement.lang = lang;
+  document.documentElement.dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
+
+  // Update lang label in nav
+  const ll = document.getElementById('langLabel');
+  if (ll) ll.textContent = LANG_LABELS[lang] || lang.toUpperCase();
+
+  // Apply translations
+  const t = TRANSLATIONS[lang];
+  const fallback = TRANSLATIONS['en'];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const val = (t && t[key]) || (fallback && fallback[key]);
+    if (val !== undefined) el.innerHTML = val;
+  });
+
+  // Update active states
+  document.querySelectorAll('.footer-lang-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.lang-opt').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll(`[onclick="setLang('${lang}')"]`).forEach(btn => btn.classList.add('active'));
+
+  // Close lang menu if open
+  closeLangMenu();
+
+  // Store preference (UI only, not auth)
+  try { localStorage.setItem('biye_lang', lang); } catch(e) {}
+}
+
+// ── LANGUAGE DROPDOWN ────────────────────────────────────────────────────────
+const langToggle = document.getElementById('langToggle');
+const langMenu = document.getElementById('langMenu');
+
+function openLangMenu() {
+  langMenu.classList.add('open');
+  langToggle.setAttribute('aria-expanded', 'true');
+}
+function closeLangMenu() {
+  langMenu.classList.remove('open');
+  langToggle.setAttribute('aria-expanded', 'false');
+}
+
+if (langToggle) {
+  langToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    langMenu.classList.contains('open') ? closeLangMenu() : openLangMenu();
+  });
+}
+document.addEventListener('click', () => closeLangMenu());
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLangMenu(); });
+
+// ── MOBILE NAV ───────────────────────────────────────────────────────────────
+const hamburger = document.getElementById('navHamburger');
+const mobileNav = document.getElementById('mobileNav');
+const mobileOverlay = document.getElementById('mobileOverlay');
+const mobileClose = document.getElementById('mobileNavClose');
+let lastFocusedEl = null;
+
+function openMobileNav() {
+  lastFocusedEl = document.activeElement;
+  mobileNav.classList.add('open');
+  mobileNav.setAttribute('aria-hidden', 'false');
+  mobileOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (hamburger) { hamburger.setAttribute('aria-expanded', 'true'); }
+  setTimeout(() => { if (mobileClose) mobileClose.focus(); }, 50);
+}
+function closeMobileNav() {
+  mobileNav.classList.remove('open');
+  mobileNav.setAttribute('aria-hidden', 'true');
+  mobileOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+  if (hamburger) { hamburger.setAttribute('aria-expanded', 'false'); }
+  if (lastFocusedEl) lastFocusedEl.focus();
+}
+
+if (hamburger) hamburger.addEventListener('click', openMobileNav);
+if (mobileClose) mobileClose.addEventListener('click', closeMobileNav);
+if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileNav);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobileNav(); });
+
+// Close mobile nav links
+document.querySelectorAll('.mobile-nav-link').forEach(link => {
+  link.addEventListener('click', () => { closeMobileNav(); });
+});
+
+// ── FAQ ACCORDION ────────────────────────────────────────────────────────────
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const expanded = this.getAttribute('aria-expanded') === 'true';
+    const answerId = this.getAttribute('aria-controls');
+    const answer = document.getElementById(answerId);
+    if (!answer) return;
+
+    if (expanded) {
+      this.setAttribute('aria-expanded', 'false');
+      answer.style.maxHeight = '0';
+    } else {
+      // Close all others
+      document.querySelectorAll('.faq-q[aria-expanded="true"]').forEach(openBtn => {
+        openBtn.setAttribute('aria-expanded', 'false');
+        const id = openBtn.getAttribute('aria-controls');
+        const el = document.getElementById(id);
+        if (el) el.style.maxHeight = '0';
+      });
+      this.setAttribute('aria-expanded', 'true');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
+
+// ── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!prefersReduced && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.journey-step,.trust-card,.metric-cat,.arch-layer,.kyc-rung,.compare-card,.safety-card,.match-flow-step').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+}
+
+// ── SMOOTH SCROLL FOR ANCHOR LINKS ──────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const id = this.getAttribute('href').slice(1);
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+(function init() {
+  // Restore language preference (UI only)
+  let savedLang = 'en';
+  try { savedLang = localStorage.getItem('biye_lang') || 'en'; } catch(e) {}
+  if (TRANSLATIONS[savedLang]) {
+    setLang(savedLang);
+  }
+})();
+</script>
+</body>
+</html>
