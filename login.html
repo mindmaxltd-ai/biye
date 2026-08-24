@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>BIYE — লগইন</title>
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pk:#E2136E;--pk-s:rgba(226,19,110,.09);
+  --pu:#6A2DA8;--pu-s:rgba(106,45,168,.09);
+  --bl:#1565C0;
+  --gr:#00A651;--gr-s:rgba(0,166,81,.1);
+  --grad:linear-gradient(120deg,#E2136E 0%,#6A2DA8 52%,#1565C0 100%);
+  --bg:#F7F8FC;--sur:#fff;
+  --bdr:rgba(20,20,20,.08);--bdr2:rgba(20,20,20,.15);
+  --ink:#1A1A1A;--ink2:rgba(20,20,20,.55);--ink3:rgba(20,20,20,.35);
+  --danger:#C20F5E;--danger-s:rgba(194,15,94,.08);
+  --sh:0 4px 24px -8px rgba(106,45,168,.18);
+  --r:14px;--r2:10px;--r3:22px;
+  --tx:.2s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Hind Siliguri','Inter',sans-serif;
+  font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  padding-bottom:calc(env(safe-area-inset-bottom)+2rem);
+}
+html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
+:focus-visible{outline:3px solid var(--pk);outline-offset:3px;border-radius:5px}
+
+/* Aura bg */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 5% 0%,rgba(226,19,110,.07),transparent 60%),
+    radial-gradient(ellipse 50% 45% at 95% 15%,rgba(21,101,192,.07),transparent 60%);
+}
+
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(247,248,252,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bdr);
+  padding:.7rem 1.25rem;
+  padding-top:calc(.7rem + env(safe-area-inset-top));
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo img{height:34px;width:auto;object-fit:contain}
+.lang-wrap{position:relative}
+.lang-btn{
+  padding:.35rem .75rem;border-radius:50px;
+  border:1.5px solid var(--bdr2);font-size:.72rem;font-weight:700;
+  color:var(--ink2);background:var(--sur);cursor:pointer;transition:var(--tx);
+}
+.lang-btn:hover{border-color:var(--pk);color:var(--pk)}
+.lang-menu{
+  position:absolute;top:calc(100%+.4rem);right:0;
+  background:var(--sur);border:1px solid var(--bdr2);
+  border-radius:var(--r2);box-shadow:var(--sh);
+  min-width:130px;overflow:hidden;display:none;z-index:300;
+}
+.lang-menu.open{display:block}
+.lang-opt{
+  display:block;width:100%;text-align:start;
+  padding:.6rem .9rem;font-size:.82rem;font-weight:600;
+  color:var(--ink);cursor:pointer;background:none;border:none;
+  font-family:inherit;transition:var(--tx);
+}
+.lang-opt:hover,.lang-opt.active{background:var(--pk-s);color:var(--pk)}
+
+/* ── LAYOUT ── */
+.page{
+  position:relative;z-index:1;
+  max-width:420px;margin:0 auto;
+  padding:2rem 1rem 1rem;
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--sur);border-radius:var(--r3);
+  box-shadow:var(--sh);border:1px solid var(--bdr);overflow:hidden;
+}
+.card-head{
+  padding:1.6rem 1.5rem 1.1rem;
+  background:linear-gradient(135deg,var(--pk-s),var(--pu-s));
+  border-bottom:1px solid var(--bdr);text-align:center;
+}
+.card-title{font-size:1.4rem;font-weight:800;margin-bottom:.2rem}
+.card-sub{font-size:.86rem;color:var(--ink2)}
+.card-body{padding:1.5rem}
+
+/* Panels */
+.panel{display:none;animation:fadeup .25s ease}
+.panel.active{display:block}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FIELDS ── */
+.field{margin-bottom:1.1rem}
+.field-lbl{
+  display:flex;align-items:center;gap:.4rem;
+  font-size:.84rem;font-weight:700;color:var(--ink2);margin-bottom:.45rem;
+}
+.field-wrap{position:relative}
+.field-input{
+  width:100%;padding:.88rem 3rem .88rem 1rem;
+  border:2px solid var(--bdr2);border-radius:var(--r2);
+  font-size:1rem;color:var(--ink);background:var(--sur);
+  outline:none;transition:var(--tx);font-family:inherit;
+  -webkit-appearance:none;
+}
+.field-input:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.12)}
+.field-input.ok{border-color:var(--gr)}
+.field-input.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-s)}
+.field-hint{font-size:.75rem;color:var(--ink3);margin-top:.35rem}
+.field-err{font-size:.76rem;color:var(--danger);font-weight:600;margin-top:.35rem;display:none}
+.field-err.show{display:block}
+
+/* pw toggle */
+.pw-toggle{
+  position:absolute;right:.8rem;top:50%;transform:translateY(-50%);
+  color:var(--ink3);font-size:.76rem;font-weight:700;
+  padding:.2rem;border-radius:4px;transition:var(--tx);background:none;border:none;cursor:pointer;
+}
+.pw-toggle:hover{color:var(--pu)}
+
+/* ── EXTRAS ROW ── */
+.extras-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:.6rem 0 1.1rem;
+}
+.remember-label{
+  display:flex;align-items:center;gap:.4rem;
+  font-size:.82rem;color:var(--ink2);cursor:pointer;
+}
+.remember-label input{width:17px;height:17px;accent-color:var(--pu);cursor:pointer}
+.forgot-btn{
+  font-size:.82rem;font-weight:700;color:var(--pu);
+  background:none;border:none;cursor:pointer;
+  font-family:inherit;transition:var(--tx);padding:.1rem;
+}
+.forgot-btn:hover{color:var(--pk)}
+
+/* ── BUTTONS ── */
+.btn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.95rem;border-radius:var(--r2);
+  font-size:1rem;font-weight:800;cursor:pointer;border:none;
+  font-family:inherit;transition:var(--tx);min-height:52px;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 5px 20px -8px rgba(106,45,168,.5)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-primary:active{transform:none}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-ghost{background:var(--sur);color:var(--ink2);border:1.5px solid var(--bdr2);margin-top:.6rem}
+.btn-ghost:hover{border-color:var(--pk);color:var(--pk)}
+
+/* ── ALERT ── */
+.alert{
+  border-radius:var(--r2);padding:.8rem 1rem;
+  font-size:.85rem;font-weight:600;margin-bottom:.9rem;display:none;
+}
+.alert.show{display:block}
+.alert-err{background:var(--danger-s);border:1px solid rgba(194,15,94,.2);color:var(--danger)}
+.alert-info{background:rgba(21,101,192,.07);border:1px solid rgba(21,101,192,.15);color:var(--bl)}
+
+/* ── OTP BOXES ── */
+.otp-row{display:flex;gap:.5rem;justify-content:center;margin:.9rem 0 .5rem}
+.otp-box{
+  width:50px;height:58px;border-radius:var(--r2);
+  border:2px solid var(--bdr2);text-align:center;
+  font-size:1.5rem;font-weight:800;font-family:'Inter',sans-serif;
+  color:var(--ink);outline:none;transition:var(--tx);
+  -webkit-appearance:none;
+}
+.otp-box:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.12)}
+.otp-box.filled{border-color:var(--gr);color:var(--gr)}
+.resend-row{text-align:center;font-size:.8rem;color:var(--ink2);margin-top:.5rem}
+.resend-btn{color:var(--pu);font-weight:700;cursor:pointer;background:none;border:none;padding:.1rem;font-family:inherit}
+
+/* ── PW STRENGTH ── */
+.pw-bars{display:flex;gap:.3rem;margin-top:.5rem;height:4px}
+.pw-bar{flex:1;border-radius:4px;background:var(--bdr2);transition:var(--tx)}
+.pw-bar.w{background:#E2136E}.pw-bar.f{background:#D4AF37}.pw-bar.s{background:#00A651}
+.pw-reqs{display:flex;flex-direction:column;gap:.25rem;margin-top:.5rem}
+.pw-req{font-size:.72rem;display:flex;align-items:center;gap:.35rem;color:var(--ink3)}
+.pw-req.met{color:var(--gr)}
+.pw-req-dot{width:7px;height:7px;border-radius:50%;background:var(--bdr2);flex-shrink:0}
+.pw-req.met .pw-req-dot{background:var(--gr)}
+
+/* ── RESET STEPS ── */
+.rsteps{display:flex;align-items:center;justify-content:center;gap:.35rem;margin-bottom:1rem}
+.rs{width:8px;height:8px;border-radius:50%;background:var(--bdr2);transition:var(--tx)}
+.rs.active{background:var(--pk);width:22px;border-radius:4px}
+.rs.done{background:var(--gr)}
+
+/* ── DIVIDER ── */
+.divider{display:flex;align-items:center;gap:.65rem;margin:1.25rem 0;font-size:.78rem;color:var(--ink3)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--bdr)}
+
+/* ── REGISTER LINK ── */
+.reg-row{text-align:center;margin-top:1rem;font-size:.85rem;color:var(--ink2)}
+.reg-row a{color:var(--pu);font-weight:700}
+.reg-row a:hover{color:var(--pk)}
+
+/* ── SUCCESS ── */
+.success-wrap{text-align:center;padding:1.5rem .5rem 1rem}
+.success-ring{
+  width:76px;height:76px;border-radius:50%;
+  background:var(--gr-s);border:3px solid var(--gr);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;margin:0 auto 1rem;
+}
+.spinner{
+  display:inline-block;width:17px;height:17px;
+  border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;
+  border-radius:50%;animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── VOICE FAB ── */
+.vfab{
+  position:fixed;bottom:calc(1.2rem + env(safe-area-inset-bottom));right:1.2rem;
+  width:50px;height:50px;border-radius:50%;
+  background:var(--grad);color:#fff;font-size:1.25rem;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 5px 20px -6px rgba(106,45,168,.55);
+  cursor:pointer;border:none;z-index:200;transition:var(--tx);
+}
+.vfab:hover{transform:scale(1.08)}
+.vfab.hide{display:none}
+
+/* ── VOICE PANEL ── */
+.vpanel{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(20,20,30,.96);backdrop-filter:blur(18px);
+  border-top-left-radius:22px;border-top-right-radius:22px;
+  padding:1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+  z-index:600;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);
+  color:#fff;text-align:center;
+}
+.vpanel.open{transform:translateY(0)}
+.vorb{
+  width:66px;height:66px;border-radius:50%;background:var(--pk);
+  margin:0 auto .7rem;display:flex;align-items:center;justify-content:center;
+  font-size:1.7rem;cursor:pointer;
+}
+.vorb.listening{animation:orb 1.4s infinite}
+@keyframes orb{0%{box-shadow:0 0 0 0 rgba(226,19,110,.6)}70%{box-shadow:0 0 0 18px rgba(226,19,110,0)}100%{box-shadow:0 0 0 0 rgba(226,19,110,0)}}
+.vstat{font-size:.95rem;font-weight:700;margin-bottom:.2rem}
+.vtrans{font-size:.82rem;color:rgba(255,255,255,.6);min-height:1.3rem;margin-bottom:.8rem}
+.vclose{font-size:.8rem;color:rgba(255,255,255,.45);cursor:pointer;background:none;border:none;font-family:inherit;padding:.5rem 1.5rem}
+
+@media(max-width:400px){
+  .otp-box{width:44px;height:52px;font-size:1.3rem}
+  .card-body{padding:1.1rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" aria-label="BIYE হোমপেজ">
+    <img src="LOGO_PLACEHOLDER" alt="BIYE" style="height:34px;width:auto;object-fit:contain">
+  </a>
+  <div class="lang-wrap">
+    <button class="lang-btn" id="langToggle" aria-haspopup="listbox" aria-expanded="false">
+      <span id="langLabel">বাং</span> ▾
+    </button>
+    <div class="lang-menu" id="langMenu" role="listbox">
+      <button class="lang-opt active" onclick="setLang('bn')">🇧🇩 বাংলা</button>
+      <button class="lang-opt" onclick="setLang('en')">🇬🇧 English</button>
+      <button class="lang-opt" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+      <button class="lang-opt" onclick="setLang('ar')">🌍 العربية</button>
+      <button class="lang-opt" onclick="setLang('zh')">🇨🇳 中文</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+<div class="card" role="main">
+  <div id="sessionBanner" style="display:none;background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:.75rem 1rem;margin:1rem 1rem 0;font-size:.84rem;color:#5a4000;font-weight:600" role="alert">
+    ⏱ <span data-i18n="session.expired">আপনার session শেষ হয়ে গেছে। আবার লগইন করুন।</span>
+  </div>
+
+<!-- ══ LOGIN PANEL ══ -->
+<div class="panel active" id="pLogin">
+  <div class="card-head">
+    <div style="font-size:1.8rem;margin-bottom:.4rem">👋</div>
+    <h1 class="card-title" data-i18n="l.title">আবার স্বাগতম!</h1>
+    <p class="card-sub" data-i18n="l.sub">আপনার BIYE account-এ লগইন করুন</p>
+  </div>
+  <div class="card-body">
+    <div class="alert alert-err" id="loginErr" role="alert"></div>
+
+    <div class="field">
+      <label class="field-lbl" for="lPhone">📱 <span data-i18n="l.phone">মোবাইল নম্বর</span><span style="color:var(--pk)">*</span></label>
+      <div class="field-wrap">
+        <input class="field-input" type="tel" id="lPhone"
+          inputmode="numeric" autocomplete="tel"
+          placeholder="01XXXXXXXXX" maxlength="11">
+        <button class="pw-toggle" onclick="startVoice('lPhone')" id="vbPhone" aria-label="ভয়েস">🎙</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-lbl" for="lPw">🔑 <span data-i18n="l.pw">পাসওয়ার্ড</span><span style="color:var(--pk)">*</span></label>
+      <div class="field-wrap">
+        <input class="field-input" type="password" id="lPw"
+          autocomplete="current-password"
+          placeholder="••••••••">
+        <button class="pw-toggle" onclick="togglePw('lPw',this)" id="lPwToggle" data-i18n="pw.show">দেখুন</button>
+      </div>
+    </div>
+
+    <div class="extras-row">
+      <label class="remember-label">
+        <input type="checkbox" id="remember">
+        <span data-i18n="l.remember">মনে রাখুন</span>
+      </label>
+      <button class="forgot-btn" onclick="show('pForgot')" data-i18n="l.forgot">পাসওয়ার্ড ভুলে গেছেন?</button>
+    </div>
+
+    <button class="btn btn-primary" id="loginBtn" onclick="doLogin()">
+      <span id="loginTxt" data-i18n="l.btn">লগইন করুন</span>
+    </button>
+
+    <div class="divider"><span data-i18n="l.or">অথবা</span></div>
+    <div class="reg-row">
+      <span data-i18n="l.new">নতুন?</span>
+      <a href="register.html" data-i18n="l.reg"> অ্যাকাউন্ট তৈরি করুন →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORGOT PANEL (step 1 — enter phone) ══ -->
+<div class="panel" id="pForgot">
+  <div class="card-head">
+    <h2 class="card-title" data-i18n="f.title">পাসওয়ার্ড রিসেট করুন</h2>
+    <p class="card-sub" data-i18n="f.sub">আপনার মোবাইল নম্বর দিন। OTP পাঠানো হবে।</p>
+  </div>
+  <div class="card-body">
+    <div class="rsteps"><div class="rs active" id="rs1"></div><div class="rs" id="rs2"></div><div class="rs" id="rs3"></div></div>
+    <div class="alert alert-err" id="forgotErr" role="alert"></div>
+
+    <div class="field">
+      <label class="field-lbl" for="fPhone">📱 <span data-i18n="l.phone">মোবাইল নম্বর</span><span style="color:var(--pk)">*</span></label>
+      <div class="field-wrap">
+        <input class="field-input" type="tel" id="fPhone"
+          inputmode="numeric" autocomplete="tel"
+          placeholder="01XXXXXXXXX" maxlength="11">
+        <button class="pw-toggle" onclick="startVoice('fPhone')" aria-label="ভয়েস">🎙</button>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="forgotBtn" onclick="sendResetOtp()">
+      <span id="forgotTxt" data-i18n="f.send">OTP পাঠান</span>
+    </button>
+    <button class="btn btn-ghost" onclick="show('pLogin')" data-i18n="btn.back">← পেছনে</button>
+  </div>
+</div>
+
+<!-- ══ RESET OTP PANEL (step 2) ══ -->
+<div class="panel" id="pResetOtp">
+  <div class="card-head">
+    <h2 class="card-title" data-i18n="r.title">OTP কোড দিন</h2>
+    <p class="card-sub" id="rotpSub" data-i18n="r.sub">আপনার ফোনে পাঠানো ৬ সংখ্যার কোড</p>
+  </div>
+  <div class="card-body">
+    <div class="rsteps"><div class="rs done"></div><div class="rs active"></div><div class="rs"></div></div>
+    <div class="alert alert-err" id="rotpErr" role="alert"></div>
+    <div class="alert alert-info show" data-i18n="r.info">📲 OTP পাঠানো হয়েছে। SMS চেক করুন।</div>
+
+    <div class="otp-row" role="group" aria-label="OTP">
+      <input class="otp-box" id="r1" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]">
+      <input class="otp-box" id="r2" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]">
+      <input class="otp-box" id="r3" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]">
+      <input class="otp-box" id="r4" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]">
+      <input class="otp-box" id="r5" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]">
+      <input class="otp-box" id="r6" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]">
+    </div>
+    <div class="resend-row">
+      <span data-i18n="otp.no">কোড আসেনি?</span>
+      <button class="resend-btn" onclick="sendResetOtp(true)" data-i18n="otp.resend">আবার পাঠান</button>
+    </div>
+
+    <button class="btn btn-primary" id="rotpBtn" onclick="verifyResetOtp()" style="margin-top:.75rem">
+      <span id="rotpTxt" data-i18n="otp.verify">যাচাই করুন</span>
+    </button>
+    <button class="btn btn-ghost" onclick="show('pForgot')" data-i18n="btn.back">← পেছনে</button>
+  </div>
+</div>
+
+<!-- ══ NEW PASSWORD PANEL (step 3) ══ -->
+<div class="panel" id="pNewPw">
+  <div class="card-head">
+    <h2 class="card-title" data-i18n="np.title">নতুন পাসওয়ার্ড দিন</h2>
+    <p class="card-sub" data-i18n="np.sub">একটি শক্তিশালী পাসওয়ার্ড তৈরি করুন</p>
+  </div>
+  <div class="card-body">
+    <div class="rsteps"><div class="rs done"></div><div class="rs done"></div><div class="rs active"></div></div>
+    <div class="alert alert-err" id="npErr" role="alert"></div>
+
+    <div class="field">
+      <label class="field-lbl" for="np1">🔑 <span data-i18n="np.pw1">নতুন পাসওয়ার্ড</span><span style="color:var(--pk)">*</span></label>
+      <div class="field-wrap">
+        <input class="field-input" type="password" id="np1"
+          autocomplete="new-password" oninput="checkStr(this.value)" style="padding-right:4.5rem">
+        <button class="pw-toggle" onclick="togglePw('np1',this)" data-i18n="pw.show">দেখুন</button>
+      </div>
+      <div class="pw-bars" aria-hidden="true">
+        <div class="pw-bar" id="pb1"></div><div class="pw-bar" id="pb2"></div>
+        <div class="pw-bar" id="pb3"></div><div class="pw-bar" id="pb4"></div>
+      </div>
+      <div class="pw-reqs" aria-live="polite">
+        <div class="pw-req" id="req-len"><span class="pw-req-dot"></span><span data-i18n="pw.len">কমপক্ষে ৮ অক্ষর</span></div>
+        <div class="pw-req" id="req-up"><span class="pw-req-dot"></span><span data-i18n="pw.up">একটি বড় হাতের অক্ষর</span></div>
+        <div class="pw-req" id="req-num"><span class="pw-req-dot"></span><span data-i18n="pw.num">একটি সংখ্যা</span></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-lbl" for="np2">🔑 <span data-i18n="np.pw2">পাসওয়ার্ড নিশ্চিত করুন</span><span style="color:var(--pk)">*</span></label>
+      <div class="field-wrap">
+        <input class="field-input" type="password" id="np2" autocomplete="new-password" style="padding-right:4.5rem">
+        <button class="pw-toggle" onclick="togglePw('np2',this)" data-i18n="pw.show">দেখুন</button>
+      </div>
+      <div class="field-err" id="np2err" data-i18n="err.match">পাসওয়ার্ড মিলছে না।</div>
+    </div>
+
+    <button class="btn btn-primary" id="npBtn" onclick="submitNewPw()">
+      <span id="npTxt" data-i18n="np.btn">পাসওয়ার্ড সেট করুন</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ SUCCESS PANEL ══ -->
+<div class="panel" id="pSuccess">
+  <div class="card-body">
+    <div class="success-wrap">
+      <div class="success-ring">✅</div>
+      <h2 class="card-title" data-i18n="s.title" style="margin-bottom:.3rem">লগইন সফল!</h2>
+      <p class="card-sub" style="margin-bottom:1.25rem" data-i18n="s.sub">ড্যাশবোর্ডে যাচ্ছেন...</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;color:var(--pu);font-weight:700">
+        <span class="spinner" style="border-color:var(--pu-s);border-top-color:var(--pu)"></span>
+        <span data-i18n="s.wait">একটু অপেক্ষা করুন</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESET DONE PANEL ══ -->
+<div class="panel" id="pResetDone">
+  <div class="card-body" style="text-align:center;padding:1.75rem 1.5rem">
+    <div style="font-size:2.5rem;margin-bottom:.75rem">🔑</div>
+    <h2 class="card-title" data-i18n="rd.title" style="margin-bottom:.3rem">পাসওয়ার্ড পরিবর্তন হয়েছে!</h2>
+    <p class="card-sub" style="margin-bottom:1.25rem" data-i18n="rd.sub">এখন নতুন পাসওয়ার্ড দিয়ে লগইন করুন।</p>
+    <button class="btn btn-primary" onclick="show('pLogin')" data-i18n="rd.btn">লগইন করুন →</button>
+  </div>
+</div>
+
+</div><!-- /card -->
+</div><!-- /page -->
+
+<!-- VOICE FAB -->
+<button class="vfab" id="voiceFab" onclick="openVPanel()" aria-label="ভয়েস">🎙</button>
+
+<!-- VOICE PANEL -->
+<div class="vpanel" id="vPanel" role="dialog" aria-modal="true" aria-label="ভয়েস">
+  <div class="vorb" id="vorb" onclick="toggleVoice()">🎙</div>
+  <div class="vstat" id="vstat" data-i18n="v.tap">ট্যাপ করুন ও বলুন</div>
+  <div class="vtrans" id="vtrans"></div>
+  <button class="vclose" onclick="closeVPanel()" data-i18n="v.close">বন্ধ করুন</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   BIYE login.html
+   Login: phone + password → dashboard
+   Reset: phone → OTP → new password
+   ═══════════════════════════════════════ */
+
+// ── STATE ──
+const S = {lang:'bn', phone:'', otpOk:false, voice:null, vfield:null};
+
+// ── i18n ──
+const T = {
+  bn:{
+    'l.title':'আবার স্বাগতম!','l.sub':'আপনার BIYE account-এ লগইন করুন',
+    'l.phone':'মোবাইল নম্বর','l.pw':'পাসওয়ার্ড','l.remember':'মনে রাখুন',
+    'l.forgot':'পাসওয়ার্ড ভুলে গেছেন?','l.btn':'লগইন করুন',
+    'l.or':'অথবা','l.new':'নতুন?','l.reg':' অ্যাকাউন্ট তৈরি করুন →',
+    'f.title':'পাসওয়ার্ড রিসেট করুন','f.sub':'আপনার মোবাইল নম্বর দিন। OTP পাঠানো হবে।',
+    'f.send':'OTP পাঠান',
+    'r.title':'OTP কোড দিন','r.sub':'আপনার ফোনে পাঠানো ৬ সংখ্যার কোড',
+    'r.info':'📲 OTP পাঠানো হয়েছে। SMS চেক করুন।',
+    'np.title':'নতুন পাসওয়ার্ড দিন','np.sub':'একটি শক্তিশালী পাসওয়ার্ড তৈরি করুন',
+    'np.pw1':'নতুন পাসওয়ার্ড','np.pw2':'পাসওয়ার্ড নিশ্চিত করুন','np.btn':'পাসওয়ার্ড সেট করুন',
+    's.title':'লগইন সফল!','s.sub':'ড্যাশবোর্ডে যাচ্ছেন...','s.wait':'একটু অপেক্ষা করুন',
+    'rd.title':'পাসওয়ার্ড পরিবর্তন হয়েছে!','rd.sub':'এখন নতুন পাসওয়ার্ড দিয়ে লগইন করুন।','rd.btn':'লগইন করুন →',
+    'otp.no':'কোড আসেনি?','otp.resend':'আবার পাঠান','otp.verify':'যাচাই করুন',
+    'pw.show':'দেখুন','pw.hide':'লুকান',
+    'pw.len':'কমপক্ষে ৮ অক্ষর','pw.up':'একটি বড় হাতের অক্ষর','pw.num':'একটি সংখ্যা',
+    'err.phone':'সঠিক মোবাইল নম্বর দিন (01X XXXX XXXX)',
+    'err.pw':'পাসওয়ার্ড দিন','err.wrong':'ফোন নম্বর বা পাসওয়ার্ড ভুল।','session.expired':'আপনার session শেষ হয়ে গেছে। আবার লগইন করুন।',
+    'err.otp':'কোড সঠিক নয়। আবার চেষ্টা করুন।','err.otplen':'৬ সংখ্যার কোড দিন।',
+    'err.match':'পাসওয়ার্ড মিলছে না।','err.weak':'পাসওয়ার্ড শক্তিশালী করুন।',
+    'err.generic':'কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।',
+    'btn.back':'← পেছনে','v.tap':'ট্যাপ করুন ও বলুন','v.listen':'শুনছি... 🎙',
+    'v.done':'বোঝা গেছে ✓','v.err':'আবার বলুন','v.close':'বন্ধ করুন',
+    'sending':'পাঠানো হচ্ছে...','verifying':'যাচাই হচ্ছে...','logging':'লগইন হচ্ছে...',
+  },
+  en:{
+    'l.title':'Welcome Back!','l.sub':'Login to your BIYE account',
+    'l.phone':'Mobile Number','l.pw':'Password','l.remember':'Remember me',
+    'l.forgot':'Forgot password?','l.btn':'Login',
+    'l.or':'or','l.new':'New here?','l.reg':' Create an account →',
+    'f.title':'Reset Password','f.sub':'Enter your mobile number. An OTP will be sent.',
+    'f.send':'Send OTP',
+    'r.title':'Enter OTP','r.sub':'Enter the 6-digit code sent to your phone',
+    'r.info':'📲 OTP sent. Check your SMS.',
+    'np.title':'Create New Password','np.sub':'Choose a strong password.',
+    'np.pw1':'New Password','np.pw2':'Confirm Password','np.btn':'Set Password',
+    's.title':'Login successful!','s.sub':'Redirecting to dashboard...','s.wait':'Please wait',
+    'rd.title':'Password Updated!','rd.sub':'Login with your new password.','rd.btn':'Login →',
+    'otp.no':"Didn't get the code?",'otp.resend':'Resend','otp.verify':'Verify',
+    'pw.show':'Show','pw.hide':'Hide',
+    'pw.len':'Minimum 8 characters','pw.up':'At least one uppercase','pw.num':'At least one number',
+    'err.phone':'Enter a valid Bangladesh mobile number',
+    'err.pw':'Enter your password','err.wrong':'Incorrect phone number or password.',
+    'err.otp':'Incorrect code. Try again.','err.otplen':'Enter the 6-digit code.',
+    'err.match':'Passwords do not match.','err.weak':'Please use a stronger password.',
+    'err.generic':'Something went wrong. Please try again.',
+    'btn.back':'← Back','v.tap':'Tap and speak','v.listen':'Listening... 🎙',
+    'v.done':'Got it ✓','v.err':'Please speak again','v.close':'Close',
+    'sending':'Sending...','verifying':'Verifying...','logging':'Logging in...',
+  },
+  hi:{
+    'l.title':'वापस स्वागत!','l.sub':'अपने BIYE account में लॉगिन करें',
+    'l.phone':'मोबाइल नंबर','l.pw':'पासवर्ड','l.btn':'लॉगिन करें',
+    'l.forgot':'पासवर्ड भूल गए?','l.new':'नए हैं?','l.reg':' खाता बनाएं →',
+    'btn.back':'← वापस','err.phone':'सही मोबाइल नंबर दर्ज करें',
+    'err.wrong':'गलत नंबर या पासवर्ड।','otp.verify':'सत्यापित करें',
+    'np.title':'नया पासवर्ड','np.btn':'पासवर्ड सेट करें',
+    's.title':'लॉगिन सफल!','rd.title':'पासवर्ड बदल गया!',
+  },
+  ar:{
+    'l.title':'مرحباً بعودتك!','l.sub':'سجّل الدخول إلى حسابك',
+    'l.phone':'رقم الهاتف','l.pw':'كلمة المرور','l.btn':'تسجيل الدخول',
+    'l.forgot':'نسيت كلمة المرور؟','l.new':'مستخدم جديد؟','l.reg':' إنشاء حساب →',
+    'btn.back':'← رجوع','err.phone':'أدخل رقم هاتف صحيح',
+    'err.wrong':'رقم الهاتف أو كلمة المرور غير صحيحة.',
+    'otp.verify':'تحقق','np.title':'كلمة مرور جديدة','np.btn':'تعيين كلمة المرور',
+    's.title':'تم تسجيل الدخول!','rd.title':'تم تحديث كلمة المرور!',
+  },
+  zh:{
+    'l.title':'欢迎回来！','l.sub':'登录您的 BIYE 账户',
+    'l.phone':'手机号码','l.pw':'密码','l.btn':'登录',
+    'l.forgot':'忘记密码？','l.new':'新用户？','l.reg':' 创建账户 →',
+    'btn.back':'← 返回','err.phone':'请输入有效的手机号码',
+    'err.wrong':'手机号码或密码错误。','otp.verify':'验证',
+    'np.title':'设置新密码','np.btn':'设置密码',
+    's.title':'登录成功！','rd.title':'密码已更新！',
+  }
+};
+const RTL = new Set(['ar']);
+function tr(k){ const v=T[S.lang]&&T[S.lang][k]; return v!=null?v:(T.bn[k]!=null?T.bn[k]:k); }
+
+// ── LANG ──
+function setLang(lang){
+  if(!T[lang]) lang='bn';
+  S.lang=lang;
+  document.documentElement.lang=lang;
+  document.documentElement.dir=RTL.has(lang)?'rtl':'ltr';
+  const labels={bn:'বাং',en:'EN',hi:'हिं',ar:'عر',zh:'中'};
+  const ll=document.getElementById('langLabel');
+  if(ll) ll.textContent=labels[lang]||lang.toUpperCase();
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const v=tr(el.dataset.i18n);
+    if(v!==el.dataset.i18n||T.bn[el.dataset.i18n]) el.innerHTML=v;
+  });
+  document.querySelectorAll('.lang-opt').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('[onclick="setLang(\''+lang+'\')"]').forEach(b=>b.classList.add('active'));
+  closeLangMenu();
+  try{localStorage.setItem('biye_lang',lang);}catch(e){}
+}
+
+// lang dropdown
+const lt=document.getElementById('langToggle'),lm=document.getElementById('langMenu');
+function closeLangMenu(){if(lm){lm.classList.remove('open');if(lt)lt.setAttribute('aria-expanded','false');}}
+if(lt) lt.addEventListener('click',e=>{e.stopPropagation();lm.classList.contains('open')?closeLangMenu():(lm.classList.add('open'),lt.setAttribute('aria-expanded','true'));});
+document.addEventListener('click',closeLangMenu);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLangMenu();});
+
+// ── PANEL NAV ──
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el){el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+}
+
+// ── PHONE UTILS ──
+function norm(raw){
+  let n=String(raw).replace(/[^0-9]/g,'');
+  if(n.startsWith('880'))return n;
+  if(n.startsWith('0'))return '88'+n;
+  if(n.startsWith('1'))return '880'+n;
+  return n;
+}
+function validPh(raw){return /^8801[3-9]\d{8}$/.test(norm(raw));}
+
+// ── LOGIN ──
+function doLogin(){
+  clearA('loginErr');
+  const ph=document.getElementById('lPhone').value.trim();
+  const pw=document.getElementById('lPw').value;
+  let ok=true;
+  if(!validPh(ph)){showA('loginErr',tr('err.phone'));ok=false;}
+  if(!pw){showA('loginErr',tr('err.pw'));ok=false;}
+  if(!ok)return;
+
+  setBL('loginBtn','loginTxt',tr('logging'));
+
+  // Backend: phone + password auth
+  // The Netlify function verifies credentials against Supabase
+  fetch('/.netlify/functions/send-otp',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'login',phone:norm(ph),password:pw})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d&&d.ok!==false&&d.success!==false){
+      loginOk();
+    } else {
+      resetBL('loginBtn','loginTxt',tr('l.btn'));
+      showA('loginErr',d.error||tr('err.wrong'));
+    }
+  })
+  .catch(()=>{
+    // DEMO mode — accept any credentials
+    if(isDemoMode()) loginOk();
+    else { resetBL('loginBtn','loginTxt',tr('l.btn')); showA('loginErr',tr('err.wrong')); }
+  });
+}
+
+function isDemoMode(){
+  return typeof BIYE_DEMO_MODE==='undefined'||BIYE_DEMO_MODE===true;
+}
+
+function loginOk(){
+  show('pSuccess');
+  setTimeout(()=>{ window.location.href='dashboard.html'; },1600);
+}
+
+// ── FORGOT / RESET FLOW ──
+function sendResetOtp(isResend){
+  clearA('forgotErr');
+  if(!isResend){
+    const ph=document.getElementById('fPhone').value.trim();
+    if(!validPh(ph)){showA('forgotErr',tr('err.phone'));return;}
+    S.phone=norm(ph);
+  }
+  if(!isResend) setBL('forgotBtn','forgotTxt',tr('sending'));
+
+  fetch('/.netlify/functions/send-otp',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'send',phone:S.phone,purpose:'reset'})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(!isResend) resetBL('forgotBtn','forgotTxt',tr('f.send'));
+    if(d&&d.ok!==false){ clearOtp('r'); show('pResetOtp'); document.getElementById('r1').focus(); }
+    else showA('forgotErr',d.error||tr('err.generic'));
+  })
+  .catch(()=>{
+    if(!isResend) resetBL('forgotBtn','forgotTxt',tr('f.send'));
+    if(isDemoMode()){ clearOtp('r'); show('pResetOtp'); document.getElementById('r1').focus(); }
+    else showA('forgotErr',tr('err.generic'));
+  });
+}
+
+function verifyResetOtp(){
+  clearA('rotpErr');
+  const code=getOtp('r');
+  if(code.length<6){showA('rotpErr',tr('err.otplen'));return;}
+  setBL('rotpBtn','rotpTxt',tr('verifying'));
+
+  fetch('/.netlify/functions/send-otp',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'verify',phone:S.phone,code,purpose:'reset'})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d&&d.ok!==false&&d.verified!==false){
+      S.otpOk=true; show('pNewPw'); document.getElementById('np1').focus();
+    } else {
+      resetBL('rotpBtn','rotpTxt',tr('otp.verify'));
+      showA('rotpErr',tr('err.otp'));
+    }
+  })
+  .catch(()=>{
+    if(isDemoMode()){ S.otpOk=true; show('pNewPw'); }
+    else { resetBL('rotpBtn','rotpTxt',tr('otp.verify')); showA('rotpErr',tr('err.generic')); }
+  });
+}
+
+function submitNewPw(){
+  if(!S.otpOk){ show('pForgot'); return; }
+  clearA('npErr');
+  const p1=document.getElementById('np1').value;
+  const p2=document.getElementById('np2').value;
+  if(!(p1.length>=8&&/[A-Z]/.test(p1)&&/[0-9]/.test(p1))){showA('npErr',tr('err.weak'));return;}
+  if(p1!==p2){document.getElementById('np2err').classList.add('show');return;}
+  document.getElementById('np2err').classList.remove('show');
+  setBL('npBtn','npTxt',tr('verifying'));
+
+  fetch('/.netlify/functions/send-otp',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'resetPassword',phone:S.phone,newPassword:p1})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d&&d.ok!==false){ S.otpOk=false; show('pResetDone'); }
+    else { resetBL('npBtn','npTxt',tr('np.btn')); showA('npErr',d.error||tr('err.generic')); }
+  })
+  .catch(()=>{
+    if(isDemoMode()){ S.otpOk=false; show('pResetDone'); }
+    else { resetBL('npBtn','npTxt',tr('np.btn')); showA('npErr',tr('err.generic')); }
+  });
+}
+
+// ── OTP BOXES ──
+function setupOtp(p){
+  for(let i=1;i<=6;i++){(function(idx){
+    const el=document.getElementById(p+idx);
+    if(!el)return;
+    el.addEventListener('input',e=>{
+      const v=e.target.value.replace(/[^0-9]/g,'');
+      e.target.value=v;
+      if(v){el.classList.add('filled');if(idx<6)document.getElementById(p+(idx+1)).focus();}
+      else el.classList.remove('filled');
+      if(v&&idx===6&&getOtp(p).length===6) setTimeout(verifyResetOtp,350);
+    });
+    el.addEventListener('keydown',e=>{
+      if(e.key==='Backspace'&&!el.value&&idx>1){
+        const prev=document.getElementById(p+(idx-1));
+        if(prev){prev.value='';prev.classList.remove('filled');prev.focus();}
+      }
+      if(e.key==='Enter') verifyResetOtp();
+    });
+    el.addEventListener('paste',e=>{
+      e.preventDefault();
+      const txt=(e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+      for(let j=0;j<6;j++){
+        const b=document.getElementById(p+(j+1));
+        if(b&&txt[j]){b.value=txt[j];b.classList.add('filled');}
+      }
+      if(txt.length>=6) setTimeout(verifyResetOtp,400);
+    });
+  })(i);}
+}
+setupOtp('r');
+function getOtp(p){return [1,2,3,4,5,6].map(i=>{const e=document.getElementById(p+i);return e?e.value:'';}).join('');}
+function clearOtp(p){[1,2,3,4,5,6].forEach(i=>{const e=document.getElementById(p+i);if(e){e.value='';e.classList.remove('filled');}});}
+
+// ── PW STRENGTH ──
+function checkStr(pw){
+  const l=pw.length>=8,u=/[A-Z]/.test(pw),n=/[0-9]/.test(pw);
+  function rq(id,met){const e=document.getElementById(id);if(e)e.classList.toggle('met',met);}
+  rq('req-len',l);rq('req-up',u);rq('req-num',n);
+  const sc=(l?1:0)+(u?1:0)+(n?1:0)+(pw.length>=12?1:0);
+  ['pb1','pb2','pb3','pb4'].forEach((id,i)=>{
+    const e=document.getElementById(id);if(!e)return;
+    e.className='pw-bar';
+    if(i<sc) e.classList.add(sc<=1?'w':sc<=2?'f':'s');
+  });
+}
+function togglePw(id,btn){
+  const el=document.getElementById(id);if(!el)return;
+  const show=el.type==='password';
+  el.type=show?'text':'password';
+  btn.textContent=show?tr('pw.hide'):tr('pw.show');
+}
+
+// ── VOICE ──
+function initVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){
+    document.getElementById('voiceFab').classList.add('hide');
+    document.querySelectorAll('[onclick^="startVoice"]').forEach(b=>b.style.display='none');
+    return;
+  }
+  const rec=new SR();
+  rec.continuous=false;rec.interimResults=true;
+  rec.onstart=()=>{document.getElementById('vorb').classList.add('listening');document.getElementById('vstat').textContent=tr('v.listen');};
+  rec.onresult=e=>{
+    let final='',interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) final+=e.results[i][0].transcript;
+      else interim+=e.results[i][0].transcript;
+    }
+    const txt=(final||interim).trim();
+    document.getElementById('vtrans').textContent=txt;
+    if(final&&S.vfield) applyVoice(txt);
+  };
+  rec.onerror=()=>{document.getElementById('vorb').classList.remove('listening');document.getElementById('vstat').textContent=tr('v.err');};
+  rec.onend=()=>{
+    document.getElementById('vorb').classList.remove('listening');
+    const s=document.getElementById('vstat');
+    if(s.textContent===tr('v.listen')) s.textContent=tr('v.done');
+  };
+  S.voice=rec;
+}
+function applyVoice(txt){
+  const mapped=txt
+    .replace(/শূন্য|zero/gi,'0').replace(/এক|one/gi,'1').replace(/দুই|two/gi,'2')
+    .replace(/তিন|three/gi,'3').replace(/চার|four/gi,'4').replace(/পাঁচ|five/gi,'5')
+    .replace(/ছয়|six/gi,'6').replace(/সাত|seven/gi,'7').replace(/আট|eight/gi,'8')
+    .replace(/নয়|nine/gi,'9');
+  const digits=mapped.replace(/[^0-9]/g,'').slice(0,11);
+  if(digits.length>=10){
+    const el=document.getElementById(S.vfield);
+    if(el){el.value=digits;el.classList.add('ok');}
+    document.getElementById('vstat').textContent=tr('v.done');
+    setTimeout(closeVPanel,1000);
+  }
+}
+function startVoice(fieldId){
+  S.vfield=fieldId;openVPanel();
+  setTimeout(()=>{try{S.voice.lang=S.lang==='bn'?'bn-BD':'en-US';S.voice.start();}catch(e){}},400);
+}
+function openVPanel(){document.getElementById('vPanel').classList.add('open');}
+function closeVPanel(){
+  document.getElementById('vPanel').classList.remove('open');
+  try{if(S.voice)S.voice.stop();}catch(e){}
+  S.vfield=null;
+}
+function toggleVoice(){
+  S.vfield=S.vfield||'lPhone';
+  try{S.voice.lang=S.lang==='bn'?'bn-BD':'en-US';S.voice.start();}
+  catch(e){try{S.voice.stop();}catch(e2){}}
+}
+
+// ── HELPERS ──
+function showA(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('show');e.style.display='';}}
+function clearA(id){const e=document.getElementById(id);if(e){e.classList.remove('show');e.textContent='';e.style.display='none';}}
+function setBL(bid,tid,lbl){
+  const b=document.getElementById(bid),t=document.getElementById(tid);
+  if(b)b.disabled=true;
+  if(t)t.innerHTML='<span class="spinner"></span> '+lbl;
+}
+function resetBL(bid,tid,lbl){
+  const b=document.getElementById(bid),t=document.getElementById(tid);
+  if(b)b.disabled=false;
+  if(t)t.textContent=lbl;
+}
+
+// Enter key on login fields
+document.getElementById('lPhone').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('lPw').focus();});
+document.getElementById('lPw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('fPhone').addEventListener('keydown',e=>{if(e.key==='Enter')sendResetOtp(false);});
+
+// ── INIT ──
+(function(){
+  let lang='bn';
+  try{lang=localStorage.getItem('biye_lang')||'bn';}catch(e){}
+  const sp=new URLSearchParams(window.location.search);
+  if(sp.get('reason')==='expired'||sp.get('session')==='expired'){const sb=document.getElementById('sessionBanner');if(sb)sb.style.display='';if(window.history&&window.history.replaceState)window.history.replaceState({},document.title,window.location.pathname);}
+  setLang(lang);
+  initVoice();
+  // Check URL param for session expiry
+  if(new URLSearchParams(window.location.search).get('reason')==='expired'){
+    showA('loginErr','⏱ Session শেষ হয়েছে। আবার লগইন করুন।');
+    if(window.history&&window.history.replaceState) window.history.replaceState({},document.title,window.location.pathname);
+  }
+})();
+</script>
+</body>
+</html>
