@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>BIYE — প্রোফাইল সম্পাদনা</title><meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><style>
+/* ═══════════════════════════════════════════
+   BIYE SHARED CSS — All 25 pages
+   ═══════════════════════════════════════════ */
+:root{
+  --pk:#E2136E;--pk-d:#C20F5E;--pk-s:rgba(226,19,110,.09);
+  --pu:#6A2DA8;--pu-s:rgba(106,45,168,.09);
+  --bl:#1565C0;--bl-s:rgba(21,101,192,.09);
+  --gr:#00A651;--gr-s:rgba(0,166,81,.1);
+  --gd:#D4AF37;--gd-s:rgba(212,175,55,.14);
+  --grad:linear-gradient(120deg,#E2136E 0%,#6A2DA8 52%,#1565C0 100%);
+  --bg:#F7F8FC;--sur:#fff;
+  --bdr:rgba(20,20,20,.08);--bdr2:rgba(20,20,20,.14);
+  --ink:#1A1A1A;--ink2:rgba(20,20,20,.55);--ink3:rgba(20,20,20,.35);
+  --danger:#C20F5E;--danger-s:rgba(194,15,94,.08);
+  --sh:0 4px 24px -8px rgba(106,45,168,.14);
+  --sh2:0 12px 40px -12px rgba(106,45,168,.2);
+  --r:14px;--r2:10px;--r3:20px;--tx:.2s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Hind Siliguri','Inter',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+img{display:block;max-width:100%}a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
+:focus-visible{outline:3px solid var(--pk);outline-offset:3px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.biye-desktop-only{display:none}
+@media(min-width:769px){.biye-desktop-only{display:flex}}
+
+/* NAV */
+.biye-nav{background:rgba(247,248,252,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;padding:.7rem 1.25rem;padding-top:calc(.7rem + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.biye-nav-logo{display:flex;align-items:center}
+.biye-nav-logo img{height:34px;width:auto;object-fit:contain}
+.biye-nav-right{display:flex;align-items:center;gap:.5rem}
+.biye-nav-link{font-size:.82rem;font-weight:600;color:var(--ink2);padding:.35rem .6rem;border-radius:8px;transition:var(--tx);white-space:nowrap;background:none;border:none;cursor:pointer;font-family:inherit}
+.biye-nav-link:hover{color:var(--pk);background:var(--pk-s)}
+
+/* BUTTONS */
+.biye-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.25rem;border-radius:var(--r2);font-size:.88rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:var(--tx);white-space:nowrap;text-decoration:none;min-height:44px}
+.biye-btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 16px -6px rgba(106,45,168,.45)}
+.biye-btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px -6px rgba(106,45,168,.55)}
+.biye-btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.biye-btn-ghost{background:var(--sur);color:var(--ink2);border:1.5px solid var(--bdr2)}
+.biye-btn-ghost:hover{border-color:var(--pk);color:var(--pk)}
+.biye-btn-danger{background:var(--danger-s);color:var(--danger);border:1.5px solid rgba(194,15,94,.2)}
+.biye-btn-sm{padding:.4rem .9rem;font-size:.8rem;min-height:36px}
+.biye-btn-full{width:100%;display:flex}
+.biye-btn-gold{background:var(--gd);color:#2a1a00}
+
+/* LAYOUT */
+.biye-page{max-width:960px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.biye-page-wide{max-width:1200px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.biye-page-narrow{max-width:520px;margin:0 auto;padding:1.5rem 1rem 5rem}
+
+/* CARDS */
+.biye-card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh);border:1px solid var(--bdr);overflow:hidden}
+.biye-card-body{padding:1.4rem}
+.biye-card-head{padding:1rem 1.4rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.biye-card-title{font-size:1rem;font-weight:800}
+
+/* GRID */
+.biye-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.biye-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.biye-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media(max-width:640px){.biye-grid-2,.biye-grid-3,.biye-grid-4{grid-template-columns:1fr}}
+@media(max-width:860px){.biye-grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.biye-grid-3{grid-template-columns:repeat(2,1fr)}}
+
+/* FORM */
+.biye-field{margin-bottom:1rem}
+.biye-label{display:block;font-size:.84rem;font-weight:700;color:var(--ink2);margin-bottom:.4rem}
+.biye-input,.biye-select,.biye-textarea{width:100%;padding:.82rem 1rem;border:2px solid var(--bdr2);border-radius:var(--r2);font-size:1rem;color:var(--ink);background:var(--sur);outline:none;transition:var(--tx);font-family:inherit;-webkit-appearance:none}
+.biye-input:focus,.biye-select:focus,.biye-textarea:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.1)}
+.biye-input.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-s)}
+.biye-input.ok{border-color:var(--gr)}
+.biye-textarea{resize:vertical;min-height:100px}
+.biye-field-err{font-size:.76rem;color:var(--danger);font-weight:600;margin-top:.3rem;display:none}
+.biye-field-err.show{display:block}
+.biye-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+
+/* ALERTS */
+.biye-alert{border-radius:var(--r2);padding:.8rem 1rem;font-size:.84rem;font-weight:600;margin-bottom:.9rem;display:none}
+.biye-alert.show{display:block}
+.biye-alert-err{background:var(--danger-s);border:1px solid rgba(194,15,94,.2);color:var(--danger)}
+.biye-alert-ok{background:var(--gr-s);border:1px solid rgba(0,166,81,.2);color:#005c2e}
+.biye-alert-info{background:var(--bl-s);border:1px solid rgba(21,101,192,.15);color:var(--bl)}
+.biye-alert-warn{background:var(--gd-s);border:1px solid rgba(212,175,55,.3);color:#5a3e00}
+
+/* BADGES */
+.biye-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.biye-badge-green{background:var(--gr-s);color:var(--gr)}
+.biye-badge-pk{background:var(--pk-s);color:var(--pk)}
+.biye-badge-pu{background:var(--pu-s);color:var(--pu)}
+.biye-badge-gd{background:var(--gd-s);color:#5a3e00}
+.biye-badge-gray{background:rgba(20,20,20,.06);color:var(--ink3)}
+.biye-badge-blue{background:var(--bl-s);color:var(--bl)}
+
+/* PROGRESS */
+.biye-progress{height:6px;border-radius:4px;background:var(--bdr2);overflow:hidden}
+.biye-progress-bar{height:100%;border-radius:4px;background:var(--grad);transition:width .4s ease}
+
+/* AVATAR */
+.biye-avatar{width:40px;height:40px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.95rem;flex-shrink:0;text-decoration:none}
+.biye-avatar-lg{width:72px;height:72px;font-size:1.5rem}
+
+/* SPINNER */
+.biye-spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:biye-spin .8s linear infinite;vertical-align:middle}
+@keyframes biye-spin{to{transform:rotate(360deg)}}
+
+/* PAGE HEADER */
+.biye-page-header{margin-bottom:1.5rem}
+.biye-page-title{font-size:1.35rem;font-weight:900;margin-bottom:.25rem}
+.biye-page-sub{font-size:.87rem;color:var(--ink2);line-height:1.6}
+
+/* SECTION */
+.biye-section-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:.5rem}
+.biye-section-title{font-size:1rem;font-weight:800}
+
+/* STAT */
+.biye-stat{background:var(--sur);border-radius:var(--r);border:1px solid var(--bdr);padding:1rem 1.1rem}
+.biye-stat-val{font-size:1.5rem;font-weight:900;line-height:1.15;margin-bottom:.15rem}
+.biye-stat-lbl{font-size:.74rem;color:var(--ink2);font-weight:600}
+
+/* TABS */
+.biye-tabs{display:flex;gap:.3rem;border-bottom:2px solid var(--bdr);margin-bottom:1.25rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.biye-tabs::-webkit-scrollbar{display:none}
+.biye-tab{padding:.55rem 1rem;font-size:.84rem;font-weight:700;color:var(--ink2);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;transition:var(--tx);background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.biye-tab.active{color:var(--pk);border-bottom-color:var(--pk)}
+.biye-tab-panel{display:none;animation:biye-fadeup .25s ease}
+.biye-tab-panel.active{display:block}
+@keyframes biye-fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* MATCH CARD */
+.biye-match-card{background:var(--sur);border-radius:var(--r3);border:1px solid var(--bdr);overflow:hidden;transition:var(--tx);cursor:pointer}
+.biye-match-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.biye-match-photo{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,var(--pk-s),var(--pu-s));display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden}
+.biye-match-photo img{width:100%;height:100%;object-fit:cover}
+.biye-match-info{padding:.85rem}
+.biye-match-name{font-size:.9rem;font-weight:800;margin-bottom:.15rem}
+.biye-match-meta{font-size:.75rem;color:var(--ink2);margin-bottom:.6rem;line-height:1.5}
+.biye-match-actions{display:flex;gap:.35rem}
+
+/* STEP DOTS */
+.biye-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:1.5rem}
+.biye-step-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:var(--ink3);font-family:'Inter',sans-serif;transition:var(--tx);flex-shrink:0}
+.biye-step-dot.active{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 3px 12px -4px rgba(106,45,168,.5)}
+.biye-step-dot.done{background:var(--gr);border-color:var(--gr);color:#fff}
+.biye-step-line{flex:1;height:2px;background:var(--bdr2);min-width:16px;max-width:48px;transition:var(--tx)}
+.biye-step-line.done{background:var(--gr)}
+
+/* EMPTY */
+.biye-empty{text-align:center;padding:3rem 1rem}
+.biye-empty-icon{font-size:3rem;margin-bottom:.75rem}
+.biye-empty-title{font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.biye-empty-sub{font-size:.84rem;color:var(--ink2);margin-bottom:1.25rem}
+
+/* SKELETON */
+.biye-skel{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:biye-skel 1.4s infinite;border-radius:8px}
+@keyframes biye-skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* DISCLAIMER */
+.biye-disclaimer{background:var(--gd-s);border:1px solid rgba(212,175,55,.3);border-radius:var(--r2);padding:.75rem 1rem;font-size:.78rem;color:#5a3e00;line-height:1.55}
+
+/* NOTIF BADGE */
+.biye-notif-badge{position:absolute;top:-4px;right:-4px;background:var(--pk);color:#fff;font-size:.6rem;font-weight:800;border-radius:50px;padding:.1rem .35rem;min-width:16px;text-align:center}
+
+/* MOBILE NAV */
+.biye-mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--sur);border-top:1px solid var(--bdr);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+@media(max-width:768px){.biye-mobile-nav{display:flex}}
+.biye-mobile-nav-items{display:flex;width:100%}
+.biye-mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem .2rem;font-size:.58rem;font-weight:700;color:var(--ink3);cursor:pointer;transition:var(--tx);background:none;border:none;font-family:inherit;min-height:44px;justify-content:center}
+.biye-mobile-nav-item.active,.biye-mobile-nav-item:hover{color:var(--pk)}
+.biye-mobile-nav-icon{font-size:1.1rem;line-height:1}
+
+/* FOOTER */
+.biye-footer{background:#12122A;color:rgba(255,255,255,.65);padding:2.5rem 1.25rem;padding-bottom:calc(2.5rem + env(safe-area-inset-bottom));margin-top:3rem}
+.biye-footer-inner{max-width:960px;margin:0 auto}
+.biye-footer-logo{margin-bottom:.6rem}
+.biye-footer-logo img{filter:brightness(0) invert(1);opacity:.75}
+.biye-footer-tagline{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1.75rem}
+.biye-footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:1.75rem}
+@media(max-width:600px){.biye-footer-grid{grid-template-columns:repeat(2,1fr)}}
+.biye-footer-col h4{font-size:.75rem;font-weight:800;color:#fff;margin-bottom:.55rem;text-transform:uppercase;letter-spacing:.07em}
+.biye-footer-col a{display:block;font-size:.76rem;color:rgba(255,255,255,.45);margin-bottom:.3rem;transition:var(--tx)}
+.biye-footer-col a:hover{color:#fff}
+.biye-footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:1rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
+.biye-footer-copy{font-size:.7rem;color:rgba(255,255,255,.3)}
+
+/* RTL */
+html[dir=rtl] .biye-input,.biye-select,.biye-textarea{text-align:right}
+html[dir=rtl] .biye-nav{flex-direction:row-reverse}
+
+/* RESPONSIVE */
+@media(max-width:480px){body{font-size:15px}.biye-page,.biye-page-wide,.biye-page-narrow{padding-left:.75rem;padding-right:.75rem}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.edit-tabs-sticky{position:sticky;top:56px;z-index:50;background:var(--bg);padding:.5rem 0}
+.photo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-bottom.75rem}
+.photo-slot{aspect-ratio:1;border-radius:var(--r2);border:2px dashed var(--bdr2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tx);font-size:1.2rem;position:relative;overflow:hidden;background:var(--bg)}
+.photo-slot:hover{border-color:var(--pk);background:var(--pk-s)}
+.photo-slot img{width:100%;height:100%;object-fit:cover}
+.photo-slot-label{position:absolute;bottom:0;left:0;right:0;font-size:.6rem;font-weight:700;text-align:center;background:rgba(0,0,0,.55);color:#fff;padding:.2rem}
+.parent-note{background:var(--gd-s);border:1px solid rgba(212,175,55,.3);border-radius:var(--r2);padding:.75rem;font-size:.78rem;color:#5a3e00;margin-bottom.75rem}
+</style></head>
+<body>
+<nav class="biye-nav"><a href="profile.html" class="biye-nav-logo"><img src="data:image/png;base64,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" alt="BIYE" height="34"></a>
+<div class="biye-nav-right"><button id="saveBtn" class="biye-btn biye-btn-primary biye-btn-sm" data-i18n="edit.save">সংরক্ষণ করুন</button></div></nav>
+<main class="biye-page-narrow" role="main">
+  <div class="biye-page-header"><h1 class="biye-page-title" data-i18n="edit.title">প্রোফাইল সম্পাদনা</h1></div>
+  <div id="alertBox" class="biye-alert"></div>
+  <div class="edit-tabs-sticky">
+    <div class="biye-tabs" role="tablist">
+      <button class="biye-tab active" role="tab" data-tab="basic" data-i18n="edit.tabBasic">মূল তথ্য</button>
+      <button class="biye-tab" role="tab" data-tab="photos" id="photosTab" data-i18n="edit.tabPhotos">ছবি</button>
+      <button class="biye-tab" role="tab" data-tab="priorities" data-i18n="edit.tabPriorities">অগ্রাধিকার</button>
+      <button class="biye-tab" role="tab" data-tab="privacy" data-i18n="edit.tabPrivacy">গোপনীয়তা</button>
+    </div>
+  </div>
+
+  <!-- Basic Info -->
+  <div class="biye-tab-panel active" id="tab-basic">
+    <div class="biye-card"><div class="biye-card-body">
+      <div class="biye-field"><label class="biye-label" for="dispName" data-i18n="edit.displayName">প্রদর্শন নাম *</label><input class="biye-input" id="dispName" type="text" autocomplete="name"></div>
+      <div class="biye-field"><label class="biye-label" for="gender" data-i18n="edit.gender">লিঙ্গ</label><select class="biye-input biye-select" id="gender"><option value="male" data-i18n="gender.male">পুরুষ</option><option value="female" data-i18n="gender.female">মহিলা</option></select></div>
+      <div class="biye-field"><label class="biye-label" for="dob" data-i18n="edit.dob">জন্ম তারিখ</label><input class="biye-input" id="dob" type="date"></div>
+      <div class="biye-grid-2">
+        <div class="biye-field"><label class="biye-label" for="division" data-i18n="edit.division">বিভাগ</label><input class="biye-input" id="division" type="text"></div>
+        <div class="biye-field"><label class="biye-label" for="district" data-i18n="edit.district">জেলা</label><input class="biye-input" id="district" type="text"></div>
+      </div>
+      <div class="biye-field"><label class="biye-label" for="education" data-i18n="edit.education">শিক্ষা</label><input class="biye-input" id="education" type="text"></div>
+      <div class="biye-field"><label class="biye-label" for="profession" data-i18n="edit.profession">পেশা</label><input class="biye-input" id="profession" type="text"></div>
+      <div class="biye-field"><label class="biye-label" for="religion" data-i18n="edit.religion">ধর্ম</label><input class="biye-input" id="religion" type="text"></div>
+      <div class="biye-field"><label class="biye-label" for="marital" data-i18n="edit.marital">বৈবাহিক অবস্থা</label><select class="biye-input biye-select" id="marital"><option value="never_married" data-i18n="marital.never">অবিবাহিত</option><option value="divorced" data-i18n="marital.divorced">বিবাহবিচ্ছিন্ন</option><option value="widowed" data-i18n="marital.widowed">বিধবা/বিপত্নীক</option></select></div>
+    </div></div>
+  </div>
+
+  <!-- Photos -->
+  <div class="biye-tab-panel" id="tab-photos">
+    <div class="biye-card"><div class="biye-card-body">
+      <p style="font-size:.82rem;color:var(--ink2);margin-bottom:1rem" data-i18n="edit.photoNote">সর্বোচ্চ ২টি পাসপোর্ট + ৩টি পূর্ণ ছবি। ছবি ব্যক্তিগত স্টোরেজে সুরক্ষিত।</p>
+      <div class="photo-grid" id="photoGrid">
+        <div class="photo-slot" data-slot="passport_1" role="button" tabindex="0" aria-label="Passport photo 1">➕<span class="photo-slot-label">পাসপোর্ট ১</span></div>
+        <div class="photo-slot" data-slot="passport_2" role="button" tabindex="0" aria-label="Passport photo 2">➕<span class="photo-slot-label">পাসপোর্ট ২</span></div>
+        <div class="photo-slot" data-slot="full_1" role="button" tabindex="0" aria-label="Full photo 1">➕<span class="photo-slot-label">ছবি ১</span></div>
+        <div class="photo-slot" data-slot="full_2" role="button" tabindex="0" aria-label="Full photo 2">➕<span class="photo-slot-label">ছবি ২</span></div>
+        <div class="photo-slot" data-slot="full_3" role="button" tabindex="0" aria-label="Full photo 3">➕<span class="photo-slot-label">ছবি ৩</span></div>
+      </div>
+      <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" style="display:none" aria-label="Choose photo">
+      <p class="biye-disclaimer" data-i18n="edit.photoDisclaimer">আপনার ছবি কখনো সর্বজনীনভাবে প্রকাশ করা হয় না।</p>
+    </div></div>
+  </div>
+
+  <!-- Priorities -->
+  <div class="biye-tab-panel" id="tab-priorities">
+    <div class="parent-note" role="note" data-i18n="edit.parentNote">অভিভাবক কর্তৃক প্রদত্ত অগ্রাধিকার আলাদাভাবে চিহ্নিত। আপনি নিজে নিশ্চিত বা পরিবর্তন করতে পারবেন।</div>
+    <div class="biye-card"><div class="biye-card-body">
+      <p style="font-size:.85rem;color:var(--ink2);margin-bottom:1rem" data-i18n="edit.prioritiesNote">আপনার ৩০টি পছন্দের অগ্রাধিকার নির্ধারণ করুন।</p>
+      <a href="questionnaire.html" class="biye-btn biye-btn-primary biye-btn-full" data-i18n="edit.gotoQ">প্রশ্নমালায় যান</a>
+    </div></div>
+  </div>
+
+  <!-- Privacy -->
+  <div class="biye-tab-panel" id="tab-privacy">
+    <div class="biye-card"><div class="biye-card-body">
+      <div class="biye-field">
+        <label class="biye-label" for="visibility" data-i18n="edit.visibility">প্রোফাইল দৃশ্যমানতা</label>
+        <select class="biye-input biye-select" id="visibility">
+          <option value="verified_only" data-i18n="vis.verified">শুধু যাচাইকৃত ব্যবহারকারীরা</option>
+          <option value="connections_only" data-i18n="vis.connections">শুধু সংযোগ</option>
+          <option value="private" data-i18n="vis.private">ব্যক্তিগত</option>
+        </select>
+      </div>
+      <p class="biye-disclaimer" data-i18n="edit.privacyDisclaimer">আপনার ব্যক্তিগত তথ্য সর্বদা সুরক্ষিত। ফোন, ইমেইল, NID কখনো প্রকাশ হয় না।</p>
+    </div></div>
+    <div class="biye-card" style="margin-top:.75rem"><div class="biye-card-body">
+      <h3 class="biye-card-title" style="margin-bottom:.75rem" data-i18n="edit.dangerZone">অ্যাকাউন্ট</h3>
+      <button id="deleteAccountBtn" class="biye-btn biye-btn-danger biye-btn-full" data-i18n="edit.deleteAccount">অ্যাকাউন্ট মুছুন</button>
+    </div></div>
+  </div>
+</main>
+<script type="module">
+import { App } from './js/app.js';
+import { Profile } from './js/profile.js';
+import { Photos } from './js/photos.js';
+import { I18n } from './js/i18n.js';
+import { UI } from './js/ui.js';
+import { Validation } from './js/validation.js';
+
+let profileId;
+
+document.addEventListener('biye:ready', async ({ detail: { user } }) => {
+  if (!user) return;
+  const p = await Profile.loadOwn();
+  if (!p) return;
+  profileId = p.id;
+
+  // Populate fields
+  document.getElementById('dispName').value = p.display_name || '';
+  document.getElementById('gender').value = p.gender || 'male';
+  document.getElementById('dob').value = p.date_of_birth || '';
+  document.getElementById('division').value = p.division || '';
+  document.getElementById('district').value = p.district || '';
+  document.getElementById('education').value = p.education || '';
+  document.getElementById('profession').value = p.profession || '';
+  document.getElementById('religion').value = p.religion || '';
+  document.getElementById('marital').value = p.marital_status || 'never_married';
+  document.getElementById('visibility').value = p.visibility || 'verified_only';
+
+  // Load photos
+  const photos = await Photos.loadPhotos(profileId);
+  Photos.renderPhotoGrid(document.getElementById('photoGrid'), photos, (slot) => {
+    document.getElementById('photoInput').dataset.slot = slot;
+    document.getElementById('photoInput').click();
+  });
+
+  // Photo upload
+  document.getElementById('photoInput').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const slot = e.target.dataset.slot;
+    try {
+      UI.toast(I18n.t('edit.uploading'), 'info');
+      await Photos.upload(profileId, file, slot);
+      UI.toast(I18n.t('edit.uploadDone'), 'success');
+      const updated = await Photos.loadPhotos(profileId);
+      Photos.renderPhotoGrid(document.getElementById('photoGrid'), updated, () => {});
+    } catch (err) {
+      UI.toast(I18n.t(err.message.includes('limit') ? 'edit.photoLimit' : 'err.generic'), 'error');
+    }
+    e.target.value = '';
+  });
+
+  // Save
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const display_name = document.getElementById('dispName').value.trim();
+    if (!Validation.name(display_name)) { UI.toast(I18n.t('err.required'), 'error'); return; }
+    try {
+      UI.setLoading(document.getElementById('saveBtn'), true, I18n.t('saving'));
+      await Profile.update(profileId, {
+        display_name,
+        gender: document.getElementById('gender').value,
+        date_of_birth: document.getElementById('dob').value || null,
+        division: document.getElementById('division').value.trim(),
+        district: document.getElementById('district').value.trim(),
+        education: document.getElementById('education').value.trim(),
+        profession: document.getElementById('profession').value.trim(),
+        religion: document.getElementById('religion').value.trim(),
+        marital_status: document.getElementById('marital').value,
+        visibility: document.getElementById('visibility').value,
+      });
+      await Profile.updateCompletion(profileId);
+      UI.toast(I18n.t('edit.saved'), 'success');
+    } catch (e) { UI.toast(I18n.t('err.generic'), 'error'); }
+    finally { UI.setLoading(document.getElementById('saveBtn'), false); }
+  });
+
+  // Tabs
+  document.querySelectorAll('.biye-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.biye-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      document.querySelectorAll('.biye-tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected','true');
+      document.getElementById('tab-' + tab.dataset.tab)?.classList.add('active');
+    });
+  });
+
+  // Delete account
+  document.getElementById('deleteAccountBtn').addEventListener('click', async () => {
+    const confirmed = await UI.confirm(I18n.t('edit.deleteConfirm'), { confirmLabel: I18n.t('edit.deleteConfirmBtn') });
+    if (confirmed) { await Profile.requestDeletion(profileId); window.location.href = 'index.html'; }
+  });
+
+  // Hash routing for photos tab
+  if (window.location.hash === '#photos') document.getElementById('photosTab').click();
+});
+</script>
+</body></html>
