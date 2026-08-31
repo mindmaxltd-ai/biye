@@ -1,6 +1,6 @@
 // netlify/functions/send-otp.js
 // ─────────────────────────────────────────────────────────────
-// BIYE.COM — OTP পাঠায় ও যাচাই করে (register.html-এর Step 1 এই ফাংশন কল করবে)।
+// BIYE.COM — OTP পাঠায় ও যাচাই করে (onboarding.html-এর Step 1 এই ফাংশন কল করবে)।
 // কোড Supabase-এর otp_codes টেবিলে থাকে।
 //
 // Netlify env:
@@ -105,7 +105,7 @@ exports.handler = async (event) => {
     const code = String(Math.floor(100000 + Math.random() * 900000));
     const expires = new Date(Date.now() + OTP_TTL_MIN * 60000).toISOString();
 
-    await sb(`otp_codes?phone=eq.${phone}&consumed_at=is.null`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+    await sb(`otp_codes?phone=eq.${phone}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
 
     const ins = await sb('otp_codes', {
       method: 'POST',
