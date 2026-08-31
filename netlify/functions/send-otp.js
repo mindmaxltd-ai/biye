@@ -1,6 +1,6 @@
 // netlify/functions/send-otp.js
 // ─────────────────────────────────────────────────────────────
-// BIYE.COM — OTP পাঠায় ও যাচাই করে (onboarding.html-এর Step 1 এই ফাংশন কল করবে)।
+// BIYE.COM — OTP পাঠায় ও যাচাই করে (register.html-এর Step 1 এই ফাংশন কল করবে)।
 // কোড Supabase-এর otp_codes টেবিলে থাকে।
 //
 // Netlify env:
