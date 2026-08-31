@@ -25,8 +25,8 @@
 // supabase-client.js's schema comment — no new tables needed.
 // ═══════════════════════════════════════════════════════════════════
 
-const BIYE_METRICS = require('../metrics-config.js');
-const BiyeScoring   = require('../scoring.js');
+const BIYE_METRICS = require('./metrics-config.js');
+const BiyeScoring   = require('./scoring.js');
 
 const SUPA_URL = process.env.SUPABASE_URL || '';
 const SUPA_KEY = process.env.SUPABASE_SERVICE_KEY || '';
