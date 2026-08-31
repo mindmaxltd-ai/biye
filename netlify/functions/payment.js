@@ -78,7 +78,9 @@ create table subscriptions (
 // ─────────────────────────────────────────────────────────────
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
-const SERVICE_KEY  = process.env.SUPABASE_SERVICE_KEY || '';
+const SERVICE_KEY  = process.env.SUPABASE_SERVICE_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_KEY || '';
 const SITE_URL      = process.env.URL || process.env.SITE_URL || 'https://biye.ltd';
 const SSLC_STORE_ID = process.env.SSLC_STORE_ID || '';
 const SSLC_STORE_PWD = process.env.SSLC_STORE_PWD || '';
