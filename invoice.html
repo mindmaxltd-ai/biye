@@ -301,7 +301,8 @@ html[dir=rtl] .biye-nav{flex-direction:row-reverse}
 </main>
 
 <script type="module">
-import { App } from './app.js';
+// Load App for session but don't depend on biye:ready event
+try { const { App } = await import('./app.js'); } catch(e) {}
 
 const STATUS = {
   paid:    { label: '✓ পেমেন্ট সম্পন্ন', cls: 'biye-badge-green', bg: 'rgba(0,166,81,.08)' },
@@ -309,7 +310,8 @@ const STATUS = {
   void:    { label: '✕ বাতিল',            cls: 'biye-badge-pk',    bg: 'rgba(194,15,94,.08)' },
 };
 
-document.addEventListener('biye:ready', async () => {
+// Run on load — don't wait for biye:ready
+async function loadInvoice() {
   const params = new URLSearchParams(window.location.search);
   const inv    = params.get('inv') || params.get('invoice_number');
   const fromPay = params.get('from') === 'payment';
@@ -375,7 +377,14 @@ document.addEventListener('biye:ready', async () => {
     document.getElementById('invNotFound').style.display = '';
     console.error('Invoice error:', e);
   }
-});
+}
+
+// Call immediately when DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadInvoice);
+} else {
+  loadInvoice();
+}
 </script>
 </body>
 </html>
