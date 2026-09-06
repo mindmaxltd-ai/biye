@@ -883,7 +883,7 @@ function startPayment(){
 
   fetch('/.netlify/functions/payment',{
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action:'createInvoice', customer_id: S.userId, package_code:'REG'})
+    body: JSON.stringify({action:'createInvoice', phone: S.phone, package_code:'REG'})
   })
   .then(r => r.json())
   .then(d => {
