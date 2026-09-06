@@ -79,18 +79,32 @@ async function sbUpdate(table, query, updates) {
 
 // ── CREATE INVOICE ──────────────────────────────────────────
 async function createInvoice(body) {
-  const { customer_id, profile_id, package_code } = body;
-  const pid = profile_id || customer_id;
-  if (!pid) return reply(400, { ok: false, error: 'profile_id required' });
-
+  const { customer_id, profile_id, phone, package_code } = body;
   const pkg = PACKAGES[package_code] || PACKAGES.REG;
   const invoice_number = genInvoiceNumber();
   const transaction_id = genTxnId();
   const now = new Date().toISOString();
 
-  // 1. Create payment row first
+  // Resolve a valid UUID profile_id from whatever the client sent
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  let validProfileId = null;
+  if (profile_id && UUID_RE.test(profile_id)) {
+    validProfileId = profile_id;
+  } else if (customer_id && UUID_RE.test(customer_id)) {
+    validProfileId = customer_id;
+  } else if (phone) {
+    // Look up profile by phone number (new registrations)
+    const digits = String(phone).replace(/[^0-9]/g,'');
+    const variants = [digits, '0'+digits.replace(/^880/,''), '+'+digits];
+    for (const ph of variants) {
+      const rows = await sbSelect('profiles', 'phone=eq.'+encodeURIComponent(ph)+'&select=id&limit=1');
+      if (rows[0]?.id) { validProfileId = rows[0].id; break; }
+    }
+  }
+  // validProfileId may be null for brand-new users — invoice will still be created
+
   const payment = await sbInsert('payments', {
-    profile_id: pid,
+    profile_id: validProfileId,
     transaction_id,
     payment_type: pkg.type,
     amount: pkg.total,
@@ -103,7 +117,7 @@ async function createInvoice(body) {
 
   // 2. Create invoice row
   const invoice = await sbInsert('invoices', {
-    profile_id: pid,
+    profile_id: validProfileId,
     invoice_number,
     payment_id: payment.id,
     subtotal: pkg.subtotal,
