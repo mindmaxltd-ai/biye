@@ -1,4 +1,14 @@
-<!DOCTYPE html><html lang="bn" dir="ltr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"><title>BIYE — রসিদ</title><meta name="robots" content="noindex,follow"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><style>
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>BIYE — পেমেন্ট রসিদ</title>
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
 /* ═══════════════════════════════════════════
    BIYE SHARED CSS — All 25 pages
    ═══════════════════════════════════════════ */
@@ -192,31 +202,154 @@ html[dir=rtl] .biye-nav{flex-direction:row-reverse}
 
 /* RESPONSIVE */
 @media(max-width:480px){body{font-size:15px}.biye-page,.biye-page-wide,.biye-page-narrow{padding-left:.75rem;padding-right:.75rem}}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}</style></head><body>
-<nav class="biye-nav"><a href="dashboard.html" class="biye-nav-logo"><img src="data:image/png;base64,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" alt="BIYE" height="34"></a><div class="biye-nav-right"><a href="membership.html" class="biye-btn biye-btn-ghost biye-btn-sm" data-i18n="nav.membership">সদস্যপদ</a></div></nav>
-<main class="biye-page-narrow" role="main">
-  <div class="biye-page-header"><h1 class="biye-page-title" data-i18n="receipt.title">পেমেন্ট রসিদ</h1></div>
-  <div id="receiptList"><div class="biye-skel" style="height:80px;border-radius:14px;margin-bottom:.6rem"></div></div>
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.receipt-box{background:#fff;border-radius:20px;border:1px solid rgba(20,20,20,.08);padding:2rem;max-width:500px;margin:0 auto}
+.receipt-header{text-align:center;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:2px solid rgba(20,20,20,.08)}
+.receipt-logo{font-size:1.5rem;font-weight:900;background:linear-gradient(120deg,#E2136E,#6A2DA8,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.25rem}
+.receipt-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(20,20,20,.08);font-size:.88rem}
+.receipt-row:last-child{border-bottom:none;font-weight:800;font-size:.95rem}
+.receipt-card{background:#fff;border-radius:14px;border:1px solid rgba(20,20,20,.08);padding:1rem;margin-bottom:.6rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:.2s}
+.receipt-card:hover{box-shadow:0 4px 20px -6px rgba(106,45,168,.18)}
+.biye-spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(106,45,168,.2);border-top-color:#6A2DA8;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.biye-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.25rem;border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:.2s;text-decoration:none;min-height:44px}
+.biye-btn-primary{background:linear-gradient(120deg,#E2136E,#6A2DA8,#1565C0);color:#fff}
+.biye-btn-ghost{background:#fff;color:rgba(20,20,20,.55);border:1.5px solid rgba(20,20,20,.14)}
+.biye-btn-sm{padding:.4rem .9rem;font-size:.8rem;min-height:36px}
+.biye-btn-full{width:100%;display:flex}
+.biye-badge{display:inline-flex;align-items:center;padding:.2rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700}
+.biye-badge-green{background:rgba(0,166,81,.1);color:#00A651}
+.biye-badge-gd{background:rgba(212,175,55,.14);color:#5a3e00}
+.biye-empty{text-align:center;padding:3rem 1rem}
+.biye-empty-icon{font-size:3rem;margin-bottom:.75rem}
+.biye-empty-title{font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.biye-empty-sub{font-size:.84rem;color:rgba(20,20,20,.55);margin-bottom:1.25rem}
+.biye-skel{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:skel 1.4s infinite;border-radius:8px}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+</style>
+</head>
+<body>
+<nav class="biye-nav" aria-label="Navigation">
+  <a href="dashboard.html" class="biye-nav-logo"><img src="data:image/png;base64,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" alt="BIYE" height="34"></a>
+  <div class="biye-nav-right">
+    <a href="invoice.html" class="biye-btn biye-btn-ghost biye-btn-sm">🧾 ইনভয়েস</a>
+    <a href="membership.html" class="biye-btn biye-btn-ghost biye-btn-sm">সদস্যপদ</a>
+    <a href="dashboard.html" class="biye-btn biye-btn-primary biye-btn-sm">Dashboard</a>
+  </div>
+</nav>
+
+<main style="max-width:520px;margin:0 auto;padding:1.5rem 1rem 5rem" role="main">
+  <div style="margin-bottom:1.5rem">
+    <h1 style="font-size:1.35rem;font-weight:900;margin-bottom:.25rem">পেমেন্ট রসিদ</h1>
+    <p style="font-size:.87rem;color:rgba(20,20,20,.55)">আপনার সমস্ত পেমেন্টের রসিদ</p>
+  </div>
+
+  <!-- Single receipt view (from invoice.html link) -->
+  <div id="singleReceipt" style="display:none">
+    <div class="receipt-box" id="receiptBox">
+      <div class="receipt-header">
+        <div class="receipt-logo">BIYE</div>
+        <div style="font-size:.85rem;color:rgba(20,20,20,.55);font-weight:600">পেমেন্ট রসিদ / RECEIPT</div>
+        <div style="font-size:.78rem;color:rgba(20,20,20,.4);margin-top:.2rem" id="rNum">—</div>
+        <div style="font-size:.72rem;color:rgba(20,20,20,.35);margin-top:.15rem" id="rDate"></div>
+      </div>
+      <div style="text-align:center;padding:.85rem;border-radius:10px;background:rgba(0,166,81,.08);margin:1rem 0">
+        <span class="biye-badge biye-badge-green" style="font-size:.85rem">✓ পেমেন্ট যাচাইকৃত</span>
+      </div>
+      <div id="rRows" style="margin-bottom:.75rem"></div>
+      <div style="display:flex;gap:.5rem;margin-top:1.25rem">
+        <button onclick="window.print()" class="biye-btn biye-btn-ghost biye-btn-sm" style="flex:1">🖨 প্রিন্ট</button>
+        <a href="dashboard.html" class="biye-btn biye-btn-primary" style="flex:2">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- All receipts list -->
+  <div id="allReceipts">
+    <div class="biye-skel" style="height:70px;margin-bottom:.6rem"></div>
+    <div class="biye-skel" style="height:70px;margin-bottom:.6rem"></div>
+  </div>
 </main>
+
+<nav class="biye-mobile-nav" aria-label="Bottom navigation">
+  <div class="biye-mobile-nav-items" style="display:flex;width:100%">
+    <button style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem;font-size:.58rem;font-weight:700;color:rgba(20,20,20,.4);background:none;border:none;cursor:pointer;font-family:inherit" onclick="location.href='dashboard.html'">🏠<span>Home</span></button>
+    <button style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem;font-size:.58rem;font-weight:700;color:rgba(20,20,20,.4);background:none;border:none;cursor:pointer;font-family:inherit" onclick="location.href='match-feed.html'">💫<span>Matches</span></button>
+    <button style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem;font-size:.58rem;font-weight:700;color:rgba(20,20,20,.4);background:none;border:none;cursor:pointer;font-family:inherit" onclick="location.href='messages.html'">💬<span>Messages</span></button>
+    <button style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem;font-size:.58rem;font-weight:700;color:#E2136E;background:none;border:none;cursor:pointer;font-family:inherit" onclick="location.href='receipt.html'">🧾<span>Receipts</span></button>
+    <button style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem;font-size:.58rem;font-weight:700;color:rgba(20,20,20,.4);background:none;border:none;cursor:pointer;font-family:inherit" onclick="location.href='profile.html'">👤<span>Profile</span></button>
+  </div>
+</nav>
+
 <script type="module">
-import { App } from './js/app.js';
-import { Payment } from './js/payment.js';
-import { Profile } from './js/profile.js';
-import { I18n } from './js/i18n.js';
-import { UI } from './js/ui.js';
+import { App } from './app.js';
+import { Profile } from './profile.js';
 
 document.addEventListener('biye:ready', async ({ detail: { user } }) => {
   if (!user) return;
   const p = await Profile.loadOwn();
-  const receipts = await Payment.loadReceipts(p?.id);
-  const list = document.getElementById('receiptList');
+  const params = new URLSearchParams(window.location.search);
+  const paymentId = params.get('payment_id');
+
+  // Single receipt view
+  if (paymentId) {
+    document.getElementById('allReceipts').style.display = 'none';
+    document.getElementById('singleReceipt').style.display = '';
+    try {
+      const res  = await fetch('/.netlify/functions/payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getReceipt', payment_id: paymentId }),
+      });
+      const data = await res.json();
+      if (data.ok && data.receipt) {
+        const r = data.receipt;
+        document.getElementById('rNum').textContent  = r.receipt_number || '—';
+        document.getElementById('rDate').textContent = r.issued_at
+          ? new Date(r.issued_at).toLocaleString('bn-BD') : '';
+        const rows = document.getElementById('rRows');
+        const row  = (l, v) => {
+          const d = document.createElement('div'); d.className = 'receipt-row';
+          const lEl = document.createElement('span'); lEl.textContent = l;
+          const vEl = document.createElement('span'); vEl.textContent = v;
+          d.appendChild(lEl); d.appendChild(vEl); rows.appendChild(d);
+        };
+        row('পরিমাণ (Amount)', '৳' + Number(r.amount||0).toLocaleString('bn-BD'));
+        row('মুদ্রা (Currency)', r.currency || 'BDT');
+        row('অবস্থা (Status)', r.verification_status || 'verified');
+        if (r.issued_at) row('তারিখ (Date)', new Date(r.issued_at).toLocaleDateString('bn-BD'));
+      }
+    } catch (e) { console.error(e); }
+    return;
+  }
+
+  // All receipts list
+  const list = document.getElementById('allReceipts');
   list.innerHTML = '';
-  if (!receipts?.length) { UI.emptyState(list, { icon: '🧾', title: I18n.t('receipt.empty'), subtitle: I18n.t('receipt.emptySub') }); return; }
-  receipts.forEach(r => {
-    const card = document.createElement('div');
-    card.style.cssText = 'background:var(--sur);border-radius:var(--r);border:1px solid var(--bdr);padding:1rem;margin-bottom:.6rem;display:flex;justify-content:space-between;align-items:center';
-    card.innerHTML = '<div><div style="font-size:.85rem;font-weight:800">' + r.receipt_number + '</div><div style="font-size:.75rem;color:var(--ink2)">' + new Date(r.issued_at).toLocaleString() + '</div></div><div style="text-align:right"><div style="font-size:.95rem;font-weight:900;color:var(--gr)">৳' + r.amount + '</div><span class="biye-badge biye-badge-green">✓ ' + r.verification_status + '</span></div>';
-    list.appendChild(card);
-  });
+  try {
+    const { DB } = await import('./supabase.js');
+    if (!p?.id) { list.innerHTML = '<p style="text-align:center;color:rgba(20,20,20,.5);padding:2rem">রসিদ পাওয়া যায়নি</p>'; return; }
+    const data = await DB.select('receipts', {
+      filters: { profile_id: p.id },
+      order: { column: 'issued_at', asc: false },
+    }).catch(() => []);
+
+    if (!data?.length) {
+      list.innerHTML = '<div class="biye-empty"><div class="biye-empty-icon">🧾</div><div class="biye-empty-title">কোনো রসিদ নেই</div><div class="biye-empty-sub">পেমেন্ট সম্পন্ন হলে রসিদ এখানে দেখা যাবে।</div><a href="payment.html" class="biye-btn biye-btn-primary" style="margin-top:1rem">পেমেন্ট করুন</a></div>';
+      return;
+    }
+
+    data.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'receipt-card';
+      card.onclick = () => { location.href = 'receipt.html?payment_id=' + r.payment_id; };
+      card.innerHTML = '<div><div style="font-size:.85rem;font-weight:800">' + (r.receipt_number||'—') + '</div><div style="font-size:.72rem;color:rgba(20,20,20,.5)">' + (r.issued_at ? new Date(r.issued_at).toLocaleDateString('bn-BD') : '') + '</div></div><div style="text-align:right"><div style="font-size:.95rem;font-weight:900;color:#00A651">৳' + Number(r.amount||0).toLocaleString('bn-BD') + '</div><span class="biye-badge biye-badge-green">✓ ' + (r.verification_status||'verified') + '</span></div>';
+      list.appendChild(card);
+    });
+  } catch (e) { console.error(e); list.innerHTML = '<p style="text-align:center;color:rgba(20,20,20,.5);padding:2rem">লোড করতে সমস্যা হয়েছে</p>'; }
 });
-</script></body></html>
+</script>
+</body>
+</html>
