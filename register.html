@@ -322,6 +322,13 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 
 /* Page wrapper */
 .page{max-width:520px;margin:0 auto;padding:0 0 2rem}
+.owner-btn{
+  background:var(--sur);border:2px solid var(--bdr2);border-radius:var(--r2);
+  padding:.9rem .5rem;text-align:center;cursor:pointer;transition:var(--tx);
+  font-family:inherit;width:100%;
+}
+.owner-btn:hover{border-color:var(--pu);background:var(--pu-s)}
+.owner-btn.active{border-color:var(--pk);background:var(--pk-s)}
 </style>
 </head>
 <body>
@@ -372,19 +379,105 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 <!-- ══ STEP 1: INFO + OTP ══ -->
 <div class="step active" id="step1" aria-labelledby="s1h">
   <div class="card-head">
-    <div class="card-step-badge">👤 <span data-bn="ধাপ ১" data-en="Step 1">ধাপ ১</span></div>
-    <h1 class="card-title" id="s1h" data-bn="আপনার তথ্য দিন" data-en="Enter your information">আপনার তথ্য দিন</h1>
-    <p class="card-sub" data-bn="সব তথ্য দিন, তারপর মোবাইলে কোড যাবে।" data-en="Fill in your details, then we'll send a code to your phone.">সব তথ্য দিন, তারপর মোবাইলে কোড যাবে।</p>
+    <div class="card-step-badge">📝 <span data-bn="ধাপ ১" data-en="Step 1">ধাপ ১</span></div>
+    <h1 class="card-title" id="s1h" data-bn="প্রোফাইল তৈরি করুন" data-en="Create your profile">প্রোফাইল তৈরি করুন</h1>
+    <p class="card-sub" data-bn="তথ্য দিন, তারপর মোবাইলে কোড যাবে।" data-en="Fill in your details, then we'll verify your phone.">তথ্য দিন, তারপর মোবাইলে কোড যাবে।</p>
   </div>
   <div class="card-body">
     <div id="s1err" class="inline-err" role="alert"></div>
 
-    <!-- Phone -->
+    <!-- Who is this for? -->
+    <div class="field">
+      <div class="field-lbl">
+        <span style="font-size:1.1rem">👥</span>
+        <span data-bn="এই প্রোফাইলটি কার জন্য?" data-en="Who is this profile for?">এই প্রোফাইলটি কার জন্য?</span>
+        <span class="req">*</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+        <button type="button" class="owner-btn active" id="ownSelf" onclick="setOwner('self')" aria-pressed="true">
+          <div style="font-size:1.35rem;margin-bottom:.3rem">🙋</div>
+          <div style="font-size:.82rem;font-weight:800" data-bn="নিজের জন্য" data-en="For myself">নিজের জন্য</div>
+          <div style="font-size:.68rem;color:var(--ink3);margin-top:.1rem">Self</div>
+        </button>
+        <button type="button" class="owner-btn" id="ownGuardian" onclick="setOwner('parent_assisted')" aria-pressed="false">
+          <div style="font-size:1.35rem;margin-bottom:.3rem">👨‍👩‍👧</div>
+          <div style="font-size:.82rem;font-weight:800" data-bn="সন্তানের জন্য" data-en="For my child">সন্তানের জন্য</div>
+          <div style="font-size:.68rem;color:var(--ink3);margin-top:.1rem">Guardian</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Guardian info box (shown when guardian selected) -->
+    <div id="guardianBox" style="display:none">
+      <div style="background:var(--gd-s);border:1px solid rgba(212,175,55,.35);border-radius:var(--r2);padding:.85rem 1rem;margin-bottom:1rem">
+        <div style="font-size:.8rem;font-weight:800;color:#5a3e00;margin-bottom:.2rem">👤 আপনার তথ্য (অভিভাবক)</div>
+        <div style="font-size:.74rem;color:#7a5e00" data-bn="আপনি login করবেন — আপনার নাম ও ফোন দিন।" data-en="You will login — enter your name and phone.">আপনি login করবেন — আপনার নাম ও ফোন দিন।</div>
+      </div>
+      <!-- Guardian Name -->
+      <div class="field">
+        <div class="field-lbl">
+          <span>👤</span><span data-bn="আপনার নাম (অভিভাবক)" data-en="Your name (Guardian)">আপনার নাম (অভিভাবক)</span><span class="req">*</span>
+        </div>
+        <div class="field-wrap">
+          <input class="field-input" type="text" id="gNameInput" autocomplete="name"
+            placeholder="অভিভাবকের পূর্ণ নাম" maxlength="100">
+        </div>
+        <div class="field-err" id="gNameErr" data-bn="নাম দিন (কমপক্ষে ২ অক্ষর)" data-en="Enter your name">নাম দিন</div>
+      </div>
+      <!-- Guardian Phone -->
+      <div class="field">
+        <div class="field-lbl">
+          <span>📱</span><span data-bn="আপনার মোবাইল (অভিভাবক)" data-en="Your mobile (Guardian)">আপনার মোবাইল (অভিভাবক)</span><span class="req">*</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone-prefix">🇧🇩 +880</div>
+          <div class="field-wrap phone-field">
+            <input class="field-input" type="tel" id="gPhoneInput"
+              inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" maxlength="11">
+          </div>
+        </div>
+        <div class="field-err" id="gPhoneErr" data-bn="সঠিক মোবাইল নম্বর দিন" data-en="Enter valid number">সঠিক নম্বর দিন</div>
+      </div>
+      <!-- Guardian Password -->
+      <div class="field">
+        <div class="field-lbl">
+          <span>🔒</span><span data-bn="আপনার পাসওয়ার্ড" data-en="Your password">আপনার পাসওয়ার্ড</span><span class="req">*</span>
+        </div>
+        <div class="field-wrap">
+          <input class="field-input" type="password" id="gPassInput"
+            autocomplete="new-password" placeholder="কমপক্ষে ৮ অক্ষর" maxlength="64"
+            style="padding-right:3.2rem">
+          <button type="button" class="voice-btn" onclick="togglePass('gPassInput')" style="background:none;color:var(--ink3)" aria-label="পাসওয়ার্ড দেখুন">👁</button>
+        </div>
+        <div class="field-err" id="gPassErr" data-bn="কমপক্ষে ৮ অক্ষর, একটি বড় হাতের অক্ষর ও সংখ্যা" data-en="Min 8 chars, 1 uppercase, 1 number">কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা সহ</div>
+      </div>
+      <!-- Divider for candidate info -->
+      <div style="background:var(--bl-s);border:1px solid rgba(21,101,192,.15);border-radius:var(--r2);padding:.75rem 1rem;margin-bottom:1rem">
+        <div style="font-size:.8rem;font-weight:800;color:var(--bl);margin-bottom:.2rem">👧 সন্তানের তথ্য (Candidate)</div>
+        <div style="font-size:.74rem;color:var(--bl)" data-bn="সন্তানের নাম ও বয়স দিন। ফোন না থাকলে খালি রাখুন।" data-en="Enter child's name and age. Phone is optional.">সন্তানের নাম ও বয়স দিন।</div>
+      </div>
+    </div>
+
+    <!-- Candidate Name -->
+    <div class="field">
+      <div class="field-lbl">
+        <span>👤</span>
+        <span id="nameLbl" data-bn="আপনার নাম" data-en="Your name">আপনার নাম</span>
+        <span class="req">*</span>
+      </div>
+      <div class="field-wrap">
+        <input class="field-input" type="text" id="nameInput" autocomplete="name"
+          placeholder="পূর্ণ নাম লিখুন" maxlength="100">
+      </div>
+      <div class="field-err" id="nameErr" data-bn="নাম দিন (কমপক্ষে ২ অক্ষর)" data-en="Enter name (min 2 chars)">নাম দিন</div>
+    </div>
+
+    <!-- Candidate Phone -->
     <div class="field">
       <div class="field-lbl" id="phoneLabel">
         <span style="font-size:1.1rem">📱</span>
-        <span data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</span>
-        <span class="req">*</span>
+        <span id="phoneLbl" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</span>
+        <span class="req" id="phoneReq">*</span>
       </div>
       <div class="phone-wrap">
         <div class="phone-prefix">🇧🇩 +880</div>
@@ -393,94 +486,74 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
             inputmode="numeric" autocomplete="tel"
             placeholder="01XXXXXXXXX"
             aria-labelledby="phoneLabel"
-            aria-describedby="phoneHint phoneErr" maxlength="11">
+            aria-describedby="phoneHint" maxlength="11">
           <button class="voice-btn" id="vbPhone" onclick="startVoice('phoneInput','phone')"
             aria-label="ভয়েস দিয়ে নম্বর বলুন" title="🎙 বলুন">🎙</button>
         </div>
       </div>
       <p class="field-hint" id="phoneHint" data-bn="উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর" data-en="Example: 01712345678 — Bangladesh numbers only">উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর</p>
-      <div class="field-err" id="phoneErr" role="alert" data-bn="সঠিক মোবাইল নম্বর দিন (01X XXXX XXXX)" data-en="Enter a valid mobile number (01X XXXX XXXX)">সঠিক মোবাইল নম্বর দিন</div>
-    </div>
-
-    <!-- Name -->
-    <div class="field">
-      <div class="field-lbl" id="nameLabel">
-        <span style="font-size:1.1rem">👤</span>
-        <span data-bn="আপনার নাম" data-en="Your Name">আপনার নাম</span>
-        <span class="req">*</span>
-      </div>
-      <div class="field-wrap">
-        <input class="field-input" type="text" id="nameInput"
-          autocomplete="name" placeholder="পূর্ণ নাম লিখুন"
-          aria-labelledby="nameLabel" maxlength="100">
-      </div>
-      <div class="field-err" id="nameErr" role="alert">নাম দিন (কমপক্ষে ২ অক্ষর)</div>
+      <div class="field-err" id="phoneErr" role="alert">সঠিক মোবাইল নম্বর দিন</div>
     </div>
 
     <!-- Age (optional) -->
     <div class="field">
-      <div class="field-lbl" id="ageLabel">
-        <span style="font-size:1.1rem">🎂</span>
-        <span data-bn="বয়স" data-en="Age">বয়স</span>
-        <span style="font-size:.7rem;color:var(--ink3);font-weight:500"> (ঐচ্ছিক / optional)</span>
+      <div class="field-lbl">
+        <span>🎂</span>
+        <span id="ageLbl" data-bn="বয়স" data-en="Age">বয়স</span>
+        <span style="font-size:.72rem;color:var(--ink3);font-weight:500"> (ঐচ্ছিক)</span>
       </div>
       <div class="field-wrap">
         <input class="field-input" type="number" id="ageInput"
           inputmode="numeric" min="18" max="80" placeholder="যেমন: 25"
-          aria-labelledby="ageLabel">
+          style="padding-right:1rem">
       </div>
-      <div class="field-err" id="ageErr" role="alert">বয়স ১৮-৮০ এর মধ্যে হতে হবে</div>
+      <div class="field-err" id="ageErr" data-bn="বয়স ১৮-৮০ এর মধ্যে হতে হবে" data-en="Age must be 18-80">বয়স ১৮-৮০ এর মধ্যে</div>
     </div>
 
     <!-- Email (optional) -->
     <div class="field">
-      <div class="field-lbl" id="emailLabel">
-        <span style="font-size:1.1rem">📧</span>
+      <div class="field-lbl">
+        <span>📧</span>
         <span data-bn="ইমেইল" data-en="Email">ইমেইল</span>
-        <span style="font-size:.7rem;color:var(--ink3);font-weight:500"> (ঐচ্ছিক / optional)</span>
+        <span style="font-size:.72rem;color:var(--ink3);font-weight:500"> (ঐচ্ছিক)</span>
       </div>
       <div class="field-wrap">
         <input class="field-input" type="email" id="emailInput"
-          autocomplete="email" placeholder="example@email.com"
-          aria-labelledby="emailLabel">
+          autocomplete="email" placeholder="example@email.com" maxlength="120">
       </div>
-      <div class="field-err" id="emailErr" role="alert">সঠিক ইমেইল দিন</div>
+      <div class="field-err" id="emailErr" data-bn="সঠিক ইমেইল দিন" data-en="Enter valid email">সঠিক ইমেইল দিন</div>
     </div>
 
-    <!-- Password -->
-    <div class="field">
-      <div class="field-lbl" id="passLabel">
-        <span style="font-size:1.1rem">🔒</span>
-        <span data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</span>
-        <span class="req">*</span>
+    <!-- Password (self only) -->
+    <div id="selfPassSection">
+      <div class="field">
+        <div class="field-lbl">
+          <span>🔒</span>
+          <span data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</span>
+          <span class="req">*</span>
+        </div>
+        <div class="field-wrap">
+          <input class="field-input" type="password" id="passInput"
+            autocomplete="new-password" placeholder="কমপক্ষে ৮ অক্ষর" maxlength="64"
+            style="padding-right:3.2rem">
+          <button type="button" class="voice-btn" onclick="togglePass('passInput')" style="background:none;color:var(--ink3)" aria-label="পাসওয়ার্ড দেখুন">👁</button>
+        </div>
+        <div class="field-err" id="passErr" data-bn="কমপক্ষে ৮ অক্ষর, একটি বড় হাতের অক্ষর ও সংখ্যা" data-en="Min 8 chars, 1 uppercase, 1 number">কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা সহ</div>
       </div>
-      <div class="field-wrap" style="position:relative">
-        <input class="field-input" type="password" id="passInput"
-          autocomplete="new-password" placeholder="কমপক্ষে ৮ অক্ষর"
-          aria-labelledby="passLabel" maxlength="64">
-        <button type="button" onclick="togglePass('passInput','eyePass')"
-          style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--ink3)"
-          aria-label="পাসওয়ার্ড দেখুন" id="eyePass">👁</button>
+      <div class="field">
+        <div class="field-lbl">
+          <span>🔒</span>
+          <span data-bn="পাসওয়ার্ড নিশ্চিত করুন" data-en="Confirm Password">পাসওয়ার্ড নিশ্চিত করুন</span>
+          <span class="req">*</span>
+        </div>
+        <div class="field-wrap">
+          <input class="field-input" type="password" id="pass2Input"
+            autocomplete="new-password" placeholder="পাসওয়ার্ড আবার লিখুন" maxlength="64"
+            style="padding-right:3.2rem">
+          <button type="button" class="voice-btn" onclick="togglePass('pass2Input')" style="background:none;color:var(--ink3)" aria-label="পাসওয়ার্ড দেখুন">👁</button>
+        </div>
+        <div class="field-err" id="pass2Err" data-bn="পাসওয়ার্ড মিলছে না" data-en="Passwords do not match">পাসওয়ার্ড মিলছে না</div>
       </div>
-      <div class="field-err" id="passErr" role="alert">পাসওয়ার্ড কমপক্ষে ৮ অক্ষর, একটি বড় হাতের অক্ষর ও একটি সংখ্যা থাকতে হবে</div>
-    </div>
-
-    <!-- Confirm Password -->
-    <div class="field">
-      <div class="field-lbl" id="pass2Label">
-        <span style="font-size:1.1rem">🔒</span>
-        <span data-bn="পাসওয়ার্ড নিশ্চিত করুন" data-en="Confirm Password">পাসওয়ার্ড নিশ্চিত করুন</span>
-        <span class="req">*</span>
-      </div>
-      <div class="field-wrap" style="position:relative">
-        <input class="field-input" type="password" id="pass2Input"
-          autocomplete="new-password" placeholder="পাসওয়ার্ড আবার লিখুন"
-          aria-labelledby="pass2Label" maxlength="64">
-        <button type="button" onclick="togglePass('pass2Input','eyePass2')"
-          style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--ink3)"
-          aria-label="পাসওয়ার্ড দেখুন" id="eyePass2">👁</button>
-      </div>
-      <div class="field-err" id="pass2Err" role="alert">পাসওয়ার্ড মিলছে না</div>
     </div>
 
     <!-- OTP section (hidden until sent) -->
@@ -503,8 +576,13 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
     </div>
 
     <button class="btn btn-primary" id="s1btn" onclick="handleStep1()" style="margin-top:.5rem">
-      <span id="s1btnTxt" data-bn="কোড পাঠান" data-en="Send Code">পরবর্তী → কোড পাঠান</span>
+      <span id="s1btnTxt" data-bn="কোড পাঠান" data-en="Send Code">কোড পাঠান</span>
     </button>
+
+    <p style="text-align:center;margin-top:.9rem;font-size:.82rem;color:var(--ink2)">
+      <span data-bn="ইতিমধ্যে অ্যাকাউন্ট আছে?" data-en="Already have an account?">ইতিমধ্যে অ্যাকাউন্ট আছে?</span>
+      <a href="login.html" style="color:var(--pk);font-weight:700;margin-left:.3rem" data-bn="লগইন করুন →" data-en="Login →">লগইন করুন →</a>
+    </p>
   </div>
 </div>
 
@@ -702,11 +780,20 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 
 // ── STATE ──────────────────────────────────────
 const S = {
-  phone: '',
+  // Owner type
+  ownerType: 'self',          // 'self' | 'parent_assisted'
+  // Guardian info (parent flow)
+  guardianName: '',
+  guardianPhone: '',
+  guardianPassword: '',
+  // Candidate info
   name: '',
+  phone: '',
+  candidatePhone: '',
   age: '',
   email: '',
   password: '',
+  // Flow
   otpSent: false,
   otpVerified: false,
   lang: 'bn',
@@ -721,7 +808,15 @@ const REQUIRED = ['tos','priv','match','pay'];
 // ── i18n ───────────────────────────────────────
 const T = {
   bn: {
-    'send':'কোড পাঠান', 'verify':'যাচাই করুন', 'sending':'পাঠানো হচ্ছে...', 'verifying':'যাচাই হচ্ছে...',
+    'send':'কোড পাঠান',
+    'nameErr':'নাম দিন (কমপক্ষে ২ অক্ষর)',
+    'ageErr':'বয়স ১৮-৮০ এর মধ্যে হতে হবে',
+    'emailErr':'সঠিক ইমেইল দিন',
+    'passErr':'পাসওয়ার্ড কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা সহ',
+    'pass2Err':'পাসওয়ার্ড মিলছে না',
+    'gNameErr':'অভিভাবকের নাম দিন',
+    'gPhoneErr':'অভিভাবকের সঠিক মোবাইল নম্বর দিন',
+    'gPassErr':'পাসওয়ার্ড কমপক্ষে ৮ অক্ষর',, 'verify':'যাচাই করুন', 'sending':'পাঠানো হচ্ছে...', 'verifying':'যাচাই হচ্ছে...',
     'phoneErr':'সঠিক মোবাইল নম্বর দিন (01X XXXX XXXX)',
     'otpErr':'কোডটি সঠিক নয়। আবার চেষ্টা করুন।',
     'otpFullErr':'৬ সংখ্যার কোড দিন।',
@@ -734,7 +829,15 @@ const T = {
     'signinLink':'লগইন করুন',
   },
   en: {
-    'send':'Send Code', 'verify':'Verify Code', 'sending':'Sending...', 'verifying':'Verifying...',
+    'send':'Send Code',
+    'nameErr':'Enter your name (min 2 chars)',
+    'ageErr':'Age must be between 18 and 80',
+    'emailErr':'Enter a valid email address',
+    'passErr':'Min 8 chars, 1 uppercase letter, 1 number',
+    'pass2Err':'Passwords do not match',
+    'gNameErr':'Enter guardian name',
+    'gPhoneErr':'Enter valid guardian mobile number',
+    'gPassErr':'Password min 8 characters',, 'verify':'Verify Code', 'sending':'Sending...', 'verifying':'Verifying...',
     'phoneErr':'Enter a valid Bangladesh mobile number (01X XXXX XXXX)',
     'otpErr':'Incorrect code. Please try again.',
     'otpFullErr':'Enter the 6-digit code.',
@@ -814,101 +917,170 @@ function validPhone(raw){
 }
 
 // ── STEP 1: PHONE + OTP ────────────────────────
+// ── OWNER TYPE ─────────────────────────────────
+function setOwner(type) {
+  S.ownerType = type;
+  const isSelf = type === 'self';
+  // Buttons
+  ['ownSelf','ownGuardian'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el){ el.classList.remove('active'); el.setAttribute('aria-pressed','false'); }
+  });
+  const activeId = isSelf ? 'ownSelf' : 'ownGuardian';
+  const activeEl = document.getElementById(activeId);
+  if(activeEl){ activeEl.classList.add('active'); activeEl.setAttribute('aria-pressed','true'); }
+  // Guardian section
+  const gb = document.getElementById('guardianBox');
+  if(gb) gb.style.display = isSelf ? 'none' : '';
+  // Self password section
+  const sp = document.getElementById('selfPassSection');
+  if(sp) sp.style.display = isSelf ? '' : 'none';
+  // Labels
+  const nl = document.getElementById('nameLbl');
+  const pl = document.getElementById('phoneLbl');
+  const pr = document.getElementById('phoneReq');
+  if(nl) nl.setAttribute('data-bn', isSelf ? 'আপনার নাম' : 'সন্তানের নাম');
+  if(nl) nl.textContent = isSelf ? (S.lang==='en'?'Your name':'আপনার নাম') : (S.lang==='en'?'Child's name':'সন্তানের নাম');
+  if(pl) pl.textContent = isSelf ? (S.lang==='en'?'Mobile Number':'মোবাইল নম্বর') : (S.lang==='en'?'Child's mobile (optional)':'সন্তানের মোবাইল (ঐচ্ছিক)');
+  if(pr) pr.style.display = isSelf ? '' : 'none';
+  const ph = document.getElementById('phoneInput');
+  if(ph) ph.placeholder = isSelf ? '01XXXXXXXXX' : (S.lang==='en'?'Optional':'না থাকলে খালি রাখুন');
+}
+
+function togglePass(inputId) {
+  const el = document.getElementById(inputId);
+  if(el) el.type = el.type === 'password' ? 'text' : 'password';
+}
+
 function handleStep1(){
   if(!S.otpSent) sendOtp();
   else verifyOtp();
 }
 
-function togglePass(inputId, btnId) {
-  const inp = document.getElementById(inputId);
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-}
-
-function sendOtp(){
+function validateStep1Fields() {
   let valid = true;
   hideErr('s1err');
+  const isSelf = S.ownerType === 'self';
 
-  // Name validation
+  // Guardian validation
+  if(!isSelf) {
+    const gName = document.getElementById('gNameInput').value.trim();
+    const gRaw  = document.getElementById('gPhoneInput').value.trim();
+    const gPass = document.getElementById('gPassInput').value;
+    if(!gName || gName.length < 2) {
+      document.getElementById('gNameErr').style.display='block';
+      document.getElementById('gNameInput').classList.add('err'); valid=false;
+    } else {
+      document.getElementById('gNameErr').style.display='none';
+      document.getElementById('gNameInput').classList.remove('err');
+      S.guardianName = gName;
+    }
+    if(!validPhone(gRaw)) {
+      document.getElementById('gPhoneErr').style.display='block';
+      document.getElementById('gPhoneInput').classList.add('err'); valid=false;
+    } else {
+      document.getElementById('gPhoneErr').style.display='none';
+      document.getElementById('gPhoneInput').classList.remove('err');
+      S.guardianPhone = normPhone(gRaw);
+    }
+    if(!gPass || gPass.length < 8) {
+      document.getElementById('gPassErr').style.display='block';
+      document.getElementById('gPassInput').classList.add('err'); valid=false;
+    } else {
+      document.getElementById('gPassErr').style.display='none';
+      document.getElementById('gPassInput').classList.remove('err');
+      S.guardianPassword = gPass;
+    }
+  }
+
+  // Candidate name
   const name = document.getElementById('nameInput').value.trim();
-  if(!name || name.length < 2){
-    document.getElementById('nameErr').style.display = 'block';
-    document.getElementById('nameInput').classList.add('err');
-    valid = false;
+  if(!name || name.length < 2) {
+    document.getElementById('nameErr').style.display='block';
+    document.getElementById('nameInput').classList.add('err'); valid=false;
   } else {
-    document.getElementById('nameErr').style.display = 'none';
+    document.getElementById('nameErr').style.display='none';
     document.getElementById('nameInput').classList.remove('err');
     S.name = name;
   }
 
-  // Phone validation
+  // Phone — required for self, optional for guardian
   const raw = document.getElementById('phoneInput').value.trim();
-  if(!validPhone(raw)){
-    showErr('s1err', t('phoneErr'));
-    document.getElementById('phoneInput').classList.add('err');
-    valid = false;
+  if(isSelf) {
+    if(!validPhone(raw)) {
+      showErr('s1err', t('phoneErr'));
+      document.getElementById('phoneInput').classList.add('err'); valid=false;
+    } else {
+      document.getElementById('phoneInput').classList.remove('err');
+      document.getElementById('phoneInput').classList.add('ok');
+      S.phone = normPhone(raw);
+      S.candidatePhone = S.phone;
+    }
   } else {
-    document.getElementById('phoneInput').classList.remove('err');
-    document.getElementById('phoneInput').classList.add('ok');
-    S.phone = normPhone(raw);
+    if(raw && validPhone(raw)) {
+      S.candidatePhone = normPhone(raw);
+      document.getElementById('phoneInput').classList.add('ok');
+    } else {
+      S.candidatePhone = '';
+    }
+    S.phone = S.guardianPhone; // OTP goes to guardian
   }
 
-  // Age (optional but if filled, must be 18-80)
+  // Age (optional but validate if filled)
   const ageVal = document.getElementById('ageInput').value.trim();
   if(ageVal) {
     const age = parseInt(ageVal);
-    if(isNaN(age) || age < 18 || age > 80){
-      document.getElementById('ageErr').style.display = 'block';
-      document.getElementById('ageInput').classList.add('err');
-      valid = false;
+    if(isNaN(age)||age<18||age>80) {
+      document.getElementById('ageErr').style.display='block';
+      document.getElementById('ageInput').classList.add('err'); valid=false;
     } else {
-      document.getElementById('ageErr').style.display = 'none';
+      document.getElementById('ageErr').style.display='none';
       document.getElementById('ageInput').classList.remove('err');
       S.age = ageVal;
     }
-  } else {
-    S.age = '';
-  }
+  } else { S.age = ''; }
 
-  // Email (optional but if filled, must be valid)
+  // Email (optional but validate if filled)
   const emailVal = document.getElementById('emailInput').value.trim();
   if(emailVal) {
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
-      document.getElementById('emailErr').style.display = 'block';
-      document.getElementById('emailInput').classList.add('err');
-      valid = false;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      document.getElementById('emailErr').style.display='block';
+      document.getElementById('emailInput').classList.add('err'); valid=false;
     } else {
-      document.getElementById('emailErr').style.display = 'none';
+      document.getElementById('emailErr').style.display='none';
       document.getElementById('emailInput').classList.remove('err');
       S.email = emailVal;
     }
+  } else { S.email = ''; }
+
+  // Password (required for self only)
+  if(isSelf) {
+    const pass = document.getElementById('passInput').value;
+    const pass2 = document.getElementById('pass2Input').value;
+    if(!pass||pass.length<8||!/[A-Z]/.test(pass)||!/[0-9]/.test(pass)) {
+      document.getElementById('passErr').style.display='block';
+      document.getElementById('passInput').classList.add('err'); valid=false;
+    } else {
+      document.getElementById('passErr').style.display='none';
+      document.getElementById('passInput').classList.remove('err');
+      S.password = pass;
+    }
+    if(pass && pass !== pass2) {
+      document.getElementById('pass2Err').style.display='block';
+      document.getElementById('pass2Input').classList.add('err'); valid=false;
+    } else {
+      document.getElementById('pass2Err').style.display='none';
+      document.getElementById('pass2Input').classList.remove('err');
+    }
   } else {
-    S.email = '';
+    S.password = S.guardianPassword;
   }
 
-  // Password validation
-  const pass = document.getElementById('passInput').value;
-  if(!pass || pass.length < 8 || !/[A-Z]/.test(pass) || !/[0-9]/.test(pass)){
-    document.getElementById('passErr').style.display = 'block';
-    document.getElementById('passInput').classList.add('err');
-    valid = false;
-  } else {
-    document.getElementById('passErr').style.display = 'none';
-    document.getElementById('passInput').classList.remove('err');
-    S.password = pass;
-  }
+  return valid;
+}
 
-  // Confirm password
-  const pass2 = document.getElementById('pass2Input').value;
-  if(pass !== pass2){
-    document.getElementById('pass2Err').style.display = 'block';
-    document.getElementById('pass2Input').classList.add('err');
-    valid = false;
-  } else {
-    document.getElementById('pass2Err').style.display = 'none';
-    document.getElementById('pass2Input').classList.remove('err');
-  }
-
-  if(!valid) return;
+function sendOtp(){
+  if(!validateStep1Fields()) return;
 
   setBtnLoading('s1btn','s1btnTxt', t('sending'));
 
@@ -921,20 +1093,27 @@ function sendOtp(){
     resetBtn('s1btn','s1btnTxt', t('verify'));
     if(d && d.ok !== false){
       S.otpSent = true;
+      // Lock fields
+      ['nameInput','phoneInput','ageInput','emailInput','passInput','pass2Input',
+       'gNameInput','gPhoneInput','gPassInput'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.readOnly = true;
+      });
+      ['ownSelf','ownGuardian'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.disabled = true;
+      });
       document.getElementById('otpSection').style.display = '';
       document.getElementById('o1').focus();
-      document.getElementById('phoneInput').readOnly = true;
     } else {
       showErr('s1err', d.error || t('phoneErr'));
     }
   })
   .catch(() => {
-    // DEMO mode fallback
     resetBtn('s1btn','s1btnTxt', t('verify'));
     S.otpSent = true;
     document.getElementById('otpSection').style.display = '';
     document.getElementById('o1').focus();
-    document.getElementById('phoneInput').readOnly = true;
   });
 }
 
@@ -1035,7 +1214,9 @@ function validateConsent(){
 
   // Populate summary
   const ph = S.phone.replace(/^880/,'0');
-  document.getElementById('sumPhone').textContent = ph;
+  const isSelf = S.ownerType === 'self';
+  document.getElementById('sumPhone').textContent =
+    isSelf ? ph : (S.name + ' (' + (S.candidatePhone||'').replace(/^880/,'0') + ')');
   goStep(3);
 }
 
@@ -1046,7 +1227,19 @@ function startPayment(){
 
   fetch('/.netlify/functions/payment',{
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action:'createInvoice', phone: S.phone, name: S.name, package_code:'REG'})
+    body: JSON.stringify({
+      action:'createInvoice',
+      phone: S.phone,
+      name: S.name,
+      email: S.email,
+      age: S.age,
+      password: S.password,
+      owner_type: S.ownerType,
+      guardian_name: S.guardianName,
+      guardian_phone: S.guardianPhone,
+      candidate_phone: S.candidatePhone,
+      package_code:'REG'
+    })
   })
   .then(r => r.json())
   .then(d => {
