@@ -369,12 +369,12 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 <div class="page">
 <div class="card" role="main">
 
-<!-- ══ STEP 1: PHONE ══ -->
+<!-- ══ STEP 1: INFO + OTP ══ -->
 <div class="step active" id="step1" aria-labelledby="s1h">
   <div class="card-head">
-    <div class="card-step-badge">📱 <span data-bn="ধাপ ১" data-en="Step 1">ধাপ ১</span></div>
-    <h1 class="card-title" id="s1h" data-bn="আপনার মোবাইল নম্বর দিন" data-en="Enter your mobile number">আপনার মোবাইল নম্বর দিন</h1>
-    <p class="card-sub" data-bn="আপনার ফোনে একটি কোড যাবে। নাম বা NID পরে দেওয়া যাবে।" data-en="A code will be sent to your phone. Name & NID can be added later.">আপনার ফোনে একটি কোড যাবে। নাম বা NID পরে দেওয়া যাবে।</p>
+    <div class="card-step-badge">👤 <span data-bn="ধাপ ১" data-en="Step 1">ধাপ ১</span></div>
+    <h1 class="card-title" id="s1h" data-bn="আপনার তথ্য দিন" data-en="Enter your information">আপনার তথ্য দিন</h1>
+    <p class="card-sub" data-bn="সব তথ্য দিন, তারপর মোবাইলে কোড যাবে।" data-en="Fill in your details, then we'll send a code to your phone.">সব তথ্য দিন, তারপর মোবাইলে কোড যাবে।</p>
   </div>
   <div class="card-body">
     <div id="s1err" class="inline-err" role="alert"></div>
@@ -402,6 +402,87 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
       <div class="field-err" id="phoneErr" role="alert" data-bn="সঠিক মোবাইল নম্বর দিন (01X XXXX XXXX)" data-en="Enter a valid mobile number (01X XXXX XXXX)">সঠিক মোবাইল নম্বর দিন</div>
     </div>
 
+    <!-- Name -->
+    <div class="field">
+      <div class="field-lbl" id="nameLabel">
+        <span style="font-size:1.1rem">👤</span>
+        <span data-bn="আপনার নাম" data-en="Your Name">আপনার নাম</span>
+        <span class="req">*</span>
+      </div>
+      <div class="field-wrap">
+        <input class="field-input" type="text" id="nameInput"
+          autocomplete="name" placeholder="পূর্ণ নাম লিখুন"
+          aria-labelledby="nameLabel" maxlength="100">
+      </div>
+      <div class="field-err" id="nameErr" role="alert">নাম দিন (কমপক্ষে ২ অক্ষর)</div>
+    </div>
+
+    <!-- Age (optional) -->
+    <div class="field">
+      <div class="field-lbl" id="ageLabel">
+        <span style="font-size:1.1rem">🎂</span>
+        <span data-bn="বয়স" data-en="Age">বয়স</span>
+        <span style="font-size:.7rem;color:var(--ink3);font-weight:500"> (ঐচ্ছিক / optional)</span>
+      </div>
+      <div class="field-wrap">
+        <input class="field-input" type="number" id="ageInput"
+          inputmode="numeric" min="18" max="80" placeholder="যেমন: 25"
+          aria-labelledby="ageLabel">
+      </div>
+      <div class="field-err" id="ageErr" role="alert">বয়স ১৮-৮০ এর মধ্যে হতে হবে</div>
+    </div>
+
+    <!-- Email (optional) -->
+    <div class="field">
+      <div class="field-lbl" id="emailLabel">
+        <span style="font-size:1.1rem">📧</span>
+        <span data-bn="ইমেইল" data-en="Email">ইমেইল</span>
+        <span style="font-size:.7rem;color:var(--ink3);font-weight:500"> (ঐচ্ছিক / optional)</span>
+      </div>
+      <div class="field-wrap">
+        <input class="field-input" type="email" id="emailInput"
+          autocomplete="email" placeholder="example@email.com"
+          aria-labelledby="emailLabel">
+      </div>
+      <div class="field-err" id="emailErr" role="alert">সঠিক ইমেইল দিন</div>
+    </div>
+
+    <!-- Password -->
+    <div class="field">
+      <div class="field-lbl" id="passLabel">
+        <span style="font-size:1.1rem">🔒</span>
+        <span data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</span>
+        <span class="req">*</span>
+      </div>
+      <div class="field-wrap" style="position:relative">
+        <input class="field-input" type="password" id="passInput"
+          autocomplete="new-password" placeholder="কমপক্ষে ৮ অক্ষর"
+          aria-labelledby="passLabel" maxlength="64">
+        <button type="button" onclick="togglePass('passInput','eyePass')"
+          style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--ink3)"
+          aria-label="পাসওয়ার্ড দেখুন" id="eyePass">👁</button>
+      </div>
+      <div class="field-err" id="passErr" role="alert">পাসওয়ার্ড কমপক্ষে ৮ অক্ষর, একটি বড় হাতের অক্ষর ও একটি সংখ্যা থাকতে হবে</div>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="field">
+      <div class="field-lbl" id="pass2Label">
+        <span style="font-size:1.1rem">🔒</span>
+        <span data-bn="পাসওয়ার্ড নিশ্চিত করুন" data-en="Confirm Password">পাসওয়ার্ড নিশ্চিত করুন</span>
+        <span class="req">*</span>
+      </div>
+      <div class="field-wrap" style="position:relative">
+        <input class="field-input" type="password" id="pass2Input"
+          autocomplete="new-password" placeholder="পাসওয়ার্ড আবার লিখুন"
+          aria-labelledby="pass2Label" maxlength="64">
+        <button type="button" onclick="togglePass('pass2Input','eyePass2')"
+          style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--ink3)"
+          aria-label="পাসওয়ার্ড দেখুন" id="eyePass2">👁</button>
+      </div>
+      <div class="field-err" id="pass2Err" role="alert">পাসওয়ার্ড মিলছে না</div>
+    </div>
+
     <!-- OTP section (hidden until sent) -->
     <div id="otpSection" style="display:none">
       <div class="inline-info" id="otpInfo" data-bn="📲 কোড পাঠানো হয়েছে। ফোনে আসা ৬ সংখ্যার কোডটি নিচে লিখুন।" data-en="📲 Code sent! Enter the 6-digit code from your SMS.">📲 কোড পাঠানো হয়েছে। ফোনে আসা ৬ সংখ্যার কোডটি নিচে লিখুন।</div>
@@ -422,7 +503,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
     </div>
 
     <button class="btn btn-primary" id="s1btn" onclick="handleStep1()" style="margin-top:.5rem">
-      <span id="s1btnTxt" data-bn="কোড পাঠান" data-en="Send Code">কোড পাঠান</span>
+      <span id="s1btnTxt" data-bn="কোড পাঠান" data-en="Send Code">পরবর্তী → কোড পাঠান</span>
     </button>
   </div>
 </div>
@@ -622,9 +703,12 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 // ── STATE ──────────────────────────────────────
 const S = {
   phone: '',
+  name: '',
+  age: '',
+  email: '',
+  password: '',
   otpSent: false,
   otpVerified: false,
-  userId: 'demo-' + Date.now(),
   lang: 'bn',
   voiceSupported: false,
   recognition: null,
@@ -735,17 +819,96 @@ function handleStep1(){
   else verifyOtp();
 }
 
+function togglePass(inputId, btnId) {
+  const inp = document.getElementById(inputId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
 function sendOtp(){
+  let valid = true;
+  hideErr('s1err');
+
+  // Name validation
+  const name = document.getElementById('nameInput').value.trim();
+  if(!name || name.length < 2){
+    document.getElementById('nameErr').style.display = 'block';
+    document.getElementById('nameInput').classList.add('err');
+    valid = false;
+  } else {
+    document.getElementById('nameErr').style.display = 'none';
+    document.getElementById('nameInput').classList.remove('err');
+    S.name = name;
+  }
+
+  // Phone validation
   const raw = document.getElementById('phoneInput').value.trim();
   if(!validPhone(raw)){
     showErr('s1err', t('phoneErr'));
     document.getElementById('phoneInput').classList.add('err');
-    return;
+    valid = false;
+  } else {
+    document.getElementById('phoneInput').classList.remove('err');
+    document.getElementById('phoneInput').classList.add('ok');
+    S.phone = normPhone(raw);
   }
-  hideErr('s1err');
-  document.getElementById('phoneInput').classList.remove('err');
-  document.getElementById('phoneInput').classList.add('ok');
-  S.phone = normPhone(raw);
+
+  // Age (optional but if filled, must be 18-80)
+  const ageVal = document.getElementById('ageInput').value.trim();
+  if(ageVal) {
+    const age = parseInt(ageVal);
+    if(isNaN(age) || age < 18 || age > 80){
+      document.getElementById('ageErr').style.display = 'block';
+      document.getElementById('ageInput').classList.add('err');
+      valid = false;
+    } else {
+      document.getElementById('ageErr').style.display = 'none';
+      document.getElementById('ageInput').classList.remove('err');
+      S.age = ageVal;
+    }
+  } else {
+    S.age = '';
+  }
+
+  // Email (optional but if filled, must be valid)
+  const emailVal = document.getElementById('emailInput').value.trim();
+  if(emailVal) {
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+      document.getElementById('emailErr').style.display = 'block';
+      document.getElementById('emailInput').classList.add('err');
+      valid = false;
+    } else {
+      document.getElementById('emailErr').style.display = 'none';
+      document.getElementById('emailInput').classList.remove('err');
+      S.email = emailVal;
+    }
+  } else {
+    S.email = '';
+  }
+
+  // Password validation
+  const pass = document.getElementById('passInput').value;
+  if(!pass || pass.length < 8 || !/[A-Z]/.test(pass) || !/[0-9]/.test(pass)){
+    document.getElementById('passErr').style.display = 'block';
+    document.getElementById('passInput').classList.add('err');
+    valid = false;
+  } else {
+    document.getElementById('passErr').style.display = 'none';
+    document.getElementById('passInput').classList.remove('err');
+    S.password = pass;
+  }
+
+  // Confirm password
+  const pass2 = document.getElementById('pass2Input').value;
+  if(pass !== pass2){
+    document.getElementById('pass2Err').style.display = 'block';
+    document.getElementById('pass2Input').classList.add('err');
+    valid = false;
+  } else {
+    document.getElementById('pass2Err').style.display = 'none';
+    document.getElementById('pass2Input').classList.remove('err');
+  }
+
+  if(!valid) return;
 
   setBtnLoading('s1btn','s1btnTxt', t('sending'));
 
@@ -883,7 +1046,7 @@ function startPayment(){
 
   fetch('/.netlify/functions/payment',{
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action:'createInvoice', phone: S.phone, package_code:'REG'})
+    body: JSON.stringify({action:'createInvoice', phone: S.phone, name: S.name, package_code:'REG'})
   })
   .then(r => r.json())
   .then(d => {
