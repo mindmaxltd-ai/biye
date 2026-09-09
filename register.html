@@ -15,1413 +15,1495 @@
   --gd:#D4AF37;--gd-s:rgba(212,175,55,.15);
   --gr:#00A651;--gr-s:rgba(0,166,81,.1);
   --or:#E65100;--or-s:rgba(230,81,0,.08);
-  --te:#00796B;--te-s:rgba(0,121,107,.09);
   --grad:linear-gradient(120deg,#E2136E 0%,#6A2DA8 52%,#1565C0 100%);
-  --grad2:linear-gradient(135deg,#1565C0 0%,#6A2DA8 100%);
-  --grad3:linear-gradient(135deg,#E65100 0%,#E2136E 100%);
-  --grad4:linear-gradient(135deg,#00A651 0%,#1565C0 100%);
-  --grad5:linear-gradient(135deg,#D4AF37 0%,#E65100 100%);
-  --bg:#F7F8FC;--sur:#fff;
-  --bdr:rgba(20,20,20,.08);--bdr2:rgba(20,20,20,.15);
+  --grad-gd:linear-gradient(135deg,#D4AF37,#E65100);
+  --grad-gr:linear-gradient(135deg,#00A651,#1565C0);
+  --bg:#F4F6FB;--sur:#fff;
+  --bdr:rgba(20,20,20,.07);--bdr2:rgba(20,20,20,.14);
   --ink:#1A1A1A;--ink2:rgba(20,20,20,.55);--ink3:rgba(20,20,20,.35);
   --danger:#C20F5E;--danger-s:rgba(194,15,94,.08);
-  --sh:0 4px 20px -6px rgba(106,45,168,.16);
-  --sh2:0 8px 32px -8px rgba(106,45,168,.22);
-  --r:14px;--r2:10px;--r3:22px;
+  --sh:0 4px 24px -6px rgba(106,45,168,.14);
+  --sh2:0 8px 40px -10px rgba(106,45,168,.2);
+  --sh3:0 2px 8px -2px rgba(20,20,20,.08);
+  --r:14px;--r2:10px;--r3:24px;--r4:32px;
   --tx:.2s cubic-bezier(.4,0,.2,1);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 html[lang="ar"]{direction:rtl}
-html[lang="bn"] body,html[lang="hi"] body,html[lang="ar"] body{font-family:'Hind Siliguri','Noto Naskh Arabic','Inter',sans-serif}
+html[lang="bn"] body,html[lang="hi"] body,html[lang="ar"] body{
+  font-family:'Hind Siliguri','Noto Naskh Arabic','Inter',sans-serif}
 body{
   background:var(--bg);color:var(--ink);
   font-family:'Hind Siliguri','Inter',sans-serif;
-  font-size:17px;line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;overflow-x:hidden;
-  padding-bottom:calc(env(safe-area-inset-bottom) + 2rem);
+  font-size:16px;line-height:1.6;min-height:100vh;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
-:focus-visible{outline:3px solid var(--pk);outline-offset:3px;border-radius:6px}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid var(--pk);outline-offset:2px;border-radius:6px}
 
-/* ── NAV ── */
-.nav{background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr);
-  position:sticky;top:0;z-index:100;padding:.75rem 1.1rem;
-  padding-top:calc(.75rem + env(safe-area-inset-top));
-  display:flex;align-items:center;justify-content:space-between}
-.nav-logo{display:flex;align-items:center;gap:.5rem}
-.nav-logo img{height:34px;width:auto}
-.nav-right{display:flex;align-items:center;gap:.6rem}
-.lang-selector{position:relative}
+/* ── HERO SPLIT LAYOUT ── */
+.page-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+@media(max-width:900px){.page-wrap{grid-template-columns:1fr}}
+
+/* LEFT PANEL */
+.left-panel{
+  background:linear-gradient(160deg,#1a0533 0%,#3b1069 40%,#6A2DA8 70%,#E2136E 100%);
+  position:relative;overflow:hidden;padding:2rem 2.5rem;
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-height:100vh;
+}
+@media(max-width:900px){.left-panel{display:none}}
+.left-panel::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 40%,rgba(255,255,255,.07) 0%,transparent 60%),
+             radial-gradient(circle at 80% 80%,rgba(226,19,110,.25) 0%,transparent 50%);
+}
+.lp-logo{position:relative;z-index:2}
+.lp-logo img{height:42px;filter:brightness(0) invert(1)}
+.lp-content{position:relative;z-index:2}
+.lp-headline{font-size:2.4rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:1rem}
+.lp-headline em{font-style:normal;background:linear-gradient(90deg,#FFD700,#FF6B9D);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lp-sub{font-size:1rem;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:2rem}
+.lp-stats{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:2rem}
+.lp-stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r2);padding:.85rem 1rem;backdrop-filter:blur(8px)}
+.lp-stat-num{font-size:1.5rem;font-weight:900;color:#fff;font-family:'Inter',sans-serif;line-height:1}
+.lp-stat-lbl{font-size:.72rem;color:rgba(255,255,255,.65);margin-top:.2rem}
+.lp-features{display:flex;flex-direction:column;gap:.65rem}
+.lp-feature{display:flex;align-items:center;gap:.75rem}
+.lp-feature-icon{width:32px;height:32px;border-radius:10px;
+  background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;flex-shrink:0}
+.lp-feature-text{font-size:.82rem;color:rgba(255,255,255,.8);font-weight:500}
+.lp-verse{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--r);padding:1.1rem 1.2rem;position:relative;z-index:2}
+.lp-verse-arabic{font-size:1rem;color:#FFD700;direction:rtl;line-height:1.9;
+  font-family:'Noto Naskh Arabic',serif;margin-bottom:.4rem}
+.lp-verse-trans{font-size:.75rem;color:rgba(255,255,255,.7);line-height:1.65;font-style:italic}
+.lp-verse-ref{font-size:.65rem;color:rgba(255,255,255,.45);margin-top:.4rem;font-weight:700}
+/* Decorative circles */
+.deco-circle{position:absolute;border-radius:50%;pointer-events:none}
+.dc1{width:300px;height:300px;background:radial-gradient(circle,rgba(226,19,110,.2),transparent 70%);
+  top:-80px;right:-80px}
+.dc2{width:200px;height:200px;background:radial-gradient(circle,rgba(212,175,55,.15),transparent 70%);
+  bottom:15%;left:-60px}
+.dc3{width:150px;height:150px;background:radial-gradient(circle,rgba(106,45,168,.3),transparent 70%);
+  bottom:30%;right:10%}
+
+/* RIGHT PANEL */
+.right-panel{
+  background:var(--bg);overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+.rp-nav{
+  background:rgba(255,255,255,.96);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;
+  padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;
+}
+@media(min-width:901px){.rp-nav-logo{display:none}}
+.rp-nav-right{display:flex;align-items:center;gap:.65rem}
 .lang-btn{padding:.35rem .75rem;border-radius:50px;border:1.5px solid var(--bdr2);
-  font-size:.78rem;font-weight:800;color:var(--ink2);background:var(--sur);
-  cursor:pointer;transition:var(--tx);display:flex;align-items:center;gap:.3rem}
+  font-size:.78rem;font-weight:800;color:var(--ink2);display:flex;align-items:center;gap:.3rem;transition:var(--tx)}
 .lang-btn:hover{border-color:var(--pk);color:var(--pk)}
 .lang-dropdown{position:absolute;top:calc(100% + .5rem);right:0;background:var(--sur);
   border:1px solid var(--bdr2);border-radius:var(--r);box-shadow:var(--sh2);
-  min-width:140px;display:none;z-index:200;overflow:hidden}
+  min-width:150px;display:none;z-index:300;overflow:hidden}
 .lang-dropdown.open{display:block}
 .lang-opt{display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;
   font-size:.85rem;font-weight:600;cursor:pointer;transition:var(--tx);width:100%;text-align:start}
 .lang-opt:hover{background:var(--pk-s);color:var(--pk)}
 .lang-opt.active{background:var(--pu-s);color:var(--pu)}
+.lang-sel{position:relative}
 
-/* ── STEP DOTS ── */
-.steps-row{display:flex;align-items:center;justify-content:center;gap:0;padding:1.25rem 1rem .5rem}
-.sdot-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem}
-.sdot{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--bdr2);background:var(--sur);
-  display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;
-  color:var(--ink3);transition:var(--tx);font-family:'Inter',sans-serif}
-.sdot.done{background:var(--gr);border-color:var(--gr);color:#fff}
-.sdot.active{background:var(--grad);border-color:transparent;color:#fff;
-  box-shadow:0 4px 16px -4px rgba(106,45,168,.5)}
-.sdot-lbl{font-size:.65rem;font-weight:700;color:var(--ink3);text-align:center;white-space:nowrap}
-.sdot-lbl.active{color:var(--pu);font-weight:800}
-.sdot-lbl.done{color:var(--gr)}
-.sline{flex:1;height:3px;background:var(--bdr2);min-width:24px;max-width:56px;
-  margin-bottom:18px;border-radius:4px;transition:var(--tx)}
-.sline.done{background:var(--gr)}
+/* Progress bar */
+.progress-bar{height:3px;background:var(--bdr);position:relative}
+.progress-fill{height:100%;background:var(--grad);border-radius:2px;transition:width .4s ease}
 
-/* ── CARD ── */
-.card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh2);margin:0 1rem;overflow:hidden}
-.card-head{padding:1.5rem 1.4rem 1.1rem}
-.card-step-badge{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;font-weight:800;
-  text-transform:uppercase;letter-spacing:.08em;color:var(--pu);margin-bottom:.5rem}
-.card-title{font-size:1.3rem;font-weight:900;line-height:1.25;margin-bottom:.3rem}
-.card-sub{font-size:.88rem;color:var(--ink2);line-height:1.6}
-.card-body{padding:1.4rem}
+/* ── FORM SHELL ── */
+.rp-form{flex:1;padding:1.5rem 1.5rem 3rem;max-width:520px;width:100%;margin:0 auto}
 
-/* ── COLORFUL SECTION HEADERS ── */
-.section-header{
-  display:flex;align-items:center;gap:.6rem;
-  font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;
-  padding:.55rem .85rem;border-radius:50px;margin-bottom:.85rem;
-}
-.sh-pk{background:var(--pk-s);color:var(--pk)}
-.sh-pu{background:var(--pu-s);color:var(--pu)}
-.sh-bl{background:var(--bl-s);color:var(--bl)}
-.sh-gd{background:var(--gd-s);color:#5a3e00}
-.sh-gr{background:var(--gr-s);color:#00602e}
-.sh-or{background:var(--or-s);color:var(--or)}
+/* Step indicators */
+.step-pills{display:flex;gap:.4rem;margin-bottom:1.5rem;overflow-x:auto;scrollbar-width:none;padding-bottom:.1rem}
+.step-pills::-webkit-scrollbar{display:none}
+.step-pill{display:flex;align-items:center;gap:.4rem;padding:.35rem .85rem;
+  border-radius:50px;font-size:.72rem;font-weight:700;white-space:nowrap;
+  border:1.5px solid var(--bdr2);color:var(--ink3);transition:var(--tx);cursor:default}
+.step-pill.done{background:var(--gr-s);border-color:var(--gr);color:var(--gr)}
+.step-pill.active{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 3px 12px -4px rgba(106,45,168,.45)}
+.step-pill-num{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0}
+.step-pill.done .step-pill-num{background:var(--gr);color:#fff}
 
-/* ── VERSE CARDS ── */
-.verse-card{border-radius:var(--r2);padding:1rem 1.1rem;margin-bottom:1rem;position:relative;overflow:hidden}
-.verse-card::before{content:'';position:absolute;inset:0;opacity:.07}
-.verse-quran{background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(0,166,81,.1));border:1.5px solid rgba(212,175,55,.35)}
-.verse-hadith{background:linear-gradient(135deg,rgba(106,45,168,.1),rgba(21,101,192,.08));border:1.5px solid rgba(106,45,168,.2)}
-.verse-arabic{font-size:1.05rem;font-weight:600;color:#3a2000;direction:rtl;line-height:2;margin-bottom:.35rem;font-family:'Noto Naskh Arabic','Hind Siliguri',serif}
-.verse-trans{font-size:.82rem;color:var(--ink2);line-height:1.7;font-style:italic;margin-bottom:.25rem}
-.verse-ref{font-size:.7rem;font-weight:800;display:inline-flex;align-items:center;gap:.3rem;
-  padding:.18rem .65rem;border-radius:50px;background:rgba(212,175,55,.2);color:#5a3e00}
+/* Section card */
+.form-section{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh);
+  border:1px solid var(--bdr);overflow:hidden;margin-bottom:1rem}
+.fs-head{padding:1.1rem 1.4rem .9rem;border-bottom:1px solid var(--bdr)}
+.fs-title{font-size:1rem;font-weight:800;display:flex;align-items:center;gap:.5rem}
+.fs-sub{font-size:.78rem;color:var(--ink2);margin-top:.2rem}
+.fs-body{padding:1.2rem 1.4rem}
 
-/* ── OWNER BUTTONS ── */
-.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-top:.2rem}
+/* Verse cards inside form */
+.verse-inline{border-radius:var(--r2);padding:.85rem 1rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.vi-quran{background:linear-gradient(135deg,rgba(212,175,55,.13),rgba(0,166,81,.07));border:1.5px solid rgba(212,175,55,.3)}
+.vi-hadith{background:linear-gradient(135deg,rgba(106,45,168,.08),rgba(21,101,192,.06));border:1.5px solid rgba(106,45,168,.15)}
+.vi-arabic{font-size:1rem;font-weight:600;color:#3a2000;direction:rtl;line-height:2;margin-bottom:.3rem;font-family:'Noto Naskh Arabic',serif}
+.vi-trans{font-size:.76rem;color:var(--ink2);font-style:italic;line-height:1.6;margin-bottom:.25rem}
+.vi-ref{font-size:.65rem;font-weight:800;padding:.15rem .55rem;border-radius:50px;
+  background:rgba(212,175,55,.2);color:#5a3e00;display:inline-flex;align-items:center;gap:.25rem}
+
+/* Owner type buttons */
+.owner-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;margin-bottom:.5rem}
+.owner-row2{display:grid;grid-template-columns:repeat(2,1fr);gap:.45rem}
 .owner-btn{
-  border:2.5px solid var(--bdr2);border-radius:var(--r2);
-  padding:1rem .75rem;text-align:center;cursor:pointer;transition:var(--tx);
-  font-family:inherit;background:var(--sur);position:relative;overflow:hidden;
+  padding:.7rem .4rem;border-radius:var(--r2);border:2px solid var(--bdr2);
+  background:var(--sur);cursor:pointer;transition:var(--tx);
+  text-align:center;font-family:inherit;position:relative;overflow:hidden;
 }
-.owner-btn::before{content:'';position:absolute;inset:0;opacity:0;transition:var(--tx)}
-.owner-btn:hover{border-color:var(--pu);transform:translateY(-2px);box-shadow:var(--sh)}
-.owner-btn.active{border-color:var(--pk);box-shadow:0 0 0 3px var(--pk-s)}
-.owner-btn.active::before{opacity:1}
-.owner-icon{font-size:1.6rem;margin-bottom:.4rem;display:block}
-.owner-label{font-size:.88rem;font-weight:800;display:block;margin-bottom:.15rem}
-.owner-sub{font-size:.68rem;color:var(--ink3)}
+.owner-btn:hover{border-color:var(--pu);transform:translateY(-1px);box-shadow:var(--sh3)}
+.owner-btn.active{border-color:var(--pk);background:var(--pk-s);box-shadow:0 0 0 3px rgba(226,19,110,.12)}
+.ob-icon{font-size:1.4rem;display:block;margin-bottom:.25rem}
+.ob-label{font-size:.75rem;font-weight:800;color:var(--ink)}
+.owner-btn.active .ob-label{color:var(--pk)}
 
-/* ── FIELDS ── */
-.field{margin-bottom:1.1rem}
-.field-lbl{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;
-  color:var(--ink2);margin-bottom:.5rem}
-.field-lbl .req{color:var(--pk);font-size:.9rem}
+/* Seeking */
+.seek-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.seek-btn{padding:.85rem .5rem;border-radius:var(--r2);border:2.5px solid var(--bdr2);
+  background:var(--sur);cursor:pointer;transition:var(--tx);text-align:center;font-family:inherit}
+.seek-btn:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.seek-btn.active-bride{border-color:var(--pk);background:linear-gradient(135deg,rgba(226,19,110,.06),rgba(212,175,55,.06))}
+.seek-btn.active-groom{border-color:var(--bl);background:linear-gradient(135deg,rgba(21,101,192,.06),rgba(106,45,168,.06))}
+.sb-icon{font-size:1.6rem;display:block;margin-bottom:.3rem}
+.sb-label{font-size:.85rem;font-weight:800}
+.sb-sub{font-size:.68rem;color:var(--ink3);margin-top:.1rem}
+
+/* Fields */
+.field{margin-bottom:1rem}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:380px){.field-row{grid-template-columns:1fr}}
+.field-lbl{font-size:.8rem;font-weight:700;color:var(--ink2);margin-bottom:.4rem;
+  display:flex;align-items:center;gap:.4rem}
+.req{color:var(--pk);font-weight:800}
+.opt-tag{font-size:.65rem;background:rgba(20,20,20,.06);color:var(--ink3);
+  padding:.1rem .4rem;border-radius:4px;font-weight:600}
 .field-wrap{position:relative}
-.field-input{
-  width:100%;padding:.85rem 3rem .85rem 1rem;
-  border:2px solid var(--bdr2);border-radius:var(--r2);
-  font-size:1rem;color:var(--ink);background:var(--sur);
-  outline:none;transition:var(--tx);font-family:inherit;-webkit-appearance:none;
+.fi{
+  width:100%;padding:.82rem 1rem;border:2px solid var(--bdr2);border-radius:var(--r2);
+  font-size:.92rem;color:var(--ink);background:var(--sur);outline:none;
+  transition:var(--tx);font-family:inherit;-webkit-appearance:none;
+  appearance:none;
 }
-.field-input:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.1)}
-.field-input.ok{border-color:var(--gr)}
-.field-input.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-s)}
-.field-hint{font-size:.76rem;color:var(--ink3);margin-top:.35rem}
-.field-err{font-size:.76rem;color:var(--danger);font-weight:600;margin-top:.35rem;display:none}
-.field-err.show,.field-err[style*="block"]{display:block}
-.phone-wrap{display:flex;gap:.5rem}
-.phone-prefix{display:flex;align-items:center;padding:0 .85rem;
-  border:2px solid var(--bdr2);border-radius:var(--r2);
-  font-size:1rem;font-weight:700;color:var(--ink2);background:var(--bg);white-space:nowrap;flex-shrink:0}
-.phone-field{flex:1}
-.pw-btn{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
-  background:none;border:none;cursor:pointer;font-size:1rem;color:var(--ink3);padding:.25rem}
-.pw-btn:hover{color:var(--pu)}
+.fi:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.08)}
+.fi.ok{border-color:var(--gr)}
+.fi.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-s)}
+select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236A2DA8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+.fi-icon{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none}
+.fi.has-icon{padding-left:2.6rem}
+.pw-toggle{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;font-size:1rem;color:var(--ink3);padding:.2rem}
+.phone-row{display:flex;gap:.5rem}
+.phone-prefix{padding:0 .85rem;border:2px solid var(--bdr2);border-radius:var(--r2);
+  font-size:.85rem;font-weight:700;color:var(--ink2);background:var(--bg);
+  white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:.3rem}
+.fi-hint{font-size:.72rem;color:var(--ink3);margin-top:.3rem}
+.fi-err{font-size:.73rem;color:var(--danger);font-weight:600;margin-top:.3rem;display:none}
+.fi-err.show,.fi-err[style*="block"]{display:block}
 
-/* ── PASSWORD STRENGTH ── */
-.pw-strength{margin-top:.4rem}
-.pw-bars{display:flex;gap:.25rem;margin-bottom:.25rem}
-.pw-bar{flex:1;height:4px;border-radius:4px;background:var(--bdr2);transition:var(--tx)}
-.pw-label{font-size:.72rem;font-weight:700}
-.str-0 .pw-bar:nth-child(1){background:var(--danger)}
-.str-1 .pw-bar:nth-child(-n+2){background:var(--or)}
-.str-2 .pw-bar:nth-child(-n+3){background:var(--gd)}
-.str-3 .pw-bar{background:var(--gr)}
+/* Password strength */
+.pw-bars{display:flex;gap:.25rem;margin-top:.4rem}
+.pw-bar{flex:1;height:4px;border-radius:3px;background:var(--bdr2);transition:background .3s}
+.pw-hint{font-size:.7rem;font-weight:700;margin-top:.25rem}
+.str0 .pw-bar:nth-child(1){background:#ef4444}
+.str1 .pw-bar:nth-child(-n+2){background:var(--or)}
+.str2 .pw-bar:nth-child(-n+3){background:var(--bl)}
+.str3 .pw-bar{background:var(--gr)}
 
-/* ── OTP ── */
-.otp-boxes{display:flex;gap:.55rem;justify-content:center}
-.otp-box{width:52px;height:60px;border-radius:var(--r2);border:2px solid var(--bdr2);
-  text-align:center;font-size:1.6rem;font-weight:800;font-family:'Inter',sans-serif;
+/* OTP */
+.otp-mask{font-size:.88rem;font-weight:700;color:var(--pu);text-align:center;margin-bottom:.65rem}
+.otp-boxes{display:flex;gap:.5rem;justify-content:center}
+.otp-box{width:50px;height:58px;border-radius:var(--r2);border:2px solid var(--bdr2);
+  text-align:center;font-size:1.5rem;font-weight:800;font-family:'Inter',sans-serif;
   color:var(--ink);outline:none;transition:var(--tx);-webkit-appearance:none}
-.otp-box:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.12)}
+.otp-box:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.1)}
 .otp-box.filled{border-color:var(--gr);color:var(--gr)}
-.resend-row{text-align:center;font-size:.82rem;color:var(--ink2);margin-top:.75rem}
-.resend-btn{color:var(--pu);font-weight:700;cursor:pointer;background:none;border:none;padding:.1rem}
-.otp-timer{color:var(--ink3);font-weight:700}
+.otp-footer{display:flex;justify-content:space-between;align-items:center;margin-top:.65rem;font-size:.8rem;color:var(--ink2)}
+.resend-btn{color:var(--pu);font-weight:700;cursor:pointer;transition:var(--tx);display:none}
+.resend-btn:hover{color:var(--pk)}
+.otp-timer{color:var(--ink3);font-family:'Inter',sans-serif;font-weight:700}
 
-/* ── CONSENT ITEMS ── */
-.consent-section-lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
-  color:var(--ink3);margin-bottom:.65rem;display:flex;align-items:center;gap:.4rem}
-.ctag{padding:.2rem .6rem;border-radius:50px;font-size:.62rem;font-weight:700}
-.ctag-req{background:var(--pk-s);color:var(--pk)}
-.ctag-opt{background:rgba(20,20,20,.06);color:var(--ink3)}
-.consent-item{
-  display:flex;align-items:flex-start;gap:.85rem;
-  padding:1rem 1.1rem;border:1.5px solid var(--bdr);border-radius:var(--r2);
-  margin-bottom:.55rem;cursor:pointer;transition:var(--tx);position:relative;
-  -webkit-tap-highlight-color:transparent;
-}
-.consent-item:hover{border-color:var(--pu);background:var(--pu-s)}
-.consent-item.checked{border-color:var(--gr);background:var(--gr-s)}
-.consent-item.err{border-color:var(--danger);background:var(--danger-s)}
-.consent-box{width:24px;height:24px;border:2px solid var(--bdr2);border-radius:7px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-top:2px;transition:var(--tx);font-size:.85rem}
-.consent-item.checked .consent-box{background:var(--gr);border-color:var(--gr);color:#fff}
-.ctitle{font-size:.9rem;font-weight:700;margin-bottom:.2rem}
-.cdesc{font-size:.78rem;color:var(--ink2);line-height:1.55}
-.real-cb{position:absolute;opacity:0;width:0;height:0}
-/* Consent tooltip */
-.consent-full{
-  display:none;margin-top:.6rem;padding:.65rem .8rem;
-  background:rgba(20,20,20,.04);border-radius:8px;
-  font-size:.75rem;color:var(--ink2);line-height:1.65;border-left:3px solid var(--pu)}
-.consent-item:hover .consent-full{display:block}
-.consent-link{color:var(--pu);font-weight:700;text-decoration:underline;cursor:pointer}
+/* Consent */
+.consent-item{display:flex;gap:.85rem;padding:.9rem 1rem;border:1.5px solid var(--bdr);
+  border-radius:var(--r2);margin-bottom:.5rem;cursor:pointer;transition:var(--tx);position:relative}
+.consent-item:hover{border-color:var(--pu);background:rgba(106,45,168,.03)}
+.consent-item.checked{border-color:var(--gr);background:rgba(0,166,81,.04)}
+.consent-item.cerr{border-color:var(--danger);background:var(--danger-s)}
+.cbox{width:22px;height:22px;border:2px solid var(--bdr2);border-radius:6px;
+  flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;transition:var(--tx)}
+.consent-item.checked .cbox{background:var(--gr);border-color:var(--gr);color:#fff}
+.ctitle{font-size:.88rem;font-weight:700;margin-bottom:.15rem}
+.cdesc{font-size:.75rem;color:var(--ink2);line-height:1.55}
+.cfull{display:none;margin-top:.55rem;padding:.6rem .75rem;
+  background:rgba(20,20,20,.04);border-left:3px solid var(--pu);border-radius:0 6px 6px 0;
+  font-size:.74rem;color:var(--ink2);line-height:1.65}
+.consent-item:hover .cfull{display:block}
 
-/* ── PRICE BOX ── */
-.price-box{background:var(--gd-s);border:1.5px solid rgba(212,175,55,.35);
-  border-radius:var(--r2);padding:1rem 1.2rem;margin-bottom:1.2rem}
-.price-row{display:flex;justify-content:space-between;align-items:center;
-  padding:.35rem 0;font-size:.9rem}
-.price-row+.price-row{border-top:1px solid rgba(212,175,55,.2)}
-.price-row .lbl{color:var(--ink2)}
-.price-row .val{font-weight:700}
-.price-row.total .val{font-size:1.15rem;font-weight:900;color:#3a2000}
+/* Price summary */
+.price-sum{background:linear-gradient(135deg,var(--gd-s),rgba(212,175,55,.05));
+  border:1.5px solid rgba(212,175,55,.35);border-radius:var(--r2);padding:1rem 1.1rem;margin-bottom:1rem}
+.price-row{display:flex;justify-content:space-between;font-size:.88rem;padding:.3rem 0}
+.price-row+.price-row{border-top:1px dashed rgba(212,175,55,.3)}
+.price-row.total{font-weight:900;font-size:1rem;color:#3a2000}
+.profile-summary{background:var(--bg);border:1px solid var(--bdr);
+  border-radius:var(--r2);padding:.85rem 1rem;margin-bottom:1rem}
+.ps-row{display:flex;justify-content:space-between;padding:.3rem 0;font-size:.85rem;border-bottom:1px solid var(--bdr)}
+.ps-row:last-child{border-bottom:none}
+.ps-row .lbl{color:var(--ink2)}
+.ps-row .val{font-weight:700;display:flex;align-items:center;gap:.35rem}
+.dot-ok{width:7px;height:7px;border-radius:50%;background:var(--gr);flex-shrink:0}
 
-/* ── SUM CARD ── */
-.sum-card{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);
-  padding:1rem 1.1rem;margin-bottom:1.1rem}
-.sum-row{display:flex;justify-content:space-between;align-items:center;
-  padding:.4rem 0;font-size:.88rem;border-bottom:1px solid var(--bdr)}
-.sum-row:last-child{border-bottom:none}
-.sum-row .lbl{color:var(--ink2)}
-.sum-row .val{font-weight:700;display:flex;align-items:center;gap:.35rem}
-.dot-ok{width:8px;height:8px;border-radius:50%;background:var(--gr);flex-shrink:0}
-
-/* ── BUTTONS ── */
+/* Buttons */
 .btn{display:flex;align-items:center;justify-content:center;gap:.5rem;
-  width:100%;padding:1rem 1.5rem;border-radius:var(--r2);
-  font-size:1rem;font-weight:800;cursor:pointer;border:none;
-  font-family:inherit;transition:var(--tx);min-height:54px;
-  -webkit-tap-highlight-color:transparent}
+  width:100%;padding:.95rem 1.5rem;border-radius:var(--r2);font-size:.95rem;
+  font-weight:800;cursor:pointer;border:none;font-family:inherit;
+  transition:var(--tx);min-height:52px;-webkit-tap-highlight-color:transparent}
 .btn-primary{background:var(--grad);color:#fff;box-shadow:0 5px 22px -8px rgba(106,45,168,.5)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px -8px rgba(106,45,168,.6)}
-.btn-primary:active{transform:translateY(0)}
+.btn-primary:active{transform:none}
 .btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none}
-.btn-ghost{background:var(--sur);color:var(--ink2);border:1.5px solid var(--bdr2);margin-top:.65rem}
+.btn-ghost{background:var(--sur);color:var(--ink2);border:1.5px solid var(--bdr2)}
 .btn-ghost:hover{border-color:var(--pk);color:var(--pk)}
-.btn-pay{background:var(--gd);color:#2a1a00;border:2px solid #F0D878;
-  box-shadow:0 4px 18px -6px rgba(212,175,55,.45)}
-.btn-pay:hover{transform:translateY(-2px);background:#F0D878}
+.btn-pay{background:linear-gradient(120deg,#D4AF37,#E65100);color:#fff;
+  box-shadow:0 5px 22px -8px rgba(212,175,55,.6)}
+.btn-pay:hover{transform:translateY(-2px);box-shadow:0 8px 28px -8px rgba(212,175,55,.7)}
 .btn-pay:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-row{display:flex;gap:.6rem;margin-top:.75rem}
+.btn-row .btn-ghost{flex:1}
+.btn-row .btn-primary{flex:2}
 
-/* ── INLINE ALERTS ── */
-.inline-err{background:var(--danger-s);border:1px solid rgba(194,15,94,.2);
-  border-radius:var(--r2);padding:.75rem 1rem;font-size:.85rem;
-  color:var(--danger);font-weight:600;margin-bottom:.9rem;display:none}
-.inline-err.show{display:block}
-.inline-info{background:var(--bl-s);border:1px solid rgba(21,101,192,.15);
-  border-radius:var(--r2);padding:.75rem 1rem;font-size:.85rem;color:var(--bl);margin-bottom:.9rem}
-.inline-ok{background:var(--gr-s);border:1px solid rgba(0,166,81,.2);
-  border-radius:var(--r2);padding:.75rem 1rem;font-size:.85rem;color:#00602e;font-weight:600;margin-bottom:.9rem;display:none}
-.inline-ok.show{display:block}
+/* Alerts */
+.alert{border-radius:var(--r2);padding:.75rem 1rem;font-size:.84rem;font-weight:600;margin-bottom:.85rem;display:none}
+.alert.show{display:block}
+.alert-err{background:var(--danger-s);border:1px solid rgba(194,15,94,.2);color:var(--danger)}
+.alert-ok{background:var(--gr-s);border:1px solid rgba(0,166,81,.2);color:#00602e}
+.alert-info{background:var(--bl-s);border:1px solid rgba(21,101,192,.15);color:var(--bl)}
 
-/* ── STEPS ── */
-.step{display:none;animation:fadeup .3s ease}
-.step.active{display:block}
-@keyframes fadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* Success */
+.success-wrap{text-align:center;padding:2rem 1rem}
+.success-anim{width:90px;height:90px;border-radius:50%;background:var(--gr-s);
+  border:3px solid var(--gr);margin:0 auto 1.25rem;
+  display:flex;align-items:center;justify-content:center;font-size:2.2rem;
+  animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+.success-cards{display:grid;gap:.5rem;text-align:left;margin:1.25rem 0}
+.sc{display:flex;align-items:center;gap:.75rem;background:var(--bg);
+  border:1px solid var(--bdr);border-radius:var(--r2);padding:.8rem 1rem}
+.sc-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:.95rem}
+.sc-text strong{display:block;font-size:.85rem;font-weight:700}
+.sc-text span{font-size:.74rem;color:var(--ink2)}
 
-/* ── SPINNER ── */
-.spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);
-  border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+/* Spinner */
+.spinner{display:inline-block;width:16px;height:16px;
+  border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;
+  border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── SUCCESS ── */
-.success-wrap{text-align:center;padding:1.25rem .5rem}
-.success-ring{width:80px;height:80px;border-radius:50%;background:var(--gr-s);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 1.25rem;border:3px solid var(--gr);font-size:2rem}
-.success-cards{display:grid;gap:.6rem;margin:1.25rem 0;text-align:start}
-.success-item{display:flex;align-items:center;gap:.75rem;background:var(--bg);
-  border:1px solid var(--bdr);border-radius:var(--r2);padding:.85rem 1rem}
-.si-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
-  justify-content:center;font-size:1rem;flex-shrink:0}
-.si-text strong{display:block;font-size:.88rem;font-weight:700}
-.si-text span{font-size:.76rem;color:var(--ink2)}
+/* Deco chips */
+.chip-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.85rem}
+.chip{padding:.25rem .65rem;border-radius:50px;font-size:.7rem;font-weight:700;
+  display:inline-flex;align-items:center;gap:.25rem}
+.chip-pk{background:var(--pk-s);color:var(--pk)}
+.chip-pu{background:var(--pu-s);color:var(--pu)}
+.chip-bl{background:var(--bl-s);color:var(--bl)}
+.chip-gr{background:var(--gr-s);color:#005c2e}
+.chip-gd{background:var(--gd-s);color:#5a3e00}
 
-/* ── PAY STATES ── */
-.pay-state{text-align:center;padding:1.5rem .5rem}
-.pay-icon{width:68px;height:68px;border-radius:50%;margin:0 auto 1rem;
-  display:flex;align-items:center;justify-content:center;font-size:2rem}
-.pay-icon.spin svg{animation:spin 1s linear infinite}
+/* Guardian box */
+.guardian-box{background:linear-gradient(135deg,var(--gd-s),rgba(212,175,55,.04));
+  border:1.5px solid rgba(212,175,55,.35);border-radius:var(--r2);padding:.85rem 1rem;margin-bottom:.85rem}
+.candidate-box{background:linear-gradient(135deg,var(--bl-s),rgba(106,45,168,.04));
+  border:1.5px solid rgba(21,101,192,.2);border-radius:var(--r2);padding:.85rem 1rem;margin-bottom:.85rem}
+.box-header{font-size:.8rem;font-weight:800;margin-bottom:.2rem;display:flex;align-items:center;gap:.4rem}
+.box-sub{font-size:.73rem;color:var(--ink2)}
 
-/* ── VOICE ── */
-.voice-btn{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);
-  width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:var(--pu-s);color:var(--pu);font-size:1rem;transition:var(--tx);cursor:pointer;border:none;flex-shrink:0}
-.voice-btn:hover{background:var(--pu);color:#fff}
-.voice-btn.listening{background:var(--pk);color:#fff;animation:pulse-ring 1.2s infinite}
-.voice-btn.nosupport{display:none}
-@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(226,19,110,.5)}70%{box-shadow:0 0 0 10px rgba(226,19,110,0)}100%{box-shadow:0 0 0 0 rgba(226,19,110,0)}}
-.voice-fab{position:fixed;bottom:calc(1.2rem + env(safe-area-inset-bottom));right:1.2rem;
-  width:54px;height:54px;border-radius:50%;background:var(--grad);color:#fff;font-size:1.4rem;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 22px -6px rgba(106,45,168,.6);cursor:pointer;border:none;z-index:200;transition:var(--tx)}
+/* Step visibility */
+.step{display:none}
+.step.active{display:block;animation:fadeup .3s ease}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Pay processing */
+.pay-spin{text-align:center;padding:2rem 1rem}
+.pay-orb{width:72px;height:72px;border-radius:50%;margin:0 auto .85rem;
+  background:var(--pu-s);display:flex;align-items:center;justify-content:center}
+.pay-orb svg{animation:spin 1.2s linear infinite;color:var(--pu)}
+.pay-fail{text-align:center;padding:1.5rem 1rem}
+.pay-fail-icon{font-size:3rem;margin-bottom:.75rem}
+
+/* Floating stickers */
+.fs{position:fixed;pointer-events:none;z-index:0;opacity:.12;font-size:2.2rem;
+  animation:float 7s ease-in-out infinite}
+.fs1{top:12%;left:1%;animation-delay:0s}
+.fs2{top:55%;right:1%;animation-delay:3s}
+.fs3{bottom:18%;left:2%;animation-delay:1.5s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(8deg)}}
+
+/* Voice */
+.voice-fab{position:fixed;bottom:calc(1.5rem + env(safe-area-inset-bottom));right:1.5rem;
+  width:52px;height:52px;border-radius:50%;background:var(--grad);color:#fff;
+  font-size:1.3rem;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 24px -6px rgba(106,45,168,.6);cursor:pointer;border:none;
+  z-index:200;transition:var(--tx)}
 .voice-fab:hover{transform:scale(1.08)}
 .voice-fab.nosupport{display:none}
-.voice-panel{position:fixed;bottom:0;left:0;right:0;
-  background:rgba(26,26,26,.96);backdrop-filter:blur(16px);
-  border-top-left-radius:20px;border-top-right-radius:20px;
-  padding:1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+.vp{position:fixed;bottom:0;left:0;right:0;background:rgba(22,10,40,.97);
+  backdrop-filter:blur(16px);border-top-left-radius:22px;border-top-right-radius:22px;
+  padding:1.5rem 1.25rem calc(1.75rem + env(safe-area-inset-bottom));
   z-index:500;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
   color:#fff;text-align:center}
-.voice-panel.open{transform:translateY(0)}
-.voice-orb{width:72px;height:72px;border-radius:50%;background:var(--pk);
+.vp.open{transform:translateY(0)}
+.vp-orb{width:68px;height:68px;border-radius:50%;background:var(--pk);
   margin:0 auto .75rem;display:flex;align-items:center;justify-content:center;
-  font-size:1.8rem;cursor:pointer;box-shadow:0 0 0 0 rgba(226,19,110,.4)}
-.voice-orb.listening{animation:orb-pulse 1.5s infinite}
-@keyframes orb-pulse{0%{box-shadow:0 0 0 0 rgba(226,19,110,.6)}70%{box-shadow:0 0 0 20px rgba(226,19,110,0)}100%{box-shadow:0 0 0 0 rgba(226,19,110,0)}}
-.voice-status{font-size:1rem;font-weight:700;margin-bottom:.25rem}
-.voice-transcript{font-size:.85rem;color:rgba(255,255,255,.65);min-height:1.4rem;margin-bottom:1rem}
-.voice-close{font-size:.82rem;color:rgba(255,255,255,.5);cursor:pointer;padding:.5rem 1.5rem}
+  font-size:1.8rem;cursor:pointer}
+.vp-orb.on{animation:orb-pulse 1.4s infinite}
+@keyframes orb-pulse{0%{box-shadow:0 0 0 0 rgba(226,19,110,.5)}70%{box-shadow:0 0 0 18px rgba(226,19,110,0)}100%{box-shadow:0 0 0 0 rgba(226,19,110,0)}}
+.vp-status{font-size:.95rem;font-weight:700;margin-bottom:.2rem}
+.vp-tx{font-size:.82rem;color:rgba(255,255,255,.6);min-height:1.4rem;margin-bottom:.85rem}
+.vp-close{font-size:.8rem;color:rgba(255,255,255,.45);cursor:pointer;padding:.5rem 2rem}
 
-/* ── COLORFUL DECORATIONS ── */
-.deco-row{display:flex;gap:.5rem;margin-bottom:.9rem;flex-wrap:wrap}
-.deco-chip{padding:.3rem .75rem;border-radius:50px;font-size:.72rem;font-weight:700;
-  display:inline-flex;align-items:center;gap:.3rem}
-.deco-pk{background:var(--pk-s);color:var(--pk)}
-.deco-pu{background:var(--pu-s);color:var(--pu)}
-.deco-bl{background:var(--bl-s);color:var(--bl)}
-.deco-gr{background:var(--gr-s);color:#00602e}
-.deco-gd{background:var(--gd-s);color:#5a3e00}
-.deco-or{background:var(--or-s);color:var(--or)}
-.gradient-divider{height:3px;background:var(--grad);border-radius:4px;margin:1rem 0;opacity:.35}
-.floating-sticker{position:fixed;pointer-events:none;z-index:1;opacity:.15;font-size:2.5rem;
-  animation:float 6s ease-in-out infinite}
-.fs1{top:15%;left:3%;animation-delay:0s}
-.fs2{top:40%;right:3%;animation-delay:2s}
-.fs3{bottom:20%;left:5%;animation-delay:4s}
-@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-15px) rotate(5deg)}}
-.card-head-pk{background:linear-gradient(135deg,var(--pk-s),rgba(212,175,55,.12))}
-.card-head-pu{background:linear-gradient(135deg,var(--pu-s),var(--bl-s))}
-.card-head-gr{background:linear-gradient(135deg,var(--gr-s),var(--bl-s))}
-.card-head-gd{background:linear-gradient(135deg,var(--gd-s),var(--or-s))}
+/* Mobile nav logo */
+.mob-logo{height:30px}
 
-/* ── GUARDIAN / SELF SECTIONS ── */
-.guardian-header{background:linear-gradient(135deg,var(--gd-s),rgba(212,175,55,.07));
-  border:1.5px solid rgba(212,175,55,.35);border-radius:var(--r2);
-  padding:.85rem 1rem;margin-bottom:.9rem}
-.candidate-header{background:linear-gradient(135deg,var(--bl-s),rgba(106,45,168,.06));
-  border:1.5px solid rgba(21,101,192,.2);border-radius:var(--r2);
-  padding:.85rem 1rem;margin-bottom:.9rem}
-
-/* ── RESPONSIVE ── */
-@media(max-width:420px){
-  .otp-box{width:44px;height:54px;font-size:1.4rem}
-  .card-body{padding:1.1rem}
-  .card-head{padding:1.2rem 1.1rem .9rem}
+@media(max-width:600px){
+  .rp-form{padding:1rem 1rem 3rem}
+  .otp-box{width:44px;height:52px;font-size:1.35rem}
 }
-@media(min-width:600px){
-  .card{max-width:500px;margin:0 auto}
-  .steps-row{max-width:500px;margin:0 auto}
+@media(max-width:380px){
+  .owner-row{grid-template-columns:repeat(3,1fr)}
+  .otp-box{width:38px;height:48px}
 }
-.page{max-width:540px;margin:0 auto;padding:0 0 2rem}
 </style>
 </head>
 <body>
 
 <!-- Floating stickers -->
-<div class="floating-sticker fs1" aria-hidden="true">💍</div>
-<div class="floating-sticker fs2" aria-hidden="true">🌙</div>
-<div class="floating-sticker fs3" aria-hidden="true">❤️</div>
+<div class="fs fs1" aria-hidden="true">💍</div>
+<div class="fs fs2" aria-hidden="true">🌙</div>
+<div class="fs fs3" aria-hidden="true">❤️</div>
 
-<!-- ── NAV ── -->
-<nav class="nav" aria-label="Top navigation">
-  <a href="index.html" class="nav-logo" aria-label="BIYE হোমপেজ">
-    <img id="navLogo" src="" alt="BIYE">
-  </a>
-  <div class="nav-right">
-    <div class="lang-selector">
-      <button class="lang-btn" id="langBtn" onclick="toggleLangMenu()" aria-expanded="false" aria-haspopup="true" aria-label="Language">
-        <span id="langLabel">বাং</span> ▾
-      </button>
-      <div class="lang-dropdown" id="langMenu" role="listbox">
-        <button class="lang-opt active" role="option" onclick="setLang('bn')">🇧🇩 বাংলা</button>
-        <button class="lang-opt" role="option" onclick="setLang('en')">🇺🇸 English</button>
-        <button class="lang-opt" role="option" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
-        <button class="lang-opt" role="option" onclick="setLang('ar')">🌍 العربية</button>
-        <button class="lang-opt" role="option" onclick="setLang('zh')">🇨🇳 中文</button>
-      </div>
+<div class="page-wrap">
+
+<!-- ════ LEFT PANEL ════ -->
+<div class="left-panel" aria-hidden="true">
+  <div class="deco-circle dc1"></div>
+  <div class="deco-circle dc2"></div>
+  <div class="deco-circle dc3"></div>
+
+  <div class="lp-logo">
+    <img id="lpLogo" src="data:image/png;base64,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" alt="BIYE">
+  </div>
+
+  <div class="lp-content">
+    <h1 class="lp-headline">আপনার <em>জীবনসঙ্গী</em> খুঁজুন</h1>
+    <p class="lp-sub">বিশ্বের প্রথম AI + EI + Blockchain ম্যাট্রিমোনি। ১৩৭+ সামঞ্জস্য মাত্রা। ৭-agent AI। সিদ্ধান্ত সর্বদা আপনার। <em style="font-style:normal;color:#FFD700">মাত্র ৳১১১ থেকে শুরু।</em></p>
+    <div class="lp-stats">
+      <div class="lp-stat"><div class="lp-stat-num">১৩৭+</div><div class="lp-stat-lbl">সামঞ্জস্য মাত্রা</div></div>
+      <div class="lp-stat"><div class="lp-stat-num">৭</div><div class="lp-stat-lbl">স্তরের যাচাই</div></div>
+      <div class="lp-stat"><div class="lp-stat-num">১০০%</div><div class="lp-stat-lbl">তথ্য সুরক্ষিত</div></div>
+      <div class="lp-stat"><div class="lp-stat-num">৳৩৩৩</div><div class="lp-stat-lbl">প্রতি ম্যাচ ভিউ</div></div>
     </div>
-    <a href="login.html" style="font-size:.82rem;font-weight:700;color:var(--ink2);padding:.4rem .6rem" id="signinLink" data-i18n="nav.signIn">লগইন</a>
+    <!-- Pricing tiers -->
+    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.9rem 1rem;margin-bottom:1.25rem">
+      <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-bottom:.65rem">💎 সম্পূর্ণ মূল্য তালিকা</div>
+      <div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem;color:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.06)"><span>👤 রেজিস্ট্রেশন (Lifetime)</span><span style="color:#FFD700;font-weight:800">৳১১১</span></div>
+      <div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem;color:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.06)"><span>🔍 ১ম ম্যাচ ভিউ</span><span style="color:#FFD700;font-weight:800">৳১১১</span></div>
+      <div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem;color:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.06)"><span>💯 Mutual Match (A↔B)</span><span style="color:#FFD700;font-weight:800">৳২২২</span></div>
+      <div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem;color:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.06)"><span>🤖 EI+AI Full Match</span><span style="color:#FFD700;font-weight:800">৳৩৩৩</span></div>
+      <div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem;color:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.06)"><span>🎯 Manual 5-Match</span><span style="color:#FFD700;font-weight:800">৳১,১১১</span></div>
+      <div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem;color:rgba(255,255,255,.7)"><span>💡 AI Suggestion</span><span style="color:#FFD700;font-weight:800">৳৫৫</span></div>
+    </div>
+    <div class="lp-features">
+      <div class="lp-feature"><div class="lp-feature-icon">🤖</div><div class="lp-feature-text">AI + Rule Engine — ৯০/১০ স্কোরিং আর্কিটেকচার</div></div>
+      <div class="lp-feature"><div class="lp-feature-icon">🔐</div><div class="lp-feature-text">NID · ছবি · শিক্ষা · পেশা — সব যাচাইকৃত</div></div>
+      <div class="lp-feature"><div class="lp-feature-icon">💜</div><div class="lp-feature-text">আবেগীয় বুদ্ধিমত্তা বিশ্লেষণ (EI Engine)</div></div>
+      <div class="lp-feature"><div class="lp-feature-icon">🛡️</div><div class="lp-feature-text">সিদ্ধান্ত সবসময় আপনার — AI শুধু সহায়তা করে</div></div>
+      <div class="lp-feature"><div class="lp-feature-icon">🌍</div><div class="lp-feature-text">প্রবাসী বাংলাদেশি — ১৫০+ দেশ</div></div>
+    </div>
   </div>
-</nav>
 
-<!-- ── STEP DOTS ── -->
-<div class="steps-row" role="list" aria-label="রেজিস্ট্রেশন ধাপ">
-  <div class="sdot-wrap" role="listitem">
-    <div class="sdot active" id="d1">1</div>
-    <div class="sdot-lbl active" id="l1" data-i18n="step.info">তথ্য</div>
-  </div>
-  <div class="sline" id="sl1"></div>
-  <div class="sdot-wrap" role="listitem">
-    <div class="sdot" id="d2">2</div>
-    <div class="sdot-lbl" id="l2" data-i18n="step.consent">সম্মতি</div>
-  </div>
-  <div class="sline" id="sl2"></div>
-  <div class="sdot-wrap" role="listitem">
-    <div class="sdot" id="d3">3</div>
-    <div class="sdot-lbl" id="l3" data-i18n="step.payment">পেমেন্ট</div>
-  </div>
-  <div class="sline" id="sl3"></div>
-  <div class="sdot-wrap" role="listitem">
-    <div class="sdot" id="d4">✓</div>
-    <div class="sdot-lbl" id="l4" data-i18n="step.done">সম্পন্ন</div>
+  <div class="lp-verse">
+    <div class="lp-verse-arabic">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</div>
+    <div class="lp-verse-trans">তাঁর নিদর্শনের একটি হলো, তিনি তোমাদের জন্য তোমাদের মধ্য থেকে সঙ্গিনী সৃষ্টি করেছেন, যাতে তোমরা তাদের কাছে প্রশান্তি পাও এবং তিনি তোমাদের মধ্যে ভালোবাসা ও দয়া রেখেছেন।</div>
+    <div class="lp-verse-ref">📖 সূরা আর-রূম ৩০:২১</div>
   </div>
 </div>
 
-<div class="page">
-<div class="card" role="main">
+<!-- ════ RIGHT PANEL ════ -->
+<div class="right-panel">
 
-<!-- ══ STEP 1: INFO + OTP ══ -->
-<div class="step active" id="step1" aria-labelledby="s1h">
-  <div class="card-head card-head-pk">
-    <div class="card-step-badge">💍 <span data-i18n="step1.badge">ধাপ ১</span></div>
-    <h1 class="card-title" id="s1h" data-i18n="step1.title">প্রোফাইল তৈরি করুন</h1>
-    <p class="card-sub" data-i18n="step1.sub">তথ্য দিন, তারপর মোবাইলে যাচাই কোড যাবে।</p>
-  </div>
-  <div class="card-body">
-    <div id="s1err" class="inline-err" role="alert"></div>
-
-    <!-- Quran verse -->
-    <div class="verse-card verse-quran">
-      <div class="verse-arabic">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</div>
-      <div class="verse-trans" data-i18n="verse.quran">তাঁর নিদর্শনের একটি হলো, তিনি তোমাদের জন্য তোমাদের মধ্য থেকে সঙ্গিনী সৃষ্টি করেছেন, যাতে তোমরা তাদের কাছে প্রশান্তি পাও। এবং তিনি তোমাদের মধ্যে ভালোবাসা ও দয়া রেখেছেন।</div>
-      <span class="verse-ref">📖 সূরা আর-রূম ৩০:২১</span>
-    </div>
-
-    <!-- Hadith -->
-    <div class="verse-card verse-hadith">
-      <div class="verse-arabic">تَزَوَّجُوا الْوَدُودَ الْوَلُودَ</div>
-      <div class="verse-trans" data-i18n="verse.hadith">ভালোবাসাময়ী ও সন্তান-প্রসবকারী নারীকে বিবাহ করো।</div>
-      <span class="verse-ref">📚 হাদিস — আবু দাউদ</span>
-    </div>
-
-    <!-- Decorative chips -->
-    <div class="deco-row">
-      <span class="deco-chip deco-pk">💍 বিবাহ</span>
-      <span class="deco-chip deco-pu">🤝 বিশ্বাস</span>
-      <span class="deco-chip deco-bl">🧠 ১৩৭ মাত্রা</span>
-      <span class="deco-chip deco-gr">✓ যাচাইকৃত</span>
-      <span class="deco-chip deco-gd">🔒 নিরাপদ</span>
-    </div>
-
-    <div class="gradient-divider"></div>
-
-    <!-- Who is this for -->
-    <div class="section-header sh-pk">👥 <span data-i18n="s1.ownerLabel">এই প্রোফাইলটি কার জন্য?</span></div>
-    <div class="owner-grid">
-      <button type="button" class="owner-btn active" id="ownSelf"
-        onclick="setOwner('self')" aria-pressed="true">
-        <span class="owner-icon">🙋</span>
-        <span class="owner-label" data-i18n="owner.self">নিজের জন্য</span>
-        <span class="owner-sub">Self / Candidate</span>
-      </button>
-      <button type="button" class="owner-btn" id="ownGuardian"
-        onclick="setOwner('parent_assisted')" aria-pressed="false">
-        <span class="owner-icon">👨‍👩‍👧</span>
-        <span class="owner-label" data-i18n="owner.guardian">সন্তানের জন্য</span>
-        <span class="owner-sub">Father / Mother / Guardian</span>
-      </button>
-    </div>
-
-    <div class="gradient-divider"></div>
-
-    <!-- ── GUARDIAN SECTION ── -->
-    <div id="guardianBox" style="display:none">
-      <div class="guardian-header">
-        <div style="font-size:.82rem;font-weight:800;color:#5a3e00">👤 <span data-i18n="guardian.header">আপনার তথ্য (অভিভাবক)</span></div>
-        <div style="font-size:.75rem;color:#7a5e00;margin-top:.2rem" data-i18n="guardian.sub">আপনি এই অ্যাকাউন্টে login করবেন। আপনার নাম, মোবাইল ও পাসওয়ার্ড দিন।</div>
+  <!-- Nav -->
+  <div style="background:linear-gradient(90deg,#E2136E,#7B2FBE,#1565C0);color:#fff;text-align:center;padding:.42rem 1rem;font-size:.75rem;font-weight:700;overflow:hidden;position:relative">
+  <span>🌟 বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি | রেজিস্ট্রেশন <strong>৳১১১</strong> | ম্যাচ ৳১১১ | Mutual ৳২২২ | EI+AI ৳৩৩৩ | Manual ৳১,১১১ | Suggestion ৳৫৫</span>
+</div>
+<nav class="rp-nav">
+    <a href="index.html" class="rp-nav-logo"><img class="mob-logo" id="navLogo" src="data:image/png;base64,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" alt="BIYE"></a>
+    <div class="rp-nav-right">
+      <div class="lang-sel">
+        <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-expanded="false">
+          <span id="langLabel">বাং</span> ▾
+        </button>
+        <div class="lang-dropdown" id="langMenu">
+          <button class="lang-opt active" onclick="setLang('bn')">🇧🇩 বাংলা</button>
+          <button class="lang-opt" onclick="setLang('en')">🇺🇸 English</button>
+          <button class="lang-opt" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+          <button class="lang-opt" onclick="setLang('ar')">🌍 العربية</button>
+          <button class="lang-opt" onclick="setLang('zh')">🇨🇳 中文</button>
+        </div>
       </div>
-      <!-- Guardian name -->
-      <div class="field">
-        <div class="field-lbl">
-          <span style="color:var(--gd)">👤</span>
-          <span data-i18n="guardian.name">আপনার নাম (অভিভাবক)</span>
-          <span class="req">*</span>
-        </div>
-        <div class="field-wrap">
-          <input class="field-input" type="text" id="gNameInput"
-            autocomplete="name" maxlength="100"
-            placeholder="আপনার পূর্ণ নাম" style="padding-right:1rem">
-        </div>
-        <div class="field-err" id="gNameErr" data-i18n="err.name">নাম দিন (কমপক্ষে ২ অক্ষর)</div>
+      <a href="login.html" style="font-size:.8rem;font-weight:700;color:var(--ink2);padding:.38rem .7rem;border:1.5px solid var(--bdr2);border-radius:50px" id="loginLink">লগইন</a>
+    </div>
+  </nav>
+
+  <!-- Progress bar -->
+  <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:25%"></div></div>
+
+  <div class="rp-form">
+
+    <!-- Step pills -->
+    <div class="step-pills">
+      <div class="step-pill active" id="pill1"><div class="step-pill-num">1</div><span id="p1lbl">তথ্য ও OTP</span></div>
+      <div class="step-pill" id="pill2"><div class="step-pill-num">2</div><span id="p2lbl">সম্মতি</span></div>
+      <div class="step-pill" id="pill3"><div class="step-pill-num">3</div><span id="p3lbl">পেমেন্ট</span></div>
+      <div class="step-pill" id="pill4"><div class="step-pill-num">✓</div><span id="p4lbl">সম্পন্ন</span></div>
+    </div>
+
+    <!-- ══ STEP 1 ══ -->
+    <div class="step active" id="step1">
+
+      <!-- Verse -->
+      <div class="verse-inline vi-quran">
+        <div class="vi-arabic">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا</div>
+        <div class="vi-trans" id="v1trans">তাঁর নিদর্শনের একটি হলো তিনি তোমাদের মধ্য থেকে জীবনসঙ্গী সৃষ্টি করেছেন।</div>
+        <span class="vi-ref">📖 সূরা আর-রূম ৩০:২১</span>
       </div>
-      <!-- Guardian phone -->
-      <div class="field">
-        <div class="field-lbl">
-          <span style="color:var(--pk)">📱</span>
-          <span data-i18n="guardian.phone">আপনার মোবাইল (অভিভাবক)</span>
-          <span class="req">*</span>
+
+      <!-- Chip row -->
+      <div class="chip-row">
+        <span class="chip chip-pk">💍 বিবাহ</span>
+        <span class="chip chip-pu">🧠 ১৩৭ মাত্রা</span>
+        <span class="chip chip-gr">✓ যাচাইকৃত</span>
+        <span class="chip chip-gd">🔒 নিরাপদ</span>
+        <span class="chip chip-bl">🌍 প্রবাসী</span>
+      </div>
+
+      <!-- Section: Who -->
+      <div class="form-section">
+        <div class="fs-head">
+          <div class="fs-title">👥 <span id="lbl-who">এই প্রোফাইলটি কার জন্য?</span></div>
+          <div class="fs-sub" id="lbl-who-sub">সঠিক বিকল্পটি বেছে নিন</div>
         </div>
-        <div class="phone-wrap">
-          <div class="phone-prefix">🇧🇩 +880</div>
-          <div class="field-wrap phone-field">
-            <input class="field-input" type="tel" id="gPhoneInput"
-              inputmode="numeric" autocomplete="tel"
-              placeholder="01XXXXXXXXX" maxlength="11">
+        <div class="fs-body">
+          <div class="owner-row">
+            <button class="owner-btn active" id="ownSelf" onclick="setOwner('self')" aria-pressed="true">
+              <span class="ob-icon">🙋</span><span class="ob-label" id="lo-self">নিজে</span>
+            </button>
+            <button class="owner-btn" id="ownFather" onclick="setOwner('father')" aria-pressed="false">
+              <span class="ob-icon">👨</span><span class="ob-label" id="lo-father">বাবা</span>
+            </button>
+            <button class="owner-btn" id="ownMother" onclick="setOwner('mother')" aria-pressed="false">
+              <span class="ob-icon">👩</span><span class="ob-label" id="lo-mother">মা</span>
+            </button>
+          </div>
+          <div class="owner-row2">
+            <button class="owner-btn" id="ownBrother" onclick="setOwner('brother')" aria-pressed="false">
+              <span class="ob-icon">👦</span><span class="ob-label" id="lo-brother">ভাই</span>
+            </button>
+            <button class="owner-btn" id="ownSister" onclick="setOwner('sister')" aria-pressed="false">
+              <span class="ob-icon">👧</span><span class="ob-label" id="lo-sister">বোন</span>
+            </button>
           </div>
         </div>
-        <div class="field-err" id="gPhoneErr" data-i18n="err.phone">সঠিক বাংলাদেশ মোবাইল নম্বর দিন</div>
       </div>
-      <!-- Guardian password -->
-      <div class="field">
-        <div class="field-lbl">
-          <span style="color:var(--pu)">🔒</span>
-          <span data-i18n="guardian.password">আপনার পাসওয়ার্ড</span>
-          <span class="req">*</span>
+
+      <!-- Section: Seeking -->
+      <div class="form-section">
+        <div class="fs-head">
+          <div class="fs-title">🔍 <span id="lbl-seek">আপনি খুঁজছেন</span></div>
         </div>
-        <div class="field-wrap">
-          <input class="field-input" type="password" id="gPassInput"
-            autocomplete="new-password" maxlength="64"
-            placeholder="কমপক্ষে ৮ অক্ষর" style="padding-right:3rem">
-          <button type="button" class="pw-btn" onclick="togglePw('gPassInput')" aria-label="পাসওয়ার্ড দেখুন">👁</button>
-        </div>
-        <div class="field-err" id="gPassErr" data-i18n="err.pass">কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা</div>
-      </div>
-      <div class="gradient-divider"></div>
-      <!-- Candidate header -->
-      <div class="candidate-header">
-        <div style="font-size:.82rem;font-weight:800;color:var(--bl)">👧 <span data-i18n="candidate.header">সন্তানের তথ্য</span></div>
-        <div style="font-size:.75rem;color:var(--bl);margin-top:.2rem" data-i18n="candidate.sub">সন্তানের নাম দিন। মোবাইল ও ইমেইল না থাকলে খালি রাখুন।</div>
-      </div>
-    </div>
-
-    <!-- ── CANDIDATE INFO ── -->
-    <div class="section-header sh-pu">📝 <span data-i18n="s1.infoLabel" id="infoSectionLabel">আপনার তথ্য</span></div>
-
-    <!-- Name -->
-    <div class="field">
-      <div class="field-lbl">
-        <span style="color:var(--pu)">👤</span>
-        <span id="nameLbl" data-i18n="field.name">আপনার নাম</span>
-        <span class="req">*</span>
-      </div>
-      <div class="field-wrap">
-        <input class="field-input" type="text" id="nameInput"
-          autocomplete="name" maxlength="100"
-          placeholder="পূর্ণ নাম লিখুন" style="padding-right:1rem">
-      </div>
-      <div class="field-err" id="nameErr" data-i18n="err.name">নাম দিন (কমপক্ষে ২ অক্ষর)</div>
-    </div>
-
-    <!-- Phone -->
-    <div class="field">
-      <div class="field-lbl" id="phoneLabel">
-        <span style="color:var(--pk)">📱</span>
-        <span id="phoneLbl" data-i18n="field.phone">মোবাইল নম্বর</span>
-        <span class="req" id="phoneReq">*</span>
-      </div>
-      <div class="phone-wrap">
-        <div class="phone-prefix">🇧🇩 +880</div>
-        <div class="field-wrap phone-field">
-          <input class="field-input" type="tel" id="phoneInput"
-            inputmode="numeric" autocomplete="tel"
-            placeholder="01XXXXXXXXX" maxlength="11">
-          <button class="voice-btn" id="vbPhone" onclick="startVoice('phoneInput','phone')"
-            aria-label="ভয়েস দিয়ে নম্বর বলুন">🎙</button>
-        </div>
-      </div>
-      <p class="field-hint" data-i18n="field.phoneHint">উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর</p>
-      <div class="field-err" id="phoneErr" role="alert" data-i18n="err.phone">সঠিক বাংলাদেশ মোবাইল নম্বর দিন</div>
-    </div>
-
-    <!-- Age -->
-    <div class="field">
-      <div class="field-lbl">
-        <span style="color:var(--or)">🎂</span>
-        <span id="ageLbl" data-i18n="field.age">বয়স</span>
-        <span style="font-size:.72rem;color:var(--ink3);font-weight:400"> (<span data-i18n="optional">ঐচ্ছিক</span>)</span>
-      </div>
-      <div class="field-wrap">
-        <input class="field-input" type="number" id="ageInput"
-          inputmode="numeric" min="18" max="80"
-          placeholder="যেমন: 25" style="padding-right:1rem">
-      </div>
-      <div class="field-err" id="ageErr" data-i18n="err.age">বয়স ১৮-৮০ এর মধ্যে হতে হবে</div>
-    </div>
-
-    <!-- Email -->
-    <div class="field">
-      <div class="field-lbl">
-        <span style="color:var(--bl)">📧</span>
-        <span data-i18n="field.email">ইমেইল</span>
-        <span style="font-size:.72rem;color:var(--ink3);font-weight:400"> (<span data-i18n="optional">ঐচ্ছিক</span>)</span>
-      </div>
-      <div class="field-wrap">
-        <input class="field-input" type="email" id="emailInput"
-          autocomplete="email" maxlength="120"
-          placeholder="example@email.com" style="padding-right:1rem">
-      </div>
-      <div class="field-err" id="emailErr" data-i18n="err.email">সঠিক ইমেইল ঠিকানা দিন</div>
-    </div>
-
-    <!-- Password (self only) -->
-    <div id="selfPassBox">
-      <div class="gradient-divider"></div>
-      <div class="section-header sh-pu">🔒 <span data-i18n="s1.passLabel">পাসওয়ার্ড তৈরি করুন</span></div>
-      <div class="field">
-        <div class="field-lbl">
-          <span style="color:var(--pu)">🔒</span>
-          <span data-i18n="field.password">পাসওয়ার্ড</span>
-          <span class="req">*</span>
-        </div>
-        <div class="field-wrap">
-          <input class="field-input" type="password" id="passInput"
-            autocomplete="new-password" maxlength="64"
-            placeholder="কমপক্ষে ৮ অক্ষর" style="padding-right:3rem"
-            oninput="checkPwStrength(this.value)">
-          <button type="button" class="pw-btn" onclick="togglePw('passInput')" aria-label="পাসওয়ার্ড দেখুন">👁</button>
-        </div>
-        <div class="pw-strength" id="pwStrength" style="display:none">
-          <div class="pw-bars">
-            <div class="pw-bar"></div><div class="pw-bar"></div>
-            <div class="pw-bar"></div><div class="pw-bar"></div>
+        <div class="fs-body">
+          <div class="seek-row">
+            <button class="seek-btn active-bride" id="seekBride" onclick="setSeeking('bride')" aria-pressed="true">
+              <span class="sb-icon">👰</span>
+              <span class="sb-label" id="lbl-bride">পাত্রী</span>
+              <div class="sb-sub">Bride</div>
+            </button>
+            <button class="seek-btn" id="seekGroom" onclick="setSeeking('groom')" aria-pressed="false">
+              <span class="sb-icon">🤵</span>
+              <span class="sb-label" id="lbl-groom">পাত্র</span>
+              <div class="sb-sub">Groom</div>
+            </button>
           </div>
-          <div class="pw-label" id="pwLabel"></div>
-        </div>
-        <div class="field-err" id="passErr" data-i18n="err.pass">কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা সহ</div>
-      </div>
-      <div class="field">
-        <div class="field-lbl">
-          <span style="color:var(--pu)">🔒</span>
-          <span data-i18n="field.confirmPass">পাসওয়ার্ড নিশ্চিত করুন</span>
-          <span class="req">*</span>
-        </div>
-        <div class="field-wrap">
-          <input class="field-input" type="password" id="pass2Input"
-            autocomplete="new-password" maxlength="64"
-            placeholder="পাসওয়ার্ড আবার লিখুন" style="padding-right:3rem">
-          <button type="button" class="pw-btn" onclick="togglePw('pass2Input')" aria-label="পাসওয়ার্ড দেখুন">👁</button>
-        </div>
-        <div class="field-err" id="pass2Err" data-i18n="err.pass2">পাসওয়ার্ড মিলছে না</div>
-      </div>
-    </div>
-
-    <!-- OTP section -->
-    <div id="otpSection" style="display:none">
-      <div class="gradient-divider"></div>
-      <div class="section-header sh-bl">📲 <span data-i18n="otp.header">মোবাইল যাচাই</span></div>
-      <div class="inline-info" id="otpInfo" data-i18n="otp.info">📲 কোড পাঠানো হয়েছে। ফোনে আসা ৬ সংখ্যার কোডটি নিচে লিখুন।</div>
-      <p style="font-size:.85rem;font-weight:700;margin-bottom:.65rem;text-align:center" data-i18n="otp.enter">যাচাই কোড লিখুন</p>
-      <div class="otp-boxes" role="group" aria-label="6 সংখ্যার OTP কোড">
-        <input class="otp-box" id="o1" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="১">
-        <input class="otp-box" id="o2" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="২">
-        <input class="otp-box" id="o3" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৩">
-        <input class="otp-box" id="o4" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৪">
-        <input class="otp-box" id="o5" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৫">
-        <input class="otp-box" id="o6" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৬">
-      </div>
-      <div class="field-err" id="otpErr" role="alert" style="text-align:center;margin-top:.5rem"></div>
-      <div class="resend-row">
-        <span data-i18n="otp.noCode">কোড আসেনি?</span>
-        <button class="resend-btn" id="resendBtn" onclick="resendOtp()" data-i18n="otp.resend">আবার পাঠান</button>
-        <span class="otp-timer" id="otpTimer"></span>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" id="s1btn" onclick="handleStep1()" style="margin-top:.75rem">
-      <span id="s1btnTxt" data-i18n="btn.sendCode">কোড পাঠান</span>
-    </button>
-    <p style="text-align:center;margin-top:.9rem;font-size:.82rem;color:var(--ink2)">
-      <span data-i18n="s1.hasAccount">ইতিমধ্যে অ্যাকাউন্ট আছে?</span>
-      <a href="login.html" style="color:var(--pk);font-weight:700;margin-left:.25rem" data-i18n="nav.signIn">লগইন করুন →</a>
-    </p>
-  </div>
-</div>
-
-<!-- ══ STEP 2: CONSENT ══ -->
-<div class="step" id="step2" aria-labelledby="s2h">
-  <div class="card-head card-head-pu">
-    <div class="card-step-badge">📋 <span data-i18n="step2.badge">ধাপ ২</span></div>
-    <h2 class="card-title" id="s2h" data-i18n="step2.title">শর্তাবলি ও সম্মতি</h2>
-    <p class="card-sub" data-i18n="step2.sub">প্রতিটি শর্তের উপর মাউস রাখলে বিস্তারিত দেখাবে। পড়ুন ও সম্মতি দিন।</p>
-  </div>
-  <div class="card-body">
-    <div id="s2err" class="inline-err" role="alert"></div>
-
-    <!-- Required consents -->
-    <div class="section-header sh-pk">⚠️ <span data-i18n="consent.required">আবশ্যক শর্তাবলি</span></div>
-
-    <div class="consent-item" id="ci-tos" onclick="toggleConsent('tos')" role="checkbox" aria-checked="false" tabindex="0">
-      <div class="consent-box" id="cb-tos"></div>
-      <div style="flex:1">
-        <div class="ctitle" data-i18n="tos.title">📜 সেবার শর্তাবলি</div>
-        <div class="cdesc" data-i18n="tos.desc">আমি BIYE-এর সেবার শর্তাবলি মেনে নিচ্ছি।</div>
-        <div class="consent-full" data-i18n="tos.full">BIYE একটি ম্যাচমেকিং প্ল্যাটফর্ম যা ব্যবহারকারীদের সামঞ্জস্য বিশ্লেষণ করে। ব্যবহারকারীরা সম্মত হচ্ছেন যে: (১) তারা ১৮+ বছর বয়সী; (২) প্রদত্ত তথ্য সত্য; (৩) BIYE-এর সিদ্ধান্ত চূড়ান্ত নয়; (৪) প্ল্যাটফর্মের অপব্যবহার করা যাবে না; (৫) অ্যাকাউন্ট হস্তান্তরযোগ্য নয়। সম্পূর্ণ শর্ত: <span class="consent-link">terms.biye.ltd</span></div>
-      </div>
-      <input type="checkbox" class="real-cb" id="tos" aria-hidden="true">
-    </div>
-
-    <div class="consent-item" id="ci-priv" onclick="toggleConsent('priv')" role="checkbox" aria-checked="false" tabindex="0">
-      <div class="consent-box" id="cb-priv"></div>
-      <div style="flex:1">
-        <div class="ctitle" data-i18n="priv.title">🔐 গোপনীয়তা নীতি</div>
-        <div class="cdesc" data-i18n="priv.desc">আমি গোপনীয়তা নীতি পড়েছি ও বুঝেছি।</div>
-        <div class="consent-full" data-i18n="priv.full">BIYE আপনার ব্যক্তিগত তথ্য সুরক্ষিত রাখে। আমরা: (১) আপনার ফোন, ইমেইল, NID তৃতীয় পক্ষকে বিক্রি করি না; (২) শুধু ম্যাচিং উদ্দেশ্যে তথ্য ব্যবহার করি; (৩) আপনি যেকোনো সময় ডেটা মুছতে পারবেন; (৪) সমস্ত তথ্য এনক্রিপ্টেড ডেটাবেজে সুরক্ষিত; (৫) GDPR ও বাংলাদেশ তথ্য সুরক্ষা আইন মেনে চলা হয়। বিস্তারিত: <span class="consent-link">privacy.biye.ltd</span></div>
-      </div>
-      <input type="checkbox" class="real-cb" id="priv" aria-hidden="true">
-    </div>
-
-    <div class="consent-item" id="ci-match" onclick="toggleConsent('match')" role="checkbox" aria-checked="false" tabindex="0">
-      <div class="consent-box" id="cb-match"></div>
-      <div style="flex:1">
-        <div class="ctitle" data-i18n="match.title">🤖 ম্যাচিং ও AI সম্মতি</div>
-        <div class="cdesc" data-i18n="match.desc">BIYE AI ও ১৩৭-মেট্রিক পদ্ধতি ব্যবহার করে। AI সিদ্ধান্ত নেয় না।</div>
-        <div class="consent-full" data-i18n="match.full">BIYE-এর ১৩৭-মেট্রিক সামঞ্জস্য ইঞ্জিন আপনার উত্তরের ভিত্তিতে সম্ভাব্য সামঞ্জস্য বিশ্লেষণ করে। গুরুত্বপূর্ণ বিষয়সমূহ: (১) AI সিদ্ধান্ত নেয় না — এটি শুধু তথ্য সরবরাহ করে; (২) সামঞ্জস্য স্কোর একটি নির্দেশিকা মাত্র; (৩) আপনার প্রোফাইল যাচাইকৃত সদস্যরা দেখতে পারবে; (৪) AI বিশ্লেষণে ব্যক্তিগত তথ্য প্রক্রিয়া করা হয়; (৫) সিদ্ধান্ত সর্বদা আপনার — BIYE কখনো জোর করে না।</div>
-      </div>
-      <input type="checkbox" class="real-cb" id="match" aria-hidden="true">
-    </div>
-
-    <div class="consent-item" id="ci-pay" onclick="toggleConsent('pay')" role="checkbox" aria-checked="false" tabindex="0">
-      <div class="consent-box" id="cb-pay"></div>
-      <div style="flex:1">
-        <div class="ctitle" data-i18n="pay.title">💳 পেমেন্ট ও রেজিস্ট্রেশন চুক্তি</div>
-        <div class="cdesc" data-i18n="pay.desc">রেজিস্ট্রেশন ফি ৳৯৯৯ (+ ৫% ভ্যাট = ৳১,০৪৯)। ২টি বিনামূল্যে ম্যাচ ভিউ অন্তর্ভুক্ত।</div>
-        <div class="consent-full" data-i18n="pay.full">রেজিস্ট্রেশন ফি: ৳৯৯৯ (মূল) + ৳৫০ (ভ্যাট ৫%) = ৳১,০৪৯ মোট। অন্তর্ভুক্ত সুবিধাসমূহ: (১) ২টি বিনামূল্যে ম্যাচ প্রোফাইল ভিউ; (২) সম্পূর্ণ প্রোফাইল তৈরি ও সম্পাদনা; (৩) প্রশ্নমালা অ্যাক্সেস; (৪) AI সামঞ্জস্য বিশ্লেষণ। অতিরিক্ত ম্যাচ ভিউ: ৳৩৩৩ প্রতিটি। ফেরত নীতি: পেমেন্টের ৪৮ ঘণ্টার মধ্যে আবেদন করা যাবে। পেমেন্ট গেটওয়ে: SSLCommerz (নিরাপদ)।</div>
-      </div>
-      <input type="checkbox" class="real-cb" id="pay" aria-hidden="true">
-    </div>
-
-    <!-- Optional -->
-    <div class="section-header sh-gr" style="margin-top:1rem">✅ <span data-i18n="consent.optional">ঐচ্ছিক</span></div>
-    <div class="consent-item" id="ci-sms" onclick="toggleConsent('sms')" role="checkbox" aria-checked="false" tabindex="0">
-      <div class="consent-box" id="cb-sms"></div>
-      <div style="flex:1">
-        <div class="ctitle" data-i18n="sms.title">📱 প্রচারমূলক SMS</div>
-        <div class="cdesc" data-i18n="sms.desc">BIYE থেকে অফার, টিপস ও আপডেট SMS পেতে চাই।</div>
-        <div class="consent-full" data-i18n="sms.full">আপনি BIYE-এর পক্ষ থেকে নিম্নলিখিত বার্তা পেতে সম্মত হচ্ছেন: (১) নতুন ম্যাচ সতর্কতা; (২) প্ল্যাটফর্ম আপডেট; (৩) বিশেষ অফার ও ছাড়; (৪) বিবাহ বিষয়ক টিপস। যেকোনো সময় STOP লিখে SMS করে বাতিল করা যাবে। এটি সম্পূর্ণ ঐচ্ছিক।</div>
-      </div>
-      <input type="checkbox" class="real-cb" id="sms" aria-hidden="true">
-    </div>
-
-    <div style="display:flex;gap:.6rem;margin-top:1.1rem">
-      <button class="btn btn-ghost" onclick="goStep(1)" style="flex:1;margin-top:0" data-i18n="btn.back">← পেছনে</button>
-      <button class="btn btn-primary" onclick="validateConsent()" style="flex:2" data-i18n="btn.next">পরবর্তী →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ STEP 3: PAYMENT ══ -->
-<div class="step" id="step3" aria-labelledby="s3h">
-  <div class="card-head card-head-gd">
-    <div class="card-step-badge">💳 <span data-i18n="step3.badge">ধাপ ৩</span></div>
-    <h2 class="card-title" id="s3h" data-i18n="step3.title">পেমেন্ট সম্পন্ন করুন</h2>
-    <p class="card-sub" data-i18n="step3.sub">নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে।</p>
-  </div>
-  <div class="card-body">
-    <div id="s3err" class="inline-err" role="alert"></div>
-    <div class="sum-card">
-      <div class="sum-row">
-        <span class="lbl" data-i18n="sum.mobile">মোবাইল</span>
-        <span class="val" id="sumPhone">—</span>
-      </div>
-      <div class="sum-row">
-        <span class="lbl" data-i18n="sum.name">নাম</span>
-        <span class="val" id="sumName">—</span>
-      </div>
-      <div class="sum-row">
-        <span class="lbl" data-i18n="sum.type">অ্যাকাউন্টের ধরন</span>
-        <span class="val" id="sumType">—</span>
-      </div>
-      <div class="sum-row">
-        <span class="lbl" data-i18n="sum.consent">শর্তাবলি</span>
-        <span class="val"><span class="dot-ok"></span> <span data-i18n="sum.accepted">গৃহীত</span></span>
-      </div>
-      <div class="sum-row">
-        <span class="lbl" data-i18n="sum.views">ম্যাচ ভিউ</span>
-        <span class="val"><span class="dot-ok"></span> <span data-i18n="sum.freeViews">২টি বিনামূল্যে</span></span>
-      </div>
-    </div>
-    <div class="price-box">
-      <div class="price-row">
-        <span class="lbl" data-i18n="price.reg">BIYE রেজিস্ট্রেশন</span>
-        <span class="val">৳৯৯৯</span>
-      </div>
-      <div class="price-row">
-        <span class="lbl" data-i18n="price.vat">ভ্যাট (৫%)</span>
-        <span class="val">৳৫০</span>
-      </div>
-      <div class="price-row total">
-        <span class="lbl" data-i18n="price.total">মোট</span>
-        <span class="val">৳১,০৪৯</span>
-      </div>
-    </div>
-    <p class="field-hint" style="margin-bottom:1rem" data-i18n="pay.warning">⚠️ পেমেন্ট করার সময় OTP বা পাসওয়ার্ড কাউকে দেবেন না।</p>
-    <div id="payActions">
-      <button class="btn btn-pay" onclick="startPayment()" id="payBtn" data-i18n="btn.payNow">💳 পেমেন্ট করুন — ৳১,০৪৯</button>
-      <button class="btn btn-ghost" onclick="goStep(2)" data-i18n="btn.back">← পেছনে</button>
-    </div>
-    <div id="payProcessing" style="display:none">
-      <div class="pay-state">
-        <div class="pay-icon spin" style="background:var(--pu-s);color:var(--pu)">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M21 12a9 9 0 1 1-6.2-8.6"/>
-          </svg>
-        </div>
-        <div style="font-weight:700;margin-bottom:.3rem" data-i18n="pay.creating">ইনভয়েস তৈরি হচ্ছে...</div>
-        <div class="field-hint" data-i18n="pay.wait">এই পেজ বন্ধ করবেন না।</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ STEP 4: SUCCESS ══ -->
-<div class="step" id="step4" aria-labelledby="s4h">
-  <div class="card-head card-head-gr">
-    <div class="card-step-badge">🎉 <span data-i18n="step4.badge">সম্পন্ন</span></div>
-  </div>
-  <div class="card-body" style="padding-top:1.75rem">
-    <div class="success-wrap">
-      <div class="success-ring">✅</div>
-      <h2 class="card-title" id="s4h" data-i18n="step4.title">BIYE-তে স্বাগতম!</h2>
-      <p class="card-sub" style="margin-top:.4rem;margin-bottom:.25rem" data-i18n="step4.sub">আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।</p>
-      <div class="success-cards">
-        <div class="success-item">
-          <div class="si-icon" style="background:var(--gr-s);color:var(--gr)">✓</div>
-          <div class="si-text"><strong data-i18n="success.reg">রেজিস্ট্রেশন</strong><span data-i18n="success.regSub">সফলভাবে সম্পন্ন</span></div>
-        </div>
-        <div class="success-item">
-          <div class="si-icon" style="background:var(--gd-s);color:#6a4e00">৳</div>
-          <div class="si-text"><strong data-i18n="success.pay">পেমেন্ট</strong><span>৳৯৯৯ <span data-i18n="success.confirmed">নিশ্চিত</span></span></div>
-        </div>
-        <div class="success-item">
-          <div class="si-icon" style="background:var(--pu-s);color:var(--pu)">👁</div>
-          <div class="si-text"><strong data-i18n="success.views">ম্যাচ ভিউ</strong><span>2 <span data-i18n="success.free">বিনামূল্যে</span></span></div>
         </div>
       </div>
-      <a href="questionnaire.html" class="btn btn-primary" style="text-decoration:none;margin-top:.5rem" data-i18n="btn.startQ">🎯 প্রশ্নমালা শুরু করুন →</a>
-      <a href="dashboard.html" class="btn btn-ghost" style="text-decoration:none" data-i18n="btn.dashboard">ড্যাশবোর্ডে যান</a>
-    </div>
-  </div>
-</div>
 
-<!-- Pay fail -->
-<div class="step" id="step-fail">
-  <div class="card-body">
-    <div class="pay-state">
-      <div class="pay-icon" style="background:var(--danger-s);color:var(--danger)">✕</div>
-      <div style="font-weight:800;font-size:1rem;margin-bottom:.4rem;color:var(--danger)" data-i18n="fail.title">পেমেন্ট সফল হয়নি</div>
-      <p class="field-hint" style="margin-bottom:1.25rem" data-i18n="fail.sub">কোনো চার্জ হয়নি। আবার চেষ্টা করুন।</p>
-      <button class="btn btn-pay" onclick="goStep(3)" style="max-width:260px;margin:0 auto" data-i18n="btn.retry">আবার চেষ্টা করুন</button>
-      <button class="btn btn-ghost" onclick="goStep(1)" style="max-width:260px;margin:.5rem auto 0" data-i18n="btn.startOver">শুরু থেকে করুন</button>
-    </div>
-  </div>
-</div>
+      <!-- Guardian section -->
+      <div id="guardianSection" style="display:none">
+        <div class="guardian-box">
+          <div class="box-header" style="color:#5a3e00">👤 <span id="lbl-guardian-hd">আপনার তথ্য (অভিভাবক)</span></div>
+          <div class="box-sub" id="lbl-guardian-sub">আপনি এই অ্যাকাউন্টে login করবেন</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <div class="field-lbl"><span id="lbl-gname">অভিভাবকের নাম</span> <span class="req">*</span></div>
+            <input class="fi" type="text" id="gName" autocomplete="name" maxlength="100" placeholder="পূর্ণ নাম">
+            <div class="fi-err" id="gNameErr">নাম দিন</div>
+          </div>
+          <div class="field">
+            <div class="field-lbl"><span id="lbl-grel">সম্পর্ক</span></div>
+            <select class="fi" id="gRelation">
+              <option value="">নির্বাচন করুন</option>
+              <option value="father">বাবা / Father</option>
+              <option value="mother">মা / Mother</option>
+              <option value="brother">ভাই / Brother</option>
+              <option value="sister">বোন / Sister</option>
+              <option value="uncle">চাচা/মামা</option>
+              <option value="aunt">চাচি/মামি</option>
+              <option value="other">অন্য</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-lbl">📱 <span id="lbl-gphone">অভিভাবকের মোবাইল</span> <span class="req">*</span></div>
+          <div class="phone-row">
+            <div class="phone-prefix">🇧🇩 +880</div>
+            <input class="fi" type="tel" id="gPhone" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX" autocomplete="tel">
+          </div>
+          <div class="fi-err" id="gPhoneErr">সঠিক নম্বর দিন</div>
+        </div>
+        <div class="field">
+          <div class="field-lbl">🔒 <span id="lbl-gpass">পাসওয়ার্ড</span> <span class="req">*</span></div>
+          <div class="field-wrap">
+            <input class="fi" type="password" id="gPass" autocomplete="new-password" maxlength="64" placeholder="কমপক্ষে ৮ অক্ষর" style="padding-right:3rem">
+            <button type="button" class="pw-toggle" onclick="togglePw('gPass')">👁</button>
+          </div>
+          <div class="fi-err" id="gPassErr">কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা</div>
+        </div>
+        <div class="candidate-box">
+          <div class="box-header" style="color:var(--bl)">👧 <span id="lbl-cand-hd">সন্তানের তথ্য</span></div>
+          <div class="box-sub" id="lbl-cand-sub">সন্তানের নাম দিন। মোবাইল না থাকলে খালি রাখুন।</div>
+        </div>
+      </div>
 
-</div><!-- /card -->
-</div><!-- /page -->
+      <!-- Candidate Info -->
+      <div class="form-section">
+        <div class="fs-head">
+          <div class="fs-title">📝 <span id="lbl-info-hd">আপনার তথ্য</span></div>
+          <div class="fs-sub" id="lbl-info-sub">সঠিক তথ্য দিন — যাচাই করা হবে</div>
+        </div>
+        <div class="fs-body">
+          <!-- Name row -->
+          <div class="field-row">
+            <div class="field">
+              <div class="field-lbl"><span id="lbl-fname">প্রথম নাম</span> <span class="req">*</span></div>
+              <input class="fi" type="text" id="firstName" autocomplete="given-name" maxlength="50" placeholder="প্রথম নাম">
+              <div class="fi-err" id="fNameErr">প্রথম নাম দিন</div>
+            </div>
+            <div class="field">
+              <div class="field-lbl"><span id="lbl-lname">শেষ নাম</span></div>
+              <input class="fi" type="text" id="lastName" autocomplete="family-name" maxlength="50" placeholder="শেষ নাম">
+            </div>
+          </div>
+          <!-- DOB -->
+          <div class="field">
+            <div class="field-lbl">🎂 <span id="lbl-dob">জন্ম তারিখ</span> <span class="opt-tag">ঐচ্ছিক</span></div>
+            <div class="field-row">
+              <select class="fi" id="dobYear">
+                <option value="">বছর</option>
+              </select>
+              <select class="fi" id="dobMonth">
+                <option value="">মাস</option>
+                <option value="1">জানুয়ারি</option><option value="2">ফেব্রুয়ারি</option>
+                <option value="3">মার্চ</option><option value="4">এপ্রিল</option>
+                <option value="5">মে</option><option value="6">জুন</option>
+                <option value="7">জুলাই</option><option value="8">আগস্ট</option>
+                <option value="9">সেপ্টেম্বর</option><option value="10">অক্টোবর</option>
+                <option value="11">নভেম্বর</option><option value="12">ডিসেম্বর</option>
+              </select>
+            </div>
+          </div>
+          <!-- Religion + Marital -->
+          <div class="field-row">
+            <div class="field">
+              <div class="field-lbl">🕌 <span id="lbl-religion">ধর্ম</span> <span class="opt-tag">ঐচ্ছিক</span></div>
+              <select class="fi" id="religion">
+                <option value="">নির্বাচন করুন</option>
+                <option value="islam">ইসলাম</option>
+                <option value="hinduism">হিন্দু</option>
+                <option value="christianity">খ্রিস্টান</option>
+                <option value="buddhism">বৌদ্ধ</option>
+                <option value="other">অন্যান্য</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-lbl">💍 <span id="lbl-marital">বৈবাহিক অবস্থা</span></div>
+              <select class="fi" id="marital">
+                <option value="never_married">অবিবাহিত</option>
+                <option value="divorced">বিবাহবিচ্ছেদ</option>
+                <option value="widowed">বিধবা/বিপত্নীক</option>
+                <option value="awaiting_divorce">বিচ্ছেদের অপেক্ষায়</option>
+              </select>
+            </div>
+          </div>
+          <!-- Education + Profession -->
+          <div class="field-row">
+            <div class="field">
+              <div class="field-lbl">🎓 <span id="lbl-edu">শিক্ষা</span> <span class="opt-tag">ঐচ্ছিক</span></div>
+              <select class="fi" id="education">
+                <option value="">নির্বাচন করুন</option>
+                <option value="ssc">SSC</option><option value="hsc">HSC</option>
+                <option value="bachelor">ব্যাচেলর</option><option value="masters">মাস্টার্স</option>
+                <option value="mbbs">MBBS</option><option value="phd">PHD</option>
+                <option value="buet">BUET</option><option value="other">অন্যান্য</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-lbl">💼 <span id="lbl-prof">পেশা</span> <span class="opt-tag">ঐচ্ছিক</span></div>
+              <select class="fi" id="profession">
+                <option value="">নির্বাচন করুন</option>
+                <option value="engineer">ইঞ্জিনিয়ার</option>
+                <option value="doctor">ডাক্তার</option>
+                <option value="teacher">শিক্ষক</option>
+                <option value="banker">ব্যাংকার</option>
+                <option value="govt">সরকারি চাকরি</option>
+                <option value="business">ব্যবসায়ী</option>
+                <option value="software">সফটওয়্যার</option>
+                <option value="student">ছাত্র/ছাত্রী</option>
+                <option value="nrb">প্রবাসী</option>
+                <option value="other">অন্যান্য</option>
+              </select>
+            </div>
+          </div>
+          <!-- Division + District -->
+          <div class="field-row">
+            <div class="field">
+              <div class="field-lbl">📍 <span id="lbl-div">বিভাগ</span> <span class="opt-tag">ঐচ্ছিক</span></div>
+              <select class="fi" id="division" onchange="updateDistricts()">
+                <option value="">নির্বাচন করুন</option>
+                <option value="dhaka">ঢাকা</option><option value="chattogram">চট্টগ্রাম</option>
+                <option value="sylhet">সিলেট</option><option value="rajshahi">রাজশাহী</option>
+                <option value="khulna">খুলনা</option><option value="barishal">বরিশাল</option>
+                <option value="rangpur">রংপুর</option><option value="mymensingh">ময়মনসিংহ</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-lbl">🏘️ <span id="lbl-dist">জেলা</span> <span class="opt-tag">ঐচ্ছিক</span></div>
+              <select class="fi" id="district"><option value="">প্রথমে বিভাগ নির্বাচন করুন</option></select>
+            </div>
+          </div>
+          <!-- Phone -->
+          <div class="field">
+            <div class="field-lbl">📱 <span id="lbl-phone">মোবাইল নম্বর</span> <span class="req" id="phoneReq">*</span></div>
+            <div class="phone-row">
+              <div class="phone-prefix">🇧🇩 +880</div>
+              <div class="field-wrap" style="flex:1">
+                <input class="fi" type="tel" id="phone" inputmode="numeric" maxlength="11"
+                  placeholder="01XXXXXXXXX" autocomplete="tel">
+                <button class="pw-toggle" id="vbPhone" onclick="startVoice('phone','phone')" style="font-size:.85rem;right:.6rem" aria-label="ভয়েস">🎙</button>
+              </div>
+            </div>
+            <div class="fi-hint" id="phoneHint">উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর</div>
+            <div class="fi-err" id="phoneErr">সঠিক বাংলাদেশ মোবাইল নম্বর দিন</div>
+          </div>
+          <!-- Email -->
+          <div class="field">
+            <div class="field-lbl">📧 <span id="lbl-email">ইমেইল</span> <span class="opt-tag">ঐচ্ছিক</span></div>
+            <input class="fi" type="email" id="email" autocomplete="email" maxlength="120" placeholder="example@email.com" style="padding-right:1rem">
+            <div class="fi-err" id="emailErr">সঠিক ইমেইল দিন</div>
+          </div>
+          <!-- Password -->
+          <div id="selfPassBox">
+            <div class="field">
+              <div class="field-lbl">🔒 <span id="lbl-pass">পাসওয়ার্ড</span> <span class="req">*</span></div>
+              <div class="field-wrap">
+                <input class="fi" type="password" id="pass" autocomplete="new-password" maxlength="64"
+                  placeholder="কমপক্ষে ৮ অক্ষর" style="padding-right:3rem" oninput="checkPw(this.value)">
+                <button type="button" class="pw-toggle" onclick="togglePw('pass')">👁</button>
+              </div>
+              <div class="pw-bars" id="pwBars" style="display:none">
+                <div class="pw-bar"></div><div class="pw-bar"></div>
+                <div class="pw-bar"></div><div class="pw-bar"></div>
+              </div>
+              <div class="pw-hint" id="pwHint" style="display:none"></div>
+              <div class="fi-err" id="passErr">কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা সহ</div>
+            </div>
+            <div class="field">
+              <div class="field-lbl">🔒 <span id="lbl-pass2">পাসওয়ার্ড নিশ্চিত</span> <span class="req">*</span></div>
+              <div class="field-wrap">
+                <input class="fi" type="password" id="pass2" autocomplete="new-password" maxlength="64"
+                  placeholder="পুনরায় লিখুন" style="padding-right:3rem">
+                <button type="button" class="pw-toggle" onclick="togglePw('pass2')">👁</button>
+              </div>
+              <div class="fi-err" id="pass2Err">পাসওয়ার্ড মিলছে না</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hadith -->
+      <div class="verse-inline vi-hadith">
+        <div class="vi-arabic">تَزَوَّجُوا الْوَدُودَ الْوَلُودَ</div>
+        <div class="vi-trans" id="v2trans">ভালোবাসাময়ী ও সন্তান-প্রসবকারী নারীকে বিবাহ করো।</div>
+        <span class="vi-ref">📚 হাদিস — আবু দাউদ</span>
+      </div>
+
+      <!-- OTP Section -->
+      <div id="otpSection" style="display:none">
+        <div class="form-section">
+          <div class="fs-head">
+            <div class="fs-title">📲 <span id="lbl-otp-hd">মোবাইল যাচাই</span></div>
+            <div class="fs-sub" id="otpMask">—</div>
+          </div>
+          <div class="fs-body">
+            <div class="alert alert-info show" id="otpInfo">📲 কোড পাঠানো হয়েছে। ৬ সংখ্যার কোডটি লিখুন।</div>
+            <div class="otp-boxes" role="group">
+              <input class="otp-box" id="o1" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="১">
+              <input class="otp-box" id="o2" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="২">
+              <input class="otp-box" id="o3" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৩">
+              <input class="otp-box" id="o4" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৪">
+              <input class="otp-box" id="o5" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৫">
+              <input class="otp-box" id="o6" maxlength="1" inputmode="numeric" type="text" pattern="[0-9]" aria-label="৬">
+            </div>
+            <div class="fi-err" id="otpErr" style="text-align:center;margin-top:.5rem"></div>
+            <div class="otp-footer">
+              <span id="lbl-nocode">কোড আসেনি?</span>
+              <button class="resend-btn" id="resendBtn" onclick="resendOtp()">আবার পাঠান</button>
+              <span class="otp-timer" id="otpTimer"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-err" id="s1err"></div>
+      <button class="btn btn-primary" id="s1btn" onclick="handleS1()">
+        <span id="s1btntxt">পরবর্তী → কোড পাঠান</span>
+      </button>
+      <p style="text-align:center;margin-top:.85rem;font-size:.82rem;color:var(--ink2)">
+        <span id="lbl-hasacc">ইতিমধ্যে অ্যাকাউন্ট আছে?</span>
+        <a href="login.html" style="color:var(--pk);font-weight:700;margin-left:.25rem" id="loginLinkTxt"> লগইন করুন →</a>
+      </p>
+    </div>
+
+    <!-- ══ STEP 2: CONSENT ══ -->
+    <div class="step" id="step2">
+      <div class="form-section">
+        <div class="fs-head">
+          <div class="fs-title">📋 <span id="lbl-consent-hd">শর্তাবলি ও সম্মতি</span></div>
+          <div class="fs-sub" id="lbl-consent-sub">প্রতিটি শর্তের উপর মাউস রাখলে বিস্তারিত দেখাবে</div>
+        </div>
+        <div class="fs-body">
+          <div class="alert alert-err" id="s2err"></div>
+
+          <!-- Required -->
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--pk);margin-bottom:.5rem" id="lbl-req">⚠️ আবশ্যক</div>
+
+          <div class="consent-item" id="ci-tos" onclick="toggleC('tos')" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="cbox" id="cb-tos"></div>
+            <div style="flex:1">
+              <div class="ctitle">📜 <span id="lbl-tos">সেবার শর্তাবলি</span></div>
+              <div class="cdesc" id="lbl-tos-d">আমি BIYE-এর সেবার শর্তাবলি মেনে নিচ্ছি।</div>
+              <div class="cfull">BIYE একটি ম্যাচমেকিং প্ল্যাটফর্ম। ব্যবহারকারীরা সম্মত হচ্ছেন যে: (১) তারা ১৮+ বছর বয়সী; (২) প্রদত্ত তথ্য সত্য ও সঠিক; (৩) BIYE-এর স্কোর চূড়ান্ত সিদ্ধান্ত নয়; (৪) প্ল্যাটফর্মের অপব্যবহার বা হয়রানি করা যাবে না; (৫) অ্যাকাউন্ট হস্তান্তরযোগ্য নয়। সম্পূর্ণ শর্ত: terms.biye.ltd</div>
+            </div>
+            <input type="checkbox" id="tos" style="display:none">
+          </div>
+
+          <div class="consent-item" id="ci-priv" onclick="toggleC('priv')" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="cbox" id="cb-priv"></div>
+            <div style="flex:1">
+              <div class="ctitle">🔐 <span id="lbl-priv">গোপনীয়তা নীতি</span></div>
+              <div class="cdesc" id="lbl-priv-d">আমি গোপনীয়তা নীতি পড়েছি ও বুঝেছি।</div>
+              <div class="cfull">BIYE আপনার ব্যক্তিগত তথ্য সুরক্ষিত রাখে: (১) ফোন, NID, স্বাস্থ্য তথ্য কখনো বিক্রি হয় না; (২) শুধু ম্যাচিং উদ্দেশ্যে তথ্য ব্যবহার; (৩) যেকোনো সময় ডেটা মুছতে পারবেন; (৪) সমস্ত তথ্য এনক্রিপ্টেড Supabase ডেটাবেজে; (৫) বাংলাদেশ তথ্য সুরক্ষা আইন মেনে চলা হয়।</div>
+            </div>
+            <input type="checkbox" id="priv" style="display:none">
+          </div>
+
+          <div class="consent-item" id="ci-match" onclick="toggleC('match')" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="cbox" id="cb-match"></div>
+            <div style="flex:1">
+              <div class="ctitle">🤖 <span id="lbl-match">ম্যাচিং ও AI সম্মতি</span></div>
+              <div class="cdesc" id="lbl-match-d">BIYE AI ব্যবহার করে — AI সিদ্ধান্ত নেয় না।</div>
+              <div class="cfull">BIYE-এর ১৩৭-মেট্রিক ইঞ্জিন আপনার উত্তরের ভিত্তিতে সামঞ্জস্য বিশ্লেষণ করে। গুরুত্বপূর্ণ: (১) AI সিদ্ধান্ত নেয় না — তথ্য সরবরাহ করে মাত্র; (২) স্কোর একটি নির্দেশিকা; (৩) প্রোফাইল যাচাইকৃত সদস্যরা দেখতে পাবে; (৪) AI বিশ্লেষণে ব্যক্তিগত তথ্য প্রক্রিয়া করা হয়; (৫) চূড়ান্ত সিদ্ধান্ত সর্বদা আপনার।</div>
+            </div>
+            <input type="checkbox" id="match" style="display:none">
+          </div>
+
+          <div class="consent-item" id="ci-pay" onclick="toggleC('pay')" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="cbox" id="cb-pay"></div>
+            <div style="flex:1">
+              <div class="ctitle">💳 <span id="lbl-pay">পেমেন্ট চুক্তি</span></div>
+              <div class="cdesc" id="lbl-pay-d">রেজিস্ট্রেশন ৳১১১ + ভ্যাট ৫% = ৳১১৬.৫৫। ২টি বিনামূল্যে ম্যাচ ভিউ।</div>
+              <div class="cfull">রেজিস্ট্রেশন ফি: ৳১১১ + ৳৫০ ভ্যাট = ৳১১৬.৫৫। সুবিধা: (১) ২টি বিনামূল্যে ম্যাচ ভিউ; (২) সম্পূর্ণ প্রোফাইল তৈরি; (৩) প্রশ্নমালা অ্যাক্সেস; (৪) AI সামঞ্জস্য বিশ্লেষণ। অতিরিক্ত ভিউ ৳৩৩৩ প্রতিটি। পেমেন্ট গেটওয়ে: SSLCommerz (নিরাপদ)।</div>
+            </div>
+            <input type="checkbox" id="pay" style="display:none">
+          </div>
+
+          
+          <!-- Blockchain -->
+          <div class="consent-item" id="ci-blockchain" onclick="toggleC('blockchain')" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="cbox" id="cb-blockchain"></div>
+            <div style="flex:1">
+              <div class="ctitle">🔗 <span data-i18n="c.blockchain">Blockchain Consent Logging</span></div>
+              <div class="cdesc" data-i18n="c.blockchain_d">আমার সম্মতি Blockchain-এ অপরিবর্তনীয়ভাবে রেকর্ড হবে।</div>
+              <div class="cfull">BIYE Blockchain Trust Layer ব্যবহার করে: (১) আপনার consent Blockchain-এ immutable record হয়; (২) KYC verification audit trail; (৩) Identity security; (৪) Tamper-proof consent logging। এটি BIYE-কে বিশ্বের প্রথম Blockchain-based matrimony consent system করে।</div>
+            </div>
+            <input type="checkbox" id="blockchain" style="display:none">
+          </div>
+<!-- Optional -->
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gr);margin:.85rem 0 .5rem" id="lbl-opt">✅ ঐচ্ছিক</div>
+          <div class="consent-item" id="ci-sms" onclick="toggleC('sms')" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="cbox" id="cb-sms"></div>
+            <div style="flex:1">
+              <div class="ctitle">📱 <span id="lbl-sms">প্রচারমূলক SMS</span></div>
+              <div class="cdesc" id="lbl-sms-d">BIYE থেকে অফার ও আপডেট পেতে চাই।</div>
+              <div class="cfull">নতুন ম্যাচ সতর্কতা, প্ল্যাটফর্ম আপডেট, বিশেষ অফার পাবেন। যেকোনো সময় STOP লিখে বাতিল করা যাবে।</div>
+            </div>
+            <input type="checkbox" id="sms" style="display:none">
+          </div>
+
+          <div class="btn-row" style="margin-top:1.1rem">
+            <button class="btn btn-ghost" onclick="goStep(1)">← <span id="lbl-back">পেছনে</span></button>
+            <button class="btn btn-primary" onclick="validateConsent()"><span id="lbl-next2">পরবর্তী →</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 3: PAYMENT ══ -->
+    <div class="step" id="step3">
+      <div class="form-section">
+        <div class="fs-head">
+          <div class="fs-title">💳 <span id="lbl-pay-hd">পেমেন্ট</span></div>
+          <div class="fs-sub" id="lbl-pay-sub">নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে</div>
+        </div>
+        <div class="fs-body">
+          <div class="alert alert-err" id="s3err"></div>
+
+          <div class="profile-summary">
+            <div class="ps-row"><span class="lbl" id="lbl-sum-phone">মোবাইল</span><span class="val" id="sumPhone">—</span></div>
+            <div class="ps-row"><span class="lbl" id="lbl-sum-name">নাম</span><span class="val" id="sumName">—</span></div>
+            <div class="ps-row"><span class="lbl" id="lbl-sum-type">ধরন</span><span class="val" id="sumType">—</span></div>
+            <div class="ps-row"><span class="lbl" id="lbl-sum-agree">শর্তাবলি</span><span class="val"><span class="dot-ok"></span> <span id="lbl-accepted">গৃহীত</span></span></div>
+            <div class="ps-row"><span class="lbl" id="lbl-sum-views">ম্যাচ ভিউ</span><span class="val"><span class="dot-ok"></span> <span id="lbl-free2">২টি বিনামূল্যে</span></span></div>
+          </div>
+
+          <div class="price-sum">
+            <div class="price-row"><span id="lbl-pr-reg">BIYE রেজিস্ট্রেশন</span><span>৳১১১</span></div>
+            <div class="price-row"><span id="lbl-pr-vat">ভ্যাট (৫%)</span><span>৳৫০</span></div>
+            <div class="price-row total"><span id="lbl-pr-total">মোট</span><span>৳১১৬.৫৫</span></div>
+          </div>
+
+          <p style="font-size:.76rem;color:var(--ink2);margin-bottom:.85rem" id="lbl-pay-warn">⚠️ পেমেন্ট করার সময় OTP বা পাসওয়ার্ড কাউকে দেবেন না।</p>
+
+          <div id="payActions">
+            <button class="btn btn-pay" onclick="startPay()" id="payBtn">
+              💳 <span id="lbl-paynow">পেমেন্ট করুন — ৳১১৬.৫৫</span>
+            </button>
+            <div class="btn-row" style="margin-top:.6rem">
+              <button class="btn btn-ghost" onclick="goStep(2)">← <span id="lbl-back2">পেছনে</span></button>
+            </div>
+          </div>
+
+          <div id="payProcessing" style="display:none">
+            <div class="pay-spin">
+              <div class="pay-orb">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.2-8.6"/></svg>
+              </div>
+              <div style="font-weight:700;margin-bottom:.3rem" id="lbl-creating">ইনভয়েস তৈরি হচ্ছে...</div>
+              <div style="font-size:.78rem;color:var(--ink2)" id="lbl-wait">এই পেজ বন্ধ করবেন না।</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 4: SUCCESS ══ -->
+    <div class="step" id="step4">
+      <div class="form-section">
+        <div class="fs-body">
+          <div class="success-wrap">
+            <div class="success-anim">🎉</div>
+            <h2 style="font-size:1.4rem;font-weight:900;margin-bottom:.4rem" id="lbl-welcome">BIYE-তে স্বাগতম!</h2>
+            <p style="font-size:.9rem;color:var(--ink2)" id="lbl-success-sub">আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।</p>
+            <div class="success-cards">
+              <div class="sc"><div class="sc-icon" style="background:var(--gr-s);color:var(--gr)">✓</div><div class="sc-text"><strong id="ls-reg">রেজিস্ট্রেশন</strong><span id="ls-reg-s">সফলভাবে সম্পন্ন</span></div></div>
+              <div class="sc"><div class="sc-icon" style="background:var(--gd-s);color:#6a4e00">৳</div><div class="sc-text"><strong id="ls-pay">পেমেন্ট</strong><span>৳১১৬.৫৫ <span id="ls-confirmed">নিশ্চিত</span></span></div></div>
+              <div class="sc"><div class="sc-icon" style="background:var(--pu-s);color:var(--pu)">👁</div><div class="sc-text"><strong id="ls-views">ম্যাচ ভিউ</strong><span>2 <span id="ls-free">বিনামূল্যে</span></span></div></div>
+            </div>
+            <div class="suc-card"><div class="suc-icon" style="background:var(--bl-s);color:var(--bl)">🔗</div><div class="sc-text"><strong id="ls-blockchain" data-i18n="suc.blockchain">Blockchain Consent</strong><span data-i18n="suc.blockchain_s">রেকর্ড করা হয়েছে</span></div></div>
+      <a href="questionnaire.html" class="btn btn-primary" style="text-decoration:none;margin-top:.5rem" id="lbl-startq">🎯 প্রশ্নমালা শুরু করুন →</a>
+            <a href="dashboard.html" class="btn btn-ghost" style="text-decoration:none;margin-top:.6rem" id="lbl-dash">ড্যাশবোর্ডে যান</a>
+            <div style="margin-top:1rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
+              <a href="invoice.html" class="chip chip-gd" style="text-decoration:none" id="lbl-inv">🧾 ইনভয়েস</a>
+              <a href="receipt.html" class="chip chip-gr" style="text-decoration:none" id="lbl-rec">📄 রসিদ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAY FAIL ══ -->
+    <div class="step" id="stepFail">
+      <div class="form-section">
+        <div class="fs-body">
+          <div class="pay-fail">
+            <div class="pay-fail-icon">❌</div>
+            <h3 style="font-size:1.1rem;font-weight:800;color:var(--danger);margin-bottom:.4rem" id="lbl-fail">পেমেন্ট সফল হয়নি</h3>
+            <p style="font-size:.85rem;color:var(--ink2);margin-bottom:1.25rem" id="lbl-fail-sub">কোনো চার্জ হয়নি। আবার চেষ্টা করুন।</p>
+            <button class="btn btn-pay" onclick="goStep(3)" style="max-width:260px;margin:0 auto" id="lbl-retry">আবার চেষ্টা করুন</button>
+            <button class="btn btn-ghost" onclick="goStep(1)" style="max-width:260px;margin:.5rem auto 0" id="lbl-restart">শুরু থেকে করুন</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /rp-form -->
+</div><!-- /right-panel -->
+</div><!-- /page-wrap -->
 
 <!-- Voice FAB -->
-<button class="voice-fab" id="voiceFab" onclick="openVoicePanel()" aria-label="ভয়েস সহায়তা">🎙</button>
+<button class="voice-fab" id="voiceFab" onclick="openVP()" aria-label="ভয়েস সহায়তা">🎙</button>
 
 <!-- Voice Panel -->
-<div class="voice-panel" id="voicePanel" role="dialog" aria-modal="true" aria-label="ভয়েস সহায়তা">
-  <div class="voice-orb" id="voiceOrb" onclick="toggleMainVoice()">🎙</div>
-  <div class="voice-status" id="voiceStatus">ট্যাপ করুন ও বলুন</div>
-  <div class="voice-transcript" id="voiceTranscript"></div>
-  <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:.5rem" data-i18n="voice.hint">আপনার মোবাইল নম্বর বাংলায় বা ইংরেজিতে বলুন</p>
-  <button class="voice-close" onclick="closeVoicePanel()" data-i18n="btn.close">বন্ধ করুন</button>
+<div class="vp" id="vp" role="dialog" aria-modal="true">
+  <div class="vp-orb" id="vpOrb" onclick="toggleVoice()">🎙</div>
+  <div class="vp-status" id="vpStatus">ট্যাপ করুন ও বলুন</div>
+  <div class="vp-tx" id="vpTx"></div>
+  <p style="font-size:.75rem;color:rgba(255,255,255,.45);margin-bottom:.5rem">মোবাইল নম্বর বলুন</p>
+  <button class="vp-close" onclick="closeVP()">বন্ধ করুন</button>
 </div>
 
 <script>
-// ══════════════════════════════════════════════════
-//  BIYE register.html — Production JS
-//  7 languages · colorful · consent tooltips · OTP timer
-// ══════════════════════════════════════════════════
+// ══════════════════════════════════════════════
+//  BIYE Register v3 — Production JS
+// ══════════════════════════════════════════════
 
-// ── LOGO ─────────────────────────────────────────
-(function loadLogo(){
-  var img = document.getElementById('navLogo');
-  if(img) img.src = 'data:image/png;base64,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';
+// ── LOGO ─────────────────────────────────────
+var LOGO_DATA = 'data:image/png;base64,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';
+document.getElementById('lpLogo').src = 'data:image/png;base64,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';
+document.getElementById('navLogo').src = 'data:image/png;base64,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';
+
+// ── DISTRICTS MAP ─────────────────────────────
+var DISTRICTS = {
+  dhaka:['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মানিকগঞ্জ','মুন্সীগঞ্জ','নরসিংদী','ফরিদপুর','গোপালগঞ্জ','কিশোরগঞ্জ','মাদারীপুর','রাজবাড়ী','শরীয়তপুর','টাঙ্গাইল'],
+  chattogram:['চট্টগ্রাম','কক্সবাজার','রাঙ্গামাটি','বান্দরবান','খাগড়াছড়ি','কুমিল্লা','ফেনী','ব্রাহ্মণবাড়িয়া','চাঁদপুর','লক্ষ্মীপুর','নোয়াখালী'],
+  sylhet:['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
+  rajshahi:['রাজশাহী','নওগাঁ','নাটোর','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
+  khulna:['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','ঝিনাইদহ','নড়াইল','মাগুরা','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা'],
+  barishal:['বরিশাল','পটুয়াখালী','পিরোজপুর','ঝালকাঠি','বরগুনা','ভোলা'],
+  rangpur:['রংপুর','দিনাজপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','পঞ্চগড়','ঠাকুরগাঁও'],
+  mymensingh:['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোনা']
+};
+
+function updateDistricts(){
+  var div = document.getElementById('division').value;
+  var sel = document.getElementById('district');
+  sel.innerHTML = '<option value="">জেলা নির্বাচন করুন</option>';
+  if(DISTRICTS[div]) DISTRICTS[div].forEach(function(d){ sel.innerHTML += '<option value="'+d+'">'+d+'</option>'; });
+}
+
+// ── DOB YEARS ─────────────────────────────────
+(function(){
+  var y = document.getElementById('dobYear');
+  var cur = new Date().getFullYear();
+  for(var i=cur-18;i>=cur-70;i--){
+    var o=document.createElement('option'); o.value=i; o.textContent=i; y.appendChild(o);
+  }
 })();
 
-// ── TRANSLATIONS (7 languages) ───────────────────
+// ── TRANSLATIONS ─────────────────────────────
 var T = {
   bn:{
-    'nav.signIn':'লগইন',
-    'step.info':'তথ্য','step.consent':'সম্মতি','step.payment':'পেমেন্ট','step.done':'সম্পন্ন',
-    'step1.badge':'ধাপ ১','step1.title':'প্রোফাইল তৈরি করুন','step1.sub':'তথ্য দিন, তারপর মোবাইলে যাচাই কোড যাবে।',
-    'verse.quran':'তাঁর নিদর্শনের একটি হলো, তিনি তোমাদের জন্য তোমাদের মধ্য থেকে সঙ্গিনী সৃষ্টি করেছেন, যাতে তোমরা তাদের কাছে প্রশান্তি পাও।',
-    'verse.hadith':'ভালোবাসাময়ী নারীকে বিবাহ করো।',
-    's1.ownerLabel':'এই প্রোফাইলটি কার জন্য?',
-    'owner.self':'নিজের জন্য','owner.guardian':'সন্তানের জন্য',
-    'guardian.header':'আপনার তথ্য (অভিভাবক)','guardian.sub':'আপনি login করবেন। নাম, মোবাইল ও পাসওয়ার্ড দিন।',
-    'guardian.name':'আপনার নাম (অভিভাবক)','guardian.phone':'আপনার মোবাইল','guardian.password':'আপনার পাসওয়ার্ড',
-    'candidate.header':'সন্তানের তথ্য','candidate.sub':'সন্তানের নাম দিন।',
-    's1.infoLabel':'আপনার তথ্য','s1.passLabel':'পাসওয়ার্ড তৈরি করুন',
-    'field.name':'আপনার নাম','field.phone':'মোবাইল নম্বর','field.age':'বয়স','field.email':'ইমেইল',
-    'field.password':'পাসওয়ার্ড','field.confirmPass':'পাসওয়ার্ড নিশ্চিত করুন',
-    'field.phoneHint':'উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর',
-    'optional':'ঐচ্ছিক',
-    'err.name':'নাম দিন (কমপক্ষে ২ অক্ষর)','err.phone':'সঠিক বাংলাদেশ মোবাইল নম্বর দিন',
-    'err.age':'বয়স ১৮-৮০ এর মধ্যে হতে হবে','err.email':'সঠিক ইমেইল দিন',
-    'err.pass':'কমপক্ষে ৮ অক্ষর, বড় হাতের অক্ষর ও সংখ্যা','err.pass2':'পাসওয়ার্ড মিলছে না',
-    'otp.header':'মোবাইল যাচাই','otp.info':'📲 কোড পাঠানো হয়েছে। ফোনে আসা ৬ সংখ্যার কোডটি লিখুন।',
-    'otp.enter':'যাচাই কোড লিখুন','otp.noCode':'কোড আসেনি?','otp.resend':'আবার পাঠান',
-    'btn.sendCode':'পরবর্তী → কোড পাঠান','btn.verify':'যাচাই করুন',
-    'btn.sending':'পাঠানো হচ্ছে...','btn.verifying':'যাচাই হচ্ছে...',
-    'btn.back':'← পেছনে','btn.next':'পরবর্তী →','btn.payNow':'💳 পেমেন্ট করুন — ৳১,০৪৯',
-    'btn.startQ':'🎯 প্রশ্নমালা শুরু করুন →','btn.dashboard':'ড্যাশবোর্ডে যান',
-    'btn.retry':'আবার চেষ্টা করুন','btn.startOver':'শুরু থেকে করুন','btn.close':'বন্ধ করুন',
-    's1.hasAccount':'ইতিমধ্যে অ্যাকাউন্ট আছে?',
-    'step2.badge':'ধাপ ২','step2.title':'শর্তাবলি ও সম্মতি','step2.sub':'প্রতিটি শর্তের উপর মাউস রাখলে বিস্তারিত দেখাবে।',
-    'consent.required':'আবশ্যক শর্তাবলি','consent.optional':'ঐচ্ছিক',
-    'tos.title':'📜 সেবার শর্তাবলি','tos.desc':'আমি BIYE-এর সেবার শর্তাবলি মেনে নিচ্ছি।',
-    'priv.title':'🔐 গোপনীয়তা নীতি','priv.desc':'আমি গোপনীয়তা নীতি পড়েছি ও বুঝেছি।',
-    'match.title':'🤖 ম্যাচিং ও AI সম্মতি','match.desc':'BIYE AI ব্যবহার করে — AI সিদ্ধান্ত নেয় না।',
-    'pay.title':'💳 পেমেন্ট চুক্তি','pay.desc':'রেজিস্ট্রেশন ৳৯৯৯ + ভ্যাট ৫% = ৳১,০৪৯।',
-    'sms.title':'📱 প্রচারমূলক SMS','sms.desc':'BIYE থেকে অফার ও আপডেট পেতে চাই।',
-    'step3.badge':'ধাপ ৩','step3.title':'পেমেন্ট সম্পন্ন করুন','step3.sub':'নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে।',
-    'sum.mobile':'মোবাইল','sum.name':'নাম','sum.type':'ধরন','sum.consent':'শর্তাবলি','sum.views':'ম্যাচ ভিউ',
-    'sum.accepted':'গৃহীত','sum.freeViews':'২টি বিনামূল্যে',
-    'price.reg':'BIYE রেজিস্ট্রেশন','price.vat':'ভ্যাট (৫%)','price.total':'মোট',
-    'pay.warning':'⚠️ পেমেন্ট করার সময় OTP বা পাসওয়ার্ড কাউকে দেবেন না।',
-    'pay.creating':'ইনভয়েস তৈরি হচ্ছে...','pay.wait':'এই পেজ বন্ধ করবেন না।',
-    'step4.badge':'সম্পন্ন','step4.title':'BIYE-তে স্বাগতম!','step4.sub':'আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।',
-    'success.reg':'রেজিস্ট্রেশন','success.regSub':'সফলভাবে সম্পন্ন',
-    'success.pay':'পেমেন্ট','success.confirmed':'নিশ্চিত',
-    'success.views':'ম্যাচ ভিউ','success.free':'বিনামূল্যে',
-    'fail.title':'পেমেন্ট সফল হয়নি','fail.sub':'কোনো চার্জ হয়নি। আবার চেষ্টা করুন।',
-    'voice.hint':'আপনার মোবাইল নম্বর বাংলায় বলুন',
-    'err.server':'সার্ভার সংযোগ ব্যর্থ। আপনার ইন্টারনেট সংযোগ চেক করুন এবং আবার চেষ্টা করুন।',
-    'err.otp':'কোডটি সঠিক নয়। আবার চেষ্টা করুন।',
-    'err.otpFull':'৬ সংখ্যার কোড দিন।',
-    'err.consent':'সব আবশ্যক শর্ত মেনে নিন।',
-    'err.payFail':'পেমেন্ট সেবা পাওয়া যাচ্ছে না। আবার চেষ্টা করুন।',
-    'pw.weak':'দুর্বল 🔴','pw.fair':'মোটামুটি 🟡','pw.good':'ভালো 🔵','pw.strong':'শক্তিশালী 🟢',
-    'type.self':'নিজে (Candidate)','type.guardian':'অভিভাবক',
+    lang:'বাং', loginLink:'লগইন',
+    'pill1':'তথ্য ও OTP','pill2':'সম্মতি','pill3':'পেমেন্ট','pill4':'সম্পন্ন',
+    'who':'এই প্রোফাইলটি কার জন্য?','who-sub':'সঠিক বিকল্পটি বেছে নিন',
+    'self':'নিজে','father':'বাবা','mother':'মা','brother':'ভাই','sister':'বোন',
+    'seek':'আপনি খুঁজছেন','bride':'পাত্রী','groom':'পাত্র',
+    'g-hd':'আপনার তথ্য (অভিভাবক)','g-sub':'আপনি এই অ্যাকাউন্টে login করবেন',
+    'gname':'অভিভাবকের নাম','grel':'সম্পর্ক','gphone':'অভিভাবকের মোবাইল','gpass':'পাসওয়ার্ড',
+    'c-hd':'সন্তানের তথ্য','c-sub':'সন্তানের নাম দিন। মোবাইল না থাকলে খালি রাখুন।',
+    'info-hd':'আপনার তথ্য','info-sub':'সঠিক তথ্য দিন — যাচাই করা হবে',
+    'fname':'প্রথম নাম','lname':'শেষ নাম','dob':'জন্ম তারিখ',
+    'religion':'ধর্ম','marital':'বৈবাহিক অবস্থা','edu':'শিক্ষা','prof':'পেশা',
+    'div':'বিভাগ','dist':'জেলা','phone':'মোবাইল নম্বর','email':'ইমেইল',
+    'pass':'পাসওয়ার্ড','pass2':'পাসওয়ার্ড নিশ্চিত',
+    'otp-hd':'মোবাইল যাচাই','nocode':'কোড আসেনি?','resend':'আবার পাঠান',
+    's1btn':'পরবর্তী → কোড পাঠান','s1verify':'যাচাই করুন',
+    'sending':'পাঠানো হচ্ছে...','verifying':'যাচাই হচ্ছে...',
+    'hasacc':'ইতিমধ্যে অ্যাকাউন্ট আছে?','login':'লগইন করুন →',
+    'consent-hd':'শর্তাবলি ও সম্মতি','consent-sub':'প্রতিটি শর্তের উপর মাউস রাখলে বিস্তারিত দেখাবে',
+    'req':'⚠️ আবশ্যক','opt':'✅ ঐচ্ছিক',
+    'tos':'সেবার শর্তাবলি','tos-d':'আমি BIYE-এর সেবার শর্তাবলি মেনে নিচ্ছি।',
+    'priv':'গোপনীয়তা নীতি','priv-d':'আমি গোপনীয়তা নীতি পড়েছি ও বুঝেছি।',
+    'match':'ম্যাচিং ও AI সম্মতি','match-d':'BIYE AI ব্যবহার করে — AI সিদ্ধান্ত নেয় না।',
+    'pay-c':'পেমেন্ট চুক্তি','pay-c-d':'রেজিস্ট্রেশন ৳১১১ + ভ্যাট ৫% = ৳১১৬.৫৫।',
+    'sms':'প্রচারমূলক SMS','sms-d':'BIYE থেকে অফার ও আপডেট পেতে চাই।',
+    'back':'পেছনে','next':'পরবর্তী →',
+    'pay-hd':'পেমেন্ট','pay-sub':'নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে',
+    'sum-phone':'মোবাইল','sum-name':'নাম','sum-type':'ধরন',
+    'sum-agree':'শর্তাবলি','accepted':'গৃহীত','sum-views':'ম্যাচ ভিউ','free2':'২টি বিনামূল্যে',
+    'pr-reg':'BIYE রেজিস্ট্রেশন','pr-vat':'ভ্যাট (৫%)','pr-total':'মোট',
+    'pay-warn':'⚠️ পেমেন্ট করার সময় OTP বা পাসওয়ার্ড কাউকে দেবেন না।',
+    'paynow':'পেমেন্ট করুন — ৳১১৬.৫৫','creating':'ইনভয়েস তৈরি হচ্ছে...','wait':'এই পেজ বন্ধ করবেন না।',
+    'welcome':'BIYE-তে স্বাগতম!','success-sub':'আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।',
+    'ls-reg':'রেজিস্ট্রেশন','ls-reg-s':'সফলভাবে সম্পন্ন','ls-pay':'পেমেন্ট','confirmed':'নিশ্চিত',
+    'ls-views':'ম্যাচ ভিউ','free':'বিনামূল্যে',
+    'startq':'🎯 প্রশ্নমালা শুরু করুন →','dash':'ড্যাশবোর্ডে যান',
+    'inv':'🧾 ইনভয়েস','rec':'📄 রসিদ',
+    'fail':'পেমেন্ট সফল হয়নি','fail-sub':'কোনো চার্জ হয়নি। আবার চেষ্টা করুন।',
+    'retry':'আবার চেষ্টা করুন','restart':'শুরু থেকে করুন',
+    'pw-weak':'দুর্বল 🔴','pw-fair':'মোটামুটি 🟡','pw-good':'ভালো 🔵','pw-strong':'শক্তিশালী 🟢',
+    'type-self':'নিজে (Candidate)','type-guardian':'অভিভাবক',
+    'err-server':'সার্ভার সংযোগ ব্যর্থ। ইন্টারনেট সংযোগ চেক করুন।',
+    'err-phone':'সঠিক বাংলাদেশ মোবাইল নম্বর দিন','err-otp':'কোডটি সঠিক নয়।',
+    'err-otp6':'৬ সংখ্যার কোড দিন।','err-consent':'সব আবশ্যক শর্ত মেনে নিন।',
+    'err-pay':'পেমেন্ট সেবা পাওয়া যাচ্ছে না।',
+    'phoneHint':'উদাহরণ: 01712345678 — শুধু বাংলাদেশ নম্বর',
+    'v1trans':'তাঁর নিদর্শনের একটি হলো তিনি তোমাদের মধ্য থেকে জীবনসঙ্গী সৃষ্টি করেছেন।',
+    'v2trans':'ভালোবাসাময়ী নারীকে বিবাহ করো।',
   },
   en:{
-    'nav.signIn':'Login',
-    'step.info':'Info','step.consent':'Consent','step.payment':'Payment','step.done':'Done',
-    'step1.badge':'Step 1','step1.title':'Create your profile','step1.sub':'Fill in your details, then verify your phone.',
-    'verse.quran':'And of His signs is that He created for you mates from among yourselves that you may find tranquility in them; and He placed between you love and mercy.',
-    'verse.hadith':'Marry the loving, the child-bearing woman.',
-    's1.ownerLabel':'Who is this profile for?',
-    'owner.self':'For myself','owner.guardian':'For my child',
-    'guardian.header':'Your details (Guardian)','guardian.sub':'You will login with these details.',
-    'guardian.name':'Your name (Guardian)','guardian.phone':'Your mobile','guardian.password':'Your password',
-    'candidate.header':'Child\'s information','candidate.sub':'Enter child\'s name.',
-    's1.infoLabel':'Your information','s1.passLabel':'Create password',
-    'field.name':'Your name','field.phone':'Mobile number','field.age':'Age','field.email':'Email',
-    'field.password':'Password','field.confirmPass':'Confirm password',
-    'field.phoneHint':'Example: 01712345678 — Bangladesh numbers only',
-    'optional':'optional',
-    'err.name':'Enter your name (min 2 chars)','err.phone':'Enter a valid Bangladesh mobile number',
-    'err.age':'Age must be between 18 and 80','err.email':'Enter a valid email address',
-    'err.pass':'Min 8 chars, 1 uppercase letter, 1 number','err.pass2':'Passwords do not match',
-    'otp.header':'Verify your phone','otp.info':'📲 Code sent! Enter the 6-digit code from your SMS.',
-    'otp.enter':'Enter verification code','otp.noCode':'Didn\'t receive the code?','otp.resend':'Resend',
-    'btn.sendCode':'Next → Send Code','btn.verify':'Verify Code',
-    'btn.sending':'Sending...','btn.verifying':'Verifying...',
-    'btn.back':'← Back','btn.next':'Next →','btn.payNow':'💳 Pay Now — ৳1,049',
-    'btn.startQ':'🎯 Start Questionnaire →','btn.dashboard':'Go to Dashboard',
-    'btn.retry':'Try Again','btn.startOver':'Start Over','btn.close':'Close',
-    's1.hasAccount':'Already have an account?',
-    'step2.badge':'Step 2','step2.title':'Terms & Consent','step2.sub':'Hover over each item to see full details.',
-    'consent.required':'Required','consent.optional':'Optional',
-    'tos.title':'📜 Terms of Service','tos.desc':'I agree to BIYE\'s Terms of Service.',
-    'priv.title':'🔐 Privacy Policy','priv.desc':'I have read and understood the Privacy Policy.',
-    'match.title':'🤖 Matching & AI Consent','match.desc':'BIYE uses AI for compatibility — AI does not decide for you.',
-    'pay.title':'💳 Payment Agreement','pay.desc':'Registration ৳999 + VAT 5% = ৳1,049.',
-    'sms.title':'📱 Promotional SMS','sms.desc':'I\'d like to receive offers and updates via SMS.',
-    'step3.badge':'Step 3','step3.title':'Complete Payment','step3.sub':'You will be securely redirected to the payment gateway.',
-    'sum.mobile':'Mobile','sum.name':'Name','sum.type':'Type','sum.consent':'Agreements','sum.views':'Match Views',
-    'sum.accepted':'Accepted','sum.freeViews':'2 free included',
-    'price.reg':'BIYE Registration','price.vat':'VAT (5%)','price.total':'Total',
-    'pay.warning':'⚠️ Never share your OTP or password with anyone during payment.',
-    'pay.creating':'Creating invoice...','pay.wait':'Please don\'t close this page.',
-    'step4.badge':'Done','step4.title':'Welcome to BIYE!','step4.sub':'Your account has been successfully created.',
-    'success.reg':'Registration','success.regSub':'Successfully completed',
-    'success.pay':'Payment','success.confirmed':'confirmed',
-    'success.views':'Match Views','success.free':'free',
-    'fail.title':'Payment Failed','fail.sub':'No charge was made. Please try again.',
-    'voice.hint':'Say your mobile number in English or Bengali',
-    'err.server':'Server connection failed. Check your internet connection and try again.',
-    'err.otp':'Incorrect code. Please try again.','err.otpFull':'Enter the 6-digit code.',
-    'err.consent':'Please accept all required agreements.',
-    'err.payFail':'Payment service unavailable. Please try again.',
-    'pw.weak':'Weak 🔴','pw.fair':'Fair 🟡','pw.good':'Good 🔵','pw.strong':'Strong 🟢',
-    'type.self':'Self (Candidate)','type.guardian':'Guardian',
+    lang:'EN', loginLink:'Login',
+    'pill1':'Info & OTP','pill2':'Consent','pill3':'Payment','pill4':'Done',
+    'who':'Who is this profile for?','who-sub':'Select the appropriate option',
+    'self':'Myself','father':'Father','mother':'Mother','brother':'Brother','sister':'Sister',
+    'seek':'I am looking for','bride':'Bride','groom':'Groom',
+    'g-hd':'Your details (Guardian)','g-sub':'You will login with these details',
+    'gname':'Guardian name','grel':'Relationship','gphone':'Guardian mobile','gpass':'Password',
+    'c-hd':'Child\'s information','c-sub':'Enter child\'s name. Phone is optional.',
+    'info-hd':'Your information','info-sub':'Enter correct details — will be verified',
+    'fname':'First name','lname':'Last name','dob':'Date of birth',
+    'religion':'Religion','marital':'Marital status','edu':'Education','prof':'Profession',
+    'div':'Division','dist':'District','phone':'Mobile number','email':'Email',
+    'pass':'Password','pass2':'Confirm password',
+    'otp-hd':'Mobile verification','nocode':'Didn\'t receive the code?','resend':'Resend',
+    's1btn':'Next → Send Code','s1verify':'Verify Code',
+    'sending':'Sending...','verifying':'Verifying...',
+    'hasacc':'Already have an account?','login':'Login →',
+    'consent-hd':'Terms & Consent','consent-sub':'Hover over each item to see full details',
+    'req':'⚠️ Required','opt':'✅ Optional',
+    'tos':'Terms of Service','tos-d':'I agree to BIYE\'s Terms of Service.',
+    'priv':'Privacy Policy','priv-d':'I have read and understood the Privacy Policy.',
+    'match':'Matching & AI Consent','match-d':'BIYE uses AI — AI does not decide for you.',
+    'pay-c':'Payment Agreement','pay-c-d':'Registration ৳111 + VAT 5% = ৳116.55.',
+    'sms':'Promotional SMS','sms-d':'I\'d like to receive offers and updates via SMS.',
+    'back':'Back','next':'Next →',
+    'pay-hd':'Payment','pay-sub':'You will be securely redirected to SSLCommerz',
+    'sum-phone':'Mobile','sum-name':'Name','sum-type':'Type',
+    'sum-agree':'Agreements','accepted':'Accepted','sum-views':'Match Views','free2':'2 free included',
+    'pr-reg':'BIYE Registration','pr-vat':'VAT (5%)','pr-total':'Total',
+    'pay-warn':'⚠️ Never share your OTP or password with anyone during payment.',
+    'paynow':'Pay Now — ৳116.55','creating':'Creating invoice...','wait':'Please don\'t close this page.',
+    'welcome':'Welcome to BIYE!','success-sub':'Your account has been successfully created.',
+    'ls-reg':'Registration','ls-reg-s':'Successfully completed','ls-pay':'Payment','confirmed':'confirmed',
+    'ls-views':'Match Views','free':'free',
+    'startq':'🎯 Start Questionnaire →','dash':'Go to Dashboard',
+    'inv':'🧾 Invoice','rec':'📄 Receipt',
+    'fail':'Payment Failed','fail-sub':'No charge was made. Please try again.',
+    'retry':'Try Again','restart':'Start Over',
+    'pw-weak':'Weak 🔴','pw-fair':'Fair 🟡','pw-good':'Good 🔵','pw-strong':'Strong 🟢',
+    'type-self':'Self (Candidate)','type-guardian':'Guardian',
+    'err-server':'Server connection failed. Check your internet connection.',
+    'err-phone':'Enter a valid Bangladesh mobile number','err-otp':'Incorrect code.',
+    'err-otp6':'Enter the 6-digit code.','err-consent':'Please accept all required agreements.',
+    'err-pay':'Payment service unavailable.',
+    'phoneHint':'Example: 01712345678 — Bangladesh numbers only',
+    'v1trans':'And of His signs is that He created for you mates from among yourselves.',
+    'v2trans':'Marry the loving, child-bearing woman.',
   },
   hi:{
-    'nav.signIn':'लॉगिन','step.info':'जानकारी','step.consent':'सहमति','step.payment':'भुगतान','step.done':'पूर्ण',
-    'step1.badge':'चरण १','step1.title':'प्रोफ़ाइल बनाएं','step1.sub':'विवरण भरें, फिर फ़ोन सत्यापित करें।',
-    'verse.quran':'उसकी निशानियों में से एक यह है कि उसने तुम्हारे लिए तुम्हीं में से जोड़े बनाए।',
-    's1.ownerLabel':'यह प्रोफ़ाइल किसके लिए है?',
-    'owner.self':'अपने लिए','owner.guardian':'बच्चे के लिए',
-    'field.name':'आपका नाम','field.phone':'मोबाइल नंबर','field.age':'उम्र','field.email':'ईमेल',
-    'field.password':'पासवर्ड','field.confirmPass':'पासवर्ड की पुष्टि करें',
-    'optional':'वैकल्पिक',
-    'err.name':'नाम दर्ज करें','err.phone':'मान्य बांग्लादेश मोबाइल नंबर दर्ज करें',
-    'err.pass':'न्यूनतम 8 वर्ण, एक बड़ा अक्षर और एक अंक',
-    'btn.sendCode':'आगे → कोड भेजें','btn.verify':'सत्यापित करें',
-    'btn.sending':'भेज रहे हैं...','btn.verifying':'सत्यापित हो रहा है...',
-    'btn.back':'← वापस','btn.next':'आगे →','btn.payNow':'💳 भुगतान करें — ৳1,049',
-    'step2.badge':'चरण २','step2.title':'नियम और सहमति',
-    'step3.badge':'चरण ३','step3.title':'भुगतान पूर्ण करें',
-    'step4.title':'BIYE में स्वागत है!','step4.sub':'आपका खाता सफलतापूर्वक बनाया गया।',
-    'err.server':'सर्वर से कनेक्ट नहीं हो सका। दोबारा प्रयास करें।',
-    'pw.weak':'कमज़ोर 🔴','pw.fair':'ठीक 🟡','pw.good':'अच्छा 🔵','pw.strong':'मज़बूत 🟢',
-    'type.self':'स्वयं (उम्मीदवार)','type.guardian':'अभिभावक',
+    lang:'हिं','pill1':'जानकारी','pill2':'सहमति','pill3':'भुगतान','pill4':'पूर्ण',
+    'who':'यह प्रोफ़ाइल किसके लिए है?',
+    'self':'स्वयं','father':'पिता','mother':'माता','brother':'भाई','sister':'बहन',
+    'seek':'मैं ढूंढ रहा/रही हूं','bride':'दुल्हन','groom':'दूल्हा',
+    'fname':'पहला नाम','lname':'अंतिम नाम','phone':'मोबाइल नंबर','email':'ईमेल',
+    'pass':'पासवर्ड','pass2':'पासवर्ड पुष्टि',
+    's1btn':'अगला → OTP भेजें','s1verify':'सत्यापित करें',
+    'sending':'भेज रहे हैं...','verifying':'सत्यापित हो रहा है...',
+    'welcome':'BIYE में स्वागत है!',
+    'err-server':'सर्वर से कनेक्ट नहीं हो सका।','err-phone':'मान्य बांग्लादेश मोबाइल नंबर दर्ज करें',
+    'pw-weak':'कमज़ोर 🔴','pw-fair':'ठीक 🟡','pw-good':'अच्छा 🔵','pw-strong':'मज़बूत 🟢',
+    'type-self':'स्वयं','type-guardian':'अभिभावक','back':'वापस','next':'आगे →',
   },
   ar:{
-    'nav.signIn':'تسجيل الدخول','step.info':'المعلومات','step.consent':'الموافقة','step.payment':'الدفع','step.done':'تم',
-    'step1.badge':'الخطوة ١','step1.title':'إنشاء الملف الشخصي','step1.sub':'أدخل بياناتك، ثم سيتم إرسال رمز التحقق.',
-    'verse.quran':'وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً',
-    'verse.hadith':'تزوجوا الودود الولود',
-    's1.ownerLabel':'لمن هذا الملف الشخصي؟',
-    'owner.self':'لنفسي','owner.guardian':'لطفلي',
-    'field.name':'الاسم الكامل','field.phone':'رقم الهاتف','field.age':'العمر','field.email':'البريد الإلكتروني',
-    'field.password':'كلمة المرور','field.confirmPass':'تأكيد كلمة المرور',
-    'optional':'اختياري',
-    'err.name':'أدخل اسمك','err.phone':'أدخل رقم هاتف بنغلاديشي صحيح',
-    'err.pass':'8 أحرف على الأقل، حرف كبير ورقم',
-    'btn.sendCode':'التالي → إرسال الرمز','btn.verify':'تحقق','btn.sending':'جارٍ الإرسال...','btn.verifying':'جارٍ التحقق...',
-    'btn.back':'← رجوع','btn.next':'التالي →','btn.payNow':'💳 ادفع الآن — ৳1,049',
-    'step2.badge':'الخطوة ٢','step2.title':'الشروط والموافقة',
-    'step3.badge':'الخطوة ٣','step3.title':'إتمام الدفع',
-    'step4.title':'أهلاً بك في BIYE!','step4.sub':'تم إنشاء حسابك بنجاح.',
-    'err.server':'فشل الاتصال بالخادم. تحقق من اتصالك وحاول مجدداً.',
-    'pw.weak':'ضعيف 🔴','pw.fair':'مقبول 🟡','pw.good':'جيد 🔵','pw.strong':'قوي 🟢',
-    'type.self':'مرشح','type.guardian':'ولي الأمر',
+    lang:'عر','pill1':'المعلومات','pill2':'الموافقة','pill3':'الدفع','pill4':'تم',
+    'who':'لمن هذا الملف الشخصي؟',
+    'self':'لنفسي','father':'الأب','mother':'الأم','brother':'الأخ','sister':'الأخت',
+    'seek':'أبحث عن','bride':'عروس','groom':'عريس',
+    'fname':'الاسم الأول','lname':'اسم العائلة','phone':'رقم الهاتف','email':'البريد الإلكتروني',
+    'pass':'كلمة المرور','pass2':'تأكيد كلمة المرور',
+    's1btn':'التالي → إرسال الرمز','s1verify':'تحقق',
+    'sending':'جارٍ الإرسال...','verifying':'جارٍ التحقق...',
+    'welcome':'أهلاً بك في BIYE!',
+    'err-server':'فشل الاتصال بالخادم.','err-phone':'أدخل رقم هاتف بنغلاديشي صحيح',
+    'pw-weak':'ضعيف 🔴','pw-fair':'مقبول 🟡','pw-good':'جيد 🔵','pw-strong':'قوي 🟢',
+    'type-self':'مرشح','type-guardian':'ولي الأمر','back':'رجوع','next':'التالي →',
   },
   zh:{
-    'nav.signIn':'登录','step.info':'信息','step.consent':'同意','step.payment':'付款','step.done':'完成',
-    'step1.badge':'第一步','step1.title':'创建您的档案','step1.sub':'填写您的详细信息，然后验证手机。',
-    'verse.quran':'祂的迹象之一是，祂为你们从你们自身中创造了配偶，以使你们向她们获得安宁。',
-    's1.ownerLabel':'这个档案是为谁创建的？',
-    'owner.self':'为我自己','owner.guardian':'为我的孩子',
-    'field.name':'您的姓名','field.phone':'手机号码','field.age':'年龄','field.email':'电子邮件',
-    'field.password':'密码','field.confirmPass':'确认密码',
-    'optional':'可选',
-    'err.name':'请输入姓名','err.phone':'请输入有效的孟加拉国手机号码',
-    'err.pass':'至少8个字符，含一个大写字母和数字',
-    'btn.sendCode':'下一步 → 发送验证码','btn.verify':'验证','btn.sending':'发送中...','btn.verifying':'验证中...',
-    'btn.back':'← 返回','btn.next':'下一步 →','btn.payNow':'💳 立即支付 — ৳1,049',
-    'step2.badge':'第二步','step2.title':'条款与同意',
-    'step3.badge':'第三步','step3.title':'完成付款',
-    'step4.title':'欢迎来到BIYE！','step4.sub':'您的账户已成功创建。',
-    'err.server':'服务器连接失败。请检查您的网络连接并重试。',
-    'pw.weak':'弱 🔴','pw.fair':'一般 🟡','pw.good':'良好 🔵','pw.strong':'强 🟢',
-    'type.self':'候选人','type.guardian':'监护人',
+    lang:'中','pill1':'信息','pill2':'同意','pill3':'付款','pill4':'完成',
+    'who':'这个档案是为谁创建的？',
+    'self':'为我自己','father':'父亲','mother':'母亲','brother':'兄弟','sister':'姐妹',
+    'seek':'我在寻找','bride':'新娘','groom':'新郎',
+    'fname':'名字','lname':'姓氏','phone':'手机号码','email':'电子邮件',
+    'pass':'密码','pass2':'确认密码',
+    's1btn':'下一步 → 发送验证码','s1verify':'验证',
+    'sending':'发送中...','verifying':'验证中...',
+    'welcome':'欢迎来到BIYE！',
+    'err-server':'服务器连接失败。','err-phone':'请输入有效的孟加拉国手机号码',
+    'pw-weak':'弱 🔴','pw-fair':'一般 🟡','pw-good':'良好 🔵','pw-strong':'强 🟢',
+    'type-self':'候选人','type-guardian':'监护人','back':'返回','next':'下一步 →',
   }
 };
 
-var RTL = {'ar':true};
-var LANG_LABELS = {bn:'বাং',en:'EN',hi:'हिं',ar:'عر',zh:'中'};
-var currentLang = 'bn';
+var RTL={ar:true};
+var L='bn';
+function t(k){ return (T[L]&&T[L][k])||T.en[k]||k; }
+function el(id){ return document.getElementById(id); }
 
-function t(k){
-  return (T[currentLang] && T[currentLang][k]) || (T.en[k]) || k;
+function applyLang(){
+  // Update all labeled elements
+  var map = {
+    'p1lbl':'pill1','p2lbl':'pill2','p3lbl':'pill3','p4lbl':'pill4',
+    'lbl-who':'who','lbl-who-sub':'who-sub',
+    'lo-self':'self','lo-father':'father','lo-mother':'mother','lo-brother':'brother','lo-sister':'sister',
+    'lbl-seek':'seek','lbl-bride':'bride','lbl-groom':'groom',
+    'lbl-guardian-hd':'g-hd','lbl-guardian-sub':'g-sub',
+    'lbl-gname':'gname','lbl-grel':'grel','lbl-gphone':'gphone','lbl-gpass':'gpass',
+    'lbl-cand-hd':'c-hd','lbl-cand-sub':'c-sub',
+    'lbl-info-hd':'info-hd','lbl-info-sub':'info-sub',
+    'lbl-fname':'fname','lbl-lname':'lname','lbl-dob':'dob',
+    'lbl-religion':'religion','lbl-marital':'marital','lbl-edu':'edu','lbl-prof':'prof',
+    'lbl-div':'div','lbl-dist':'dist','lbl-phone':'phone','lbl-email':'email',
+    'lbl-pass':'pass','lbl-pass2':'pass2',
+    'lbl-otp-hd':'otp-hd','lbl-nocode':'nocode','resendBtn':'resend',
+    's1btntxt':'s1btn','lbl-hasacc':'hasacc','loginLinkTxt':'login',
+    'lbl-consent-hd':'consent-hd','lbl-consent-sub':'consent-sub',
+    'lbl-req':'req','lbl-opt':'opt',
+    'lbl-tos':'tos','lbl-tos-d':'tos-d',
+    'lbl-priv':'priv','lbl-priv-d':'priv-d',
+    'lbl-match':'match','lbl-match-d':'match-d',
+    'lbl-pay':'pay-c','lbl-pay-d':'pay-c-d',
+    'lbl-sms':'sms','lbl-sms-d':'sms-d',
+    'lbl-back':'back','lbl-next2':'next','lbl-back2':'back',
+    'lbl-pay-hd':'pay-hd','lbl-pay-sub':'pay-sub',
+    'lbl-sum-phone':'sum-phone','lbl-sum-name':'sum-name','lbl-sum-type':'sum-type',
+    'lbl-sum-agree':'sum-agree','lbl-accepted':'accepted','lbl-sum-views':'sum-views','lbl-free2':'free2',
+    'lbl-pr-reg':'pr-reg','lbl-pr-vat':'pr-vat','lbl-pr-total':'pr-total',
+    'lbl-pay-warn':'pay-warn','lbl-paynow':'paynow','lbl-creating':'creating','lbl-wait':'wait',
+    'lbl-welcome':'welcome','lbl-success-sub':'success-sub',
+    'ls-reg':'ls-reg','ls-reg-s':'ls-reg-s','ls-pay':'ls-pay','ls-confirmed':'confirmed',
+    'ls-views':'ls-views','ls-free':'free',
+    'lbl-startq':'startq','lbl-dash':'dash','lbl-inv':'inv','lbl-rec':'rec',
+    'lbl-fail':'fail','lbl-fail-sub':'fail-sub','lbl-retry':'retry','lbl-restart':'restart',
+    'phoneHint':'phoneHint','v1trans':'v1trans','v2trans':'v2trans',
+    'loginLink':'loginLink',
+  };
+  Object.keys(map).forEach(function(id){
+    var e=document.getElementById(id);
+    if(e){ var v=t(map[id]); if(v&&v!==map[id]) e.textContent=v; }
+  });
+  el('langLabel').textContent = t('lang');
+  document.documentElement.lang = L;
+  document.documentElement.dir = RTL[L]?'rtl':'ltr';
 }
 
 function setLang(lang){
   if(!T[lang]) lang='bn';
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  document.documentElement.dir = RTL[lang] ? 'rtl' : 'ltr';
-  document.getElementById('langLabel').textContent = LANG_LABELS[lang]||lang;
-  // Apply all data-i18n
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var key = el.getAttribute('data-i18n');
-    var val = t(key);
-    if(val && val !== key) el.textContent = val;
+  L=lang;
+  applyLang();
+  // Update active button
+  document.querySelectorAll('.lang-opt').forEach(function(b,i){
+    var langs=['bn','en','hi','ar','zh'];
+    b.classList.toggle('active', langs[i]===lang);
   });
-  // Update lang-opt active
-  document.querySelectorAll('.lang-opt').forEach(function(b){
-    b.classList.remove('active');
-    if(b.textContent.includes(LANG_LABELS[lang])||b.onclick.toString().includes("'"+lang+"'")) b.classList.add('active');
-  });
+  closeLang();
   try{ localStorage.setItem('biye_lang',lang); }catch(e){}
-  closeLangMenu();
 }
 
-function toggleLangMenu(){
-  var menu = document.getElementById('langMenu');
-  var btn = document.getElementById('langBtn');
-  var open = menu.classList.toggle('open');
-  btn.setAttribute('aria-expanded', open);
+function toggleLang(){
+  var m=el('langMenu'), b=el('langBtn');
+  var open=m.classList.toggle('open');
+  b.setAttribute('aria-expanded',open);
 }
-function closeLangMenu(){
-  document.getElementById('langMenu').classList.remove('open');
-  document.getElementById('langBtn').setAttribute('aria-expanded','false');
-}
-document.addEventListener('click', function(e){
-  if(!e.target.closest('.lang-selector')) closeLangMenu();
-});
+function closeLang(){ el('langMenu').classList.remove('open'); el('langBtn').setAttribute('aria-expanded','false'); }
+document.addEventListener('click',function(e){ if(!e.target.closest('.lang-sel')) closeLang(); });
 
-// ── STATE ────────────────────────────────────────
+// ── STATE ─────────────────────────────────────
 var S = {
-  ownerType: 'self',
-  guardianName:'', guardianPhone:'', guardianPassword:'',
-  name:'', phone:'', candidatePhone:'', age:'', email:'', password:'',
-  otpSent: false, otpVerified: false,
-  lang: 'bn', voiceSupported: false, recognition: null, currentVoiceField: null, payInvoice: null
+  ownerType:'self', seekingType:'bride',
+  guardianName:'',guardianPhone:'',guardianPassword:'',guardianRelation:'',
+  firstName:'',lastName:'',phone:'',candidatePhone:'',
+  age:'',email:'',password:'',
+  religion:'',marital:'never_married',education:'',profession:'',division:'',district:'',
+  otpSent:false, otpVerified:false,
+  lang:'bn', voiceSupported:false, recognition:null, currentVoiceField:null, payInvoice:null
 };
+var REQUIRED_CONSENTS=['tos','priv','match','pay','blockchain'];
 
-var REQUIRED = ['tos','priv','match','pay'];
-
-// ── STEP NAV ─────────────────────────────────────
-var ALL_STEPS = ['step1','step2','step3','step4','step-fail'];
+// ── STEP NAV ──────────────────────────────────
+var STEPS=['step1','step2','step3','step4','stepFail'];
 function goStep(n){
-  ALL_STEPS.forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.classList.remove('active');
-  });
-  var target = n === 'fail' ? 'step-fail' : 'step'+n;
-  var el = document.getElementById(target);
-  if(el){ el.classList.add('active'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
-  var stepNum = typeof n === 'number' ? n : 4;
+  STEPS.forEach(function(id){ var e=el(id); if(e) e.classList.remove('active'); });
+  var target = typeof n==='number' ? 'step'+n : n;
+  var e=el(target); if(e){ e.classList.add('active'); window.scrollTo(0,0); }
+  // Pills
+  var prog=[0,25,50,75,100];
+  var stepNum = typeof n==='number' ? n : 4;
+  el('progFill').style.width = prog[Math.min(stepNum,4)] + '%';
   for(var i=1;i<=4;i++){
-    var dot = document.getElementById('d'+i);
-    var lbl = document.getElementById('l'+i);
-    var line = document.getElementById('sl'+i);
-    if(!dot) continue;
-    dot.classList.remove('active','done');
-    if(lbl){ lbl.classList.remove('active','done'); }
-    if(i < stepNum){ dot.classList.add('done'); dot.textContent='✓'; if(lbl) lbl.classList.add('done'); }
-    else if(i === stepNum){ dot.classList.add('active'); dot.textContent=String(i); if(lbl) lbl.classList.add('active'); }
-    else { dot.textContent = i===4?'✓':String(i); }
-    if(line) line.classList.toggle('done', i < stepNum);
+    var pill=el('pill'+i);
+    if(!pill) continue;
+    pill.classList.remove('active','done');
+    if(i<stepNum) pill.classList.add('done');
+    else if(i===stepNum) pill.classList.add('active');
   }
 }
 
-// ── OWNER TYPE ───────────────────────────────────
+// ── OWNER TYPE ────────────────────────────────
 function setOwner(type){
   S.ownerType = type;
-  var isSelf = type === 'self';
-  var bs = document.getElementById('ownSelf');
-  var bg = document.getElementById('ownGuardian');
-  if(bs){ bs.classList.toggle('active',isSelf); bs.setAttribute('aria-pressed',isSelf?'true':'false'); }
-  if(bg){ bg.classList.toggle('active',!isSelf); bg.setAttribute('aria-pressed',isSelf?'false':'true'); }
-  var gb = document.getElementById('guardianBox');
-  var sp = document.getElementById('selfPassBox');
-  if(gb) gb.style.display = isSelf ? 'none' : '';
-  if(sp) sp.style.display = isSelf ? '' : 'none';
-  var nl = document.getElementById('nameLbl');
-  var pl = document.getElementById('phoneLbl');
-  var pr = document.getElementById('phoneReq');
-  var ph = document.getElementById('phoneInput');
-  var sl = document.getElementById('infoSectionLabel');
-  if(nl) nl.textContent = isSelf ? t('field.name') : (currentLang==='en'?'Child\'s name':'সন্তানের নাম');
-  if(pl) pl.textContent = isSelf ? t('field.phone') : (currentLang==='en'?'Child\'s mobile (optional)':'সন্তানের মোবাইল (ঐচ্ছিক)');
-  if(pr) pr.style.display = isSelf ? '' : 'none';
-  if(ph) ph.placeholder = isSelf ? '01XXXXXXXXX' : (currentLang==='en'?'Optional':'না থাকলে খালি রাখুন');
-  if(sl) sl.textContent = isSelf ? t('s1.infoLabel') : (currentLang==='en'?'Child\'s information':'সন্তানের তথ্য');
+  var isSelf = type==='self';
+  var IDS=['ownSelf','ownFather','ownMother','ownBrother','ownSister'];
+  var map={self:'ownSelf',father:'ownFather',mother:'ownMother',brother:'ownBrother',sister:'ownSister'};
+  IDS.forEach(function(id){ var e=el(id); if(e){ e.classList.remove('active'); e.setAttribute('aria-pressed','false'); } });
+  var active=el(map[type]); if(active){ active.classList.add('active'); active.setAttribute('aria-pressed','true'); }
+  el('guardianSection').style.display = isSelf?'none':'';
+  el('selfPassBox').style.display = isSelf?'':'none';
+  var il=el('lbl-info-hd');
+  if(il) il.textContent = isSelf?t('info-hd'):(L==='en'?'Child\'s information':'সন্তানের তথ্য');
+  var pl=el('lbl-phone');
+  if(pl) pl.textContent = isSelf?t('phone'):(L==='en'?'Child\'s mobile (optional)':'সন্তানের মোবাইল (ঐচ্ছিক)');
+  var pr=el('phoneReq');
+  if(pr) pr.style.display=isSelf?'':'none';
 }
 
-// ── PHONE VALIDATION ─────────────────────────────
-function normPhone(raw){
-  var n = String(raw).replace(/[^0-9]/g,'');
-  if(n.startsWith('880')) return n;
-  if(n.startsWith('0')) return '88'+n;
-  if(n.startsWith('1')) return '880'+n;
-  return n;
-}
-function validPhone(raw){ return /^8801[3-9]\d{8}$/.test(normPhone(raw)); }
-
-// ── PASSWORD STRENGTH ────────────────────────────
-function checkPwStrength(val){
-  var el = document.getElementById('pwStrength');
-  if(!el) return;
-  if(!val){ el.style.display='none'; return; }
-  el.style.display='';
-  var score = 0;
-  if(val.length>=8) score++;
-  if(/[A-Z]/.test(val)) score++;
-  if(/[0-9]/.test(val)) score++;
-  if(/[^A-Za-z0-9]/.test(val)) score++;
-  el.className = 'pw-strength str-'+Math.min(score,3);
-  var labels = [t('pw.weak'),t('pw.fair'),t('pw.good'),t('pw.strong')];
-  var colors = ['var(--danger)','var(--or)','var(--bl)','var(--gr)'];
-  var lbl = document.getElementById('pwLabel');
-  if(lbl){ lbl.textContent=labels[Math.min(score,3)]; lbl.style.color=colors[Math.min(score,3)]; }
+// ── SEEKING ───────────────────────────────────
+function setSeeking(type){
+  S.seekingType=type;
+  el('seekBride').classList.remove('active-bride');
+  el('seekGroom').classList.remove('active-groom');
+  el('seekBride').setAttribute('aria-pressed','false');
+  el('seekGroom').setAttribute('aria-pressed','false');
+  if(type==='bride'){ el('seekBride').classList.add('active-bride'); el('seekBride').setAttribute('aria-pressed','true'); }
+  else{ el('seekGroom').classList.add('active-groom'); el('seekGroom').setAttribute('aria-pressed','true'); }
 }
 
-// ── TOGGLE PASSWORD ───────────────────────────────
-function togglePw(id){
-  var el = document.getElementById(id);
-  if(el) el.type = el.type==='password'?'text':'password';
+// ── PHONE ─────────────────────────────────────
+function normPhone(r){ var n=String(r).replace(/[^0-9]/g,''); if(n.startsWith('880')) return n; if(n.startsWith('0')) return '88'+n; if(n.startsWith('1')) return '880'+n; return n; }
+function validPhone(r){ return /^8801[3-9]\d{8}$/.test(normPhone(r)); }
+
+// ── PASSWORD ──────────────────────────────────
+function checkPw(v){
+  var bars=el('pwBars'), hint=el('pwHint');
+  if(!v){ bars.style.display='none'; hint.style.display='none'; return; }
+  bars.style.display=''; hint.style.display='';
+  var s=0;
+  if(v.length>=8) s++;
+  if(/[A-Z]/.test(v)) s++;
+  if(/[0-9]/.test(v)) s++;
+  if(/[^A-Za-z0-9]/.test(v)) s++;
+  var cls='str'+Math.min(s,3);
+  bars.className='pw-bars '+cls;
+  var labels=[t('pw-weak'),t('pw-fair'),t('pw-good'),t('pw-strong')];
+  var colors=['var(--danger)','var(--or)','var(--bl)','var(--gr)'];
+  hint.textContent=labels[Math.min(s,3)];
+  hint.style.color=colors[Math.min(s,3)];
 }
 
-// ── STEP 1 VALIDATION ────────────────────────────
-function validateStep1(){
-  var valid = true;
-  hideErr('s1err');
-  var isSelf = S.ownerType === 'self';
+function togglePw(id){ var e=el(id); if(e) e.type=e.type==='password'?'text':'password'; }
 
-  // Guardian fields
+// ── STEP 1 VALIDATION ─────────────────────────
+function validateS1(){
+  var valid=true;
+  hideAlert('s1err');
+  var isSelf=S.ownerType==='self';
+
   if(!isSelf){
-    var gn = document.getElementById('gNameInput').value.trim();
-    var gr = document.getElementById('gPhoneInput').value.trim();
-    var gp = document.getElementById('gPassInput').value;
-    if(!gn||gn.length<2){ showFieldErr('gNameErr'); document.getElementById('gNameInput').classList.add('err'); valid=false; }
-    else{ hideFieldErr('gNameErr'); document.getElementById('gNameInput').classList.remove('err'); S.guardianName=gn; }
-    if(!validPhone(gr)){ showFieldErr('gPhoneErr'); document.getElementById('gPhoneInput').classList.add('err'); valid=false; }
-    else{ hideFieldErr('gPhoneErr'); document.getElementById('gPhoneInput').classList.remove('err'); S.guardianPhone=normPhone(gr); }
-    if(!gp||gp.length<8){ showFieldErr('gPassErr'); document.getElementById('gPassInput').classList.add('err'); valid=false; }
-    else{ hideFieldErr('gPassErr'); document.getElementById('gPassInput').classList.remove('err'); S.guardianPassword=gp; }
+    var gn=el('gName').value.trim();
+    var gr=el('gPhone').value.trim();
+    var gp=el('gPass').value;
+    if(!gn||gn.length<2){ showFErr('gNameErr'); el('gName').classList.add('err'); valid=false; }
+    else{ hideFErr('gNameErr'); el('gName').classList.remove('err'); S.guardianName=gn; }
+    if(!validPhone(gr)){ showFErr('gPhoneErr'); el('gPhone').classList.add('err'); valid=false; }
+    else{ hideFErr('gPhoneErr'); el('gPhone').classList.remove('err'); S.guardianPhone=normPhone(gr); }
+    if(!gp||gp.length<8){ showFErr('gPassErr'); el('gPass').classList.add('err'); valid=false; }
+    else{ hideFErr('gPassErr'); el('gPass').classList.remove('err'); S.guardianPassword=gp; }
+    S.guardianRelation=el('gRelation').value;
   }
 
-  // Candidate name
-  var nm = document.getElementById('nameInput').value.trim();
-  if(!nm||nm.length<2){ showFieldErr('nameErr'); document.getElementById('nameInput').classList.add('err'); valid=false; }
-  else{ hideFieldErr('nameErr'); document.getElementById('nameInput').classList.remove('err'); S.name=nm; }
+  var fn=el('firstName').value.trim();
+  if(!fn||fn.length<2){ showFErr('fNameErr'); el('firstName').classList.add('err'); valid=false; }
+  else{ hideFErr('fNameErr'); el('firstName').classList.remove('err'); S.firstName=fn; }
+  S.lastName=el('lastName').value.trim();
 
-  // Phone
-  var raw = document.getElementById('phoneInput').value.trim();
+  var raw=el('phone').value.trim();
   if(isSelf){
-    if(!validPhone(raw)){ showErr('s1err',t('err.phone')); document.getElementById('phoneInput').classList.add('err'); valid=false; }
-    else{ document.getElementById('phoneInput').classList.remove('err'); document.getElementById('phoneInput').classList.add('ok'); S.phone=normPhone(raw); S.candidatePhone=S.phone; }
+    if(!validPhone(raw)){ showAlert('s1err',t('err-phone')); el('phone').classList.add('err'); valid=false; }
+    else{ el('phone').classList.remove('err'); el('phone').classList.add('ok'); S.phone=normPhone(raw); S.candidatePhone=S.phone; }
   } else {
-    if(raw&&validPhone(raw)){ S.candidatePhone=normPhone(raw); document.getElementById('phoneInput').classList.add('ok'); }
+    if(raw&&validPhone(raw)){ S.candidatePhone=normPhone(raw); el('phone').classList.add('ok'); }
     else S.candidatePhone='';
-    S.phone = S.guardianPhone;
+    S.phone=S.guardianPhone;
   }
 
-  // Age (optional)
-  var av = document.getElementById('ageInput').value.trim();
-  if(av){ var a=parseInt(av); if(isNaN(a)||a<18||a>80){ showFieldErr('ageErr'); document.getElementById('ageInput').classList.add('err'); valid=false; } else{ hideFieldErr('ageErr'); document.getElementById('ageInput').classList.remove('err'); S.age=av; } } else S.age='';
+  var em=el('email').value.trim();
+  if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ showFErr('emailErr'); el('email').classList.add('err'); valid=false; }
+  else{ hideFErr('emailErr'); el('email').classList.remove('err'); S.email=em; }
 
-  // Email (optional)
-  var ev = document.getElementById('emailInput').value.trim();
-  if(ev){ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ev)){ showFieldErr('emailErr'); document.getElementById('emailInput').classList.add('err'); valid=false; } else{ hideFieldErr('emailErr'); document.getElementById('emailInput').classList.remove('err'); S.email=ev; } } else S.email='';
+  S.religion=el('religion').value;
+  S.marital=el('marital').value;
+  S.education=el('education').value;
+  S.profession=el('profession').value;
+  S.division=el('division').value;
+  S.district=el('district').value;
+  var dy=el('dobYear').value, dm=el('dobMonth').value;
+  if(dy){ var age=new Date().getFullYear()-parseInt(dy); S.age=String(age); }
 
-  // Password (self only)
   if(isSelf){
-    var p = document.getElementById('passInput').value;
-    var p2 = document.getElementById('pass2Input').value;
-    if(!p||p.length<8||!/[A-Z]/.test(p)||!/[0-9]/.test(p)){ showFieldErr('passErr'); document.getElementById('passInput').classList.add('err'); valid=false; }
-    else{ hideFieldErr('passErr'); document.getElementById('passInput').classList.remove('err'); S.password=p; }
-    if(p&&p!==p2){ showFieldErr('pass2Err'); document.getElementById('pass2Input').classList.add('err'); valid=false; }
-    else{ hideFieldErr('pass2Err'); document.getElementById('pass2Input').classList.remove('err'); }
-  } else { S.password=S.guardianPassword; }
+    var p=el('pass').value, p2=el('pass2').value;
+    if(!p||p.length<8||!/[A-Z]/.test(p)||!/[0-9]/.test(p)){ showFErr('passErr'); el('pass').classList.add('err'); valid=false; }
+    else{ hideFErr('passErr'); el('pass').classList.remove('err'); S.password=p; }
+    if(p&&p!==p2){ showFErr('pass2Err'); el('pass2').classList.add('err'); valid=false; }
+    else{ hideFErr('pass2Err'); el('pass2').classList.remove('err'); }
+  } else S.password=S.guardianPassword;
 
   return valid;
 }
 
-// ── STEP 1: HANDLE ───────────────────────────────
-function handleStep1(){
-  if(!S.otpSent) sendOtp();
-  else verifyOtp();
-}
+// ── SEND OTP ──────────────────────────────────
+function handleS1(){ if(!S.otpSent) sendOtp(); else verifyOtp(); }
 
-// ── SEND OTP ─────────────────────────────────────
 function sendOtp(){
-  if(!validateStep1()) return;
-  setBtnLoading('s1btn','s1btnTxt',t('btn.sending'));
-
+  if(!validateS1()) return;
+  setBtnLoad('s1btn','s1btntxt',t('sending'));
   fetch('/.netlify/functions/send-otp',{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({action:'send',phone:S.phone})
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
-    resetBtn('s1btn','s1btnTxt',t('btn.verify'));
-    if(d && d.ok !== false){
-      S.otpSent = true;
+    resetBtn('s1btn','s1btntxt',t('s1verify'));
+    if(d&&d.ok!==false){
+      S.otpSent=true;
       lockFields();
-      document.getElementById('otpSection').style.display='';
-      document.getElementById('o1').focus();
-      startOtpTimer(120);
-    } else {
-      showErr('s1err', d.error || t('err.phone'));
-    }
+      el('otpSection').style.display='';
+      var masked=S.phone.replace(/^880/,'0');
+      el('otpMask').textContent=(L==='en'?'Code sent to: ':'কোড পাঠানো হয়েছে: ')+masked.replace(/(\d{3})\d{4}(\d{4})/,'$1••••$2');
+      el('o1').focus();
+      startTimer(120);
+    } else showAlert('s1err',d.error||t('err-phone'));
   })
-  .catch(function(){
-    resetBtn('s1btn','s1btnTxt',t('btn.sendCode'));
-    showErr('s1err', t('err.server'));
-  });
+  .catch(function(){ resetBtn('s1btn','s1btntxt',t('s1btn')); showAlert('s1err',t('err-server')); });
 }
 
 function lockFields(){
-  ['nameInput','phoneInput','ageInput','emailInput','passInput','pass2Input',
-   'gNameInput','gPhoneInput','gPassInput'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.readOnly = true;
-  });
-  ['ownSelf','ownGuardian'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.disabled = true;
-  });
+  ['firstName','lastName','phone','email','pass','pass2','gName','gPhone','gPass'].forEach(function(id){ var e=el(id); if(e) e.readOnly=true; });
+  ['ownSelf','ownFather','ownMother','ownBrother','ownSister','seekBride','seekGroom'].forEach(function(id){ var e=el(id); if(e) e.disabled=true; });
 }
 
-function resendOtp(){ S.otpSent=false; clearInterval(window._otpTimer); sendOtp(); }
+function resendOtp(){ S.otpSent=false; clearInterval(window._otp); sendOtp(); }
 
-// OTP Timer
-function startOtpTimer(sec){
-  clearInterval(window._otpTimer);
-  var rb = document.getElementById('resendBtn');
-  var rt = document.getElementById('otpTimer');
-  if(rb) rb.style.display='none';
-  window._otpTimer = setInterval(function(){
+function startTimer(sec){
+  clearInterval(window._otp);
+  el('resendBtn').style.display='none';
+  window._otp=setInterval(function(){
     sec--;
-    if(rt) rt.textContent = ' (' + sec + 's)';
-    if(sec<=0){
-      clearInterval(window._otpTimer);
-      if(rt) rt.textContent='';
-      if(rb) rb.style.display='';
-    }
+    el('otpTimer').textContent=' ('+sec+'s)';
+    if(sec<=0){ clearInterval(window._otp); el('otpTimer').textContent=''; el('resendBtn').style.display=''; }
   },1000);
 }
 
-// ── VERIFY OTP ───────────────────────────────────
-function getOtp(){ return ['o1','o2','o3','o4','o5','o6'].map(function(id){ return document.getElementById(id).value; }).join(''); }
+// ── VERIFY OTP ────────────────────────────────
+function getOtp(){ return ['o1','o2','o3','o4','o5','o6'].map(function(id){ return el(id).value; }).join(''); }
 
 function verifyOtp(){
-  var code = getOtp();
-  if(code.length<6){ showOtpErr(t('err.otpFull')); return; }
-  hideOtpErr();
-  setBtnLoading('s1btn','s1btnTxt',t('btn.verifying'));
-
+  var code=getOtp();
+  if(code.length<6){ showFErr('otpErr',''); el('otpErr').textContent=t('err-otp6'); el('otpErr').style.display='block'; return; }
+  el('otpErr').style.display='none';
+  setBtnLoad('s1btn','s1btntxt',t('verifying'));
   fetch('/.netlify/functions/send-otp',{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({action:'verify',phone:S.phone,code:code})
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
-    if(d && (d.ok!==false) && d.verified!==false){
-      S.otpVerified=true;
-      clearInterval(window._otpTimer);
-      goStep(2);
-    } else {
-      resetBtn('s1btn','s1btnTxt',t('btn.verify'));
-      showOtpErr(d.error || t('err.otp'));
-    }
+    if(d&&d.ok!==false&&d.verified!==false){
+      S.otpVerified=true; clearInterval(window._otp); goStep(2);
+    } else { resetBtn('s1btn','s1btntxt',t('s1verify')); el('otpErr').textContent=d.error||t('err-otp'); el('otpErr').style.display='block'; }
   })
-  .catch(function(){
-    resetBtn('s1btn','s1btnTxt',t('btn.verify'));
-    showOtpErr(t('err.server'));
-  });
+  .catch(function(){ resetBtn('s1btn','s1btntxt',t('s1verify')); el('otpErr').textContent=t('err-server'); el('otpErr').style.display='block'; });
 }
 
-// OTP keyboard
+// OTP keyboard UX
 ['o1','o2','o3','o4','o5','o6'].forEach(function(id,i){
-  var el = document.getElementById(id);
-  el.addEventListener('input',function(e){
-    var v=e.target.value.replace(/[^0-9]/g,''); e.target.value=v;
-    if(v){ el.classList.add('filled'); if(i<5) document.getElementById('o'+(i+2)).focus(); }
-    else el.classList.remove('filled');
-  });
-  el.addEventListener('keydown',function(e){
-    if(e.key==='Backspace'&&!el.value&&i>0){ var p=document.getElementById('o'+(i)); p.value=''; p.classList.remove('filled'); p.focus(); }
-    if(e.key==='Enter') verifyOtp();
-  });
-  el.addEventListener('paste',function(e){
-    e.preventDefault();
-    var txt=(e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'');
-    ['o1','o2','o3','o4','o5','o6'].forEach(function(bid,bi){ var b=document.getElementById(bid); if(txt[bi]){ b.value=txt[bi]; b.classList.add('filled'); } });
-    var last=Math.min(txt.length,6); if(last>0) document.getElementById('o'+last).focus();
-    if(txt.length>=6) setTimeout(verifyOtp,300);
-  });
+  var e=el(id);
+  e.addEventListener('input',function(ev){ var v=ev.target.value.replace(/[^0-9]/g,''); ev.target.value=v; if(v){ e.classList.add('filled'); if(i<5) el('o'+(i+2)).focus(); } else e.classList.remove('filled'); });
+  e.addEventListener('keydown',function(ev){ if(ev.key==='Backspace'&&!e.value&&i>0){ var p=el('o'+i); p.value=''; p.classList.remove('filled'); p.focus(); } if(ev.key==='Enter') verifyOtp(); });
+  e.addEventListener('paste',function(ev){ ev.preventDefault(); var txt=(ev.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,''); ['o1','o2','o3','o4','o5','o6'].forEach(function(bid,bi){ var b=el(bid); if(txt[bi]){ b.value=txt[bi]; b.classList.add('filled'); } }); var last=Math.min(txt.length,6); if(last>0) el('o'+last).focus(); if(txt.length>=6) setTimeout(verifyOtp,350); });
 });
 
-// ── STEP 2: CONSENT ──────────────────────────────
-function toggleConsent(id){
-  var cb=document.getElementById(id);
-  var item=document.getElementById('ci-'+id);
-  var box=document.getElementById('cb-'+id);
+// ── STEP 2: CONSENT ───────────────────────────
+function toggleC(id){
+  var cb=el(id), item=el('ci-'+id), box=el('cb-'+id);
   cb.checked=!cb.checked;
   item.classList.toggle('checked',cb.checked);
-  item.classList.remove('err');
+  item.classList.remove('cerr');
   item.setAttribute('aria-checked',cb.checked?'true':'false');
   box.textContent=cb.checked?'✓':'';
 }
-
-// Keyboard access for consent items
 document.querySelectorAll('.consent-item').forEach(function(item){
-  item.addEventListener('keydown',function(e){
-    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); item.click(); }
-  });
+  item.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); item.click(); } });
 });
 
 function validateConsent(){
-  hideErr('s2err');
+  hideAlert('s2err');
   var ok=true;
-  REQUIRED.forEach(function(id){
-    var cb=document.getElementById(id);
-    var item=document.getElementById('ci-'+id);
-    if(!cb.checked){ item.classList.add('err'); ok=false; }
+  REQUIRED_CONSENTS.forEach(function(id){
+    if(!el(id).checked){ el('ci-'+id).classList.add('cerr'); ok=false; }
   });
-  if(!ok){ showErr('s2err',t('err.consent')); document.getElementById('ci-tos').scrollIntoView({behavior:'smooth',block:'center'}); return; }
-
-  // Log consents (fire & forget)
+  if(!ok){ showAlert('s2err',t('err-consent')); return; }
   try{
-    fetch('/.netlify/functions/send-otp',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'logConsent',phone:S.phone,
-        consents:{tos:true,priv:true,match:true,pay:true,sms:document.getElementById('sms').checked},
-        ts:new Date().toISOString()
-      })
+    fetch('/.netlify/functions/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'logConsent',phone:S.phone,consents:{tos:true,priv:true,match:true,pay:true,sms:el('sms').checked},ts:new Date().toISOString()})
     }).catch(function(){});
   }catch(e){}
-
-  // Populate step 3 summary
-  var ph = S.phone.replace(/^880/,'0');
-  document.getElementById('sumPhone').textContent = ph;
-  document.getElementById('sumName').textContent = S.name || '—';
-  document.getElementById('sumType').textContent = S.ownerType==='self' ? t('type.self') : t('type.guardian');
+  // Populate step 3
+  el('sumPhone').textContent=S.phone.replace(/^880/,'0');
+  el('sumName').textContent=(S.firstName+' '+S.lastName).trim();
+  el('sumType').textContent=S.ownerType==='self'?t('type-self'):t('type-guardian');
   goStep(3);
 }
 
-// ── STEP 3: PAYMENT ──────────────────────────────
-function startPayment(){
-  document.getElementById('payActions').style.display='none';
-  document.getElementById('payProcessing').style.display='';
-
+// ── STEP 3: PAYMENT ───────────────────────────
+function startPay(){
+  el('payActions').style.display='none';
+  el('payProcessing').style.display='';
   fetch('/.netlify/functions/payment',{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
       action:'createInvoice',
-      phone:S.phone, name:S.name, email:S.email, age:S.age,
-      password:S.password, owner_type:S.ownerType,
+      phone:S.phone,
+      name:(S.firstName+' '+S.lastName).trim(),
+      email:S.email, age:S.age, password:S.password,
+      owner_type:S.ownerType, seeking_type:S.seekingType,
+      religion:S.religion, marital_status:S.marital,
+      education:S.education, profession:S.profession,
+      division:S.division, district:S.district,
       guardian_name:S.guardianName, guardian_phone:S.guardianPhone,
-      candidate_phone:S.candidatePhone, package_code:'REG'
+      guardian_relation:S.guardianRelation, candidate_phone:S.candidatePhone,
+      package_code:'REG'
     })
   })
   .then(function(r){ return r.json(); })
@@ -1430,83 +1512,77 @@ function startPayment(){
       S.payInvoice=d.invoice.invoice_number;
       window.location.href='invoice.html?inv='+encodeURIComponent(S.payInvoice)+'&from=register';
     } else {
-      showErr('s3err',(d&&d.error)||t('err.payFail'));
-      document.getElementById('payActions').style.display='';
-      document.getElementById('payProcessing').style.display='none';
+      showAlert('s3err',(d&&d.error)||t('err-pay'));
+      el('payActions').style.display='';
+      el('payProcessing').style.display='none';
     }
   })
   .catch(function(){
-    showErr('s3err',t('err.server'));
-    document.getElementById('payActions').style.display='';
-    document.getElementById('payProcessing').style.display='none';
+    showAlert('s3err',t('err-server'));
+    el('payActions').style.display='';
+    el('payProcessing').style.display='none';
   });
 }
 
-// Payment callback handler
-(function handlePayCallback(){
+// Pay callback
+(function(){
   var p=new URLSearchParams(window.location.search);
   var st=p.get('payment'), inv=p.get('inv');
   if(!st&&!inv) return;
-  if(window.history&&window.history.replaceState)
-    window.history.replaceState({},'',window.location.pathname);
-  if(st==='success'||inv){ goStep(4); if(inv) verifyPaymentBackend(inv); }
-  else if(st==='failed'||st==='cancelled') goStep('fail');
+  if(window.history&&window.history.replaceState) window.history.replaceState({},'',window.location.pathname);
+  if(st==='success'||inv){ goStep(4); }
+  else if(st==='failed'||st==='cancelled') goStep('stepFail');
 })();
 
-function verifyPaymentBackend(inv){
-  fetch('/.netlify/functions/payment',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({action:'getInvoice',invoice_number:inv})})
-  .then(function(r){ return r.json(); })
-  .then(function(d){
-    if(d&&d.invoice&&d.invoice.status==='failed') goStep('fail');
-    else if(d&&d.invoice&&d.invoice.status==='pending') setTimeout(function(){ verifyPaymentBackend(inv); },4000);
-  })
-  .catch(function(){ setTimeout(function(){ verifyPaymentBackend(inv); },5000); });
-}
+// ── HELPERS ───────────────────────────────────
+function showAlert(id,msg){ var e=el(id); if(e){ e.textContent=msg; e.classList.add('show'); } }
+function hideAlert(id){ var e=el(id); if(e){ e.classList.remove('show'); e.textContent=''; } }
+function showFErr(id){ var e=el(id); if(e) e.classList.add('show'); }
+function hideFErr(id){ var e=el(id); if(e) e.classList.remove('show'); }
+function setBtnLoad(bid,tid,lbl){ var b=el(bid),t2=el(tid); if(b) b.disabled=true; if(t2) t2.innerHTML='<span class="spinner"></span> '+lbl; }
+function resetBtn(bid,tid,lbl){ var b=el(bid),t2=el(tid); if(b) b.disabled=false; if(t2) t2.textContent=lbl; }
 
-// ── HELPERS ──────────────────────────────────────
-function showErr(id,msg){ var el=document.getElementById(id); if(el){ el.textContent=msg; el.classList.add('show'); el.style.display=''; } }
-function hideErr(id){ var el=document.getElementById(id); if(el){ el.classList.remove('show'); el.style.display='none'; } }
-function showFieldErr(id){ var el=document.getElementById(id); if(el) el.style.display='block'; }
-function hideFieldErr(id){ var el=document.getElementById(id); if(el) el.style.display='none'; }
-function showOtpErr(msg){ var el=document.getElementById('otpErr'); if(el){ el.textContent=msg; el.style.display='block'; } }
-function hideOtpErr(){ var el=document.getElementById('otpErr'); if(el) el.style.display='none'; }
-function setBtnLoading(bid,tid,label){ var b=document.getElementById(bid),t=document.getElementById(tid); if(b) b.disabled=true; if(t) t.innerHTML='<span class="spinner"></span> '+label; }
-function resetBtn(bid,tid,label){ var b=document.getElementById(bid),t=document.getElementById(tid); if(b) b.disabled=false; if(t) t.textContent=label; }
-
-// ── VOICE ────────────────────────────────────────
+// ── VOICE ─────────────────────────────────────
 function initVoice(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){ S.voiceSupported=false; document.getElementById('voiceFab').classList.add('nosupport'); document.querySelectorAll('.voice-btn').forEach(function(b){ b.classList.add('nosupport'); }); return; }
+  if(!SR){ S.voiceSupported=false; el('voiceFab').classList.add('nosupport'); return; }
   S.voiceSupported=true;
-  var rec=new SR();
-  rec.continuous=false; rec.interimResults=true; rec.maxAlternatives=3;
-  rec.onstart=function(){ document.getElementById('voiceOrb').classList.add('listening'); document.getElementById('voiceStatus').textContent=t('voice.hint'); };
-  rec.onresult=function(e){ var interim='',final=''; for(var i=e.resultIndex;i<e.results.length;i++){ if(e.results[i].isFinal) final+=e.results[i][0].transcript; else interim+=e.results[i][0].transcript; } var txt=(final||interim).trim(); document.getElementById('voiceTranscript').textContent=txt; if(final&&S.currentVoiceField) applyVoiceInput(txt,S.currentVoiceField); };
-  rec.onerror=function(){ document.getElementById('voiceOrb').classList.remove('listening'); };
-  rec.onend=function(){ document.getElementById('voiceOrb').classList.remove('listening'); };
+  var rec=new SR(); rec.continuous=false; rec.interimResults=true; rec.maxAlternatives=3;
+  rec.onstart=function(){ el('vpOrb').classList.add('on'); el('vpStatus').textContent=t('phoneHint'); };
+  rec.onresult=function(e){
+    var interim='',fin='';
+    for(var i=e.resultIndex;i<e.results.length;i++){ if(e.results[i].isFinal) fin+=e.results[i][0].transcript; else interim+=e.results[i][0].transcript; }
+    var txt=(fin||interim).trim(); el('vpTx').textContent=txt;
+    if(fin&&S.currentVoiceField){ applyVoice(txt,S.currentVoiceField); }
+  };
+  rec.onerror=function(){ el('vpOrb').classList.remove('on'); };
+  rec.onend=function(){ el('vpOrb').classList.remove('on'); };
   S.recognition=rec;
 }
-function applyVoiceInput(txt,type){
+function applyVoice(txt,type){
   if(type==='phone'){
     var m=txt.replace(/শূন্য|zero/gi,'0').replace(/এক|one/gi,'1').replace(/দুই|two/gi,'2').replace(/তিন|three/gi,'3').replace(/চার|four/gi,'4').replace(/পাঁচ|five/gi,'5').replace(/ছয়|six/gi,'6').replace(/সাত|seven/gi,'7').replace(/আট|eight/gi,'8').replace(/নয়|nine/gi,'9');
     var digits=m.replace(/[^0-9]/g,'').slice(0,11);
-    if(digits.length>=10){ document.getElementById('phoneInput').value=digits; document.getElementById('phoneInput').classList.add('ok'); setTimeout(closeVoicePanel,1200); }
+    if(digits.length>=10){ el('phone').value=digits; el('phone').classList.add('ok'); setTimeout(closeVP,1200); }
   }
 }
-function startVoice(fid,type){ if(!S.voiceSupported) return; S.currentVoiceField=type; openVoicePanel(); setTimeout(function(){ try{ S.recognition.lang=currentLang==='bn'?'bn-BD':'en-US'; S.recognition.start(); }catch(e){} },400); }
-function openVoicePanel(){ document.getElementById('voicePanel').classList.add('open'); }
-function closeVoicePanel(){ document.getElementById('voicePanel').classList.remove('open'); try{ if(S.recognition) S.recognition.stop(); }catch(e){} S.currentVoiceField=null; }
-function toggleMainVoice(){ if(!S.voiceSupported) return; S.currentVoiceField='phone'; try{ S.recognition.lang=currentLang==='bn'?'bn-BD':'en-US'; S.recognition.start(); }catch(e){ try{ S.recognition.stop(); }catch(e2){} } }
+function startVoice(fid,type){ if(!S.voiceSupported) return; S.currentVoiceField=type; openVP(); setTimeout(function(){ try{ S.recognition.lang=L==='bn'?'bn-BD':'en-US'; S.recognition.start(); }catch(e){} },400); }
+function openVP(){ el('vp').classList.add('open'); }
+function closeVP(){ el('vp').classList.remove('open'); try{ if(S.recognition) S.recognition.stop(); }catch(e){} S.currentVoiceField=null; }
+function toggleVoice(){ if(!S.voiceSupported) return; try{ S.recognition.lang=L==='bn'?'bn-BD':'en-US'; S.recognition.start(); }catch(e){ try{ S.recognition.stop(); }catch(e2){} } }
 
-// ── INIT ─────────────────────────────────────────
+// ── INIT ──────────────────────────────────────
 (function init(){
   var lang='bn';
   try{ lang=localStorage.getItem('biye_lang')||'bn'; }catch(e){}
-  setLang(lang);
+  L=lang; applyLang();
+  // Set active lang button
+  var langs=['bn','en','hi','ar','zh'];
+  document.querySelectorAll('.lang-opt').forEach(function(b,i){ b.classList.toggle('active',langs[i]===lang); });
   initVoice();
   goStep(1);
   setOwner('self');
+  setSeeking('bride');
 })();
 </script>
 </body>
