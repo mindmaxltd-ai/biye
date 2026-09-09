@@ -3,388 +3,928 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>BIYE — ইনভয়েস</title>
+<title>BIYE — ইনভয়েস | Invoice</title>
 <meta name="robots" content="noindex,follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
 <style>
-
-/* ═══════════════════════════════════════════
-   BIYE SHARED CSS — All 25 pages
-   ═══════════════════════════════════════════ */
 :root{
-  --pk:#E2136E;--pk-d:#C20F5E;--pk-s:rgba(226,19,110,.09);
-  --pu:#6A2DA8;--pu-s:rgba(106,45,168,.09);
-  --bl:#1565C0;--bl-s:rgba(21,101,192,.09);
+  --pk:#E2136E;--pk-s:rgba(226,19,110,.1);
+  --pu:#7B2FBE;--pu-s:rgba(123,47,190,.1);
+  --bl:#1565C0;--bl-s:rgba(21,101,192,.1);
+  --gd:#D4AF37;--gd-s:rgba(212,175,55,.15);
   --gr:#00A651;--gr-s:rgba(0,166,81,.1);
-  --gd:#D4AF37;--gd-s:rgba(212,175,55,.14);
-  --grad:linear-gradient(120deg,#E2136E 0%,#6A2DA8 52%,#1565C0 100%);
-  --bg:#F7F8FC;--sur:#fff;
-  --bdr:rgba(20,20,20,.08);--bdr2:rgba(20,20,20,.14);
-  --ink:#1A1A1A;--ink2:rgba(20,20,20,.55);--ink3:rgba(20,20,20,.35);
-  --danger:#C20F5E;--danger-s:rgba(194,15,94,.08);
-  --sh:0 4px 24px -8px rgba(106,45,168,.14);
-  --sh2:0 12px 40px -12px rgba(106,45,168,.2);
-  --r:14px;--r2:10px;--r3:20px;--tx:.2s cubic-bezier(.4,0,.2,1);
+  --or:#E65100;--or-s:rgba(230,81,0,.08);
+  --grad:linear-gradient(135deg,#E2136E 0%,#7B2FBE 50%,#1565C0 100%);
+  --grad2:linear-gradient(135deg,#D4AF37,#E65100);
+  --grad3:linear-gradient(135deg,#00A651,#00BCD4);
+  --dark:#050512;--dark2:#0c0c24;
+  --sur:#fff;--bg:#F7F8FF;
+  --txt:#08081a;--txt2:rgba(8,8,26,.58);--txt3:rgba(8,8,26,.36);
+  --bdr:rgba(8,8,26,.07);--bdr2:rgba(8,8,26,.14);
+  --sh:0 4px 20px rgba(8,8,26,.08);--sh2:0 12px 48px rgba(8,8,26,.13);--sh3:0 24px 80px rgba(8,8,26,.18);
+  --r:12px;--r2:8px;--r3:20px;--r4:32px;
+  --ease:cubic-bezier(.4,0,.2,1);--t:.25s;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-family:'Hind Siliguri','Inter',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
-img{display:block;max-width:100%}a{color:inherit;text-decoration:none}
+html{scroll-behavior:smooth}
+html[lang="ar"]{direction:rtl}
+html[lang="bn"] body,html[lang="hi"] body{font-family:'Hind Siliguri','Plus Jakarta Sans',sans-serif}
+html[lang="ar"] body{font-family:'Noto Naskh Arabic','Plus Jakarta Sans',sans-serif}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--txt);
+  -webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.6;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
-:focus-visible{outline:3px solid var(--pk);outline-offset:3px;border-radius:6px}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.biye-desktop-only{display:none}
-@media(min-width:769px){.biye-desktop-only{display:flex}}
+:focus-visible{outline:2px solid var(--pk);outline-offset:2px;border-radius:4px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--pk);border-radius:2px}
 
-/* NAV */
-.biye-nav{background:rgba(247,248,252,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;padding:.7rem 1.25rem;padding-top:calc(.7rem + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.biye-nav-logo{display:flex;align-items:center}
-.biye-nav-logo img{height:34px;width:auto;object-fit:contain}
-.biye-nav-right{display:flex;align-items:center;gap:.5rem}
-.biye-nav-link{font-size:.82rem;font-weight:600;color:var(--ink2);padding:.35rem .6rem;border-radius:8px;transition:var(--tx);white-space:nowrap;background:none;border:none;cursor:pointer;font-family:inherit}
-.biye-nav-link:hover{color:var(--pk);background:var(--pk-s)}
+/* ── ANNOUNCE ── */
+.announce{background:var(--grad);color:#fff;text-align:center;padding:.42rem 1rem;
+  font-size:.75rem;font-weight:700;position:relative;overflow:hidden}
+.announce::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
+  animation:shimmer 3s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
-/* BUTTONS */
-.biye-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.25rem;border-radius:var(--r2);font-size:.88rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:var(--tx);white-space:nowrap;text-decoration:none;min-height:44px}
-.biye-btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 16px -6px rgba(106,45,168,.45)}
-.biye-btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px -6px rgba(106,45,168,.55)}
-.biye-btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.biye-btn-ghost{background:var(--sur);color:var(--ink2);border:1.5px solid var(--bdr2)}
-.biye-btn-ghost:hover{border-color:var(--pk);color:var(--pk)}
-.biye-btn-danger{background:var(--danger-s);color:var(--danger);border:1.5px solid rgba(194,15,94,.2)}
-.biye-btn-sm{padding:.4rem .9rem;font-size:.8rem;min-height:36px}
-.biye-btn-full{width:100%;display:flex}
-.biye-btn-gold{background:var(--gd);color:#2a1a00}
+/* ── NAV ── */
+.nav{background:linear-gradient(90deg,#E2136E,#7B2FBE 60%,#1565C0);
+  padding:.72rem 2rem;display:flex;align-items:center;gap:1rem;
+  box-shadow:0 2px 20px rgba(226,19,110,.3);position:sticky;top:0;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:.55rem}
+.nav-logo img{height:32px;filter:brightness(0) invert(1)}
+.nav-brand{font-size:1.1rem;font-weight:900;color:#fff}
+.nav-brand-bn{font-size:.82rem;color:rgba(255,255,255,.65);font-weight:600}
+.nav-links{display:flex;align-items:center;gap:.15rem;margin:0 auto}
+.nav-a{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.75);
+  padding:.35rem .7rem;border-radius:50px;transition:all var(--t)}
+.nav-a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.nav-right{display:flex;align-items:center;gap:.55rem;margin-left:auto}
+/* Language */
+.lang-wrap{position:relative}
+.lang-btn{display:flex;align-items:center;gap:.28rem;font-size:.75rem;font-weight:700;
+  color:rgba(255,255,255,.8);padding:.32rem .7rem;border:1.5px solid rgba(255,255,255,.22);
+  border-radius:50px;background:rgba(255,255,255,.1);cursor:pointer;transition:all var(--t)}
+.lang-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.lang-drop{position:absolute;top:calc(100%+.5rem);right:0;background:var(--dark2);
+  border:1px solid rgba(255,255,255,.1);border-radius:var(--r);min-width:148px;
+  display:none;z-index:300;overflow:hidden;box-shadow:var(--sh3)}
+.lang-drop.open{display:block}
+.lang-item{display:flex;align-items:center;gap:.55rem;padding:.55rem .9rem;font-size:.8rem;
+  font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;transition:background var(--t);
+  width:100%;text-align:start;background:none;border:none;font-family:inherit}
+.lang-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.lang-item.active{color:var(--pk)}
+.nav-btn-sm{font-size:.78rem;font-weight:700;color:#fff;padding:.35rem .85rem;
+  background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);
+  border-radius:50px;transition:all var(--t)}
+.nav-btn-sm:hover{background:rgba(255,255,255,.25)}
 
-/* LAYOUT */
-.biye-page{max-width:960px;margin:0 auto;padding:1.5rem 1rem 5rem}
-.biye-page-wide{max-width:1200px;margin:0 auto;padding:1.5rem 1rem 5rem}
-.biye-page-narrow{max-width:520px;margin:0 auto;padding:1.5rem 1rem 5rem}
+/* ── PAGE LAYOUT ── */
+.page{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 4rem;
+  display:grid;grid-template-columns:1fr 340px;gap:2rem;align-items:start}
+@media(max-width:900px){.page{grid-template-columns:1fr;padding:1.5rem 1rem 3rem}}
 
-/* CARDS */
-.biye-card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh);border:1px solid var(--bdr);overflow:hidden}
-.biye-card-body{padding:1.4rem}
-.biye-card-head{padding:1rem 1.4rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.biye-card-title{font-size:1rem;font-weight:800}
+/* ── INVOICE CARD (Main) ── */
+.inv-card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh3);
+  border:1px solid var(--bdr);overflow:hidden}
 
-/* GRID */
-.biye-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
-.biye-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.biye-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-@media(max-width:640px){.biye-grid-2,.biye-grid-3,.biye-grid-4{grid-template-columns:1fr}}
-@media(max-width:860px){.biye-grid-4{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.biye-grid-3{grid-template-columns:repeat(2,1fr)}}
+/* Invoice header gradient */
+.inv-header{background:var(--grad);padding:2rem 2.5rem;color:#fff;position:relative;overflow:hidden}
+.inv-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:rgba(255,255,255,.06)}
+.inv-header::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;
+  border-radius:50%;background:rgba(255,255,255,.05)}
+.inv-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;position:relative;z-index:1}
+.inv-logo-wrap{display:flex;align-items:center;gap:.65rem}
+.inv-logo-wrap img{height:44px;filter:brightness(0) invert(1)}
+.inv-logo-text{font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.01em}
+.inv-logo-bn{font-size:.88rem;color:rgba(255,255,255,.65);font-weight:600}
+.inv-header-label{text-align:right;position:relative;z-index:1}
+.inv-header-label .label{font-size:.68rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.14em;color:rgba(255,255,255,.6)}
+.inv-header-label .num{font-size:1.1rem;font-weight:900;color:#FFD700;margin-top:.2rem;
+  font-family:'Plus Jakarta Sans'}
+.inv-header-label .date{font-size:.75rem;color:rgba(255,255,255,.55);margin-top:.15rem}
+.inv-header-body{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;position:relative;z-index:1}
+.inv-from h4,.inv-to h4{font-size:.65rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.12em;color:rgba(255,255,255,.5);margin-bottom:.55rem}
+.inv-from p,.inv-to p{font-size:.82rem;color:rgba(255,255,255,.85);line-height:1.7;font-weight:500}
+.inv-from strong,.inv-to strong{display:block;font-size:.95rem;font-weight:800;color:#fff;margin-bottom:.2rem}
 
-/* FORM */
-.biye-field{margin-bottom:1rem}
-.biye-label{display:block;font-size:.84rem;font-weight:700;color:var(--ink2);margin-bottom:.4rem}
-.biye-input,.biye-select,.biye-textarea{width:100%;padding:.82rem 1rem;border:2px solid var(--bdr2);border-radius:var(--r2);font-size:1rem;color:var(--ink);background:var(--sur);outline:none;transition:var(--tx);font-family:inherit;-webkit-appearance:none}
-.biye-input:focus,.biye-select:focus,.biye-textarea:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.1)}
-.biye-input.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-s)}
-.biye-input.ok{border-color:var(--gr)}
-.biye-textarea{resize:vertical;min-height:100px}
-.biye-field-err{font-size:.76rem;color:var(--danger);font-weight:600;margin-top:.3rem;display:none}
-.biye-field-err.show{display:block}
-.biye-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+/* Status banner */
+.inv-status-banner{padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:.75rem;border-bottom:1px solid var(--bdr)}
+.status-paid{background:rgba(0,166,81,.06);border-bottom-color:rgba(0,166,81,.15)}
+.status-pending{background:rgba(212,175,55,.07);border-bottom-color:rgba(212,175,55,.2)}
+.status-void{background:rgba(226,19,110,.06);border-bottom-color:rgba(226,19,110,.15)}
+.status-badge{display:inline-flex;align-items:center;gap:.45rem;font-size:.82rem;font-weight:800;
+  padding:.42rem 1rem;border-radius:50px}
+.sb-paid{background:var(--gr-s);color:var(--gr);border:1.5px solid rgba(0,166,81,.2)}
+.sb-pending{background:var(--gd-s);color:#7a5a00;border:1.5px solid rgba(212,175,55,.3)}
+.sb-void{background:var(--pk-s);color:var(--pk);border:1.5px solid rgba(226,19,110,.2)}
+.status-pulse{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sp-paid{background:var(--gr);box-shadow:0 0 0 3px rgba(0,166,81,.2)}
+.sp-pending{background:var(--gd);box-shadow:0 0 0 3px rgba(212,175,55,.2);animation:puls 2s infinite}
+.sp-void{background:var(--pk)}
+@keyframes puls{0%,100%{box-shadow:0 0 0 3px rgba(212,175,55,.2)}50%{box-shadow:0 0 0 6px rgba(212,175,55,.05)}}
+.status-info{font-size:.78rem;color:var(--txt2);font-weight:500}
 
-/* ALERTS */
-.biye-alert{border-radius:var(--r2);padding:.8rem 1rem;font-size:.84rem;font-weight:600;margin-bottom:.9rem;display:none}
-.biye-alert.show{display:block}
-.biye-alert-err{background:var(--danger-s);border:1px solid rgba(194,15,94,.2);color:var(--danger)}
-.biye-alert-ok{background:var(--gr-s);border:1px solid rgba(0,166,81,.2);color:#005c2e}
-.biye-alert-info{background:var(--bl-s);border:1px solid rgba(21,101,192,.15);color:var(--bl)}
-.biye-alert-warn{background:var(--gd-s);border:1px solid rgba(212,175,55,.3);color:#5a3e00}
+/* Invoice body */
+.inv-body{padding:1.75rem 2rem}
 
-/* BADGES */
-.biye-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700;white-space:nowrap}
-.biye-badge-green{background:var(--gr-s);color:var(--gr)}
-.biye-badge-pk{background:var(--pk-s);color:var(--pk)}
-.biye-badge-pu{background:var(--pu-s);color:var(--pu)}
-.biye-badge-gd{background:var(--gd-s);color:#5a3e00}
-.biye-badge-gray{background:rgba(20,20,20,.06);color:var(--ink3)}
-.biye-badge-blue{background:var(--bl-s);color:var(--bl)}
+/* Line items table */
+.inv-table-wrap{border-radius:var(--r2);overflow:hidden;border:1px solid var(--bdr);margin-bottom:1.5rem}
+.inv-table{width:100%;border-collapse:collapse}
+.inv-table th{background:var(--bg);padding:.65rem 1rem;font-size:.68rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);text-align:left;
+  border-bottom:1px solid var(--bdr)}
+.inv-table th:last-child,.inv-table td:last-child{text-align:right}
+.inv-table td{padding:.75rem 1rem;font-size:.87rem;border-bottom:1px solid var(--bdr);color:var(--txt)}
+.inv-table tr:last-child td{border-bottom:none}
+.inv-table tr:hover td{background:var(--bg)}
+.item-name{font-weight:700}
+.item-desc{font-size:.72rem;color:var(--txt3);margin-top:.15rem}
 
-/* PROGRESS */
-.biye-progress{height:6px;border-radius:4px;background:var(--bdr2);overflow:hidden}
-.biye-progress-bar{height:100%;border-radius:4px;background:var(--grad);transition:width .4s ease}
+/* Totals block */
+.inv-totals{background:var(--bg);border-radius:var(--r2);padding:1.1rem 1.25rem;margin-bottom:1.5rem;border:1px solid var(--bdr)}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;font-size:.88rem}
+.total-row+.total-row{border-top:1px dashed var(--bdr)}
+.total-row .lbl{color:var(--txt2);font-weight:500}
+.total-row .val{font-weight:700;font-family:'Plus Jakarta Sans'}
+.total-row.grand{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1rem;font-weight:900;border-top:2px solid var(--bdr2)!important;padding-top:.6rem!important;margin-top:.25rem}
+.total-row.grand .lbl{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
+.total-row.grand .val{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.15rem}
 
-/* AVATAR */
-.biye-avatar{width:40px;height:40px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.95rem;flex-shrink:0;text-decoration:none}
-.biye-avatar-lg{width:72px;height:72px;font-size:1.5rem}
+/* Payment details */
+.pay-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+@media(max-width:600px){.pay-details-grid{grid-template-columns:1fr}}
+.pd-item{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);padding:.75rem .9rem}
+.pd-lbl{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--txt3);margin-bottom:.25rem}
+.pd-val{font-size:.87rem;font-weight:700;color:var(--txt)}
+.pd-val.mono{font-family:'Plus Jakarta Sans';font-size:.82rem}
 
-/* SPINNER */
-.biye-spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:biye-spin .8s linear infinite;vertical-align:middle}
-@keyframes biye-spin{to{transform:rotate(360deg)}}
+/* Transaction ID */
+.txn-box{background:linear-gradient(135deg,var(--bl-s),var(--pu-s));
+  border:1px solid rgba(21,101,192,.15);border-radius:var(--r2);
+  padding:.85rem 1rem;margin-bottom:1.5rem;display:none}
+.txn-label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--bl);margin-bottom:.3rem}
+.txn-id{font-size:.92rem;font-weight:800;color:var(--txt);font-family:'Plus Jakarta Sans';
+  word-break:break-all;display:flex;align-items:center;gap:.5rem}
+.txn-copy{width:28px;height:28px;border-radius:8px;background:var(--bl-s);
+  display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:.8rem;flex-shrink:0;border:none;color:var(--bl);transition:all var(--t)}
+.txn-copy:hover{background:var(--bl);color:#fff}
 
-/* PAGE HEADER */
-.biye-page-header{margin-bottom:1.5rem}
-.biye-page-title{font-size:1.35rem;font-weight:900;margin-bottom:.25rem}
-.biye-page-sub{font-size:.87rem;color:var(--ink2);line-height:1.6}
+/* Gateway redirect */
+.gateway-box{background:linear-gradient(135deg,var(--gd-s),var(--or-s));
+  border:1.5px solid rgba(212,175,55,.3);border-radius:var(--r3);
+  padding:1.5rem;text-align:center;margin-bottom:1.5rem;display:none}
+.gw-icon{font-size:2.5rem;margin-bottom:.65rem}
+.gw-title{font-size:1rem;font-weight:800;color:var(--txt);margin-bottom:.35rem}
+.gw-sub{font-size:.82rem;color:var(--txt2);line-height:1.6;margin-bottom:1rem}
+.gw-countdown{font-size:.75rem;color:var(--or);font-weight:700;margin-bottom:1rem}
 
-/* SECTION */
-.biye-section-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:.5rem}
-.biye-section-title{font-size:1rem;font-weight:800}
+/* Action buttons */
+.inv-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.78rem 1.4rem;
+  border-radius:var(--r2);font-size:.87rem;font-weight:800;cursor:pointer;
+  border:none;font-family:inherit;transition:all var(--t);text-decoration:none}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 18px rgba(226,19,110,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(226,19,110,.45)}
+.btn-ghost{background:var(--sur);color:var(--txt2);border:1.5px solid var(--bdr2)}
+.btn-ghost:hover{border-color:var(--pk);color:var(--pk)}
+.btn-pay{background:linear-gradient(120deg,#D4AF37,#E65100);color:#fff;
+  box-shadow:0 4px 18px rgba(212,175,55,.4)}
+.btn-pay:hover{transform:translateY(-2px)}
+.btn-sm{padding:.55rem 1rem;font-size:.8rem}
 
-/* STAT */
-.biye-stat{background:var(--sur);border-radius:var(--r);border:1px solid var(--bdr);padding:1rem 1.1rem}
-.biye-stat-val{font-size:1.5rem;font-weight:900;line-height:1.15;margin-bottom:.15rem}
-.biye-stat-lbl{font-size:.74rem;color:var(--ink2);font-weight:600}
+/* Notes/Terms */
+.inv-notes{border-top:1px solid var(--bdr);padding:1.25rem 2rem;
+  background:var(--bg);display:flex;gap:1.5rem;flex-wrap:wrap}
+.note-item{flex:1;min-width:160px}
+.note-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--txt3);margin-bottom:.3rem;display:flex;align-items:center;gap:.3rem}
+.note-text{font-size:.75rem;color:var(--txt2);line-height:1.65}
 
-/* TABS */
-.biye-tabs{display:flex;gap:.3rem;border-bottom:2px solid var(--bdr);margin-bottom:1.25rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.biye-tabs::-webkit-scrollbar{display:none}
-.biye-tab{padding:.55rem 1rem;font-size:.84rem;font-weight:700;color:var(--ink2);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;transition:var(--tx);background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
-.biye-tab.active{color:var(--pk);border-bottom-color:var(--pk)}
-.biye-tab-panel{display:none;animation:biye-fadeup .25s ease}
-.biye-tab-panel.active{display:block}
-@keyframes biye-fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* ── SIDEBAR ── */
+.sidebar{display:flex;flex-direction:column;gap:1rem;position:sticky;top:calc(60px + 1rem)}
 
-/* MATCH CARD */
-.biye-match-card{background:var(--sur);border-radius:var(--r3);border:1px solid var(--bdr);overflow:hidden;transition:var(--tx);cursor:pointer}
-.biye-match-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
-.biye-match-photo{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,var(--pk-s),var(--pu-s));display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden}
-.biye-match-photo img{width:100%;height:100%;object-fit:cover}
-.biye-match-info{padding:.85rem}
-.biye-match-name{font-size:.9rem;font-weight:800;margin-bottom:.15rem}
-.biye-match-meta{font-size:.75rem;color:var(--ink2);margin-bottom:.6rem;line-height:1.5}
-.biye-match-actions{display:flex;gap:.35rem}
+/* Pricing card */
+.price-card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh);
+  border:1px solid var(--bdr);overflow:hidden}
+.pc-head{background:var(--dark2);padding:1rem 1.25rem}
+.pc-title{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:rgba(255,255,255,.45);margin-bottom:.6rem}
+.pc-item{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;
+  font-size:.78rem;color:rgba(255,255,255,.65);border-bottom:1px solid rgba(255,255,255,.05)}
+.pc-item:last-child{border-bottom:none}
+.pc-amt{color:#FFD700;font-weight:800;font-family:'Plus Jakarta Sans'}
+.pc-body{padding:1rem 1.25rem}
+.pc-note{font-size:.75rem;color:var(--txt2);line-height:1.65}
 
-/* STEP DOTS */
-.biye-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:1.5rem}
-.biye-step-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:var(--ink3);font-family:'Inter',sans-serif;transition:var(--tx);flex-shrink:0}
-.biye-step-dot.active{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 3px 12px -4px rgba(106,45,168,.5)}
-.biye-step-dot.done{background:var(--gr);border-color:var(--gr);color:#fff}
-.biye-step-line{flex:1;height:2px;background:var(--bdr2);min-width:16px;max-width:48px;transition:var(--tx)}
-.biye-step-line.done{background:var(--gr)}
+/* BIYE features card */
+.feat-card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh);
+  border:1px solid var(--bdr);overflow:hidden}
+.fc-head{background:var(--grad);padding:.9rem 1.25rem}
+.fc-head-txt{font-size:.78rem;font-weight:800;color:#fff}
+.fc-head-sub{font-size:.68rem;color:rgba(255,255,255,.65);margin-top:.15rem}
+.fc-body{padding:1rem 1.25rem}
+.fc-item{display:flex;align-items:flex-start;gap:.55rem;padding:.45rem 0;
+  border-bottom:1px solid var(--bdr);font-size:.78rem;color:var(--txt2)}
+.fc-item:last-child{border-bottom:none}
+.fc-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:.75rem;flex-shrink:0;margin-top:.05rem}
 
-/* EMPTY */
-.biye-empty{text-align:center;padding:3rem 1rem}
-.biye-empty-icon{font-size:3rem;margin-bottom:.75rem}
-.biye-empty-title{font-size:1rem;font-weight:700;margin-bottom:.3rem}
-.biye-empty-sub{font-size:.84rem;color:var(--ink2);margin-bottom:1.25rem}
+/* Next steps card */
+.steps-card{background:var(--sur);border-radius:var(--r3);box-shadow:var(--sh);
+  border:1px solid var(--bdr);overflow:hidden}
+.steps-head{padding:1rem 1.25rem;border-bottom:1px solid var(--bdr)}
+.steps-title{font-size:.82rem;font-weight:800;color:var(--txt)}
+.steps-body{padding:.75rem 1.25rem}
+.step-item{display:flex;align-items:flex-start;gap:.65rem;padding:.55rem 0;
+  border-bottom:1px solid var(--bdr)}
+.step-item:last-child{border-bottom:none}
+.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:.65rem;font-weight:900;color:#fff;flex-shrink:0}
+.step-text strong{display:block;font-size:.8rem;font-weight:700;color:var(--txt)}
+.step-text span{font-size:.72rem;color:var(--txt2);line-height:1.5}
 
-/* SKELETON */
-.biye-skel{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:biye-skel 1.4s infinite;border-radius:8px}
-@keyframes biye-skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Support card */
+.support-card{background:linear-gradient(135deg,var(--pu-s),var(--pk-s));
+  border:1px solid rgba(123,47,190,.15);border-radius:var(--r3);padding:1.1rem 1.25rem}
+.sup-title{font-size:.82rem;font-weight:800;color:var(--pu);margin-bottom:.55rem;
+  display:flex;align-items:center;gap:.4rem}
+.sup-item{display:flex;align-items:center;gap:.5rem;font-size:.76rem;color:var(--txt2);
+  padding:.3rem 0;border-bottom:1px solid rgba(123,47,190,.08)}
+.sup-item:last-child{border-bottom:none}
+.sup-item a{color:var(--pu);font-weight:600}
 
-/* DISCLAIMER */
-.biye-disclaimer{background:var(--gd-s);border:1px solid rgba(212,175,55,.3);border-radius:var(--r2);padding:.75rem 1rem;font-size:.78rem;color:#5a3e00;line-height:1.55}
-
-/* NOTIF BADGE */
-.biye-notif-badge{position:absolute;top:-4px;right:-4px;background:var(--pk);color:#fff;font-size:.6rem;font-weight:800;border-radius:50px;padding:.1rem .35rem;min-width:16px;text-align:center}
-
-/* MOBILE NAV */
-.biye-mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--sur);border-top:1px solid var(--bdr);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-@media(max-width:768px){.biye-mobile-nav{display:flex}}
-.biye-mobile-nav-items{display:flex;width:100%}
-.biye-mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem .2rem;font-size:.58rem;font-weight:700;color:var(--ink3);cursor:pointer;transition:var(--tx);background:none;border:none;font-family:inherit;min-height:44px;justify-content:center}
-.biye-mobile-nav-item.active,.biye-mobile-nav-item:hover{color:var(--pk)}
-.biye-mobile-nav-icon{font-size:1.1rem;line-height:1}
-
-/* FOOTER */
-.biye-footer{background:#12122A;color:rgba(255,255,255,.65);padding:2.5rem 1.25rem;padding-bottom:calc(2.5rem + env(safe-area-inset-bottom));margin-top:3rem}
-.biye-footer-inner{max-width:960px;margin:0 auto}
-.biye-footer-logo{margin-bottom:.6rem}
-.biye-footer-logo img{filter:brightness(0) invert(1);opacity:.75}
-.biye-footer-tagline{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1.75rem}
-.biye-footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:1.75rem}
-@media(max-width:600px){.biye-footer-grid{grid-template-columns:repeat(2,1fr)}}
-.biye-footer-col h4{font-size:.75rem;font-weight:800;color:#fff;margin-bottom:.55rem;text-transform:uppercase;letter-spacing:.07em}
-.biye-footer-col a{display:block;font-size:.76rem;color:rgba(255,255,255,.45);margin-bottom:.3rem;transition:var(--tx)}
-.biye-footer-col a:hover{color:#fff}
-.biye-footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:1rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
-.biye-footer-copy{font-size:.7rem;color:rgba(255,255,255,.3)}
-
-/* RTL */
-html[dir=rtl] .biye-input,.biye-select,.biye-textarea{text-align:right}
-html[dir=rtl] .biye-nav{flex-direction:row-reverse}
-
-/* RESPONSIVE */
-@media(max-width:480px){body{font-size:15px}.biye-page,.biye-page-wide,.biye-page-narrow{padding-left:.75rem;padding-right:.75rem}}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-.invoice-box{background:var(--sur);border-radius:var(--r3);border:1px solid var(--bdr);padding:2rem;max-width:480px;margin:0 auto}
-.invoice-header{text-align:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:2px solid var(--bdr)}
-.invoice-title{font-size:1.25rem;font-weight:900;margin-bottom:.25rem}
-.invoice-num{font-size:.78rem;color:var(--ink2)}
-.invoice-row{display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--bdr);font-size:.88rem}
-.invoice-row:last-child{border-bottom:none;font-weight:800}
-.invoice-status{text-align:center;padding:1rem;background:var(--gr-s);border-radius:var(--r2);margin:1rem 0}
-
-
-.invoice-box{background:#fff;border-radius:20px;border:1px solid rgba(20,20,20,.08);padding:2rem;max-width:500px;margin:0 auto}
-.invoice-header{text-align:center;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:2px solid rgba(20,20,20,.08)}
-.invoice-logo{font-size:1.5rem;font-weight:900;background:linear-gradient(120deg,#E2136E,#6A2DA8,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.25rem}
-.invoice-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(20,20,20,.08);font-size:.88rem}
-.invoice-row:last-child{border-bottom:none;font-weight:800;font-size:.95rem}
-.invoice-status{text-align:center;padding:.85rem;border-radius:10px;margin:1rem 0}
-.gateway-box{background:rgba(21,101,192,.07);border:1px solid rgba(21,101,192,.2);border-radius:10px;padding:1rem;text-align:center;margin-top:1rem}
-.biye-spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(106,45,168,.2);border-top-color:#6A2DA8;border-radius:50%;animation:spin .8s linear infinite}
+/* ── STATES ── */
+.state-box{max-width:480px;margin:4rem auto;text-align:center;padding:2rem}
+.state-icon{font-size:3.5rem;margin-bottom:1rem}
+.state-title{font-size:1.2rem;font-weight:800;margin-bottom:.5rem;color:var(--txt)}
+.state-sub{font-size:.9rem;color:var(--txt2);line-height:1.7;margin-bottom:1.5rem}
+.state-spinner{width:56px;height:56px;border:3px solid var(--pk-s);border-top-color:var(--pk);
+  border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 1.25rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-.biye-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.25rem;border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:.2s;text-decoration:none;min-height:44px}
-.biye-btn-primary{background:linear-gradient(120deg,#E2136E,#6A2DA8,#1565C0);color:#fff}
-.biye-btn-ghost{background:#fff;color:rgba(20,20,20,.55);border:1.5px solid rgba(20,20,20,.14)}
-.biye-btn-sm{padding:.4rem .9rem;font-size:.8rem;min-height:36px}
-.biye-btn-full{width:100%;display:flex}
-.biye-badge{display:inline-flex;align-items:center;padding:.2rem .65rem;border-radius:50px;font-size:.75rem;font-weight:700}
-.biye-badge-green{background:rgba(0,166,81,.1);color:#00A651}
-.biye-badge-gd{background:rgba(212,175,55,.14);color:#5a3e00}
-.biye-badge-pk{background:rgba(194,15,94,.08);color:#C20F5E}
-.biye-empty{text-align:center;padding:3rem 1rem}
-.biye-empty-icon{font-size:3rem;margin-bottom:.75rem}
-.biye-empty-title{font-size:1rem;font-weight:700;margin-bottom:.3rem}
-.biye-empty-sub{font-size:.84rem;color:rgba(20,20,20,.55);margin-bottom:1.25rem}
 
+/* ── PRINT ── */
+@media print{
+  .announce,.nav,.sidebar,.inv-actions,.gateway-box,.gw-countdown{display:none!important}
+  .page{grid-template-columns:1fr;padding:0}
+  .inv-card{box-shadow:none;border:1px solid #ddd}
+  body{background:#fff}
+  .inv-header{background:linear-gradient(135deg,#E2136E,#7B2FBE,#1565C0)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .inv-header{padding:1.5rem 1.25rem}
+  .inv-header-body{grid-template-columns:1fr}
+  .inv-body{padding:1.25rem}
+  .inv-notes{padding:1rem 1.25rem;flex-direction:column}
+  .inv-actions{flex-direction:column}
+  .pay-details-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
 </style>
 </head>
 <body>
-<nav class="biye-nav" aria-label="Navigation">
-  <a href="dashboard.html" class="biye-nav-logo"><img src="data:image/png;base64,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" alt="BIYE" height="34"></a>
-  <div class="biye-nav-right">
-    <a href="receipt.html" class="biye-btn biye-btn-ghost biye-btn-sm">🧾 রসিদ</a>
-    <a href="membership.html" class="biye-btn biye-btn-ghost biye-btn-sm">সদস্যপদ</a>
-    <a href="dashboard.html" class="biye-btn biye-btn-primary biye-btn-sm">Dashboard</a>
+
+<!-- ── ANNOUNCE ── -->
+<div class="announce">
+  <span id="ann" data-i18n="ann">🌟 BIYE — বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি | রেজিস্ট্রেশন ৳১১১ | ম্যাচ ৳১১১→২২২→৩৩৩ | Manual ৳১,১১১ | Suggestion ৳৫৫</span>
+</div>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-logo">
+    <img src="data:image/png;base64,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" alt="BIYE" height="32">
+    <span class="nav-brand">BIYE</span>
+    <span class="nav-brand-bn">বিয়ে</span>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html" class="nav-a" data-i18n="nav.dash">ড্যাশবোর্ড</a>
+    <a href="match-feed.html" class="nav-a" data-i18n="nav.matches">ম্যাচ</a>
+    <a href="questionnaire.html" class="nav-a" data-i18n="nav.quest">প্রশ্নমালা</a>
+    <a href="knowledge.html" class="nav-a" data-i18n="nav.know">জ্ঞান</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-wrap">
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-expanded="false">
+        <span>🌐</span><span id="langLabel">বাং</span><span>▾</span>
+      </button>
+      <div class="lang-drop" id="langDrop">
+        <button class="lang-item" onclick="setLang('en')">🇺🇸 English</button>
+        <button class="lang-item active" onclick="setLang('bn')">🇧🇩 বাংলা</button>
+        <button class="lang-item" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+        <button class="lang-item" onclick="setLang('ar')">🌍 العربية</button>
+        <button class="lang-item" onclick="setLang('zh')">🇨🇳 中文</button>
+      </div>
+    </div>
+    <a href="dashboard.html" class="nav-btn-sm" data-i18n="nav.dash2">ড্যাশবোর্ড</a>
   </div>
 </nav>
 
-<main style="max-width:520px;margin:0 auto;padding:1.5rem 1rem 5rem" role="main">
+<!-- ── LOADING ── -->
+<div id="stateLoading" class="state-box">
+  <div class="state-spinner"></div>
+  <div class="state-title" data-i18n="state.loading">ইনভয়েস লোড হচ্ছে...</div>
+  <div class="state-sub" data-i18n="state.loading_sub">অনুগ্রহ করে অপেক্ষা করুন।</div>
+</div>
 
-  <!-- Loading -->
-  <div id="invLoading" style="text-align:center;padding:3rem">
-    <div class="biye-spinner" style="width:28px;height:28px;margin:0 auto .75rem"></div>
-    <div>ইনভয়েস লোড হচ্ছে...</div>
-  </div>
+<!-- ── NOT FOUND ── -->
+<div id="stateNotFound" class="state-box" style="display:none">
+  <div class="state-icon">🔍</div>
+  <div class="state-title" data-i18n="state.notfound">ইনভয়েস পাওয়া যায়নি</div>
+  <div class="state-sub" data-i18n="state.notfound_sub">এই ইনভয়েস নম্বরটি বিদ্যমান নেই অথবা আপনার অ্যাকাউন্টের সাথে সম্পর্কিত নয়।</div>
+  <a href="dashboard.html" class="btn btn-primary" data-i18n="btn.dashboard">ড্যাশবোর্ডে ফিরুন</a>
+</div>
 
-  <!-- Invoice -->
-  <div id="invContent" style="display:none">
-    <div class="invoice-box">
-      <div class="invoice-header">
-        <div class="invoice-logo">BIYE</div>
-        <div style="font-size:.85rem;color:rgba(20,20,20,.55);font-weight:600">ইনভয়েস / INVOICE</div>
-        <div style="font-size:.78rem;color:rgba(20,20,20,.4);margin-top:.2rem" id="invNum">—</div>
-        <div style="font-size:.72rem;color:rgba(20,20,20,.35);margin-top:.15rem" id="invDate"></div>
-      </div>
+<!-- ── MAIN CONTENT ── -->
+<div id="stateContent" class="page" style="display:none">
 
-      <div class="invoice-status" id="invStatus">
-        <span id="invStatusBadge" class="biye-badge">—</span>
-      </div>
-
-      <div id="invRows" style="margin-bottom:.5rem"></div>
-
-      <div style="display:flex;gap:.5rem;margin-top:1.25rem;flex-wrap:wrap">
-        <button onclick="window.print()" class="biye-btn biye-btn-ghost biye-btn-sm" style="flex:1">🖨 প্রিন্ট</button>
-        <a id="receiptBtn" href="receipt.html" class="biye-btn biye-btn-ghost biye-btn-sm" style="flex:1">🧾 রসিদ</a>
-        <a href="dashboard.html" class="biye-btn biye-btn-primary biye-btn-sm" style="flex:2">Dashboard</a>
-      </div>
-
-      <!-- Gateway section (pending payment) -->
-      <div id="gatewaySection" style="display:none;margin-top:1rem">
-        <div class="gateway-box">
-          <div style="font-size:.85rem;font-weight:700;color:#1565C0;margin-bottom:.5rem">পেমেন্ট গেটওয়েতে পাঠানো হচ্ছে...</div>
-          <div class="biye-spinner" style="border-top-color:#1565C0;border-color:rgba(21,101,192,.2);width:20px;height:20px;margin:.5rem auto"></div>
+  <!-- LEFT: Invoice Card -->
+  <div class="inv-card">
+    <!-- Header -->
+    <div class="inv-header">
+      <div class="inv-header-top">
+        <div class="inv-logo-wrap">
+          <img src="data:image/png;base64,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" alt="BIYE" height="44">
+          <div>
+            <div class="inv-logo-text">BIYE বিয়ে</div>
+            <div class="inv-logo-bn" data-i18n="inv.tagline">Science of Marriage. Trust for Life.</div>
+          </div>
         </div>
-        <a id="gatewayBtn" href="#" class="biye-btn biye-btn-primary biye-btn-full" style="margin-top:.65rem">💳 গেটওয়েতে যান → Pay Now</a>
+        <div class="inv-header-label">
+          <div class="label" data-i18n="inv.label">ইনভয়েস / INVOICE</div>
+          <div class="num" id="invNum">#—</div>
+          <div class="date" id="invDate">—</div>
+        </div>
+      </div>
+      <div class="inv-header-body">
+        <div class="inv-from">
+          <h4 data-i18n="inv.from">প্রেরক / FROM</h4>
+          <p>
+            <strong>BIYE.LTD</strong>
+            MindMax Group, Bangladesh<br>
+            biye.ltd | mindmaxbd.xyz<br>
+            <span data-i18n="inv.reg_note">বাংলাদেশ নিবন্ধিত প্রতিষ্ঠান</span>
+          </p>
+        </div>
+        <div class="inv-to">
+          <h4 data-i18n="inv.to">প্রাপক / TO</h4>
+          <p>
+            <strong id="clientName">—</strong>
+            <span id="clientPhone">—</span><br>
+            <span id="clientEmail"></span>
+            <span id="clientType" style="font-size:.72rem;opacity:.7"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Banner -->
+    <div class="inv-status-banner" id="invStatusBanner">
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <span class="status-pulse" id="statusPulse"></span>
+        <span class="status-badge" id="statusBadge">—</span>
+      </div>
+      <div class="status-info" id="statusInfo">—</div>
+    </div>
+
+    <!-- Body -->
+    <div class="inv-body">
+
+      <!-- Gateway redirect (pending) -->
+      <div class="gateway-box" id="gatewayBox">
+        <div class="gw-icon">💳</div>
+        <div class="gw-title" data-i18n="gw.title">পেমেন্ট গেটওয়েতে যাচ্ছেন...</div>
+        <div class="gw-sub" data-i18n="gw.sub">আপনাকে SSLCommerz নিরাপদ পেমেন্ট গেটওয়েতে পাঠানো হচ্ছে। পেমেন্ট সম্পন্ন হলে স্বয়ংক্রিয়ভাবে BIYE-তে ফিরে আসবেন।</div>
+        <div class="gw-countdown" id="gwCountdown"></div>
+        <a href="#" id="gatewayBtn" class="btn btn-pay" style="justify-content:center">
+          💳 <span data-i18n="gw.btn">এখনই পেমেন্ট করুন</span>
+        </a>
+      </div>
+
+      <!-- Line items -->
+      <div class="inv-table-wrap">
+        <table class="inv-table" id="invTable">
+          <thead>
+            <tr>
+              <th data-i18n="col.item">পণ্য / Item</th>
+              <th data-i18n="col.qty">পরিমাণ</th>
+              <th data-i18n="col.unit">একক মূল্য</th>
+              <th data-i18n="col.total">মোট</th>
+            </tr>
+          </thead>
+          <tbody id="invRows"></tbody>
+        </table>
+      </div>
+
+      <!-- Totals -->
+      <div class="inv-totals">
+        <div class="total-row">
+          <span class="lbl" data-i18n="tot.sub">উপমোট (Subtotal)</span>
+          <span class="val" id="totSub">৳—</span>
+        </div>
+        <div class="total-row">
+          <span class="lbl" data-i18n="tot.vat">ভ্যাট VAT (5%)</span>
+          <span class="val" id="totVat">৳—</span>
+        </div>
+        <div class="total-row">
+          <span class="lbl" data-i18n="tot.disc">ছাড় (Discount)</span>
+          <span class="val" id="totDisc" style="color:var(--gr)">৳০</span>
+        </div>
+        <div class="total-row grand">
+          <span class="lbl" data-i18n="tot.grand">সর্বমোট (Grand Total)</span>
+          <span class="val" id="totGrand">৳—</span>
+        </div>
+      </div>
+
+      <!-- Transaction ID -->
+      <div class="txn-box" id="txnBox">
+        <div class="txn-label" data-i18n="txn.label">🔗 লেনদেন আইডি / Transaction ID</div>
+        <div class="txn-id">
+          <span id="txnId">—</span>
+          <button class="txn-copy" id="txnCopyBtn" onclick="copyTxn()" title="Copy">📋</button>
+        </div>
+      </div>
+
+      <!-- Payment details grid -->
+      <div class="pay-details-grid" id="payDetailsGrid" style="display:none">
+        <div class="pd-item">
+          <div class="pd-lbl" data-i18n="pd.method">পেমেন্ট পদ্ধতি</div>
+          <div class="pd-val" id="pdMethod">—</div>
+        </div>
+        <div class="pd-item">
+          <div class="pd-lbl" data-i18n="pd.date">পেমেন্ট তারিখ</div>
+          <div class="pd-val" id="pdDate">—</div>
+        </div>
+        <div class="pd-item">
+          <div class="pd-lbl" data-i18n="pd.bank">ব্যাংক / গেটওয়ে</div>
+          <div class="pd-val" id="pdBank">SSLCommerz</div>
+        </div>
+        <div class="pd-item">
+          <div class="pd-lbl" data-i18n="pd.status">পেমেন্ট অবস্থা</div>
+          <div class="pd-val" id="pdStatus">—</div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="inv-actions">
+        <button onclick="window.print()" class="btn btn-ghost btn-sm">
+          🖨 <span data-i18n="btn.print">প্রিন্ট</span>
+        </button>
+        <a href="#" id="receiptBtn" class="btn btn-ghost btn-sm" style="display:none">
+          🧾 <span data-i18n="btn.receipt">রসিদ দেখুন</span>
+        </a>
+        <a href="dashboard.html" class="btn btn-primary btn-sm">
+          📊 <span data-i18n="btn.dashboard">ড্যাশবোর্ড</span>
+        </a>
+        <a href="questionnaire.html" class="btn btn-ghost btn-sm" id="questBtn" style="display:none">
+          🎯 <span data-i18n="btn.questionnaire">প্রশ্নমালা শুরু করুন</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Notes / Terms -->
+    <div class="inv-notes">
+      <div class="note-item">
+        <div class="note-title">📋 <span data-i18n="note.terms">শর্তাবলি</span></div>
+        <div class="note-text" data-i18n="note.terms_text">পেমেন্ট সম্পন্ন হলে রসিদ SMS ও ইমেইলে পাঠানো হবে। রিফান্ড নীতি: পেমেন্টের ৪৮ ঘণ্টার মধ্যে আবেদন করুন।</div>
+      </div>
+      <div class="note-item">
+        <div class="note-title">🔗 <span data-i18n="note.blockchain">Blockchain</span></div>
+        <div class="note-text" data-i18n="note.blockchain_text">এই ইনভয়েস Blockchain-এ অপরিবর্তনীয়ভাবে রেকর্ড করা হয়েছে। BIYE Trust Architecture-এর অংশ।</div>
+      </div>
+      <div class="note-item">
+        <div class="note-title">🛡️ <span data-i18n="note.secure">নিরাপত্তা</span></div>
+        <div class="note-text" data-i18n="note.secure_text">SSLCommerz PCI-DSS সার্টিফাইড। পেমেন্ট করার সময় OTP বা পাসওয়ার্ড কাউকে দেবেন না।</div>
       </div>
     </div>
   </div>
 
-  <!-- Not found -->
-  <div id="invNotFound" style="display:none">
-    <div class="biye-empty">
-      <div class="biye-empty-icon">🧾</div>
-      <div class="biye-empty-title">ইনভয়েস পাওয়া যায়নি</div>
-      <div class="biye-empty-sub">URL চেক করুন অথবা ড্যাশবোর্ডে যান।</div>
-      <a href="dashboard.html" class="biye-btn biye-btn-primary" style="margin-top:1rem">Dashboard</a>
+  <!-- RIGHT: Sidebar -->
+  <div class="sidebar">
+    <!-- Pricing card -->
+    <div class="price-card">
+      <div class="pc-head">
+        <div class="pc-title" data-i18n="pc.title">💎 BIYE মূল্য তালিকা</div>
+        <div class="pc-item"><span data-i18n="pc.reg">👤 রেজিস্ট্রেশন (Lifetime)</span><span class="pc-amt">৳১১১</span></div>
+        <div class="pc-item"><span data-i18n="pc.match1">🔍 ১ম ম্যাচ ভিউ</span><span class="pc-amt">৳১১১</span></div>
+        <div class="pc-item"><span data-i18n="pc.mutual">💯 Mutual Match (A↔B)</span><span class="pc-amt">৳২২২</span></div>
+        <div class="pc-item"><span data-i18n="pc.ai">🤖 EI+AI Full Match</span><span class="pc-amt">৳৩৩৩</span></div>
+        <div class="pc-item"><span data-i18n="pc.manual">🎯 Manual 5-Match</span><span class="pc-amt">৳১,১১১</span></div>
+        <div class="pc-item"><span data-i18n="pc.suggest">💡 AI Suggestion</span><span class="pc-amt">৳৫৫</span></div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-note" data-i18n="pc.note">সব মূল্যে ৫% VAT যোগ হবে। কোনো লুকানো ফি নেই। SSLCommerz পেমেন্ট গেটওয়ে।</div>
+      </div>
     </div>
-  </div>
 
-</main>
+    <!-- BIYE features -->
+    <div class="feat-card">
+      <div class="fc-head">
+        <div class="fc-head-txt" data-i18n="fc.title">BIYE-তে আপনি পাচ্ছেন</div>
+        <div class="fc-head-sub" data-i18n="fc.sub">বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি</div>
+      </div>
+      <div class="fc-body">
+        <div class="fc-item"><div class="fc-icon" style="background:var(--pk-s);color:var(--pk)">🧠</div><span data-i18n="fc.f1">১৩৭+ Compatibility Intelligence</span></div>
+        <div class="fc-item"><div class="fc-icon" style="background:var(--pu-s);color:var(--pu)">⚖️</div><span data-i18n="fc.f2">Smart Rule-Based Matching</span></div>
+        <div class="fc-item"><div class="fc-icon" style="background:var(--bl-s);color:var(--bl)">💯</div><span data-i18n="fc.f3">Mutual A→B + B→A Score</span></div>
+        <div class="fc-item"><div class="fc-icon" style="background:var(--pk-s);color:var(--pk)">❤️</div><span data-i18n="fc.f4">Emotional Intelligence Engine</span></div>
+        <div class="fc-item"><div class="fc-icon" style="background:var(--gd-s);color:#7a5a00">🔗</div><span data-i18n="fc.f5">Blockchain Trust Layer</span></div>
+        <div class="fc-item"><div class="fc-icon" style="background:var(--gr-s);color:var(--gr)">🪪</div><span data-i18n="fc.f6">7-Layer Verification</span></div>
+        <div class="fc-item"><div class="fc-icon" style="background:var(--pu-s);color:var(--pu)">🌍</div><span data-i18n="fc.f7">5-Language Global Platform</span></div>
+      </div>
+    </div>
 
-<script type="module">
-// Load App for session but don't depend on biye:ready event
-try { const { App } = await import('./app.js'); } catch(e) {}
+    <!-- Next steps -->
+    <div class="steps-card">
+      <div class="steps-head">
+        <div class="steps-title" data-i18n="ns.title">📍 পরবর্তী পদক্ষেপ</div>
+      </div>
+      <div class="steps-body">
+        <div class="step-item">
+          <div class="step-num" style="background:var(--pk)">1</div>
+          <div class="step-text">
+            <strong data-i18n="ns.s1">প্রশ্নমালা পূরণ করুন</strong>
+            <span data-i18n="ns.s1_sub">১৩৭+ মাত্রায় নিজেকে বিশ্লেষণ করুন</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="background:var(--pu)">2</div>
+          <div class="step-text">
+            <strong data-i18n="ns.s2">AI সামঞ্জস্য দেখুন</strong>
+            <span data-i18n="ns.s2_sub">Match Feed-এ আপনার জন্য সেরা ম্যাচ</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="background:var(--bl)">3</div>
+          <div class="step-text">
+            <strong data-i18n="ns.s3">যাচাইকরণ সম্পন্ন করুন</strong>
+            <span data-i18n="ns.s3_sub">NID, ছবি, শিক্ষা যাচাই করুন</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="background:var(--gd)">4</div>
+          <div class="step-text">
+            <strong data-i18n="ns.s4">সিদ্ধান্ত নিন</strong>
+            <span data-i18n="ns.s4_sub">AI সহায়তা করে — সিদ্ধান্ত আপনার</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-const STATUS = {
-  paid:    { label: '✓ পেমেন্ট সম্পন্ন', cls: 'biye-badge-green', bg: 'rgba(0,166,81,.08)' },
-  pending: { label: '⏳ অপেক্ষমান',       cls: 'biye-badge-gd',    bg: 'rgba(212,175,55,.1)' },
-  void:    { label: '✕ বাতিল',            cls: 'biye-badge-pk',    bg: 'rgba(194,15,94,.08)' },
+    <!-- Support -->
+    <div class="support-card">
+      <div class="sup-title">🎧 <span data-i18n="sup.title">সহায়তা</span></div>
+      <div class="sup-item">📧 <span data-i18n="sup.email">ইমেইল:</span> <a href="mailto:support@biye.ltd">support@biye.ltd</a></div>
+      <div class="sup-item">🌐 <a href="https://biye.ltd" data-i18n="sup.web">biye.ltd</a></div>
+      <div class="sup-item">📚 <a href="knowledge.html" data-i18n="sup.know">জ্ঞান গ্রন্থাগার</a></div>
+    </div>
+  </div><!-- /sidebar -->
+
+</div><!-- /page -->
+
+<script>
+// ══════════════════════════════════════════════════
+//  BIYE invoice.html — World-Class Production JS
+// ══════════════════════════════════════════════════
+
+// ── TRANSLATIONS ──────────────────────────────────
+var T = {
+  bn: {
+    'ann':'🌟 BIYE — বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি | রেজিস্ট্রেশন ৳১১১ | ম্যাচ ৳১১১→২২২→৩৩৩ | Manual ৳১,১১১ | Suggestion ৳৫৫',
+    'nav.dash':'ড্যাশবোর্ড','nav.matches':'ম্যাচ','nav.quest':'প্রশ্নমালা','nav.know':'জ্ঞান','nav.dash2':'ড্যাশবোর্ড',
+    'inv.tagline':'বিবাহের বিজ্ঞান। আজীবনের বিশ্বাস।','inv.label':'ইনভয়েস / INVOICE',
+    'inv.from':'প্রেরক / FROM','inv.to':'প্রাপক / TO','inv.reg_note':'বাংলাদেশ নিবন্ধিত প্রতিষ্ঠান',
+    'state.loading':'ইনভয়েস লোড হচ্ছে...','state.loading_sub':'অনুগ্রহ করে অপেক্ষা করুন।',
+    'state.notfound':'ইনভয়েস পাওয়া যায়নি','state.notfound_sub':'এই ইনভয়েস নম্বরটি বিদ্যমান নেই।',
+    'gw.title':'পেমেন্ট গেটওয়েতে যাচ্ছেন...',
+    'gw.sub':'আপনাকে SSLCommerz নিরাপদ পেমেন্ট গেটওয়েতে পাঠানো হচ্ছে।',
+    'gw.btn':'এখনই পেমেন্ট করুন',
+    'col.item':'পণ্য / Item','col.qty':'পরিমাণ','col.unit':'একক মূল্য','col.total':'মোট',
+    'tot.sub':'উপমোট (Subtotal)','tot.vat':'ভ্যাট VAT (5%)','tot.disc':'ছাড় (Discount)','tot.grand':'সর্বমোট (Grand Total)',
+    'txn.label':'🔗 লেনদেন আইডি / Transaction ID',
+    'pd.method':'পেমেন্ট পদ্ধতি','pd.date':'পেমেন্ট তারিখ','pd.bank':'ব্যাংক / গেটওয়ে','pd.status':'পেমেন্ট অবস্থা',
+    'btn.print':'প্রিন্ট','btn.receipt':'রসিদ দেখুন','btn.dashboard':'ড্যাশবোর্ড','btn.questionnaire':'প্রশ্নমালা শুরু করুন',
+    'note.terms':'শর্তাবলি','note.terms_text':'পেমেন্ট সম্পন্ন হলে রসিদ SMS ও ইমেইলে পাঠানো হবে। রিফান্ড নীতি: ৪৮ ঘণ্টার মধ্যে আবেদন।',
+    'note.blockchain':'Blockchain','note.blockchain_text':'এই ইনভয়েস Blockchain-এ অপরিবর্তনীয়ভাবে রেকর্ড। BIYE Trust Architecture।',
+    'note.secure':'নিরাপত্তা','note.secure_text':'SSLCommerz PCI-DSS সার্টিফাইড। OTP বা পাসওয়ার্ড কাউকে দেবেন না।',
+    'pc.title':'💎 BIYE মূল্য তালিকা',
+    'pc.reg':'👤 রেজিস্ট্রেশন (Lifetime)','pc.match1':'🔍 ১ম ম্যাচ ভিউ',
+    'pc.mutual':'💯 Mutual Match (A↔B)','pc.ai':'🤖 EI+AI Full Match',
+    'pc.manual':'🎯 Manual 5-Match','pc.suggest':'💡 AI Suggestion',
+    'pc.note':'সব মূল্যে ৫% VAT যোগ হবে। কোনো লুকানো ফি নেই।',
+    'fc.title':'BIYE-তে আপনি পাচ্ছেন','fc.sub':'বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি',
+    'fc.f1':'১৩৭+ Compatibility Intelligence','fc.f2':'Smart Rule-Based Matching',
+    'fc.f3':'Mutual A→B + B→A Score','fc.f4':'Emotional Intelligence Engine',
+    'fc.f5':'Blockchain Trust Layer','fc.f6':'7-Layer Verification','fc.f7':'5-Language Global Platform',
+    'ns.title':'📍 পরবর্তী পদক্ষেপ',
+    'ns.s1':'প্রশ্নমালা পূরণ করুন','ns.s1_sub':'১৩৭+ মাত্রায় নিজেকে বিশ্লেষণ করুন',
+    'ns.s2':'AI সামঞ্জস্য দেখুন','ns.s2_sub':'Match Feed-এ আপনার জন্য সেরা ম্যাচ',
+    'ns.s3':'যাচাইকরণ সম্পন্ন করুন','ns.s3_sub':'NID, ছবি, শিক্ষা যাচাই করুন',
+    'ns.s4':'সিদ্ধান্ত নিন','ns.s4_sub':'AI সহায়তা করে — সিদ্ধান্ত আপনার',
+    'sup.title':'সহায়তা','sup.email':'ইমেইল:','sup.web':'biye.ltd','sup.know':'জ্ঞান গ্রন্থাগার',
+    'status.paid':'✓ পেমেন্ট সম্পন্ন','status.pending':'⏳ অপেক্ষমান','status.void':'✕ বাতিল',
+    'status.paid_info':'আপনার পেমেন্ট সফলভাবে গ্রহণ করা হয়েছে।',
+    'status.pending_info':'পেমেন্ট এখনো সম্পন্ন হয়নি।',
+    'status.void_info':'এই ইনভয়েসটি বাতিল করা হয়েছে।',
+    'gw.sec':'সেকেন্ড পরে স্বয়ংক্রিয়ভাবে...',
+    'copy.done':'কপি হয়েছে!',
+    'item.reg':'BIYE রেজিস্ট্রেশন (Lifetime)','item.reg_desc':'১৩৭+ Intelligence · 7-Layer KYC · AI+EI+Blockchain · ৫ ভাষা',
+    'item.match1':'১ম ম্যাচ ভিউ','item.mutual':'Mutual Match (A↔B)',
+    'item.ai_match':'EI+AI Full Match Report','item.manual':'Manual 5-Match Search',
+    'item.suggest':'AI Suggestion',
+  }
+};
+T.en = Object.assign({}, T.bn, {
+  'ann':'🌟 BIYE — World\'s First AI+EI+Blockchain Matrimony | Registration ৳111 | Match ৳111→222→333 | Manual ৳1,111 | Suggestion ৳55',
+  'nav.dash':'Dashboard','nav.matches':'Matches','nav.quest':'Questionnaire','nav.know':'Knowledge','nav.dash2':'Dashboard',
+  'inv.tagline':'Science of Marriage. Trust for Life.','inv.label':'INVOICE',
+  'inv.from':'FROM','inv.to':'TO','inv.reg_note':'Registered in Bangladesh',
+  'state.loading':'Loading invoice...','state.loading_sub':'Please wait.',
+  'state.notfound':'Invoice Not Found','state.notfound_sub':'This invoice number does not exist.',
+  'gw.title':'Redirecting to Payment Gateway...',
+  'gw.sub':'You are being redirected to the secure SSLCommerz payment gateway.',
+  'gw.btn':'Pay Now',
+  'col.item':'Item','col.qty':'Qty','col.unit':'Unit Price','col.total':'Total',
+  'tot.sub':'Subtotal','tot.vat':'VAT (5%)','tot.disc':'Discount','tot.grand':'Grand Total',
+  'txn.label':'🔗 Transaction ID',
+  'pd.method':'Payment Method','pd.date':'Payment Date','pd.bank':'Bank / Gateway','pd.status':'Payment Status',
+  'btn.print':'Print','btn.receipt':'View Receipt','btn.dashboard':'Dashboard','btn.questionnaire':'Start Questionnaire',
+  'note.terms':'Terms','note.terms_text':'Receipt will be sent via SMS and email. Refund policy: Apply within 48 hours.',
+  'note.blockchain':'Blockchain','note.blockchain_text':'This invoice is immutably recorded on Blockchain. Part of BIYE Trust Architecture.',
+  'note.secure':'Security','note.secure_text':'SSLCommerz PCI-DSS certified. Never share your OTP or password.',
+  'pc.title':'💎 BIYE Pricing',
+  'pc.reg':'👤 Registration (Lifetime)','pc.match1':'🔍 1st Match View',
+  'pc.mutual':'💯 Mutual Match (A↔B)','pc.ai':'🤖 EI+AI Full Match',
+  'pc.manual':'🎯 Manual 5-Match','pc.suggest':'💡 AI Suggestion',
+  'pc.note':'5% VAT applies on all transactions. No hidden fees.',
+  'fc.title':'What You Get with BIYE','fc.sub':'World\'s First AI+EI+Blockchain Matrimony',
+  'fc.f1':'137+ Compatibility Intelligence','fc.f2':'Smart Rule-Based Matching',
+  'fc.f3':'Mutual A→B + B→A Score','fc.f4':'Emotional Intelligence Engine',
+  'fc.f5':'Blockchain Trust Layer','fc.f6':'7-Layer Verification','fc.f7':'5-Language Global Platform',
+  'ns.title':'📍 Next Steps',
+  'ns.s1':'Complete Questionnaire','ns.s1_sub':'Analyze yourself across 137+ dimensions',
+  'ns.s2':'View AI Compatibility','ns.s2_sub':'Best matches for you in Match Feed',
+  'ns.s3':'Complete Verification','ns.s3_sub':'NID, photo, education verification',
+  'ns.s4':'Make Your Decision','ns.s4_sub':'AI assists — the decision is always yours',
+  'sup.title':'Support','sup.email':'Email:','sup.web':'biye.ltd','sup.know':'Knowledge Library',
+  'status.paid':'✓ Payment Complete','status.pending':'⏳ Pending','status.void':'✕ Voided',
+  'status.paid_info':'Your payment has been successfully received.',
+  'status.pending_info':'Payment has not been completed yet.',
+  'status.void_info':'This invoice has been voided.',
+  'gw.sec':'seconds, automatically...',
+  'copy.done':'Copied!',
+  'item.reg':'BIYE Registration (Lifetime)','item.reg_desc':'137+ Intelligence · 7-Layer KYC · AI+EI+Blockchain · 5 Languages',
+  'item.match1':'1st Match View','item.mutual':'Mutual Match (A↔B)',
+  'item.ai_match':'EI+AI Full Match Report','item.manual':'Manual 5-Match Search',
+  'item.suggest':'AI Suggestion',
+});
+T.hi = Object.assign({}, T.en, {
+  'ann':'🌟 BIYE — विश्व की पहली AI+EI+Blockchain मैट्रिमोनी | पंजीकरण ৳111 | मैच ৳111→222→333',
+  'nav.dash':'डैशबोर्ड','inv.tagline':'विवाह का विज्ञान। जीवन का विश्वास।',
+  'state.loading':'चालान लोड हो रहा है...','state.notfound':'चालान नहीं मिला',
+  'btn.print':'प्रिंट','btn.receipt':'रसीद देखें','btn.dashboard':'डैशबोर्ड',
+  'status.paid':'✓ भुगतान पूर्ण','status.pending':'⏳ लंबित','status.void':'✕ रद्द',
+});
+T.ar = Object.assign({}, T.en, {
+  'ann':'🌟 BIYE — أول منصة زواج AI+EI+Blockchain في العالم | تسجيل ৳111 | مطابقة ৳111→222→333',
+  'nav.dash':'لوحة التحكم','inv.tagline':'علم الزواج. ثقة مدى الحياة.',
+  'inv.label':'فاتورة','inv.from':'من','inv.to':'إلى',
+  'state.loading':'جارٍ تحميل الفاتورة...','state.notfound':'الفاتورة غير موجودة',
+  'btn.print':'طباعة','btn.receipt':'عرض الإيصال','btn.dashboard':'لوحة التحكم',
+  'status.paid':'✓ تم الدفع','status.pending':'⏳ قيد الانتظار','status.void':'✕ ملغى',
+  'tot.grand':'المجموع الكلي','col.item':'البند','col.total':'الإجمالي',
+});
+T.zh = Object.assign({}, T.en, {
+  'ann':'🌟 BIYE — 全球首个AI+EI+区块链婚恋平台 | 注册 ৳111 | 匹配 ৳111→222→333',
+  'nav.dash':'仪表板','inv.tagline':'婚姻科学。终生信任。',
+  'inv.label':'发票','inv.from':'发件人','inv.to':'收件人',
+  'state.loading':'正在加载发票...','state.notfound':'未找到发票',
+  'btn.print':'打印','btn.receipt':'查看收据','btn.dashboard':'仪表板',
+  'status.paid':'✓ 付款完成','status.pending':'⏳ 待处理','status.void':'✕ 已作废',
+  'tot.grand':'合计','col.item':'项目','col.total':'总计',
+});
+
+var RTL = {ar:true};
+var LANG_L = {en:'EN',bn:'বাং',hi:'हिं',ar:'عر',zh:'中'};
+var L = 'bn';
+function t(k){return(T[L]&&T[L][k])||T.en[k]||k;}
+function el(id){return document.getElementById(id);}
+
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(function(e){
+    var v=t(e.getAttribute('data-i18n'));
+    if(v&&v!==e.getAttribute('data-i18n'))e.textContent=v;
+  });
+}
+function setLang(lang){
+  if(!T[lang])lang='bn';
+  L=lang;
+  document.documentElement.lang=lang;
+  document.documentElement.dir=RTL[lang]?'rtl':'ltr';
+  el('langLabel').textContent=LANG_L[lang]||lang;
+  document.querySelectorAll('.lang-item').forEach(function(b,i){
+    b.classList.toggle('active',['en','bn','hi','ar','zh'][i]===lang);
+  });
+  applyLang();
+  closeLang();
+  try{localStorage.setItem('biye_lang',lang);}catch(e){}
+}
+function toggleLang(){
+  var d=el('langDrop'),b=el('langBtn');
+  d.classList.toggle('open');b.setAttribute('aria-expanded',d.classList.contains('open'));
+}
+function closeLang(){
+  el('langDrop').classList.remove('open');
+  el('langBtn').setAttribute('aria-expanded','false');
+}
+document.addEventListener('click',function(e){if(!e.target.closest('.lang-wrap'))closeLang();});
+
+// ── ITEM PACKAGE NAMES ────────────────────────────
+var PACKAGES = {
+  REG:     {name:'item.reg',    desc:'item.reg_desc',  price:111},
+  MATCH1:  {name:'item.match1', desc:null,             price:111},
+  MUTUAL:  {name:'item.mutual', desc:null,             price:222},
+  AI_MATCH:{name:'item.ai_match',desc:null,            price:333},
+  MANUAL:  {name:'item.manual', desc:null,             price:1111},
+  SUGGEST: {name:'item.suggest',desc:null,             price:55},
 };
 
-// Run on load — don't wait for biye:ready
-async function loadInvoice() {
-  const params = new URLSearchParams(window.location.search);
-  const inv    = params.get('inv') || params.get('invoice_number');
-  const fromPay = params.get('from') === 'payment';
+// ── STATUS CONFIG ─────────────────────────────────
+var STATUS = {
+  paid:    {key:'status.paid',    cls:'sb-paid',    pulse:'sp-paid',    banner:'status-paid',    info:'status.paid_info'},
+  pending: {key:'status.pending', cls:'sb-pending', pulse:'sp-pending', banner:'status-pending', info:'status.pending_info'},
+  void:    {key:'status.void',    cls:'sb-void',    pulse:'sp-void',    banner:'status-void',    info:'status.void_info'},
+};
 
-  if (!inv) {
-    document.getElementById('invLoading').style.display = 'none';
-    document.getElementById('invNotFound').style.display = '';
+// ── FORMAT ────────────────────────────────────────
+function fmtMoney(n,lang){
+  var num = Number(n||0);
+  if(lang==='bn') return '৳' + num.toLocaleString('bn-BD');
+  return '৳' + num.toLocaleString('en-BD');
+}
+function fmtDate(iso,lang){
+  if(!iso) return '—';
+  var d=new Date(iso);
+  try{
+    if(lang==='bn') return d.toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'});
+    if(lang==='ar') return d.toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short'});
+    return d.toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'});
+  }catch(e){return d.toDateString();}
+}
+
+// ── COPY ──────────────────────────────────────────
+function copyTxn(){
+  var val=el('txnId').textContent;
+  if(navigator.clipboard){navigator.clipboard.writeText(val).then(function(){
+    var btn=el('txnCopyBtn'); btn.textContent='✓';
+    setTimeout(function(){btn.textContent='📋';},2000);
+  });}
+}
+
+// ── GATEWAY COUNTDOWN ────────────────────────────
+function startCountdown(url, sec){
+  var cd=el('gwCountdown');
+  var ti=setInterval(function(){
+    sec--;
+    cd.textContent=sec+' '+t('gw.sec');
+    if(sec<=0){clearInterval(ti);window.location.href=url;}
+  },1000);
+  cd.textContent=sec+' '+t('gw.sec');
+}
+
+// ── LOAD INVOICE ─────────────────────────────────
+async function loadInvoice(){
+  var params=new URLSearchParams(window.location.search);
+  var inv=params.get('inv')||params.get('invoice_number');
+  var fromReg=params.get('from')=='register';
+  var fromPay=params.get('from')=='payment';
+
+  if(!inv){
+    el('stateLoading').style.display='none';
+    el('stateNotFound').style.display='';
     return;
   }
 
-  try {
-    const res  = await fetch('/.netlify/functions/payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'getInvoice', invoice_number: inv }),
+  try{
+    var res=await fetch('/.netlify/functions/payment',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'getInvoice',invoice_number:inv}),
     });
-    const data = await res.json();
-    document.getElementById('invLoading').style.display = 'none';
+    var data=await res.json();
+    el('stateLoading').style.display='none';
 
-    if (!data.ok || !data.invoice) {
-      document.getElementById('invNotFound').style.display = '';
+    if(!data.ok||!data.invoice){
+      el('stateNotFound').style.display='';
       return;
     }
 
-    const iv = data.invoice;
-    document.getElementById('invContent').style.display = '';
-    document.getElementById('invNum').textContent  = iv.invoice_number || inv;
-    document.getElementById('invDate').textContent = iv.issued_at
-      ? new Date(iv.issued_at).toLocaleString('bn-BD') : '';
+    var iv=data.invoice, pay=data.payment||{};
+    el('stateContent').style.display='';
 
-    const s = STATUS[iv.status] || STATUS.pending;
-    document.getElementById('invStatus').style.background = s.bg;
-    const badge = document.getElementById('invStatusBadge');
-    badge.className = 'biye-badge ' + s.cls;
-    badge.textContent = s.label;
+    // ── Header ──
+    el('invNum').textContent='#'+(iv.invoice_number||inv);
+    el('invDate').textContent=fmtDate(iv.issued_at||iv.created_at,L);
 
-    const rows = document.getElementById('invRows');
-    const row  = (lbl, val) => {
-      const d = document.createElement('div'); d.className = 'invoice-row';
-      const l = document.createElement('span'); l.textContent = lbl;
-      const v = document.createElement('span'); v.textContent = val;
-      d.appendChild(l); d.appendChild(v); rows.appendChild(d);
+    // Client info
+    var name=iv.customer_name||pay.customer_name||'';
+    var phone=(iv.phone||pay.phone||'').replace(/^880/,'0');
+    var email=iv.customer_email||'';
+    el('clientName').textContent=name||'BIYE User';
+    el('clientPhone').textContent=phone||'—';
+    if(email&&el('clientEmail')){el('clientEmail').textContent=email;el('clientEmail').style.display='block';}
+    var ownerType=iv.profile_owner_type||'';
+    if(ownerType&&el('clientType')){
+      var typeMap={self:'নিজে',parent_assisted:'অভিভাবক',guardian_assisted:'অভিভাবক'};
+      el('clientType').textContent='('+( typeMap[ownerType]||ownerType)+')';
+    }
+
+    // ── Status ──
+    var st=STATUS[iv.status]||STATUS.pending;
+    var banner=el('invStatusBanner');
+    banner.className='inv-status-banner '+st.banner;
+    el('statusPulse').className='status-pulse '+st.pulse;
+    el('statusBadge').className='status-badge '+st.cls;
+    el('statusBadge').textContent=t(st.key);
+    el('statusInfo').textContent=t(st.info);
+
+    // ── Line items ──
+    var tbody=el('invRows');
+    tbody.innerHTML='';
+    var addRow=function(name,desc,qty,unit,total){
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td><div class="item-name">'+name+'</div>'+(desc?'<div class="item-desc">'+desc+'</div>':'')+'</td>'
+        +'<td>'+qty+'</td>'
+        +'<td>'+fmtMoney(unit,L)+'</td>'
+        +'<td>'+fmtMoney(total,L)+'</td>';
+      tbody.appendChild(tr);
     };
-    row('মূল্য (Subtotal)', '৳' + Number(iv.subtotal||0).toLocaleString('bn-BD'));
-    row('ভ্যাট VAT (5%)',   '৳' + Number(iv.tax||0).toLocaleString('bn-BD'));
-    row('মোট Total',        '৳' + Number(iv.total||0).toLocaleString('bn-BD'));
-    if (data.payment?.transaction_id) row('লেনদেন ID', data.payment.transaction_id);
 
-    // Receipt link
-    if (iv.status === 'paid' && data.payment?.id) {
-      document.getElementById('receiptBtn').href = 'receipt.html?payment_id=' + data.payment.id;
+    // Determine package
+    var pkgCode=iv.package_code||'REG';
+    var pkg=PACKAGES[pkgCode]||PACKAGES.REG;
+    addRow(t(pkg.name), pkg.desc?t(pkg.desc):null, 1, iv.subtotal||pkg.price, iv.subtotal||pkg.price);
+
+    // ── Totals ──
+    el('totSub').textContent=fmtMoney(iv.subtotal||0,L);
+    el('totVat').textContent=fmtMoney(iv.tax||0,L);
+    var disc=iv.discount||0;
+    el('totDisc').textContent=(disc>0?'-':'')+fmtMoney(disc,L);
+    el('totGrand').textContent=fmtMoney(iv.total||0,L);
+
+    // ── Transaction ID ──
+    var txnId=pay.transaction_id||pay.val_id||'';
+    if(txnId){
+      el('txnBox').style.display='';
+      el('txnId').textContent=txnId;
     }
 
-    // Gateway redirect for pending invoices
-    if (iv.status === 'pending' && data.gateway_url) {
-      document.getElementById('gatewaySection').style.display = '';
-      document.getElementById('gatewayBtn').href = data.gateway_url;
-      if (fromPay) setTimeout(() => { window.location.href = data.gateway_url; }, 2000);
+    // ── Payment details ──
+    if(iv.status==='paid'||pay.payment_type){
+      el('payDetailsGrid').style.display='';
+      el('pdMethod').textContent=pay.payment_type||pay.card_type||(iv.payment_method||'SSLCommerz');
+      el('pdDate').textContent=fmtDate(pay.created_at||iv.updated_at,L);
+      el('pdStatus').textContent=t('status.paid');
+      if(pay.bank_tran_id||pay.card_issuer) el('pdBank').textContent=pay.bank_tran_id||pay.card_issuer||'SSLCommerz';
     }
 
-  } catch (e) {
-    document.getElementById('invLoading').style.display = 'none';
-    document.getElementById('invNotFound').style.display = '';
-    console.error('Invoice error:', e);
+    // ── Receipt link ──
+    if(iv.status==='paid'&&(pay.id||txnId)){
+      el('receiptBtn').href='receipt.html?payment_id='+(pay.id||'')+(txnId?'&txn='+txnId:'');
+      el('receiptBtn').style.display='';
+    }
+
+    // ── Gateway redirect (pending) ──
+    if(iv.status==='pending'&&data.gateway_url){
+      el('gatewayBox').style.display='';
+      el('gatewayBtn').href=data.gateway_url;
+      if(fromReg||fromPay) startCountdown(data.gateway_url,3);
+    }
+
+    // ── Show questionnaire button for new paid registrations ──
+    if(iv.status==='paid'&&(fromReg||pkgCode==='REG')){
+      el('questBtn').style.display='';
+    }
+
+  }catch(e){
+    el('stateLoading').style.display='none';
+    el('stateNotFound').style.display='';
+    console.error('Invoice error:',e);
   }
 }
 
-// Call immediately when DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadInvoice);
-} else {
-  loadInvoice();
-}
+// ── INIT ──────────────────────────────────────────
+var sl='bn';try{sl=localStorage.getItem('biye_lang')||'bn';}catch(e){}
+setLang(T[sl]?sl:'bn');
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadInvoice);}
+else{loadInvoice();}
 </script>
 </body>
 </html>
