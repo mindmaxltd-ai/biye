@@ -166,14 +166,18 @@ async function resolveProfile(body) {
   //    "looking for a groom" means the candidate is female.
   const gender = body.seeking_type === 'groom' ? 'female' : 'male';
 
-  // date_of_birth is NOT NULL in the schema, but register.html only collects
-  // age today, not a birthdate. This approximates DOB from age (Jan 1 of the
-  // birth year) — good enough for the 18+ check, but not exact. Recommend
-  // adding a real date-of-birth field to the registration form later.
+  // date_of_birth is NOT NULL in the schema. Prefer an exact date if the
+  // registration form collected one (body.dob, "YYYY-MM-DD"); only fall
+  // back to approximating from age (Jan 1 of the birth year) when just an
+  // age was given.
   let dob = null;
-  const age = parseInt(body.age, 10);
-  if (age && age > 0 && age < 120) {
-    dob = `${new Date().getFullYear() - age}-01-01`;
+  if (body.dob && /^\d{4}-\d{2}-\d{2}$/.test(body.dob)) {
+    dob = body.dob;
+  } else {
+    const age = parseInt(body.age, 10);
+    if (age && age > 0 && age < 120) {
+      dob = `${new Date().getFullYear() - age}-01-01`;
+    }
   }
 
   const ownerType = body.owner_type === 'self' ? 'self' : 'guardian_assisted';
