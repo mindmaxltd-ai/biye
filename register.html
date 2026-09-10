@@ -270,6 +270,18 @@ a{color:inherit}
 .btn-skip{background:none;color:var(--ink-faint);text-decoration:underline;font-weight:700;font-size:.78rem;border:none;
   display:block;margin:.7rem auto 0}
 
+/* lifetime payment step */
+.price-card{background:var(--ink);color:#fff;border-radius:16px;padding:1rem 1.1rem;margin-bottom:1rem}
+.price-row{display:flex;justify-content:space-between;font-size:.82rem;padding:.32rem 0;opacity:.85}
+.price-row.price-total{opacity:1;font-weight:800;font-size:1.05rem;border-top:1px solid rgba(255,255,255,.2);margin-top:.35rem;padding-top:.6rem}
+.price-row span:last-child{font-family:'Inter',sans-serif}
+.price-note{font-size:.68rem;opacity:.65;margin-top:.5rem;line-height:1.5}
+.facility-box{background:rgba(15,169,88,.06);border:1.5px solid rgba(15,169,88,.22);border-radius:16px;padding:.9rem 1rem;margin-bottom:1rem}
+.facility-title{font-size:.8rem;font-weight:800;margin-bottom:.6rem}
+.facility-list{list-style:none}
+.facility-list li{display:flex;gap:.55rem;align-items:flex-start;font-size:.8rem;color:var(--ink);line-height:1.55;padding:.3rem 0}
+.facility-list li svg{width:16px;height:16px;stroke:var(--green-dark);flex-shrink:0;margin-top:.15rem}
+
 /* success */
 .success-wrap{text-align:center;padding:.3rem 0 .5rem}
 .success-ring{width:88px;height:88px;border-radius:50%;background:var(--green);display:flex;align-items:center;
@@ -352,7 +364,7 @@ a{color:inherit}
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
         <span class="btn-label" data-bn="সাহায্য" data-en="Help">Help</span>
       </a>
-      <a class="hbtn" href="index.html">
+      <a class="hbtn" href="login.html">
         <span class="btn-label" data-bn="লগইন" data-en="Log in">Log in</span>
       </a>
     </div>
@@ -741,37 +753,36 @@ a{color:inherit}
         </div>
       </div>
 
-      <!-- ============ STEP 11 : SUCCESS ============ -->
-      <div class="wiz-step" data-step="success">
-        <div class="success-wrap">
-          <div class="success-ring"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
-          <h2 class="step-title" data-bn="BIYE-তে স্বাগতম" data-en="Welcome to BIYE">Welcome to BIYE</h2>
-          <p class="step-sub" data-bn="আপনার যাত্রা আনুষ্ঠানিকভাবে শুরু হলো।" data-en="Your journey has officially begun.">Your journey has officially begun.</p>
-
-          <div class="id-card">
-            <div class="idc-row"><span class="idc-k" data-bn="ইউজার আইডি" data-en="User ID">User ID</span><span class="idc-v" id="outUserId">—</span></div>
+      <!-- ============ STEP 12 (13th window) : LIFETIME PAYMENT ============ -->
+      <div class="wiz-step" data-step="payment">
+        <div class="success-wrap" style="padding-top:0">
+          <div class="success-ring" style="width:64px;height:64px;margin-bottom:.7rem"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+          <p style="font-size:.76rem;font-weight:700;color:var(--green-dark)" data-bn="অ্যাকাউন্ট তৈরি হয়েছে" data-en="Account created">Account created</p>
+          <div class="id-card" style="text-align:left">
             <div class="idc-row"><span class="idc-k" data-bn="সদস্য নম্বর" data-en="Member number">Member number</span><span class="idc-v" id="outMemberId">—</span></div>
-            <div class="idc-row"><span class="idc-k" data-bn="যাচাই অবস্থা" data-en="Verification status">Verification status</span><span class="idc-v" id="outVerifyStatus">—</span></div>
-          </div>
-
-          <p style="font-size:.78rem;color:var(--ink-soft);line-height:1.7" data-bn="AI বিশ্লেষণ করে, EI অনুভূতি বোঝে, আর নিরাপত্তা প্রতিটি ম্যাচের পেছনে জবাবদিহিতা নিশ্চিত করে।" data-en="AI analyzes, EI understands feeling, and verification keeps everyone accountable — behind every match.">AI analyzes, EI understands feeling, and verification keeps everyone accountable — behind every match.</p>
-
-          <div class="journey" aria-hidden="true">
-            <span data-bn="তৈরি" data-en="Create">Create</span>
-            <span data-bn="যাচাই" data-en="Verify">Verify</span>
-            <span data-bn="প্রোফাইল সম্পন্ন" data-en="Complete profile">Complete profile</span>
-            <span data-bn="খুঁজুন" data-en="Discover">Discover</span>
-            <span data-bn="মিল" data-en="Match">Match</span>
-            <span data-bn="সংযোগ" data-en="Connect">Connect</span>
-          </div>
-
-          <div class="next-actions">
-            <a class="na-primary" href="questionnaire.html" data-bn="আমার প্রোফাইল সম্পন্ন করুন" data-en="Complete my profile">Complete my profile</a>
-            <a class="na-secondary" href="dashboard.html" data-bn="ড্যাশবোর্ডে যান" data-en="Go to dashboard">Go to dashboard</a>
-            <a class="na-secondary" href="payment.html" data-bn="একটি প্যাকেজ বাছুন" data-en="Choose a package">Choose a package</a>
-            <a class="na-secondary" href="onboarding.html" data-bn="যাচাই সম্পন্ন করুন" data-en="Finish verification">Finish verification</a>
           </div>
         </div>
+
+        <h2 class="step-title" style="text-align:center" data-bn="লাইফটাইম রেজিস্ট্রেশন সক্রিয় করুন" data-en="Activate your lifetime registration">Activate your lifetime registration</h2>
+        <p class="step-sub" style="text-align:center" data-bn="একবারের পেমেন্ট। আজীবন সুবিধা। কখনো নবায়ন করতে হবে না।" data-en="One payment, made once. Lifetime access. No renewal, ever.">One payment, made once. Lifetime access. No renewal, ever.</p>
+
+        <div class="price-card">
+          <div class="price-row"><span data-bn="মূল মূল্য" data-en="Base amount">Base amount</span><span>৳999</span></div>
+          <div class="price-row"><span data-bn="ভ্যাট (৫%)" data-en="VAT (5%)">VAT (5%)</span><span>৳50</span></div>
+          <div class="price-row price-total"><span data-bn="মোট প্রদেয়" data-en="Total payable">Total payable</span><span>৳1,049</span></div>
+          <div class="price-note" data-bn="এটি লাইফটাইম রেজিস্ট্রেশনের জন্য একমাত্র পেমেন্ট — কোনো মাসিক বা বার্ষিক চার্জ নেই।" data-en="This is the only payment for lifetime registration — no monthly or yearly charges.">This is the only payment for lifetime registration — no monthly or yearly charges.</div>
+        </div>
+
+        <div class="facility-box">
+          <p class="facility-title" data-bn="৳৯৯৯ লাইফটাইম প্যাকেজে যা যা পাবেন" data-en="What's included in the ৳999 lifetime package">What's included in the ৳999 lifetime package</p>
+          <ul class="facility-list" id="facilityList"></ul>
+        </div>
+
+        <div class="wiz-actions">
+          <button class="btn btn-ghost" onclick="goPrev()" data-bn="পেছনে" data-en="Back">Back</button>
+          <button class="btn btn-primary" id="btnPayNow" onclick="payFor999()" data-bn="নিরাপদে ৳১,০৪৯ পরিশোধ করুন" data-en="Pay ৳1,049 securely">Pay ৳1,049 securely</button>
+        </div>
+        <p class="rate-note" data-bn="আপনাকে আমাদের সুরক্ষিত পেমেন্ট গেটওয়েতে নিয়ে যাওয়া হবে। পেমেন্ট সফল হলে বিস্তারিত নির্দেশনাসহ একটি SMS ও ইমেইল কনফার্মেশন পাবেন।" data-en="You'll be taken to our secure payment gateway. Once payment succeeds, you'll receive an SMS and email confirmation with full instructions.">You'll be taken to our secure payment gateway. Once payment succeeds, you'll receive an SMS and email confirmation with full instructions.</p>
       </div>
 
     </section>
@@ -832,7 +843,17 @@ var STATE = {
   userId:null, memberId:null
 };
 
-var STEPS = ['welcome','profileFor','seeking','identity','contact','otp','idverify','profile','preferences','review','consent','success'];
+var STEPS = ['welcome','profileFor','seeking','identity','contact','otp','idverify','profile','preferences','review','consent','payment'];
+
+var FACILITIES = [
+  {bn:'সীমাহীন AI + EI সামঞ্জস্য ম্যাচ — কোনো মাসিক সীমা নেই', en:'Unlimited AI + EI compatibility matches — no monthly caps'},
+  {bn:'সীমাহীন প্রোফাইল দেখা ও যোগাযোগের তথ্য প্রকাশ', en:'Unlimited profile views and contact reveals'},
+  {bn:'পরিচয় যাচাই সম্পন্ন হলে ভেরিফায়েড-প্রোফাইল ব্যাজ', en:'Verified-profile badge once identity verification completes'},
+  {bn:'প্রতিটি ম্যাচের জন্য সম্পূর্ণ সামঞ্জস্য রিপোর্ট', en:'Full compatibility reports for every match'},
+  {bn:'অগ্রাধিকারমূলক গ্রাহক সহায়তা', en:'Priority customer support'},
+  {bn:'অভিভাবক/পরিবারের ড্যাশবোর্ড প্রবেশাধিকার', en:'Guardian/family dashboard access'},
+  {bn:'আজীবন বৈধতা — এটি রেজিস্ট্রেশনের জন্য আপনার একমাত্র পেমেন্ট', en:'Lifetime validity — this is the only payment you\'ll ever make for registration'}
+];
 var current = 0;
 
 var DIVISIONS = {
@@ -936,6 +957,7 @@ function showStep(i){
   if(STEPS[i]==='otp') prepOtpStep();
   if(STEPS[i]==='review') renderReview();
   if(STEPS[i]==='consent') renderConsent();
+  if(STEPS[i]==='payment') renderPaymentStep();
   track('registration_step_completed', {step: STEPS[i]});
 }
 function updateProgress(){
@@ -1421,27 +1443,13 @@ function submitRegistration(){
       }catch(e){ /* best-effort demo logging */ }
     }
 
-    document.getElementById('outUserId').textContent = STATE.userId;
-    document.getElementById('outMemberId').textContent = STATE.memberId;
-    document.getElementById('outVerifyStatus').textContent = (STATE.docFront||STATE.docBack)
-      ? tt('জমা দেওয়া হয়েছে — পর্যালোচনাধীন','Submitted — pending review')
-      : tt('জমা হয়নি','Not submitted');
-
-    // Integration points: existing send-sms.js / send-email.js functions
-    // handle the actual confirmation message; never send plaintext password.
-    fetch('/.netlify/functions/send-sms', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({to: STATE.phone, msg: 'BIYE: Registration complete. Member ID '+STATE.memberId+'. Welcome!'})
-    }).catch(function(){});
-    if(STATE.email){
-      fetch('/.netlify/functions/send-email', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({to: STATE.email, subject:'Welcome to BIYE', memberId: STATE.memberId})
-      }).catch(function(){});
-    }
-
+    // Account creation is confirmed here; the ৳999 lifetime fee is collected
+    // next, on the payment step, through the existing invoice/payment/receipt
+    // architecture. The SMS/email with detailed instructions and facilities is
+    // sent once payment-webhook.js confirms the gateway payment succeeded —
+    // not from here, so no confirmation is ever sent before payment clears.
     track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
-    showStep(STEPS.indexOf('success'));
+    showStep(STEPS.indexOf('payment'));
   };
 
   if(window.BiyeDB){
@@ -1449,6 +1457,43 @@ function submitRegistration(){
   } else {
     setTimeout(function(){ finish(null); }, 500);
   }
+}
+
+/* ---------------- STEP: lifetime payment (13th window) ---------------- */
+function renderPaymentStep(){
+  document.getElementById('outMemberId').textContent = STATE.memberId || tt('তৈরি হচ্ছে…','generating…');
+  var list = document.getElementById('facilityList');
+  list.innerHTML = '';
+  FACILITIES.forEach(function(f){
+    var li = document.createElement('li');
+    li.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg><span>'+tt(f.bn,f.en)+'</span>';
+    list.appendChild(li);
+  });
+}
+
+function payFor999(){
+  var btn = document.getElementById('btnPayNow');
+  btn.disabled = true;
+  btn.textContent = tt('প্রসেস হচ্ছে...','Processing...');
+  track('registration_submitted', {stage:'payment_initiated', package:'REG', amount:999});
+
+  // Preferred path: create the invoice directly (same call payment.html makes),
+  // then continue through the existing invoice.html -> gateway -> receipt.html
+  // flow. If the function can't be reached (e.g. this static preview), fall
+  // back to payment.html itself, which can create the invoice once deployed —
+  // the ৳999 lifetime package is preselected via ?pkg=REG.
+  fetch('/.netlify/functions/payment', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({action:'createInvoice', customer_id: STATE.userId, package_code:'REG'})
+  }).then(function(r){ return r.json(); }).then(function(res){
+    if(res && res.ok && res.invoice && res.invoice.invoice_number){
+      location.href = 'invoice.html?inv=' + encodeURIComponent(res.invoice.invoice_number);
+    } else {
+      location.href = 'payment.html?pkg=REG&cid=' + encodeURIComponent(STATE.userId || '');
+    }
+  }).catch(function(){
+    location.href = 'payment.html?pkg=REG&cid=' + encodeURIComponent(STATE.userId || '');
+  });
 }
 
 /* ---------------- voice input (dictation + confirm, never auto-submits) ---------------- */
