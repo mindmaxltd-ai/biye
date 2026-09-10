@@ -66,7 +66,9 @@ function hashCode(code) {
 }
 
 function isStrongPassword(pw) {
-  return typeof pw === 'string' && pw.length >= 8 && /[A-Z]/.test(pw) && /[0-9]/.test(pw);
+  // Kept intentionally simple, matching register.html's own rule — just a
+  // minimum length. No forced uppercase/digit/special character.
+  return typeof pw === 'string' && pw.length >= 8;
 }
 
 async function sb(path, opts = {}) {
@@ -216,7 +218,10 @@ exports.handler = async (event) => {
     });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.access_token) {
-      // Never reveal whether the phone exists — same message either way.
+      // Logged server-side only (visible in Netlify → Functions → send-otp
+      // → logs) so the real cause can be diagnosed without exposing it to
+      // whoever is trying to log in.
+      console.error('login failed for', phoneE164, '— Supabase status', r.status, JSON.stringify(d));
       return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
     }
     return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token });
@@ -228,7 +233,7 @@ exports.handler = async (event) => {
     const newPassword = p.newPassword || '';
     if (!phone) return reply(400, { ok: false, error: 'no phone' });
     if (!isStrongPassword(newPassword)) {
-      return reply(400, { ok: false, error: 'পাসওয়ার্ড অন্তত ৮ অক্ষর, একটি বড় হাতের অক্ষর ও একটি সংখ্যা থাকতে হবে' });
+      return reply(400, { ok: false, error: 'পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে' });
     }
 
     // Require a recently-consumed 'reset' OTP for this phone — otherwise
