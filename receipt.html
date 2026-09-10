@@ -9,33 +9,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --pk:#E2136E;--pk-s:rgba(226,19,110,.1);--pk-d:#B50D58;
-  --pu:#7B2FBE;--pu-s:rgba(123,47,190,.1);
-  --bl:#1565C0;--bl-s:rgba(21,101,192,.1);
-  --gd:#D4AF37;--gd-s:rgba(212,175,55,.15);
-  --gr:#00A651;--gr-s:rgba(0,166,81,.1);
+  /* Retinted to match register.html's brand identity: flat red header,
+     pink/yellow accents, no gradients. */
+  --pk:#E11D2E;--pk-s:rgba(225,29,46,.08);--pk-d:#B8121F;
+  --pu:#FF1E7E;--pu-s:rgba(255,30,126,.08);
+  --bl:#1256D6;--bl-s:rgba(18,86,214,.08);
+  --gd:#FFD400;--gd-s:rgba(255,212,0,.18);
+  --gr:#0FA958;--gr-s:rgba(15,169,88,.08);
   --or:#E65100;--or-s:rgba(230,81,0,.08);
   --cy:#00BCD4;
-  --grad:linear-gradient(135deg,#E2136E 0%,#7B2FBE 50%,#1565C0 100%);
-  --grad2:linear-gradient(135deg,#D4AF37,#E65100);
-  --grad3:linear-gradient(135deg,#00A651,#00BCD4);
-  --grad4:linear-gradient(135deg,#E2136E,#D4AF37);
-  --rainbow:linear-gradient(90deg,#E2136E,#E65100,#D4AF37,#00A651,#1565C0,#7B2FBE);
+  --grad:#E11D2E;
+  --grad2:#FFD400;
+  --grad3:#0FA958;
+  --grad4:#E11D2E;
+  --rainbow:#E11D2E;
   --dark:#050512;--dark2:#0c0c24;--dark3:#12122e;
-  --sur:#fff;--bg:#F7F8FF;
-  --txt:#08081a;--txt2:rgba(8,8,26,.58);--txt3:rgba(8,8,26,.36);
-  --bdr:rgba(8,8,26,.07);--bdr2:rgba(8,8,26,.14);
-  --sh:0 4px 20px rgba(8,8,26,.08);--sh2:0 12px 48px rgba(8,8,26,.13);--sh3:0 24px 80px rgba(8,8,26,.18);
+  --sur:#fff;--bg:#FBFAF7;
+  --txt:#161616;--txt2:rgba(22,22,22,.58);--txt3:rgba(22,22,22,.36);
+  --bdr:rgba(22,22,22,.09);--bdr2:rgba(22,22,22,.14);
+  --sh:0 4px 20px rgba(22,22,22,.08);--sh2:0 12px 48px rgba(22,22,22,.13);--sh3:0 24px 60px -20px rgba(22,22,22,.32);
   --r:12px;--r2:8px;--r3:20px;--r4:32px;
   --ease:cubic-bezier(.4,0,.2,1);--t:.25s;
 }
+.split-bg{position:fixed;inset:0;z-index:-1;display:flex;pointer-events:none}
+.split-bg .half{flex:1}
+.split-bg .half.pink{background:#FF1E7E}
+.split-bg .half.yellow{background:#FFD400}
+@media (max-width:640px){.split-bg{flex-direction:column} .split-bg .half{flex:none;height:64px}}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 html[lang="ar"]{direction:rtl}
 html[lang="bn"] body,html[lang="hi"] body{font-family:'Hind Siliguri','Plus Jakarta Sans',sans-serif}
 html[lang="ar"] body{font-family:'Noto Naskh Arabic','Plus Jakarta Sans',sans-serif}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--txt);
-  -webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.6;overflow-x:hidden}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var(--txt);
+  -webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.6;overflow-x:hidden;position:relative}
 img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
@@ -51,9 +58,9 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
 /* ── NAV ── */
-.nav{background:linear-gradient(90deg,#E2136E,#7B2FBE 60%,#1565C0);
+.nav{background:var(--pk);
   padding:.72rem 2rem;display:flex;align-items:center;gap:1rem;
-  box-shadow:0 2px 20px rgba(226,19,110,.3);position:sticky;top:0;z-index:100}
+  box-shadow:0 3px 14px -6px rgba(0,0,0,.35);position:sticky;top:0;z-index:100}
 .nav-logo{display:flex;align-items:center;gap:.55rem}
 .nav-logo img{height:32px;filter:brightness(0) invert(1)}
 .nav-brand{font-size:1.1rem;font-weight:900;color:#fff}
@@ -69,14 +76,14 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
   border:1.5px solid rgba(255,255,255,.22);border-radius:50px;
   background:rgba(255,255,255,.1);cursor:pointer;transition:all var(--t)}
 .lang-btn:hover{background:rgba(255,255,255,.2);color:#fff}
-.lang-drop{position:absolute;top:calc(100%+.5rem);right:0;background:var(--dark2);
-  border:1px solid rgba(255,255,255,.1);border-radius:var(--r);min-width:148px;
+.lang-drop{position:absolute;top:calc(100%+.5rem);right:0;background:#fff;
+  border:1px solid var(--bdr2);border-radius:var(--r);min-width:148px;
   display:none;z-index:300;overflow:hidden;box-shadow:var(--sh3)}
 .lang-drop.open{display:block}
 .lang-opt{display:flex;align-items:center;gap:.55rem;padding:.55rem .9rem;font-size:.8rem;
-  font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;transition:background var(--t);
+  font-weight:600;color:var(--txt2);cursor:pointer;transition:background var(--t);
   width:100%;text-align:start;background:none;border:none;font-family:inherit}
-.lang-opt:hover{background:rgba(255,255,255,.08);color:#fff}
+.lang-opt:hover{background:var(--pk-s);color:var(--pk)}
 .lang-opt.active{color:var(--pk)}
 .nav-btn{font-size:.78rem;font-weight:700;color:#fff;padding:.35rem .85rem;
   background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);
@@ -101,7 +108,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
    RECEIPT CARD  (Shea-style professional layout)
    ══════════════════════════════════════════════ */
 .rc{background:var(--sur);border-radius:var(--r4);box-shadow:var(--sh3);
-  border:1px solid var(--bdr);overflow:hidden;position:relative}
+  border:1px solid var(--bdr);border-top:6px solid var(--pk);overflow:hidden;position:relative}
 
 /* ── RC HEADER: full gradient + logo ── */
 .rc-head{background:var(--grad);padding:2.25rem 2.5rem 1.75rem;color:#fff;position:relative;overflow:hidden}
@@ -361,9 +368,11 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 </head>
 <body>
 
+<div class="split-bg" aria-hidden="true"><div class="half pink"></div><div class="half yellow"></div></div>
+
 <!-- ── ANNOUNCE ── -->
 <div class="announce">
-  <span id="ann" data-i18n="ann">🌟 BIYE — বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি | রেজিস্ট্রেশন ৳১১১ | ম্যাচ ৳১১১→২২২→৩৩৩ | Manual ৳১,১১১ | Suggestion ৳৫৫</span>
+  <span id="ann" data-i18n="ann">🌟 BIYE — বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি | রেজিস্ট্রেশন ৳৯৯৯ | ম্যাচ ৳১১১→২২২→৩৩৩ | Manual ৳১,১১১ | Suggestion ৳৫৫</span>
 </div>
 
 <!-- ── NAV ── -->
@@ -682,7 +691,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 // ── TRANSLATIONS ──────────────────────────────────────
 var T = {
   bn: {
-    'ann':'🌟 BIYE — বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি | রেজিস্ট্রেশন ৳১১১ | ম্যাচ ৳১১১→২২২→৩৩৩ | Manual ৳১,১১১',
+    'ann':'🌟 BIYE — বিশ্বের প্রথম AI+EI+Blockchain ম্যাট্রিমোনি | রেজিস্ট্রেশন ৳৯৯৯ | ম্যাচ ৳১১১→২২২→৩৩৩ | Manual ৳১,১১১',
     'nav.dash':'ড্যাশবোর্ড','nav.matches':'ম্যাচ','nav.quest':'প্রশ্নমালা',
     'nav.know':'জ্ঞান','nav.dash2':'ড্যাশবোর্ড',
     'rc.tagline':'বিবাহের বিজ্ঞান। আজীবনের বিশ্বাস।',
@@ -890,7 +899,7 @@ function drawQR(text){
     // Fallback: simple pattern
     var ctx=cvs.getContext('2d');
     ctx.fillStyle='#fff';ctx.fillRect(0,0,100,100);
-    ctx.fillStyle='#E2136E';
+    ctx.fillStyle='#E11D2E';
     for(var i=0;i<10;i++)for(var j=0;j<10;j++){
       if((i+j)%2===0){ctx.fillRect(i*10,j*10,9,9);}
     }
