@@ -756,11 +756,8 @@ a{color:inherit}
       <!-- ============ STEP 12 (13th window) : LIFETIME PAYMENT ============ -->
       <div class="wiz-step" data-step="payment">
         <div class="success-wrap" style="padding-top:0">
-          <div class="success-ring" style="width:64px;height:64px;margin-bottom:.7rem"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
-          <p style="font-size:.76rem;font-weight:700;color:var(--green-dark)" data-bn="অ্যাকাউন্ট তৈরি হয়েছে" data-en="Account created">Account created</p>
-          <div class="id-card" style="text-align:left">
-            <div class="idc-row"><span class="idc-k" data-bn="সদস্য নম্বর" data-en="Member number">Member number</span><span class="idc-v" id="outMemberId">—</span></div>
-          </div>
+          <div class="step-badge b-blue" style="margin:0 auto .7rem">💳</div>
+          <p style="font-size:.76rem;font-weight:700;color:var(--blue-dark)" data-bn="একটি শেষ ধাপ বাকি — পেমেন্ট সম্পন্ন করলেই অ্যাকাউন্ট সক্রিয় হবে" data-en="One step left — your account activates once payment is complete">One step left — your account activates once payment is complete</p>
         </div>
 
         <h2 class="step-title" style="text-align:center" data-bn="লাইফটাইম রেজিস্ট্রেশন সক্রিয় করুন" data-en="Activate your lifetime registration">Activate your lifetime registration</h2>
@@ -1187,10 +1184,9 @@ function requestOtp(showStepAfter){
   startResendCountdown();
 }
 function demoOtpFallback(){
-  // Integration point: send-otp.js (Netlify function) is unreachable in this
-  // static preview. Demo mode accepts any 6-digit code that isn't 000000.
-  STATE.otpDemoCode = null;
-  console.log('[DEMO MODE] send-otp.js not reachable — any 6-digit code will verify in this preview.');
+  // The backend (send-otp.js) is unreachable — show a real error instead of
+  // silently pretending a code was sent, since this is a live site now.
+  showToast(tt('কোড পাঠানো যায়নি — সংযোগ পরীক্ষা করুন','Could not send code — please check your connection'));
 }
 function startResendCountdown(){
   var seconds = 30;
@@ -1242,15 +1238,15 @@ function verifyOtpStep(){
     body: JSON.stringify({action:'verify', phone: STATE.phone, code: code})
   }).then(function(r){ return r.json(); }).then(function(d){
     if(d && d.verified){ onOtpVerified(); }
-    else { onOtpDemoOrFail(code); }
-  }).catch(function(){ onOtpDemoOrFail(code); });
-}
-function onOtpDemoOrFail(code){
-  // Demo fallback: any code other than 000000 verifies, so the flow can be
-  // demonstrated without a live backend. A real deployment relies solely
-  // on send-otp.js's verification result above.
-  if(code !== '000000'){ onOtpVerified(); }
-  else { setErr('otp', true); track('otp_verified', {result:'failed'}); showToast(tt('কোডটি সঠিক নয়','Incorrect code')); }
+    else {
+      setErr('otp', true);
+      track('otp_verified', {result:'failed'});
+      showToast((d && d.error) || tt('কোডটি সঠিক নয়','Incorrect code'));
+    }
+  }).catch(function(){
+    setErr('otp', true);
+    showToast(tt('যাচাই করা যায়নি — আবার চেষ্টা করুন','Could not verify — please try again'));
+  });
 }
 function onOtpVerified(){
   setErr('otp', false);
@@ -1427,41 +1423,25 @@ function submitRegistration(){
   var btn = document.getElementById('btnSubmitReg');
   btn.disabled = true; btn.textContent = tt('তৈরি হচ্ছে...','Creating account...');
 
-  var finish = function(user){
-    STATE.userId = (user && (user.id || user.userId)) || ('u_' + Math.random().toString(36).slice(2,10));
-    STATE.memberId = 'BIYE-' + Math.floor(10000000 + Math.random()*89999999);
+  // The real account (Supabase Auth user + profile row) is created at the
+  // payment step (payFor999 → createInvoice), the same way the production
+  // register.html does it — not here. This step only logs the accepted
+  // covenants against the phone number and moves on; nothing is faked.
+  fetch('/.netlify/functions/send-otp', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      action:'logConsent', phone: STATE.phone,
+      consents:{tos:true, priv:true, match:true, pay:true, sms:true},
+      ts: new Date().toISOString(),
+    })
+  }).catch(function(){ /* best-effort — payment.js logs consent again once the profile exists */ });
 
-    if(window.BiyeDB){
-      try{
-        BiyeDB.updateProfile(STATE.userId, {
-          name: (STATE.firstName+' '+STATE.lastName).trim(),
-          phone: STATE.phone, email: STATE.email
-        });
-        COVENANTS.forEach(function(c){
-          BiyeDB.logConsent(STATE.userId, 'covenant:'+c.id, {version:'2026-09', accepted:true});
-        });
-      }catch(e){ /* best-effort demo logging */ }
-    }
-
-    // Account creation is confirmed here; the ৳999 lifetime fee is collected
-    // next, on the payment step, through the existing invoice/payment/receipt
-    // architecture. The SMS/email with detailed instructions and facilities is
-    // sent once payment-webhook.js confirms the gateway payment succeeded —
-    // not from here, so no confirmation is ever sent before payment clears.
-    track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
-    showStep(STEPS.indexOf('payment'));
-  };
-
-  if(window.BiyeDB){
-    BiyeDB.signUpWithPhone(STATE.phone).then(function(res){ finish(res && res.user); }).catch(function(){ finish(null); });
-  } else {
-    setTimeout(function(){ finish(null); }, 500);
-  }
+  track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
+  showStep(STEPS.indexOf('payment'));
 }
 
 /* ---------------- STEP: lifetime payment (13th window) ---------------- */
 function renderPaymentStep(){
-  document.getElementById('outMemberId').textContent = STATE.memberId || tt('তৈরি হচ্ছে…','generating…');
   var list = document.getElementById('facilityList');
   list.innerHTML = '';
   FACILITIES.forEach(function(f){
@@ -1477,22 +1457,34 @@ function payFor999(){
   btn.textContent = tt('প্রসেস হচ্ছে...','Processing...');
   track('registration_submitted', {stage:'payment_initiated', package:'REG', amount:999});
 
-  // Preferred path: create the invoice directly (same call payment.html makes),
-  // then continue through the existing invoice.html -> gateway -> receipt.html
-  // flow. If the function can't be reached (e.g. this static preview), fall
-  // back to payment.html itself, which can create the invoice once deployed —
-  // the ৳999 lifetime package is preselected via ?pkg=REG.
   fetch('/.netlify/functions/payment', {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action:'createInvoice', customer_id: STATE.userId, package_code:'REG'})
+    body: JSON.stringify({
+      action:'createInvoice',
+      phone: STATE.phone, name: (STATE.firstName+' '+STATE.lastName).trim(),
+      email: STATE.email, dob: STATE.dob, password: STATE.password,
+      owner_type: STATE.ownerType, seeking_type: STATE.seekingType,
+      religion: STATE.religion, marital_status: STATE.marital,
+      education: STATE.education, profession: STATE.profession,
+      division: STATE.division, district: STATE.district,
+      guardian_name: STATE.guardianName, guardian_phone: STATE.guardianPhone,
+      guardian_relation: STATE.guardianRelation, candidate_phone: STATE.candidatePhone,
+      package_code: 'REG',
+    })
   }).then(function(r){ return r.json(); }).then(function(res){
     if(res && res.ok && res.invoice && res.invoice.invoice_number){
-      location.href = 'invoice.html?inv=' + encodeURIComponent(res.invoice.invoice_number);
+      location.href = 'invoice.html?inv=' + encodeURIComponent(res.invoice.invoice_number) + '&from=register';
     } else {
-      location.href = 'payment.html?pkg=REG&cid=' + encodeURIComponent(STATE.userId || '');
+      // Show the real reason instead of silently bouncing to a different
+      // page — that hid failures before and made them impossible to debug.
+      btn.disabled = false;
+      btn.textContent = tt('নিরাপদে ৳১,০৪৯ পরিশোধ করুন','Pay ৳1,049 securely');
+      showToast((res && res.error) || tt('ইনভয়েস তৈরি করা যায়নি, আবার চেষ্টা করুন','Could not create invoice, please try again'));
     }
   }).catch(function(){
-    location.href = 'payment.html?pkg=REG&cid=' + encodeURIComponent(STATE.userId || '');
+    btn.disabled = false;
+    btn.textContent = tt('নিরাপদে ৳১,০৪৯ পরিশোধ করুন','Pay ৳1,049 securely');
+    showToast(tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
   });
 }
 
