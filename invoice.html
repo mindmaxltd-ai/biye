@@ -194,6 +194,15 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 .gw-countdown{font-size:.75rem;color:var(--or);font-weight:700;margin-bottom:1rem}
 .gw-methods{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-bottom:1rem}
 .gw-method-badge{background:#fff;border:1.4px solid var(--bdr2);border-radius:8px;padding:.3rem .6rem;font-size:.72rem;font-weight:700;color:var(--txt2)}
+.pm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:1rem 0}
+@media(max-width:480px){.pm-grid{grid-template-columns:repeat(2,1fr)}}
+.pm-card{background:#fff;border:1.8px solid var(--bdr2);border-radius:var(--r2);padding:.8rem .5rem;
+  display:flex;flex-direction:column;align-items:center;gap:.35rem;cursor:pointer;transition:all var(--t)}
+.pm-card:hover{border-color:var(--pk)}
+.pm-card.selected{border-color:var(--pk);background:var(--pk-s);box-shadow:0 0 0 2px var(--pk-s)}
+.pm-icon{font-size:1.4rem}
+.pm-label{font-size:.74rem;font-weight:700;color:var(--txt)}
+.pm-note{font-size:.72rem;color:var(--txt2);text-align:center;line-height:1.6;margin-bottom:1rem}
 
 /* Manual payment (cash / direct bKash) — only shown for allow-listed phones */
 .manual-pay-box{border:1.5px solid var(--bl-s,rgba(21,101,192,.3));border-radius:var(--r3);
@@ -404,6 +413,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
             <strong id="clientName">—</strong>
             <span id="clientPhone">—</span><br>
             <span id="clientEmail"></span>
+            <span id="clientMember" style="display:block;font-size:.76rem;font-weight:700;margin-top:.3rem"></span>
+            <span id="clientFather" style="display:block;font-size:.76rem;opacity:.75"></span>
             <span id="clientType" style="font-size:.72rem;opacity:.7"></span>
           </p>
         </div>
@@ -422,22 +433,31 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
     <!-- Body -->
     <div class="inv-body">
 
-      <!-- Gateway redirect (pending) -->
+      <!-- Payment method selection (pending) -->
       <div class="gateway-box" id="gatewayBox">
         <div class="gw-icon">💳</div>
-        <div class="gw-title" data-i18n="gw.title">পেমেন্ট গেটওয়েতে যাচ্ছেন...</div>
-        <div class="gw-sub" data-i18n="gw.sub">আপনাকে SSLCommerz নিরাপদ পেমেন্ট গেটওয়েতে পাঠানো হচ্ছে। পেমেন্ট সম্পন্ন হলে স্বয়ংক্রিয়ভাবে BIYE-তে ফিরে আসবেন।</div>
-        <div class="gw-methods">
-          <span class="gw-method-badge">bKash</span>
-          <span class="gw-method-badge">Rocket</span>
-          <span class="gw-method-badge">Nagad</span>
-          <span class="gw-method-badge">Visa / Mastercard</span>
-          <span class="gw-method-badge">Internet Banking</span>
+        <div class="gw-title" data-i18n="gw.title">পেমেন্টের পদ্ধতি বেছে নিন</div>
+        <div class="gw-sub" data-i18n="gw.sub">নিচের যেকোনো একটি বেছে নিয়ে "Pay Now"-তে ক্লিক করুন — আপনাকে নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে।</div>
+
+        <div class="pm-grid" id="pmGrid" role="radiogroup" aria-label="Payment method">
+          <button type="button" class="pm-card selected" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
+            <span class="pm-icon">📱</span><span class="pm-label">bKash</span>
+          </button>
+          <button type="button" class="pm-card" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
+            <span class="pm-icon">🚀</span><span class="pm-label">Rocket</span>
+          </button>
+          <button type="button" class="pm-card" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
+            <span class="pm-icon">💰</span><span class="pm-label">Nagad</span>
+          </button>
+          <button type="button" class="pm-card" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
+            <span class="pm-icon">💳</span><span class="pm-label">Card / Banking</span>
+          </button>
         </div>
-        <div class="gw-countdown" id="gwCountdown"></div>
-        <a href="#" id="gatewayBtn" class="btn btn-pay" style="justify-content:center">
-          💳 <span data-i18n="gw.btn">এখনই পেমেন্ট করুন</span>
-        </a>
+        <div class="pm-note" data-i18n="pm.note">bKash, Rocket, Nagad এবং কার্ড — সবগুলোই SSLCommerz-এর নিরাপদ গেটওয়ের ভেতরে পাওয়া যাবে; উপরে যেটাই বেছে নিন, গেটওয়েতে গিয়ে সেটাই নির্বাচন করবেন।</div>
+
+        <button type="button" class="btn btn-pay" id="gatewayBtn" style="width:100%;justify-content:center" onclick="goToGateway()">
+          💳 <span data-i18n="gw.btn">Pay Now — গেটওয়েতে যান</span>
+        </button>
       </div>
 
       <!-- Manual payment: cash / direct bKash — only rendered for allow-listed phones -->
@@ -842,15 +862,17 @@ function copyTxn(){
   });}
 }
 
-// ── GATEWAY COUNTDOWN ────────────────────────────
-function startCountdown(url, sec){
-  var cd=el('gwCountdown');
-  var ti=setInterval(function(){
-    sec--;
-    cd.textContent=sec+' '+t('gw.sec');
-    if(sec<=0){clearInterval(ti);window.location.href=url;}
-  },1000);
-  cd.textContent=sec+' '+t('gw.sec');
+// ── PAYMENT METHOD SELECTION ─────────────────────
+var GATEWAY_URL = null;
+var SELECTED_METHOD = 'sslcommerz';
+function selectPayMethod(method, btn){
+  SELECTED_METHOD = method;
+  document.querySelectorAll('.pm-card').forEach(function(c){ c.classList.remove('selected'); });
+  btn.classList.add('selected');
+}
+function goToGateway(){
+  if(!GATEWAY_URL){ return; }
+  window.location.href = GATEWAY_URL;
 }
 
 // ── LOAD INVOICE ─────────────────────────────────
@@ -902,6 +924,14 @@ async function loadInvoice(){
     if(ownerType&&el('clientType')){
       var typeMap={self:'নিজে',parent_assisted:'অভিভাবক',guardian_assisted:'অভিভাবক'};
       el('clientType').textContent='('+( typeMap[ownerType]||ownerType)+')';
+    }
+    if(iv.member_code&&el('clientMember')){
+      el('clientMember').textContent=(L==='en'?'Member No: ':'সদস্য নং: ')+iv.member_code;
+    }
+    if(iv.father_name&&el('clientFather')){
+      el('clientFather').textContent=(L==='en'?"Father's Name: ":'পিতার নাম: ')+iv.father_name;
+    } else if(iv.guardian_name&&el('clientFather')){
+      el('clientFather').textContent=(L==='en'?'Guardian: ':'অভিভাবক: ')+iv.guardian_name;
     }
 
     // ── Status ──
@@ -959,11 +989,16 @@ async function loadInvoice(){
       el('receiptBtn').style.display='';
     }
 
-    // ── Gateway redirect (pending) ──
-    if(iv.status==='pending'&&data.gateway_url){
+    // ── Payment method selection (pending) ──
+    GATEWAY_URL = (iv.status==='pending') ? (data.gateway_url||null) : null;
+    if(iv.status==='pending'){
       el('gatewayBox').style.display='';
-      el('gatewayBtn').href=data.gateway_url;
-      if(fromReg||fromPay) startCountdown(data.gateway_url,3);
+      if(!GATEWAY_URL){
+        el('gatewayBtn').disabled=true;
+        el('gatewayBtn').querySelector('span').textContent=L==='en'
+          ?'Payment gateway unavailable — please use cash/bKash below if offered, or try again shortly'
+          :'গেটওয়ে এই মুহূর্তে অনুপলব্ধ — নিচের নগদ/bKash অপশন থাকলে সেটা ব্যবহার করুন, অথবা একটু পরে চেষ্টা করুন';
+      }
     }
 
     // ── Manual payment (cash / direct bKash) — only for allow-listed phones ──
