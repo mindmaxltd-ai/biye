@@ -1,124 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BIYE — Log In | বিয়ে</title>
-<meta name="description" content="Log in to BIYE — the science of marriage, trust for life.">
+<title>BIYE — লগইন | Log In</title>
+<meta name="robots" content="noindex,follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ======================================================================
-   BIYE — login.html
-   Same visual language as register.html:
-   LEFT = solid vivid pink · RIGHT = solid vivid yellow · NO gradients.
-   Functional colours: RED=action, GREEN=verified/success,
-   BLUE=information, PINK=brand accent.
-   ====================================================================== */
+/* ====== Shared with register.html — same pink/yellow split design ====== */
 :root{
-  --pink:#FF1E7E;
-  --yellow:#FFD400;
-  --red:#E11D2E;
-  --red-dark:#B8121F;
-  --green:#0FA958;
-  --green-dark:#0B7F43;
-  --blue:#1256D6;
-  --blue-dark:#0C3FA0;
-  --ink:#161616;
-  --ink-soft:rgba(22,22,22,.62);
-  --ink-faint:rgba(22,22,22,.42);
-  --line:rgba(22,22,22,.12);
-  --line-soft:rgba(22,22,22,.08);
-  --card:#FFFFFF;
-  --page-bg:#FBFAF7;
-  --radius:20px;
+  --pink:#FF1E7E; --yellow:#FFD400; --red:#E11D2E; --red-dark:#B8121F;
+  --green:#0FA958; --green-dark:#0B7F43; --blue:#1256D6; --blue-dark:#0C3FA0;
+  --ink:#161616; --ink-soft:rgba(22,22,22,.62); --ink-faint:rgba(22,22,22,.42);
+  --line:rgba(22,22,22,.12); --line-soft:rgba(22,22,22,.08);
+  --card:#FFFFFF; --page-bg:#FBFAF7; --radius:20px;
   --shadow-card:0 24px 60px -20px rgba(22,22,22,.32), 0 4px 14px -6px rgba(22,22,22,.12);
   --focus:0 0 0 3px rgba(18,86,214,.28);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{
-  font-family:'Hind Siliguri','Inter',sans-serif;
-  color:var(--ink);
-  background:var(--page-bg);
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
+body{font-family:'Hind Siliguri','Inter',sans-serif;color:var(--ink);background:var(--page-bg);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 html[lang="en"] body{font-family:'Inter','Hind Siliguri',sans-serif}
 button,input{font-family:inherit;color:inherit}
 button{cursor:pointer}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-@media (prefers-reduced-motion: reduce){
-  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
-}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .skip-link{position:absolute;left:-999px;top:0;background:#fff;color:var(--ink);padding:.7rem 1rem;border-radius:0 0 10px 0;z-index:999;font-weight:700}
 .skip-link:focus{left:0}
 
-/* ---------------- Split background ---------------- */
 .split-bg{position:fixed;inset:0;z-index:0;display:flex}
 .split-bg .half{flex:1}
 .split-bg .half.pink{background:var(--pink)}
 .split-bg .half.yellow{background:var(--yellow)}
 
-/* ---------------- Header ---------------- */
-.site-header{
-  position:sticky;top:0;z-index:50;
-  background:var(--red);color:#fff;
-  box-shadow:0 3px 14px -6px rgba(0,0,0,.35);
-}
-.header-inner{
-  max-width:1180px;margin:0 auto;padding:.75rem 1.1rem;
-  display:flex;align-items:center;justify-content:space-between;gap:.8rem;
-}
+.site-header{position:sticky;top:0;z-index:50;background:var(--red);color:#fff;box-shadow:0 3px 14px -6px rgba(0,0,0,.35)}
+.header-inner{max-width:1180px;margin:0 auto;padding:.75rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem}
 .brand{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:#fff}
-.brand-mark{
-  width:34px;height:34px;border-radius:9px;background:#fff;color:var(--red);
-  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;
-  font-family:'Inter',sans-serif;flex-shrink:0;
-}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:#fff;color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;font-family:'Inter',sans-serif;flex-shrink:0}
 .brand-word{font-family:'Inter',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.01em}
 .brand-word small{display:block;font-weight:500;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;opacity:.88}
 .header-actions{display:flex;align-items:center;gap:.4rem}
-.hbtn{
-  background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.5);color:#fff;
-  font-size:.74rem;font-weight:700;padding:.42rem .7rem;border-radius:50px;
-  display:flex;align-items:center;gap:.35rem;white-space:nowrap;
-}
+.hbtn{background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.5);color:#fff;font-size:.74rem;font-weight:700;padding:.42rem .7rem;border-radius:50px;display:flex;align-items:center;gap:.35rem;white-space:nowrap}
 .hbtn:hover{background:rgba(255,255,255,.24)}
 .hbtn svg{width:14px;height:14px;stroke:#fff;flex-shrink:0}
 .hbtn.icon-only{padding:.42rem;width:34px;height:34px;justify-content:center}
-@media (max-width:640px){
-  .hbtn .btn-label{display:none}
-  .brand-word small{display:none}
-}
+@media (max-width:640px){.hbtn .btn-label{display:none} .brand-word small{display:none}}
 
-/* ---------------- Layout / floating card ---------------- */
 .stage{position:relative;z-index:1;min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;padding:2.4rem 1rem 3.5rem}
-.card-wrap{width:100%;max-width:440px}
-.login-card{
-  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-card);
-  padding:1.9rem 1.7rem 1.6rem;position:relative;
-  border-top:6px solid var(--red);
-}
-@media (max-width:480px){ .login-card{padding:1.4rem 1.1rem 1.3rem;border-radius:16px} }
+.card-wrap{width:100%;max-width:460px}
+.reg-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:1.7rem 1.6rem 1.5rem;position:relative;border-top:6px solid var(--red)}
+@media (max-width:480px){.reg-card{padding:1.3rem 1.05rem 1.2rem;border-radius:16px}}
 
-.login-badge{
-  width:52px;height:52px;border-radius:14px;background:var(--pink);display:flex;align-items:center;justify-content:center;
-  font-size:1.4rem;margin-bottom:.9rem;box-shadow:0 8px 18px -8px rgba(0,0,0,.35);
-}
-.login-title{font-size:1.28rem;font-weight:800;margin-bottom:.3rem;line-height:1.3}
-.login-sub{font-size:.85rem;color:var(--ink-soft);line-height:1.6;margin-bottom:1.3rem}
+.wiz-step{display:none;animation:fadein .3s ease}
+.wiz-step.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.step-badge{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;color:#fff;margin-bottom:.8rem;box-shadow:0 8px 18px -8px rgba(0,0,0,.35)}
+.step-badge.b-red{background:var(--red)} .step-badge.b-green{background:var(--green)} .step-badge.b-blue{background:var(--blue)} .step-badge.b-pink{background:var(--pink)}
+.step-title{font-size:1.22rem;font-weight:800;margin-bottom:.3rem;line-height:1.3}
+.step-sub{font-size:.85rem;color:var(--ink-soft);line-height:1.65;margin-bottom:1.1rem}
 
-/* fields (same tokens as register.html) */
-.field-row{margin-bottom:1.1rem}
+.field-row{margin-bottom:1rem}
 .field-label{font-size:.78rem;font-weight:700;color:var(--ink);margin-bottom:.4rem;display:flex;align-items:center;justify-content:space-between}
-.field-input{
-  width:100%;padding:.8rem .9rem;border-radius:12px;border:1.6px solid var(--line);
-  font-size:.95rem;color:var(--ink);outline:none;background:#fff;
-}
+.field-input{width:100%;padding:.75rem .85rem;border-radius:12px;border:1.6px solid var(--line);font-size:.9rem;color:var(--ink);outline:none;background:#fff}
 .field-input:focus{border-color:var(--blue);box-shadow:var(--focus)}
 .field-input.err{border-color:var(--red)}
 .field-err{font-size:.72rem;color:var(--red);margin-top:.35rem;font-weight:600;display:none}
@@ -126,60 +71,55 @@ a{color:inherit}
 .pw-wrap{position:relative}
 .pw-toggle{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;padding:.3rem;color:var(--ink-faint)}
 .pw-toggle svg{width:18px;height:18px;stroke:currentColor}
+.pw-meter{height:5px;border-radius:4px;background:var(--line-soft);margin-top:.5rem;overflow:hidden}
+.pw-meter-fill{height:100%;width:0%;border-radius:4px;transition:width .25s,background .25s}
+.pw-meter-label{font-size:.68rem;margin-top:.3rem;font-weight:700}
 .forgot-link{font-size:.72rem;font-weight:700;color:var(--blue);text-decoration:underline;background:none;border:none;cursor:pointer}
 
-.remember-row{display:flex;align-items:center;gap:.5rem;margin-bottom:1.2rem}
-.remember-row input{width:18px;height:18px;accent-color:var(--red)}
-.remember-row label{font-size:.8rem;color:var(--ink-soft)}
+.otp-row{display:flex;gap:.5rem;justify-content:center;margin:1rem 0}
+.otp-box{width:44px;height:52px;border-radius:12px;border:1.6px solid var(--line);text-align:center;font-size:1.25rem;font-weight:700;font-family:'Inter',sans-serif;outline:none}
+.otp-box:focus{border-color:var(--blue);box-shadow:var(--focus)}
+.otp-box.filled{border-color:var(--green)}
+.resend-row{text-align:center;font-size:.76rem;color:var(--ink-soft);margin-top:.3rem}
+.resend-link{color:var(--blue);font-weight:700;cursor:pointer;text-decoration:underline;background:none;border:none}
+.masked-num{font-weight:800;font-family:'Inter',sans-serif}
 
-/* buttons */
-.btn{width:100%;padding:.9rem .6rem;border-radius:14px;font-size:.92rem;font-weight:800;text-align:center;border:none}
+.wiz-actions{display:flex;gap:.6rem;margin-top:.3rem}
+.btn{flex:1;padding:.85rem .6rem;border-radius:14px;font-size:.88rem;font-weight:800;text-align:center;border:none}
 .btn-primary{background:var(--red);color:#fff;box-shadow:0 10px 20px -10px rgba(225,29,46,.55)}
-.btn-primary:disabled{opacity:.5;pointer-events:none}
-.btn-primary .spinner{display:inline-block;width:15px;height:15px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.4rem}
+.btn-primary:disabled{opacity:.4;pointer-events:none}
+.btn-ghost{background:#fff;color:var(--ink);border:1.6px solid var(--line)}
+.spinner{display:inline-block;width:14px;height:14px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.35rem}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.divider{display:flex;align-items:center;gap:.7rem;margin:1.3rem 0;color:var(--ink-faint);font-size:.72rem;font-weight:700}
-.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
-
-.alt-row{text-align:center;font-size:.84rem;color:var(--ink-soft)}
-.alt-row a{color:var(--red);font-weight:800;text-decoration:underline}
-
-.alert-banner{display:flex;gap:.5rem;background:rgba(225,29,46,.08);border:1.5px solid rgba(225,29,46,.3);border-radius:12px;
-  padding:.65rem .75rem;font-size:.78rem;color:var(--red-dark);font-weight:600;margin-bottom:1rem;display:none;align-items:flex-start}
+.alert-banner{display:flex;gap:.5rem;background:rgba(225,29,46,.08);border:1.5px solid rgba(225,29,46,.3);border-radius:12px;padding:.65rem .75rem;font-size:.78rem;color:var(--red-dark);font-weight:600;margin-bottom:1rem;display:none;align-items:flex-start}
 .alert-banner.show{display:flex}
 .alert-banner svg{width:16px;height:16px;stroke:var(--red-dark);flex-shrink:0;margin-top:.1rem}
 
-.security-note{display:flex;gap:.5rem;background:rgba(18,86,214,.06);border:1.5px solid rgba(18,86,214,.18);border-radius:12px;
-  padding:.65rem .75rem;font-size:.72rem;color:var(--ink-soft);line-height:1.5;margin-top:1.2rem}
+.success-wrap{text-align:center;padding:.3rem 0 .5rem}
+.success-ring{width:72px;height:72px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 14px 28px -12px rgba(15,169,88,.55)}
+.success-ring svg{width:34px;height:34px;stroke:#fff;stroke-width:2.6}
+
+.divider{display:flex;align-items:center;gap:.7rem;margin:1.2rem 0;color:var(--ink-faint);font-size:.72rem;font-weight:700}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.alt-row{text-align:center;font-size:.84rem;color:var(--ink-soft)}
+.alt-row a{color:var(--red);font-weight:800;text-decoration:underline}
+
+.security-note{display:flex;gap:.5rem;background:rgba(18,86,214,.06);border:1.5px solid rgba(18,86,214,.18);border-radius:12px;padding:.65rem .75rem;font-size:.72rem;color:var(--ink-soft);line-height:1.5;margin-top:1.1rem}
 .security-note svg{width:15px;height:15px;stroke:var(--blue);flex-shrink:0;margin-top:.1rem}
 
-/* toast */
-.toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:var(--ink);color:#fff;
-  padding:.7rem 1.1rem;border-radius:50px;font-size:.8rem;font-weight:700;z-index:300;box-shadow:0 10px 22px -8px rgba(0,0,0,.4);
-  display:none}
-.toast.show{display:block;animation:toastin .25s ease}
-@keyframes toastin{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
-
-/* language menu */
 .lang-menu{position:relative}
-.lang-list{position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:var(--ink);border-radius:12px;
-  box-shadow:0 14px 30px -12px rgba(0,0,0,.35);min-width:150px;display:none;overflow:hidden;z-index:60}
+.lang-list{position:absolute;right:0;top:calc(100% + 8px);background:#fff;color:var(--ink);border-radius:12px;box-shadow:0 14px 30px -12px rgba(0,0,0,.35);min-width:150px;display:none;overflow:hidden;z-index:60}
 .lang-list.open{display:block}
 .lang-list button{width:100%;text-align:left;padding:.65rem .9rem;background:none;border:none;font-size:.8rem;font-weight:600}
 .lang-list button:hover,.lang-list button.active{background:rgba(225,29,46,.08);color:var(--red)}
 
-@media (max-width:640px){
-  .split-bg{flex-direction:column}
-  .split-bg .half{flex:none;height:64px}
-  .stage{padding:1.1rem .7rem 2.6rem}
-}
+@media (max-width:640px){.split-bg{flex-direction:column} .split-bg .half{flex:none;height:64px} .stage{padding:1.1rem .7rem 2.6rem}}
 </style>
 </head>
 <body>
 
-<a class="skip-link" href="#loginCard" data-bn="মূল কনটেন্টে যান" data-en="Skip to login">Skip to login</a>
-
+<a class="skip-link" href="#loginCard">Skip to login</a>
 <div class="split-bg" aria-hidden="true"><div class="half pink"></div><div class="half yellow"></div></div>
 
 <header class="site-header">
@@ -196,205 +136,422 @@ a{color:inherit}
         <div class="lang-list" id="langList">
           <button data-lang="en">English</button>
           <button data-lang="bn">বাংলা</button>
-          <button data-lang="hi">हिन्दी</button>
-          <button data-lang="ar">العربية</button>
-          <button data-lang="zh">中文</button>
         </div>
       </div>
-      <a class="hbtn" href="register.html">
-        <span class="btn-label" data-bn="নিবন্ধন" data-en="Register">Register</span>
-      </a>
+      <a class="hbtn" href="register.html"><span class="btn-label" data-bn="নিবন্ধন" data-en="Register">Register</span></a>
     </div>
   </div>
 </header>
 
 <main class="stage">
   <div class="card-wrap">
-    <section class="login-card" id="loginCard" aria-live="polite">
+    <section class="reg-card" id="loginCard" aria-live="polite">
 
-      <div class="login-badge">🔐</div>
-      <h1 class="login-title" data-bn="আবার স্বাগতম" data-en="Welcome back">Welcome back</h1>
-      <p class="login-sub" data-bn="আপনার মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন।" data-en="Log in with your mobile number and password.">Log in with your mobile number and password.</p>
+      <!-- ============ STEP: LOGIN ============ -->
+      <div class="wiz-step active" data-step="login">
+        <div class="step-badge b-pink">🔐</div>
+        <h1 class="step-title" data-bn="আবার স্বাগতম" data-en="Welcome back">Welcome back</h1>
+        <p class="step-sub" data-bn="আপনার মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন।" data-en="Log in with your mobile number and password.">Log in with your mobile number and password.</p>
 
-      <div class="alert-banner" id="loginAlert" role="alert">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
-        <span id="loginAlertText"></span>
-      </div>
-
-      <form id="loginForm" novalidate>
-        <div class="field-row">
-          <label class="field-label" for="phone" data-bn="মোবাইল নম্বর" data-en="Mobile number">Mobile number</label>
-          <input class="field-input" id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX" oninput="clearErr('phone')">
-          <div class="field-err" id="err-phone" data-bn="একটি বৈধ বাংলাদেশি মোবাইল নম্বর দিন" data-en="Enter a valid Bangladeshi mobile number">Enter a valid Bangladeshi mobile number</div>
+        <div class="alert-banner" id="loginAlert" role="alert">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+          <span id="loginAlertText"></span>
         </div>
 
         <div class="field-row">
-          <label class="field-label" for="password">
+          <label class="field-label" for="lPhone" data-bn="মোবাইল নম্বর" data-en="Mobile number">Mobile number</label>
+          <input class="field-input" id="lPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX">
+          <div class="field-err" id="err-lPhone" data-bn="একটি বৈধ মোবাইল নম্বর দিন" data-en="Enter a valid mobile number">Enter a valid mobile number</div>
+        </div>
+
+        <div class="field-row">
+          <label class="field-label" for="lPw">
             <span data-bn="পাসওয়ার্ড" data-en="Password">Password</span>
-            <button type="button" class="forgot-link" onclick="forgotPassword()" data-bn="পাসওয়ার্ড ভুলে গেছেন?" data-en="Forgot password?">Forgot password?</button>
+            <button type="button" class="forgot-link" onclick="goStep('forgot')" data-bn="পাসওয়ার্ড ভুলে গেছেন?" data-en="Forgot password?">Forgot password?</button>
           </label>
           <div class="pw-wrap">
-            <input class="field-input" id="password" type="password" autocomplete="current-password" oninput="clearErr('password')">
-            <button type="button" class="pw-toggle" onclick="togglePw()" aria-label="Show password">
+            <input class="field-input" id="lPw" type="password" autocomplete="current-password">
+            <button type="button" class="pw-toggle" onclick="togglePw('lPw',this)" aria-label="Show password">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
-          <div class="field-err" id="err-password" data-bn="পাসওয়ার্ড দিন" data-en="Enter your password">Enter your password</div>
+          <div class="field-err" id="err-lPw" data-bn="পাসওয়ার্ড দিন" data-en="Enter your password">Enter your password</div>
         </div>
 
-        <div class="remember-row">
-          <input type="checkbox" id="remember" checked>
-          <label for="remember" data-bn="আমাকে মনে রাখুন" data-en="Remember me">Remember me</label>
+        <div class="wiz-actions">
+          <button class="btn btn-primary" id="loginBtn" onclick="doLogin()">
+            <span id="loginTxt" data-bn="লগইন করুন" data-en="Log in">Log in</span>
+          </button>
         </div>
 
-        <button class="btn btn-primary" id="loginBtn" type="submit">
-          <span id="loginBtnLabel" data-bn="লগইন করুন" data-en="Log in">Log in</span>
-        </button>
-      </form>
+        <div class="divider" data-bn="অথবা" data-en="or">or</div>
+        <div class="alt-row">
+          <span data-bn="অ্যাকাউন্ট নেই?" data-en="No account yet?">No account yet?</span>
+          <a href="register.html" data-bn="নিবন্ধন করুন" data-en="Register">Register</a>
+        </div>
 
-      <div class="divider" data-bn="অথবা" data-en="or">or</div>
-      <div class="alt-row">
-        <span data-bn="অ্যাকাউন্ট নেই?" data-en="No account yet?">No account yet?</span>
-        <a href="register.html" data-bn="নিবন্ধন করুন" data-en="Register">Register</a>
+        <div class="security-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span data-bn="BIYE কখনো আপনার পাসওয়ার্ড বা OTP চ্যাট/কলে চাইবে না।" data-en="BIYE will never ask for your password or OTP by chat or call.">BIYE will never ask for your password or OTP by chat or call.</span>
+        </div>
       </div>
 
-      <div class="security-note">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span data-bn="BIYE কখনো আপনার পাসওয়ার্ড, OTP বা কার্ডের তথ্য চ্যাট/কলে চাইবে না।" data-en="BIYE will never ask for your password, OTP, or card details by chat or call.">BIYE will never ask for your password, OTP, or card details by chat or call.</span>
+      <!-- ============ STEP: FORGOT PASSWORD (phone) ============ -->
+      <div class="wiz-step" data-step="forgot">
+        <div class="step-badge b-blue">🔑</div>
+        <h1 class="step-title" data-bn="পাসওয়ার্ড রিসেট করুন" data-en="Reset your password">Reset your password</h1>
+        <p class="step-sub" data-bn="আপনার মোবাইল নম্বর দিন, আমরা একটি যাচাই কোড পাঠাবো।" data-en="Enter your mobile number and we'll send a verification code.">Enter your mobile number and we'll send a verification code.</p>
+
+        <div class="alert-banner" id="forgotAlert" role="alert"><span id="forgotAlertText"></span></div>
+
+        <div class="field-row">
+          <label class="field-label" for="fPhone" data-bn="মোবাইল নম্বর" data-en="Mobile number">Mobile number</label>
+          <input class="field-input" id="fPhone" type="tel" inputmode="tel" placeholder="01XXXXXXXXX">
+          <div class="field-err" id="err-fPhone" data-bn="একটি বৈধ মোবাইল নম্বর দিন" data-en="Enter a valid mobile number">Enter a valid mobile number</div>
+        </div>
+
+        <div class="wiz-actions">
+          <button class="btn btn-ghost" onclick="goStep('login')" data-bn="পেছনে" data-en="Back">Back</button>
+          <button class="btn btn-primary" id="forgotBtn" onclick="sendResetOtp(false)">
+            <span id="forgotTxt" data-bn="কোড পাঠান" data-en="Send code">Send code</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ STEP: RESET OTP ============ -->
+      <div class="wiz-step" data-step="reset-otp">
+        <div class="step-badge b-blue">💬</div>
+        <h1 class="step-title" data-bn="কোড যাচাই করুন" data-en="Verify the code">Verify the code</h1>
+        <p class="step-sub"><span data-bn="পাঠানো হয়েছে:" data-en="Sent to:">Sent to:</span> <span class="masked-num" id="rMasked">—</span></p>
+
+        <div class="alert-banner" id="rotpAlert" role="alert"><span id="rotpAlertText"></span></div>
+
+        <div class="otp-row" id="rOtpRow">
+          <input class="otp-box" id="r1" maxlength="1" inputmode="numeric">
+          <input class="otp-box" id="r2" maxlength="1" inputmode="numeric">
+          <input class="otp-box" id="r3" maxlength="1" inputmode="numeric">
+          <input class="otp-box" id="r4" maxlength="1" inputmode="numeric">
+          <input class="otp-box" id="r5" maxlength="1" inputmode="numeric">
+          <input class="otp-box" id="r6" maxlength="1" inputmode="numeric">
+        </div>
+        <div class="resend-row">
+          <span id="rTimer"></span>
+          <button class="resend-link" id="rResendBtn" style="display:none" onclick="sendResetOtp(true)" data-bn="আবার পাঠান" data-en="Resend code">Resend code</button>
+        </div>
+
+        <div class="wiz-actions">
+          <button class="btn btn-ghost" onclick="goStep('forgot')" data-bn="পেছনে" data-en="Back">Back</button>
+          <button class="btn btn-primary" id="rotpBtn" onclick="verifyResetOtp()">
+            <span id="rotpTxt" data-bn="যাচাই করুন" data-en="Verify">Verify</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ STEP: NEW PASSWORD ============ -->
+      <div class="wiz-step" data-step="new-password">
+        <div class="step-badge b-green">🔒</div>
+        <h1 class="step-title" data-bn="নতুন পাসওয়ার্ড দিন" data-en="Set a new password">Set a new password</h1>
+        <p class="step-sub" data-bn="অন্তত ৮ অক্ষরের একটি পাসওয়ার্ড দিন।" data-en="Choose a password with at least 8 characters.">Choose a password with at least 8 characters.</p>
+
+        <div class="alert-banner" id="npAlert" role="alert"><span id="npAlertText"></span></div>
+
+        <div class="field-row">
+          <label class="field-label" for="np1" data-bn="নতুন পাসওয়ার্ড" data-en="New password">New password</label>
+          <div class="pw-wrap">
+            <input class="field-input" id="np1" type="password" autocomplete="new-password" oninput="checkStr()">
+            <button type="button" class="pw-toggle" onclick="togglePw('np1',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <div class="pw-meter"><div class="pw-meter-fill" id="pwFill"></div></div>
+          <div class="pw-meter-label" id="pwLabel"></div>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="np2" data-bn="পাসওয়ার্ড আবার লিখুন" data-en="Confirm password">Confirm password</label>
+          <input class="field-input" id="np2" type="password" autocomplete="new-password">
+          <div class="field-err" id="np2err" data-bn="পাসওয়ার্ড মিলছে না" data-en="Passwords don't match">Passwords don't match</div>
+        </div>
+
+        <div class="wiz-actions">
+          <button class="btn btn-primary" id="npBtn" onclick="submitNewPw()" style="flex:1">
+            <span id="npTxt" data-bn="পাসওয়ার্ড সেট করুন" data-en="Set password">Set password</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ STEP: RESET DONE ============ -->
+      <div class="wiz-step" data-step="reset-done">
+        <div class="success-wrap">
+          <div class="success-ring"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+          <h1 class="step-title" data-bn="পাসওয়ার্ড পরিবর্তন হয়েছে" data-en="Password changed">Password changed</h1>
+          <p class="step-sub" data-bn="নতুন পাসওয়ার্ড দিয়ে লগইন করুন।" data-en="Log in with your new password.">Log in with your new password.</p>
+          <button class="btn btn-primary" style="width:100%" onclick="goStep('login')" data-bn="লগইনে ফিরুন" data-en="Back to login">Back to login</button>
+        </div>
+      </div>
+
+      <!-- ============ STEP: LOGIN SUCCESS ============ -->
+      <div class="wiz-step" data-step="success">
+        <div class="success-wrap">
+          <div class="success-ring"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+          <h1 class="step-title" data-bn="স্বাগতম!" data-en="Welcome!">Welcome!</h1>
+          <p class="step-sub" data-bn="ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে..." data-en="Taking you to your dashboard...">Taking you to your dashboard...</p>
+        </div>
       </div>
 
     </section>
   </div>
 </main>
 
-<div class="toast" id="toast" role="status"></div>
-
-<script src="supabase-client.js"></script>
+<!-- Supabase JS SDK — used only to persist the session token that
+     send-otp.js's 'login' action returns, so dashboard.html (which checks
+     DB.getSession()) recognises the user as logged in. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module">
+  import { CONFIG } from './js/config.js';
+  window.__supa = window.supabase.createClient(CONFIG.SUPABASE.url, CONFIG.SUPABASE.anonKey, {
+    auth: { persistSession: true, autoRefreshToken: true },
+  });
+</script>
 <script>
-function curLang(){ return document.documentElement.getAttribute('lang') || 'en'; }
-function tt(bn, en){ return curLang() === 'bn' ? bn : en; }
+const STEPS = ['login','forgot','reset-otp','new-password','reset-done','success'];
+const S = { phone: '' };
 
-var toastTimer;
-function showToast(msg){
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+function goStep(step){
+  STEPS.forEach(function(s){
+    document.querySelector('[data-step="'+s+'"]').classList.toggle('active', s === step);
+  });
 }
 
-function clearErr(id){
-  var input = document.getElementById(id);
-  var err = document.getElementById('err-' + id);
-  if (input) input.classList.remove('err');
-  if (err) err.classList.remove('show');
+function curLang(){ return document.documentElement.getAttribute('lang') || 'bn'; }
+function tt(bn, en){ return curLang() === 'en' ? en : bn; }
+
+function norm(raw){
+  var n = String(raw).replace(/[^0-9]/g,'');
+  if (n.startsWith('880')) return n;
+  if (n.startsWith('0')) return '88'+n;
+  if (n.startsWith('1')) return '880'+n;
+  return n;
 }
+function validPh(raw){ return /^8801[3-9]\d{8}$/.test(norm(raw)); }
+
 function setErr(id, show){
   var input = document.getElementById(id);
-  var err = document.getElementById('err-' + id);
+  var err = document.getElementById('err-'+id);
   if (input) input.classList.toggle('err', show);
   if (err) err.classList.toggle('show', show);
 }
+function showAlert(boxId, textId, msg){
+  document.getElementById(textId).textContent = msg;
+  document.getElementById(boxId).classList.add('show');
+}
+function hideAlert(boxId){ document.getElementById(boxId).classList.remove('show'); }
 
-function validPhoneBD(v){
-  var n = v.replace(/[^0-9]/g,'');
-  return /^(01[3-9][0-9]{8}|8801[3-9][0-9]{8})$/.test(n);
+function setBusy(btnId, txtId, busy, label){
+  var btn = document.getElementById(btnId), txt = document.getElementById(txtId);
+  if (btn) btn.disabled = busy;
+  if (txt) txt.innerHTML = busy ? '<span class="spinner"></span>' + tt('অপেক্ষা করুন...','Please wait...') : label;
 }
 
-function togglePw(){
-  var f = document.getElementById('password');
+function togglePw(id, btn){
+  var f = document.getElementById(id);
   f.type = f.type === 'password' ? 'text' : 'password';
 }
 
-function showAlert(msg){
-  document.getElementById('loginAlertText').textContent = msg;
-  document.getElementById('loginAlert').classList.add('show');
-}
-function hideAlert(){
-  document.getElementById('loginAlert').classList.remove('show');
-}
-
-function forgotPassword(){
-  // Integration point: wire to a real password-reset flow (SMS/email OTP
-  // via send-otp.js) once that backend endpoint exists. For now, guide
-  // the user rather than pretending a reset was sent.
-  showToast(tt('পাসওয়ার্ড রিসেটের জন্য সাপোর্টে যোগাযোগ করুন', 'Contact support to reset your password'));
-}
-
-function setBusy(busy){
-  var btn = document.getElementById('loginBtn');
-  var label = document.getElementById('loginBtnLabel');
-  btn.disabled = busy;
-  if (busy) {
-    label.innerHTML = '<span class="spinner"></span>' + tt('লগইন হচ্ছে...', 'Logging in...');
-  } else {
-    label.textContent = tt('লগইন করুন', 'Log in');
-  }
-}
-
-document.getElementById('loginForm').addEventListener('submit', async function(e){
-  e.preventDefault();
-  hideAlert();
-
-  var phone = document.getElementById('phone').value.trim();
-  var password = document.getElementById('password').value;
+// ── LOGIN ──────────────────────────────────────
+function doLogin(){
+  hideAlert('loginAlert');
+  var ph = document.getElementById('lPhone').value.trim();
+  var pw = document.getElementById('lPw').value;
   var ok = true;
-
-  if (!validPhoneBD(phone)) { setErr('phone', true); ok = false; } else setErr('phone', false);
-  if (!password) { setErr('password', true); ok = false; } else setErr('password', false);
+  if (!validPh(ph)) { setErr('lPhone', true); ok = false; } else setErr('lPhone', false);
+  if (!pw) { setErr('lPw', true); ok = false; } else setErr('lPw', false);
   if (!ok) return;
 
-  setBusy(true);
-  try {
-    var result = await BiyeDB.signInWithPassword(phone, password);
-    if (result && result.error) {
-      showAlert(result.error.message || tt('মোবাইল নম্বর বা পাসওয়ার্ড ভুল', 'Incorrect mobile number or password'));
-      setBusy(false);
-      return;
+  var loginLabel = document.getElementById('loginTxt').textContent;
+  setBusy('loginBtn','loginTxt', true);
+
+  fetch('/.netlify/functions/send-otp', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action:'login', phone: norm(ph), password: pw })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if (d && d.ok && d.access_token) {
+      loginOk(d.access_token, d.refresh_token);
+    } else {
+      setBusy('loginBtn','loginTxt', false, loginLabel);
+      showAlert('loginAlert','loginAlertText', (d && d.error) || tt('মোবাইল নম্বর বা পাসওয়ার্ড ভুল','Incorrect mobile number or password'));
     }
-    showToast(tt('সফলভাবে লগইন হয়েছে', 'Logged in successfully'));
-    location.href = 'dashboard.html';
-  } catch (err) {
-    showAlert(tt('সংযোগ করা যায়নি। আবার চেষ্টা করুন।', "Couldn't connect. Please try again."));
-    setBusy(false);
+  }).catch(function(){
+    setBusy('loginBtn','loginTxt', false, loginLabel);
+    showAlert('loginAlert','loginAlertText', tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
+  });
+}
+
+async function loginOk(accessToken, refreshToken){
+  // Persist the real Supabase session so dashboard.html recognises the login.
+  try {
+    if (window.__supa && accessToken && refreshToken) {
+      await window.__supa.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+    }
+  } catch (e) { /* if this fails, dashboard.html's own auth check will redirect back here */ }
+  goStep('success');
+  setTimeout(function(){ window.location.href = 'dashboard.html'; }, 1200);
+}
+
+// ── FORGOT / RESET ───────────────────────────────
+function sendResetOtp(isResend){
+  hideAlert('forgotAlert');
+  if (!isResend) {
+    var ph = document.getElementById('fPhone').value.trim();
+    if (!validPh(ph)) { setErr('fPhone', true); return; }
+    setErr('fPhone', false);
+    S.phone = norm(ph);
+  }
+  if (!isResend) setBusy('forgotBtn','forgotTxt', true);
+
+  fetch('/.netlify/functions/send-otp', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action:'send', phone: S.phone, purpose:'reset' })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if (!isResend) setBusy('forgotBtn','forgotTxt', false, tt('কোড পাঠান','Send code'));
+    if (d && d.sent) {
+      clearOtp('r');
+      document.getElementById('rMasked').textContent = S.phone.replace(/^880/,'0').replace(/(\d{3})\d{4}(\d{4})/,'$1••••$2');
+      goStep('reset-otp');
+      document.getElementById('r1').focus();
+      startOtpTimer(120);
+    } else {
+      showAlert('forgotAlert','forgotAlertText', (d && d.error) || tt('কোড পাঠানো যায়নি','Could not send the code'));
+    }
+  }).catch(function(){
+    if (!isResend) setBusy('forgotBtn','forgotTxt', false, tt('কোড পাঠান','Send code'));
+    showAlert('forgotAlert','forgotAlertText', tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
+  });
+}
+
+function getOtp(p){ return [1,2,3,4,5,6].map(function(i){ var e = document.getElementById(p+i); return e ? e.value : ''; }).join(''); }
+function clearOtp(p){ [1,2,3,4,5,6].forEach(function(i){ var e = document.getElementById(p+i); if (e) { e.value=''; e.classList.remove('filled'); } }); }
+
+var otpTimer;
+function startOtpTimer(sec){
+  clearInterval(otpTimer);
+  document.getElementById('rResendBtn').style.display = 'none';
+  document.getElementById('rTimer').style.display = '';
+  otpTimer = setInterval(function(){
+    sec--;
+    document.getElementById('rTimer').textContent = tt(sec+' সেকেন্ডে আবার পাঠান','Resend in '+sec+'s');
+    if (sec <= 0) {
+      clearInterval(otpTimer);
+      document.getElementById('rTimer').style.display = 'none';
+      document.getElementById('rResendBtn').style.display = '';
+    }
+  }, 1000);
+}
+
+document.getElementById('rOtpRow').addEventListener('input', function(e){
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#rOtpRow .otp-box'));
+  var i = boxes.indexOf(e.target);
+  e.target.value = e.target.value.replace(/[^0-9]/g,'');
+  if (e.target.value) { e.target.classList.add('filled'); if (boxes[i+1]) boxes[i+1].focus(); }
+  else e.target.classList.remove('filled');
+  if (boxes.every(function(b){ return b.value; })) verifyResetOtp();
+});
+document.getElementById('rOtpRow').addEventListener('keydown', function(e){
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#rOtpRow .otp-box'));
+  var i = boxes.indexOf(e.target);
+  if (e.key === 'Backspace' && !e.target.value && boxes[i-1]) boxes[i-1].focus();
+});
+document.getElementById('rOtpRow').addEventListener('paste', function(e){
+  var text = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+  if (text.length) {
+    e.preventDefault();
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('#rOtpRow .otp-box'));
+    text.split('').slice(0,6).forEach(function(ch, idx){ if (boxes[idx]) { boxes[idx].value = ch; boxes[idx].classList.add('filled'); } });
+    if (boxes.every(function(b){ return b.value; })) verifyResetOtp();
   }
 });
 
+function verifyResetOtp(){
+  hideAlert('rotpAlert');
+  var code = getOtp('r');
+  if (code.length !== 6) return;
+  setBusy('rotpBtn','rotpTxt', true);
+
+  fetch('/.netlify/functions/send-otp', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action:'verify', phone: S.phone, code: code, purpose:'reset' })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if (d && d.verified) {
+      clearInterval(otpTimer);
+      goStep('new-password');
+      document.getElementById('np1').focus();
+    } else {
+      setBusy('rotpBtn','rotpTxt', false, tt('যাচাই করুন','Verify'));
+      showAlert('rotpAlert','rotpAlertText', (d && d.error) || tt('কোডটি সঠিক নয়','Incorrect code'));
+    }
+  }).catch(function(){
+    setBusy('rotpBtn','rotpTxt', false, tt('যাচাই করুন','Verify'));
+    showAlert('rotpAlert','rotpAlertText', tt('যাচাই করা যায়নি, আবার চেষ্টা করুন','Could not verify, please try again'));
+  });
+}
+
+function checkStr(){
+  var pw = document.getElementById('np1').value;
+  var score = pw.length >= 8 ? (pw.length >= 12 ? 2 : 1) : 0;
+  var pct = [15, 60, 100][score];
+  var colors = ['#E11D2E', '#FFB400', '#0FA958'];
+  var labels = [tt('কমপক্ষে ৮ অক্ষর দরকার','Needs at least 8 characters'), tt('ঠিক আছে','OK'), tt('ভালো দৈর্ঘ্য','Good length')];
+  document.getElementById('pwFill').style.width = pct + '%';
+  document.getElementById('pwFill').style.background = colors[score];
+  document.getElementById('pwLabel').textContent = labels[score];
+  document.getElementById('pwLabel').style.color = colors[score];
+}
+
+function submitNewPw(){
+  hideAlert('npAlert');
+  var p1 = document.getElementById('np1').value;
+  var p2 = document.getElementById('np2').value;
+  if (p1.length < 8) { showAlert('npAlert','npAlertText', tt('পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে','Password must be at least 8 characters')); return; }
+  if (p1 !== p2) { document.getElementById('np2err').classList.add('show'); return; }
+  document.getElementById('np2err').classList.remove('show');
+  setBusy('npBtn','npTxt', true);
+
+  fetch('/.netlify/functions/send-otp', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action:'resetPassword', phone: S.phone, newPassword: p1 })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if (d && d.ok) {
+      goStep('reset-done');
+    } else {
+      setBusy('npBtn','npTxt', false, tt('পাসওয়ার্ড সেট করুন','Set password'));
+      showAlert('npAlert','npAlertText', (d && d.error) || tt('পাসওয়ার্ড পরিবর্তন করা যায়নি','Could not change password'));
+    }
+  }).catch(function(){
+    setBusy('npBtn','npTxt', false, tt('পাসওয়ার্ড সেট করুন','Set password'));
+    showAlert('npAlert','npAlertText', tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
+  });
+}
+
+// ── Language ──────────────────────────────────────
 (function(){
-  var state = { lang: null };
-  function detectLang(){
-    if (state.lang) return state.lang;
-    var langs = navigator.languages || [navigator.language || ''];
-    for (var i = 0; i < langs.length; i++) { if (String(langs[i]).toLowerCase().indexOf('bn') === 0) return 'bn'; }
-    return 'en';
-  }
-  window.applyLang = function(lang){
-    state.lang = lang;
+  function applyLang(lang){
     document.documentElement.setAttribute('lang', lang);
-    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
     document.querySelectorAll('[data-bn]').forEach(function(el){
-      var attr = lang === 'bn' ? 'data-bn' : (lang === 'en' ? 'data-en' : null);
-      var text = attr ? el.getAttribute(attr) : el.getAttribute('data-en');
-      if (text !== null && text !== '') { el.textContent = text; }
+      var text = lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-bn');
+      if (text !== null && text !== '') el.textContent = text;
     });
     document.querySelectorAll('#langList button').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-lang') === lang);
     });
-    localStorage.setItem('biye_lang_pref', lang);
-  };
+    try { localStorage.setItem('biye_lang', lang); } catch(e){}
+  }
   document.addEventListener('DOMContentLoaded', function(){
-    var saved = localStorage.getItem('biye_lang_pref');
-    applyLang(saved || detectLang());
+    var saved = 'bn';
+    try { saved = localStorage.getItem('biye_lang') || 'bn'; } catch(e){}
+    applyLang(saved);
     document.getElementById('langBtn').addEventListener('click', function(){
-      var list = document.getElementById('langList');
-      var open = list.classList.toggle('open');
+      var open = document.getElementById('langList').classList.toggle('open');
       this.setAttribute('aria-expanded', open);
     });
     document.querySelectorAll('#langList button').forEach(function(b){
-      b.addEventListener('click', function(){
-        applyLang(this.getAttribute('data-lang'));
-        document.getElementById('langList').classList.remove('open');
-      });
+      b.addEventListener('click', function(){ applyLang(this.getAttribute('data-lang')); document.getElementById('langList').classList.remove('open'); });
     });
     document.addEventListener('click', function(e){
       if (!e.target.closest('.lang-menu')) document.getElementById('langList').classList.remove('open');
