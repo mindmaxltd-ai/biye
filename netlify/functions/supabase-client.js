@@ -58,6 +58,19 @@ const BiyeDB = {
   demoMode: BIYE_DEMO_MODE,
 
   // ---- Auth ----
+  // Mobile + password login (used by login.html). In demo mode this
+  // accepts any non-empty password so the flow can be exercised without a
+  // live backend; a real deployment relies entirely on Supabase's own
+  // signInWithPassword result below — the frontend never decides success.
+  async signInWithPassword(phone, password){
+    if (BIYE_DEMO_MODE) {
+      if (!password) return { session: null, error: { message: 'Password required' } };
+      window.__BIYE_DEMO_STORE.session.phone = phone;
+      return { session: window.__BIYE_DEMO_STORE.session, error: null };
+    }
+    return await _supaClient.auth.signInWithPassword({ phone: phone, password: password });
+  },
+
   async signUpWithPhone(phone){
     if (BIYE_DEMO_MODE) {
       window.__BIYE_DEMO_STORE.session.phone = phone;
