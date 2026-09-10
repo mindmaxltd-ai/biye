@@ -72,6 +72,12 @@ const reply = (status, body) => ({
 function genInvoiceNumber() {
   return 'INV-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(1000 + Math.random()*9000);
 }
+function genMemberCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I — avoids misreads
+  let code = '';
+  for (let i = 0; i < 8; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return 'BIYE-' + code;
+}
 function genTxnId() {
   return 'TXN-' + Date.now() + '-' + Math.floor(100 + Math.random()*900);
 }
@@ -124,7 +130,9 @@ async function authAdminCreateUser(payload) {
 }
 
 function isStrongPassword(pw) {
-  return typeof pw === 'string' && pw.length >= 8 && /[A-Z]/.test(pw) && /[0-9]/.test(pw);
+  // Kept intentionally simple, matching register.html's own rule — just a
+  // minimum length. No forced uppercase/digit/special character.
+  return typeof pw === 'string' && pw.length >= 8;
 }
 
 // ── Resolve (or create) the profile behind a registration/payment request ──
@@ -197,6 +205,7 @@ async function resolveProfile(body) {
     marital_status: body.marital_status || 'never_married',
     profile_owner_type: ownerType,
     candidate_consent_status: ownerType === 'self' ? 'granted' : 'pending',
+    member_code: genMemberCode(),
     guardian_name: body.guardian_name || null,
     guardian_phone: body.guardian_phone || null,
     guardian_relation: body.guardian_relation || null,
@@ -302,17 +311,33 @@ async function getInvoice(body) {
   const payments = await sbSelect('payments', `id=eq.${invoice.payment_id}&limit=1`);
   const payment = payments[0] || null;
 
-  const profileRows = payment ? await sbSelect('profiles', `id=eq.${invoice.profile_id}&select=phone&limit=1`) : [];
-  const phone = profileRows[0] ? profileRows[0].phone : '';
-  const methods = manualMethodsFor(phone);
+  // invoices/payments carry no name/phone/email columns — pull those from
+  // the linked profile so invoice.html has something to display.
+  const profileRows = invoice.profile_id
+    ? await sbSelect('profiles', `id=eq.${encodeURIComponent(invoice.profile_id)}&select=display_name,phone,email,profile_owner_type,member_code,guardian_name,guardian_relation&limit=1`)
+    : [];
+  const profile = profileRows[0] || null;
+  const invoiceWithCustomer = {
+    ...invoice,
+    customer_name: profile ? profile.display_name : null,
+    phone: profile ? normPhone(profile.phone) : null,
+    customer_email: profile ? profile.email : null,
+    profile_owner_type: profile ? profile.profile_owner_type : null,
+    member_code: profile ? profile.member_code : null,
+    father_name: profile && profile.guardian_relation === 'father' ? profile.guardian_name : null,
+    guardian_name: profile ? profile.guardian_name : null,
+    guardian_relation: profile ? profile.guardian_relation : null,
+  };
+
+  const methods = manualMethodsFor(profile ? profile.phone : '');
 
   let gateway_url = null;
   if (invoice.status === 'pending' && payment && SSLC_STORE_ID && SSLC_STORE_PWD) {
     const pkg = Object.values(PACKAGES).find(p => !p.tiered && p.total === invoice.total) || PACKAGES.REG;
-    gateway_url = await buildSslczSession(invoice, payment, pkg, {});
+    gateway_url = await buildSslczSession(invoice, payment, pkg, { name: invoiceWithCustomer.customer_name, email: invoiceWithCustomer.customer_email, phone: invoiceWithCustomer.phone });
   }
 
-  return reply(200, { ok: true, invoice, payment, gateway_url, available_methods: methods,
+  return reply(200, { ok: true, invoice: invoiceWithCustomer, payment, gateway_url, available_methods: methods,
     bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null });
 }
 
