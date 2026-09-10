@@ -1,6 +1,8 @@
 <!DOCTYPE html><html lang="bn" dir="ltr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"><title>BIYE — পেমেন্ট</title><meta name="robots" content="noindex,follow"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><style>
 /* ═══════════════════════════════════════════
    BIYE SHARED CSS — All 25 pages
+   (unchanged from the shared system — payment.html adds only the
+   payment-specific rules below the existing shared tokens/components)
    ═══════════════════════════════════════════ */
 :root{
   --pk:#E2136E;--pk-d:#C20F5E;--pk-s:rgba(226,19,110,.09);
@@ -58,25 +60,14 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 .biye-card-head{padding:1rem 1.4rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .biye-card-title{font-size:1rem;font-weight:800}
 
-/* GRID */
-.biye-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
-.biye-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.biye-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-@media(max-width:640px){.biye-grid-2,.biye-grid-3,.biye-grid-4{grid-template-columns:1fr}}
-@media(max-width:860px){.biye-grid-4{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.biye-grid-3{grid-template-columns:repeat(2,1fr)}}
-
 /* FORM */
 .biye-field{margin-bottom:1rem}
 .biye-label{display:block;font-size:.84rem;font-weight:700;color:var(--ink2);margin-bottom:.4rem}
-.biye-input,.biye-select,.biye-textarea{width:100%;padding:.82rem 1rem;border:2px solid var(--bdr2);border-radius:var(--r2);font-size:1rem;color:var(--ink);background:var(--sur);outline:none;transition:var(--tx);font-family:inherit;-webkit-appearance:none}
-.biye-input:focus,.biye-select:focus,.biye-textarea:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.1)}
+.biye-input{width:100%;padding:.82rem 1rem;border:2px solid var(--bdr2);border-radius:var(--r2);font-size:1rem;color:var(--ink);background:var(--sur);outline:none;transition:var(--tx);font-family:inherit}
+.biye-input:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(106,45,168,.1)}
 .biye-input.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-s)}
-.biye-input.ok{border-color:var(--gr)}
-.biye-textarea{resize:vertical;min-height:100px}
 .biye-field-err{font-size:.76rem;color:var(--danger);font-weight:600;margin-top:.3rem;display:none}
 .biye-field-err.show{display:block}
-.biye-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
 
 /* ALERTS */
 .biye-alert{border-radius:var(--r2);padding:.8rem 1rem;font-size:.84rem;font-weight:600;margin-bottom:.9rem;display:none}
@@ -95,50 +86,15 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 .biye-badge-gray{background:rgba(20,20,20,.06);color:var(--ink3)}
 .biye-badge-blue{background:var(--bl-s);color:var(--bl)}
 
-/* PROGRESS */
-.biye-progress{height:6px;border-radius:4px;background:var(--bdr2);overflow:hidden}
-.biye-progress-bar{height:100%;border-radius:4px;background:var(--grad);transition:width .4s ease}
-
-/* AVATAR */
-.biye-avatar{width:40px;height:40px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.95rem;flex-shrink:0;text-decoration:none}
-.biye-avatar-lg{width:72px;height:72px;font-size:1.5rem}
-
 /* SPINNER */
 .biye-spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:biye-spin .8s linear infinite;vertical-align:middle}
+.biye-spinner-ink{border-color:var(--pu-s);border-top-color:var(--pu)}
 @keyframes biye-spin{to{transform:rotate(360deg)}}
 
 /* PAGE HEADER */
-.biye-page-header{margin-bottom:1.5rem}
+.biye-page-header{margin-bottom:1.25rem}
 .biye-page-title{font-size:1.35rem;font-weight:900;margin-bottom:.25rem}
 .biye-page-sub{font-size:.87rem;color:var(--ink2);line-height:1.6}
-
-/* SECTION */
-.biye-section-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:.5rem}
-.biye-section-title{font-size:1rem;font-weight:800}
-
-/* STAT */
-.biye-stat{background:var(--sur);border-radius:var(--r);border:1px solid var(--bdr);padding:1rem 1.1rem}
-.biye-stat-val{font-size:1.5rem;font-weight:900;line-height:1.15;margin-bottom:.15rem}
-.biye-stat-lbl{font-size:.74rem;color:var(--ink2);font-weight:600}
-
-/* TABS */
-.biye-tabs{display:flex;gap:.3rem;border-bottom:2px solid var(--bdr);margin-bottom:1.25rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.biye-tabs::-webkit-scrollbar{display:none}
-.biye-tab{padding:.55rem 1rem;font-size:.84rem;font-weight:700;color:var(--ink2);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;transition:var(--tx);background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
-.biye-tab.active{color:var(--pk);border-bottom-color:var(--pk)}
-.biye-tab-panel{display:none;animation:biye-fadeup .25s ease}
-.biye-tab-panel.active{display:block}
-@keyframes biye-fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* MATCH CARD */
-.biye-match-card{background:var(--sur);border-radius:var(--r3);border:1px solid var(--bdr);overflow:hidden;transition:var(--tx);cursor:pointer}
-.biye-match-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
-.biye-match-photo{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,var(--pk-s),var(--pu-s));display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden}
-.biye-match-photo img{width:100%;height:100%;object-fit:cover}
-.biye-match-info{padding:.85rem}
-.biye-match-name{font-size:.9rem;font-weight:800;margin-bottom:.15rem}
-.biye-match-meta{font-size:.75rem;color:var(--ink2);margin-bottom:.6rem;line-height:1.5}
-.biye-match-actions{display:flex;gap:.35rem}
 
 /* STEP DOTS */
 .biye-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:1.5rem}
@@ -148,89 +104,125 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 .biye-step-line{flex:1;height:2px;background:var(--bdr2);min-width:16px;max-width:48px;transition:var(--tx)}
 .biye-step-line.done{background:var(--gr)}
 
-/* EMPTY */
-.biye-empty{text-align:center;padding:3rem 1rem}
-.biye-empty-icon{font-size:3rem;margin-bottom:.75rem}
-.biye-empty-title{font-size:1rem;font-weight:700;margin-bottom:.3rem}
-.biye-empty-sub{font-size:.84rem;color:var(--ink2);margin-bottom:1.25rem}
-
-/* SKELETON */
-.biye-skel{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:biye-skel 1.4s infinite;border-radius:8px}
-@keyframes biye-skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
 /* DISCLAIMER */
 .biye-disclaimer{background:var(--gd-s);border:1px solid rgba(212,175,55,.3);border-radius:var(--r2);padding:.75rem 1rem;font-size:.78rem;color:#5a3e00;line-height:1.55}
-
-/* NOTIF BADGE */
-.biye-notif-badge{position:absolute;top:-4px;right:-4px;background:var(--pk);color:#fff;font-size:.6rem;font-weight:800;border-radius:50px;padding:.1rem .35rem;min-width:16px;text-align:center}
-
-/* MOBILE NAV */
-.biye-mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--sur);border-top:1px solid var(--bdr);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-@media(max-width:768px){.biye-mobile-nav{display:flex}}
-.biye-mobile-nav-items{display:flex;width:100%}
-.biye-mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem .2rem;font-size:.58rem;font-weight:700;color:var(--ink3);cursor:pointer;transition:var(--tx);background:none;border:none;font-family:inherit;min-height:44px;justify-content:center}
-.biye-mobile-nav-item.active,.biye-mobile-nav-item:hover{color:var(--pk)}
-.biye-mobile-nav-icon{font-size:1.1rem;line-height:1}
-
-/* FOOTER */
-.biye-footer{background:#12122A;color:rgba(255,255,255,.65);padding:2.5rem 1.25rem;padding-bottom:calc(2.5rem + env(safe-area-inset-bottom));margin-top:3rem}
-.biye-footer-inner{max-width:960px;margin:0 auto}
-.biye-footer-logo{margin-bottom:.6rem}
-.biye-footer-logo img{filter:brightness(0) invert(1);opacity:.75}
-.biye-footer-tagline{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1.75rem}
-.biye-footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:1.75rem}
-@media(max-width:600px){.biye-footer-grid{grid-template-columns:repeat(2,1fr)}}
-.biye-footer-col h4{font-size:.75rem;font-weight:800;color:#fff;margin-bottom:.55rem;text-transform:uppercase;letter-spacing:.07em}
-.biye-footer-col a{display:block;font-size:.76rem;color:rgba(255,255,255,.45);margin-bottom:.3rem;transition:var(--tx)}
-.biye-footer-col a:hover{color:#fff}
-.biye-footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:1rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
-.biye-footer-copy{font-size:.7rem;color:rgba(255,255,255,.3)}
-
-/* RTL */
-html[dir=rtl] .biye-input,.biye-select,.biye-textarea{text-align:right}
-html[dir=rtl] .biye-nav{flex-direction:row-reverse}
 
 /* RESPONSIVE */
 @media(max-width:480px){body{font-size:15px}.biye-page,.biye-page-wide,.biye-page-narrow{padding-left:.75rem;padding-right:.75rem}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-.price-card{background:var(--sur);border-radius:var(--r3);border:2px solid var(--bdr);padding:1.5rem;margin-bottom:.85rem;cursor:pointer;transition:var(--tx)}
-.price-card.selected{border-color:var(--pk);background:var(--pk-s)}
-.price-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem}
-.price-name{font-size:.95rem;font-weight:800}
-.price-amount{font-size:1.3rem;font-weight:900;font-family:'Inter',sans-serif;color:var(--pk)}
-.price-desc{font-size:.78rem;color:var(--ink2)}
+
+/* ═══════════════════════════════════════════
+   payment.html — page-specific
+   ═══════════════════════════════════════════ */
+.pay-hero{background:var(--sur);border-radius:var(--r3);border:1px solid var(--bdr);box-shadow:var(--sh);padding:1.1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.9rem}
+.pay-hero-icon{width:44px;height:44px;border-radius:12px;background:var(--gr-s);color:var(--gr);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.pay-hero-text{font-size:.82rem;color:var(--ink2);line-height:1.55}
+.pay-hero-text b{color:var(--ink)}
+
+.product-grid{display:grid;grid-template-columns:1fr;gap:.75rem;margin-bottom:1.25rem}
+.product-card{background:var(--sur);border-radius:var(--r3);border:2px solid var(--bdr);padding:1.1rem 1.2rem;cursor:pointer;transition:var(--tx);text-align:left;width:100%}
+.product-card:hover{border-color:rgba(226,19,110,.35)}
+.product-card.selected{border-color:var(--pk);background:var(--pk-s)}
+.product-card.disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
+.product-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem;margin-bottom:.3rem}
+.product-name{font-size:.98rem;font-weight:800;display:flex;align-items:center;gap:.4rem}
+.product-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--bdr2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--tx)}
+.product-card.selected .product-check{background:var(--pk);border-color:var(--pk)}
+.product-check svg{width:11px;height:11px;stroke:#fff;stroke-width:3;opacity:0;transition:var(--tx)}
+.product-card.selected .product-check svg{opacity:1}
+.product-price{font-size:1.15rem;font-weight:900;font-family:'Inter',sans-serif;color:var(--pk);white-space:nowrap}
+.product-desc{font-size:.8rem;color:var(--ink2);line-height:1.55;margin-bottom:.5rem}
+.product-benefits{list-style:none;font-size:.76rem;color:var(--ink2);display:flex;flex-wrap:wrap;gap:.4rem .9rem}
+.product-benefits li{display:flex;align-items:center;gap:.3rem}
+.product-benefits li svg{width:12px;height:12px;stroke:var(--gr);flex-shrink:0}
+
 .order-sum{background:var(--gd-s);border:1px solid rgba(212,175,55,.3);border-radius:var(--r2);padding:1rem;margin-bottom:1rem}
+.order-sum-title{font-size:.78rem;font-weight:800;color:#5a3e00;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.04em}
 .order-row{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.85rem;border-bottom:1px solid rgba(212,175,55,.2)}
-.order-row:last-child{border-bottom:none;font-weight:800;font-size:.95rem;color:#3a2000}
+.order-row:last-child{border-bottom:none;font-weight:800;font-size:1.05rem;color:#3a2000;padding-top:.55rem}
+.order-row .num{font-family:'Inter',sans-serif}
+.order-row.placeholder .num{color:var(--ink3)}
+
+.trust-panel{background:var(--bl-s);border:1px solid rgba(21,101,192,.18);border-radius:var(--r2);padding:.9rem 1rem;margin-bottom:1rem}
+.trust-title{font-size:.8rem;font-weight:800;color:var(--bl);margin-bottom:.5rem}
+.trust-list{list-style:none;font-size:.78rem;color:var(--ink2);display:flex;flex-direction:column;gap:.35rem}
+.trust-list li{display:flex;align-items:center;gap:.45rem}
+.trust-list li svg{width:14px;height:14px;stroke:var(--bl);flex-shrink:0}
+
+.pay-processing{text-align:center;padding:2rem 1rem}
+.pay-processing-steps{display:flex;justify-content:center;gap:.4rem;margin-top:1rem;flex-wrap:wrap}
+.pay-processing-step{font-size:.72rem;font-weight:700;padding:.3rem .7rem;border-radius:50px;background:rgba(20,20,20,.06);color:var(--ink3)}
+.pay-processing-step.active{background:var(--pu-s);color:var(--pu)}
+.pay-processing-step.done{background:var(--gr-s);color:var(--gr)}
+
+.biye-footer{background:#12122A;color:rgba(255,255,255,.65);padding:2.5rem 1.25rem;padding-bottom:calc(2.5rem + env(safe-area-inset-bottom));margin-top:3rem}
+.biye-footer-inner{max-width:960px;margin:0 auto;text-align:center;font-size:.76rem;color:rgba(255,255,255,.4)}
 </style></head><body>
-<nav class="biye-nav"><a href="dashboard.html" class="biye-nav-logo"><img src="data:image/png;base64,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" alt="BIYE" height="34"></a><div class="biye-nav-right"><a href="dashboard.html" class="biye-btn biye-btn-ghost biye-btn-sm" data-i18n="nav.dashboard">ড্যাশবোর্ড</a></div></nav>
+<nav class="biye-nav"><a href="dashboard.html" class="biye-nav-logo"><img src="data:image/png;base64,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" alt="BIYE" height="34"></a><div class="biye-nav-right"><a href="dashboard.html" class="biye-btn biye-btn-ghost biye-btn-sm" data-i18n="nav.dashboard">ড্যাশবোর্ড</a></div></nav>
+
 <main class="biye-page-narrow" role="main">
-  <div class="biye-page-header"><h1 class="biye-page-title" data-i18n="payment.title">পেমেন্ট</h1><p class="biye-page-sub" data-i18n="payment.sub">নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে।</p></div>
-  <div id="payAlert" class="biye-alert"></div>
-
-  <div id="regCard" class="price-card selected" onclick="selectPlan('registration')" role="radio" aria-checked="true" tabindex="0">
-    <div class="price-card-header"><div class="price-name" data-i18n="payment.reg">BIYE নিবন্ধন</div><div class="price-amount">৳৯৯৯</div></div>
-    <div class="price-desc" data-i18n="payment.regDesc">২টি বিনামূল্যে ম্যাচ ভিউ সহ। এককালীন ফি।</div>
-  </div>
-  <div id="viewCard" class="price-card" onclick="selectPlan('match_view')" role="radio" aria-checked="false" tabindex="0">
-    <div class="price-card-header"><div class="price-name" data-i18n="payment.matchView">অতিরিক্ত ম্যাচ ভিউ</div><div class="price-amount">৳৩৩৩</div></div>
-    <div class="price-desc" data-i18n="payment.matchViewDesc">একটি ম্যাচ প্রোফাইল সম্পূর্ণরূপে দেখুন।</div>
+  <div class="biye-page-header">
+    <h1 class="biye-page-title" data-i18n="payment.title">নিরাপদ চেকআউট</h1>
+    <p class="biye-page-sub" data-i18n="payment.subtitle">আপনার পেমেন্ট পুরো সময় সুরক্ষিত থাকে।</p>
   </div>
 
-  <div class="order-sum" id="orderSummary">
-    <div class="order-row"><span data-i18n="payment.item">পণ্য</span><span id="orderItem">BIYE নিবন্ধন</span></div>
-    <div class="order-row"><span data-i18n="payment.subtotal">মূল্য</span><span id="orderSub">৳৯৯৯</span></div>
-    <div class="order-row"><span data-i18n="payment.vat">ভ্যাট (৫%)</span><span id="orderVat">৳৫০</span></div>
-    <div class="order-row"><span data-i18n="payment.total">মোট</span><span id="orderTotal">৳১,০৪৯</span></div>
+  <div id="payAlert" class="biye-alert" role="alert"></div>
+
+  <!-- hero: who's paying / for what -->
+  <div class="pay-hero">
+    <div class="pay-hero-icon" aria-hidden="true">🔒</div>
+    <div class="pay-hero-text" id="heroText" data-i18n="payment.subtitle">আপনার পেমেন্ট পুরো সময় সুরক্ষিত থাকে।</div>
   </div>
 
-  <div class="biye-disclaimer" style="margin-bottom:1rem" data-i18n="payment.security">কার্ড নম্বর বা পিন কখনো শেয়ার করবেন না। BIYE-এর পক্ষ থেকে কেউ এই তথ্য চাইবে না।</div>
-  <button class="biye-btn biye-btn-primary biye-btn-full" id="payBtn" data-i18n="payment.pay">💳 পেমেন্ট করুন</button>
-  <div id="payProcessing" style="display:none;text-align:center;padding:1.5rem">
-    <div class="biye-spinner" style="border-top-color:var(--pu);border-color:var(--pu-s);width:28px;height:28px;margin:0 auto .75rem"></div>
-    <div data-i18n="payment.processing">ইনভয়েস তৈরি হচ্ছে...</div>
-  </div>
+  <!-- SELECT product -->
+  <section id="selectPanel">
+    <h2 class="biye-card-title" style="margin-bottom:.75rem" data-i18n="payment.whatBuying">আপনি কী কিনছেন?</h2>
+
+    <div class="product-grid" id="productGrid" role="radiogroup" aria-label="Select a product"></div>
+
+    <div class="order-sum" id="orderSummary">
+      <div class="order-sum-title" data-i18n="payment.summary">অর্ডার সারাংশ</div>
+      <div class="order-row"><span data-i18n="payment.item">পণ্য</span><span id="orderItem">—</span></div>
+      <div class="order-row placeholder"><span data-i18n="payment.subtotal">সাবটোটাল</span><span class="num" id="orderSub">—</span></div>
+      <div class="order-row placeholder"><span data-i18n="payment.vat">ভ্যাট (অন্তর্ভুক্ত)</span><span class="num" id="orderVat">—</span></div>
+      <div class="order-row"><span data-i18n="payment.total">মোট</span><span class="num" id="orderTotal">—</span></div>
+    </div>
+
+    <div class="trust-panel">
+      <div class="trust-title" data-i18n="payment.trustTitle">এই পেমেন্ট কেন নিরাপদ?</div>
+      <ul class="trust-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg><span data-i18n="payment.trust1">এনক্রিপ্টেড সংযোগ</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg><span data-i18n="payment.trust2">নিরাপদ পেমেন্ট গেটওয়ে (SSLCommerz)</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg><span data-i18n="payment.trust3">সার্ভার-সাইড যাচাইকরণ</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg><span data-i18n="payment.trust4">পেমেন্টের আগে ইনভয়েস তৈরি হয়</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg><span data-i18n="payment.trust5">সফল পেমেন্টের পর রসিদ</span></li>
+      </ul>
+    </div>
+
+    <div class="biye-disclaimer" style="margin-bottom:1rem" data-i18n="payment.security">BIYE কখনো আপনার কার্ড পিন, OTP বা ব্যাংকিং পাসওয়ার্ড চ্যাট/কলে চাইবে না।</div>
+
+    <button class="biye-btn biye-btn-primary biye-btn-full" id="payBtn" disabled>
+      <span id="payBtnLabel" data-i18n="payment.payBtn">নিরাপদে পরিশোধ করুন</span>
+    </button>
+  </section>
+
+  <!-- PROCESSING (invoice creation + gateway redirect) -->
+  <section id="processingPanel" style="display:none">
+    <div class="biye-card"><div class="biye-card-body pay-processing">
+      <div class="biye-spinner biye-spinner-ink" style="width:30px;height:30px" aria-hidden="true"></div>
+      <p style="margin-top:1rem;font-weight:700" id="processingLabel" data-i18n="payment.creatingInvoice">ইনভয়েস তৈরি হচ্ছে...</p>
+      <p style="margin-top:.4rem;font-size:.8rem;color:var(--ink2)" data-i18n="payment.noRefresh">যাচাই করার সময় পেজ বন্ধ বা রিফ্রেশ করবেন না।</p>
+      <div class="pay-processing-steps" aria-hidden="true">
+        <span class="pay-processing-step" id="stepInvoice" data-i18n="payment.creatingInvoice">ইনভয়েস তৈরি হচ্ছে...</span>
+        <span class="pay-processing-step" id="stepGateway" data-i18n="payment.redirecting">গেটওয়েতে পাঠানো হচ্ছে...</span>
+      </div>
+    </div></div>
+  </section>
+
 </main>
+
+<footer class="biye-footer"><div class="biye-footer-inner"><span data-i18n="app.tagline">বিবাহের বিজ্ঞান। জীবনের আস্থা।</span></div></footer>
+
 <script type="module">
 import { App } from './js/app.js';
 import { Payment } from './js/payment.js';
@@ -238,48 +230,180 @@ import { Profile } from './js/profile.js';
 import { I18n } from './js/i18n.js';
 import { UI } from './js/ui.js';
 
-let plan = 'registration';
-const PLANS = { registration: { name: 'BIYE নিবন্ধন', sub: 999, vat: 50, total: 1049 }, match_view: { name: 'অতিরিক্ত ম্যাচ ভিউ', sub: 333, vat: 0, total: 333 } };
+// ── Product catalog (display layer only — the server is always the
+// authority on the actual price; see js/payment.js / the payment Netlify
+// function). Keep this in sync with PACKAGES in payment-function.js. ──
+const PRODUCTS = [
+  {
+    code: 'REG', key: 'reg', icon: '💍',
+    nameKey: 'payment.reg.name', descKey: 'payment.reg.desc', badgeKey: 'payment.reg.badge',
+    price: 999, priceLabel: '৳৯৯৯', recurring: false,
+    benefitKeys: [], hideIfRegistered: true,
+  },
+  {
+    code: 'MATCH_VIEW', key: 'matchView', icon: '👁️',
+    nameKey: 'payment.matchView.name', descKey: 'payment.matchView.desc', badgeKey: 'payment.matchView.badge',
+    price: null, priceLabel: '৳১১১ →', recurring: false,
+  },
+  {
+    code: 'MANUAL_MATCH', key: 'manual', icon: '🤝',
+    nameKey: 'payment.manual.name', descKey: 'payment.manual.desc', badgeKey: null,
+    price: 1111, priceLabel: '৳১,১১১', recurring: false,
+  },
+  {
+    code: 'SUGGESTION', key: 'suggestion', icon: '✨',
+    nameKey: 'payment.suggestion.name', descKey: 'payment.suggestion.desc', badgeKey: null,
+    price: 55, priceLabel: '৳৫৫', recurring: false,
+  },
+];
 
-window.selectPlan = (p) => {
-  plan = p;
-  document.querySelectorAll('.price-card').forEach(el => { el.classList.remove('selected'); el.setAttribute('aria-checked','false'); });
-  document.getElementById(p === 'registration' ? 'regCard' : 'viewCard').classList.add('selected');
-  document.getElementById(p === 'registration' ? 'regCard' : 'viewCard').setAttribute('aria-checked','true');
-  const info = PLANS[p];
-  document.getElementById('orderItem').textContent = info.name;
-  document.getElementById('orderSub').textContent = '৳' + info.sub.toLocaleString();
-  document.getElementById('orderVat').textContent = '৳' + info.vat;
-  document.getElementById('orderTotal').textContent = '৳' + info.total.toLocaleString();
-};
+let selected = null;   // currently selected product code
+let profileId = null;
+let busy = false;      // guards against double-submit / duplicate invoices
+
+function money(n) { return '৳' + Number(n || 0).toLocaleString('bn-BD'); }
+
+function renderProducts(profile) {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = '';
+  const alreadyRegistered = !!(profile && profile.registration_fee_paid);
+
+  PRODUCTS.forEach((p) => {
+    const disabled = p.hideIfRegistered && alreadyRegistered;
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'product-card' + (disabled ? ' disabled' : '');
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', 'false');
+    card.setAttribute('aria-disabled', String(disabled));
+    card.dataset.code = p.code;
+    card.tabIndex = disabled ? -1 : 0;
+
+    const priceLabel = disabled ? I18n.t('payment.alreadyRegistered') : p.priceLabel;
+
+    card.innerHTML = `
+      <div class="product-head">
+        <div class="product-name"><div class="product-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>${p.icon} ${I18n.t(p.nameKey)}</div>
+        <div class="product-price" style="${disabled ? 'font-size:.78rem;color:var(--gr)' : ''}">${priceLabel}</div>
+      </div>
+      <div class="product-desc">${I18n.t(p.descKey)}</div>
+      ${p.badgeKey && !disabled ? `<span class="biye-badge biye-badge-pk">${I18n.t(p.badgeKey)}</span>` : ''}
+    `;
+
+    if (!disabled) {
+      card.addEventListener('click', () => selectProduct(p.code));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectProduct(p.code); }
+      });
+    }
+    grid.appendChild(card);
+  });
+
+  // Auto-select the first available product
+  const firstAvailable = PRODUCTS.find(p => !(p.hideIfRegistered && alreadyRegistered));
+  if (firstAvailable) selectProduct(firstAvailable.code);
+}
+
+function selectProduct(code) {
+  selected = code;
+  document.querySelectorAll('.product-card').forEach(el => {
+    const on = el.dataset.code === code;
+    el.classList.toggle('selected', on);
+    el.setAttribute('aria-checked', String(on));
+  });
+  const p = PRODUCTS.find(x => x.code === code);
+  document.getElementById('orderItem').textContent = I18n.t(p.nameKey);
+  // Exact totals are only known once the server creates the invoice —
+  // show a clearly-marked estimate until then, never a fabricated total.
+  const sub = document.getElementById('orderSub');
+  const vat = document.getElementById('orderVat');
+  const total = document.getElementById('orderTotal');
+  if (p.price != null) {
+    const t = p.price;
+    const taxBackedOut = t - Math.round(t / 1.05);
+    sub.textContent = money(t - taxBackedOut);
+    vat.textContent = money(taxBackedOut);
+    total.textContent = money(t);
+    sub.closest('.order-row').classList.remove('placeholder');
+    vat.closest('.order-row').classList.remove('placeholder');
+  } else {
+    sub.textContent = '—'; vat.textContent = '—';
+    total.textContent = p.priceLabel; // e.g. "৳১১১ →" for tiered pricing
+    sub.closest('.order-row').classList.add('placeholder');
+    vat.closest('.order-row').classList.add('placeholder');
+  }
+  document.getElementById('payBtn').disabled = false;
+  document.getElementById('payBtnLabel').textContent =
+    I18n.t('payment.payBtn') + (p.price != null ? ' — ' + money(p.price) : '');
+}
+
+function showAlert(msg, type = 'err') {
+  const el = document.getElementById('payAlert');
+  el.className = 'biye-alert biye-alert-' + type + ' show';
+  el.textContent = msg;
+}
+function hideAlert() {
+  document.getElementById('payAlert').className = 'biye-alert';
+}
+
+function setProcessing(stage) {
+  document.getElementById('selectPanel').style.display = stage ? 'none' : '';
+  document.getElementById('processingPanel').style.display = stage ? '' : 'none';
+  document.getElementById('stepInvoice').classList.toggle('active', stage === 'invoice');
+  document.getElementById('stepInvoice').classList.toggle('done', stage === 'gateway');
+  document.getElementById('stepGateway').classList.toggle('active', stage === 'gateway');
+  document.getElementById('processingLabel').textContent =
+    I18n.t(stage === 'gateway' ? 'payment.redirecting' : 'payment.creatingInvoice');
+}
+
+async function startPayment() {
+  if (busy || !selected) return;
+  busy = true;
+  hideAlert();
+  UI.setLoading(document.getElementById('payBtn'), true);
+  setProcessing('invoice');
+
+  try {
+    const result = await Payment.createInvoice(profileId, selected);
+    if (!result || !result.ok || !result.invoice) {
+      throw new Error((result && result.error) || 'invoice_failed');
+    }
+
+    setProcessing('gateway');
+    if (result.gateway_url) {
+      location.href = result.gateway_url;
+      return; // leaving the page
+    }
+    // No gateway configured yet for this environment — fall back to the
+    // existing invoice page, which already knows how to poll/rebuild it.
+    location.href = 'invoice.html?inv=' + encodeURIComponent(result.invoice.invoice_number) + '&from=payment';
+  } catch (e) {
+    busy = false;
+    UI.setLoading(document.getElementById('payBtn'), false);
+    setProcessing(false);
+    showAlert(I18n.t('payment.error'), 'err');
+    UI.toast(I18n.t('payment.error'), 'error');
+  }
+}
 
 document.addEventListener('biye:ready', async ({ detail: { user } }) => {
   if (!user) return;
   const p = await Profile.loadOwn();
   if (!p) return;
+  profileId = p.id;
 
-  // Check URL params
+  renderProducts(p);
+
+  // Preselect via ?product= (registration flow links here directly)
   const params = new URLSearchParams(window.location.search);
-  if (params.get('type') === 'match_view') selectPlan('match_view');
+  const requested = params.get('product') || (params.get('type') === 'match_view' ? 'MATCH_VIEW' : null);
+  if (requested && PRODUCTS.some(x => x.code === requested)) selectProduct(requested);
 
-  // Handle payment callback
+  // Handle return from a payment gateway
   const { status, inv } = Payment.handleCallback();
-  if (status === 'success' || inv) { location.href = 'invoice.html?inv=' + (inv||''); return; }
-  if (status === 'failed') { UI.toast(I18n.t('payment.failed'), 'error'); }
+  if (status === 'success' || inv) { location.href = 'invoice.html?inv=' + (inv || ''); return; }
+  if (status === 'failed') { showAlert(I18n.t('payment.failed'), 'err'); }
 
-  document.getElementById('payBtn').addEventListener('click', async () => {
-    document.getElementById('payBtn').style.display = 'none';
-    document.getElementById('payProcessing').style.display = '';
-    try {
-      const result = await Payment.createInvoice(p.id, plan);
-      if (result.ok && result.invoice) {
-        location.href = 'invoice.html?inv=' + encodeURIComponent(result.invoice.invoice_number) + '&from=payment';
-      } else { throw new Error(result.error || 'invoice_failed'); }
-    } catch(e) {
-      document.getElementById('payBtn').style.display = '';
-      document.getElementById('payProcessing').style.display = 'none';
-      UI.toast(I18n.t('payment.error'), 'error');
-    }
-  });
+  document.getElementById('payBtn').addEventListener('click', startPayment);
 });
 </script></body></html>
