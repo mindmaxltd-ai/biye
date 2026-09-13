@@ -463,6 +463,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
           <strong id="rcClientName">—</strong>
           <span id="rcClientPhone">—</span><br>
           <span id="rcClientEmail"></span>
+          <span id="rcClientMember" style="display:block;font-size:.76rem;font-weight:700;margin-top:.3rem"></span>
+          <span id="rcClientFather" style="display:block;font-size:.76rem;opacity:.75"></span>
           <span id="rcClientType" style="font-size:.72rem;opacity:.7"></span>
         </p>
       </div>
@@ -962,6 +964,14 @@ async function loadReceipt(){
     var ot=inv.profile_owner_type||'';
     if(ot){var m={self:'নিজে',parent_assisted:'অভিভাবক',guardian_assisted:'অভিভাবক'};
       el('rcClientType').textContent='('+( m[ot]||ot)+')';}
+    if(inv.member_code&&el('rcClientMember')){
+      el('rcClientMember').textContent='সদস্য নং: '+inv.member_code;
+    }
+    if(inv.father_name&&el('rcClientFather')){
+      el('rcClientFather').textContent='পিতার নাম: '+inv.father_name;
+    } else if(inv.guardian_name&&el('rcClientFather')){
+      el('rcClientFather').textContent='অভিভাবক: '+inv.guardian_name;
+    }
 
     // ── Status ──
     var st=STATUS[pay.status||inv.status]||STATUS.pending;
