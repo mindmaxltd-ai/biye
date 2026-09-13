@@ -32,6 +32,12 @@ const BKASH_DIRECT_PHONES   = (process.env.BKASH_DIRECT_PHONES || '').split(',')
 const BKASH_MERCHANT_NUMBER = process.env.BKASH_MERCHANT_NUMBER || '';
 const ADMIN_PHONE           = process.env.ADMIN_PHONE || '';
 const ADMIN_SECRET          = process.env.ADMIN_SECRET || '';
+// Numbers allowed to confirm a CASH claim by entering the OTP sent to them —
+// separate from MANUAL_PAYMENT_PHONES (which controls who can *pay* by cash).
+const CASH_CONFIRM_PHONES   = (process.env.CASH_CONFIRM_PHONES || process.env.MANUAL_PAYMENT_PHONES || '').split(',').map(normPhone).filter(Boolean);
+const crypto = require('crypto');
+function genOtp() { return String(Math.floor(100000 + Math.random() * 900000)); }
+function hashOtp(code) { return crypto.createHash('sha256').update(String(code)).digest('hex'); }
 
 // ── Product catalogue ────────────────────────────────────────
 // Every "price" is the SUBTOTAL — VAT (5%) is added on top to get total.
@@ -427,13 +433,41 @@ async function confirmManualPayment(body) {
     updated_at: new Date().toISOString(),
   });
 
-  // Notify the admin with a one-click confirm link (GET request).
+  const payRows = await sbSelect('payments', `id=eq.${invoice.payment_id}&select=transaction_id,amount&limit=1`);
+  const txn = payRows[0] ? payRows[0].transaction_id : '';
+  const amount = payRows[0] ? payRows[0].amount : invoice.total;
+
+  if (method === 'cash') {
+    // OTP-based confirmation: one 6-digit code sent to BOTH allow-listed
+    // numbers (either one may enter it) — never a plain link, since a cash
+    // handover genuinely needs someone to actively confirm with a code.
+    if (CASH_CONFIRM_PHONES.length === 0) {
+      return reply(500, { ok: false, error: 'cash confirmation is not configured (CASH_CONFIRM_PHONES missing)' });
+    }
+    const code = genOtp();
+    const expires = new Date(Date.now() + 15 * 60000).toISOString();
+    for (const adminPhone of CASH_CONFIRM_PHONES) {
+      await sbInsert('otp_codes', {
+        phone: '+' + adminPhone, purpose: 'verification',
+        otp_hash: hashOtp(code), expires_at: expires, attempt_count: 0,
+      }, false);
+      fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: adminPhone,
+          msg: `BIYE নগদ পেমেন্ট: ৳${amount}, ফোন ${normPhone(phone)}, রেফ: ${claim_reference || '—'}। কোড: ${code} — কনফার্ম করুন: ${SITE_URL}/cash-confirm.html?inv=${encodeURIComponent(invoice_number)}`,
+        }),
+      }).catch(() => {});
+    }
+    return reply(200, { ok: true, status: 'pending_otp_confirmation' });
+  }
+
+  // bkash_direct keeps the one-click admin link (a code doesn't add much
+  // here since the admin is only confirming money already visible in their
+  // own bKash statement, not physically handing over cash).
   if (ADMIN_PHONE && ADMIN_SECRET) {
-    const payRows = await sbSelect('payments', `id=eq.${invoice.payment_id}&select=transaction_id,amount&limit=1`);
-    const txn = payRows[0] ? payRows[0].transaction_id : '';
-    const amount = payRows[0] ? payRows[0].amount : invoice.total;
     const confirmUrl = `${SITE_URL}/.netlify/functions/payment-webhook?adminConfirm=1&txn=${encodeURIComponent(txn)}&secret=${encodeURIComponent(ADMIN_SECRET)}`;
-    const msg = `BIYE: ${method === 'cash' ? 'নগদ' : 'bKash'} পেমেন্ট দাবি — ৳${amount}, ফোন ${normPhone(phone)}, রেফ: ${claim_reference || '—'}. টাকা পেয়ে থাকলে কনফার্ম করুন: ${confirmUrl}`;
+    const msg = `BIYE: bKash পেমেন্ট দাবি — ৳${amount}, ফোন ${normPhone(phone)}, রেফ: ${claim_reference || '—'}. টাকা পেয়ে থাকলে কনফার্ম করুন: ${confirmUrl}`;
     fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to: ADMIN_PHONE, msg }),
@@ -441,6 +475,128 @@ async function confirmManualPayment(body) {
   }
 
   return reply(200, { ok: true, status: 'pending_review' });
+}
+
+// ── CONFIRM CASH PAYMENT VIA OTP (entered by the admin/banker) ──────
+async function confirmCashOtp(body) {
+  const { invoice_number, phone, code } = body;
+  if (!invoice_number || !phone || !code) return reply(400, { ok: false, error: 'invoice_number, phone and code required' });
+
+  const adminPhone = normPhone(phone);
+  if (!CASH_CONFIRM_PHONES.includes(adminPhone)) {
+    return reply(403, { ok: false, error: 'this number is not authorised to confirm cash payments' });
+  }
+
+  const q = await sbSelect('otp_codes', `phone=eq.${encodeURIComponent('+' + adminPhone)}&purpose=eq.verification&order=created_at.desc&limit=1`);
+  const row = q[0];
+  if (!row) return reply(400, { ok: false, error: 'কোনো কোড পাওয়া যায়নি — আবার চেষ্টা করুন' });
+  if (row.consumed_at) return reply(400, { ok: false, error: 'এই কোড আগেই ব্যবহার হয়ে গেছে' });
+  if ((row.attempt_count || 0) >= 5) return reply(400, { ok: false, error: 'অনেকবার ভুল হয়েছে — নতুন করে জমা দিতে বলুন' });
+  if (new Date(row.expires_at) < new Date()) return reply(400, { ok: false, error: 'কোডের মেয়াদ শেষ' });
+
+  if (row.otp_hash !== hashOtp(code)) {
+    await sbUpdate('otp_codes', `id=eq.${row.id}`, { attempt_count: (row.attempt_count || 0) + 1 });
+    return reply(400, { ok: false, error: 'কোডটি সঠিক নয়' });
+  }
+  await sbUpdate('otp_codes', `id=eq.${row.id}`, { consumed_at: new Date().toISOString() });
+
+  const invRows = await sbSelect('invoices', `invoice_number=eq.${encodeURIComponent(invoice_number)}&limit=1`);
+  const invoice = invRows[0];
+  if (!invoice) return reply(404, { ok: false, error: 'invoice not found' });
+  if (invoice.status !== 'pending') return reply(200, { ok: true, note: 'invoice already ' + invoice.status });
+
+  const payRows = await sbSelect('payments', `id=eq.${invoice.payment_id}&limit=1`);
+  const payment = payRows[0];
+  if (!payment) return reply(404, { ok: false, error: 'payment not found' });
+
+  const now = new Date().toISOString();
+  await sbUpdate('payments', `id=eq.${payment.id}`, { status: 'completed', paid_at: now, updated_at: now });
+  await sbUpdate('invoices', `id=eq.${invoice.id}`, { status: 'paid' });
+
+  const receipt = await sbInsert('receipts', {
+    profile_id: payment.profile_id,
+    payment_id: payment.id,
+    receipt_number: 'RCP-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(1000 + Math.random()*9000),
+    amount: payment.amount,
+    currency: payment.currency || 'BDT',
+    verification_status: 'verified',
+    issued_at: now, created_at: now,
+  });
+
+  // Notify the customer.
+  const profRows = await sbSelect('profiles', `id=eq.${payment.profile_id}&select=phone,email,display_name&limit=1`);
+  const profile = profRows[0];
+  if (profile) {
+    const receiptUrl = `${SITE_URL}/receipt.html?payment_id=${payment.id}`;
+    if (profile.phone) {
+      fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: profile.phone, msg: `BIYE: আপনার নগদ পেমেন্ট নিশ্চিত হয়েছে! রসিদ: ${receipt ? receipt.receipt_number : ''} — ${receiptUrl}` }),
+      }).catch(() => {});
+    }
+    if (profile.email) {
+      fetch(`${SITE_URL}/.netlify/functions/send-email`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: profile.email,
+          subject: 'BIYE — পেমেন্ট নিশ্চিত হয়েছে',
+          html: `<p>আপনার নগদ পেমেন্ট (৳${payment.amount}) নিশ্চিত হয়েছে।</p><p>রসিদ নং: <strong>${receipt ? receipt.receipt_number : ''}</strong></p><p><a href="${receiptUrl}">রসিদ দেখুন</a></p>`,
+        }),
+      }).catch(() => {});
+    }
+  }
+
+  return reply(200, { ok: true, receipt_number: receipt ? receipt.receipt_number : null });
+}
+
+// ── LIST A CUSTOMER'S OWN PAYMENT HISTORY (for a dashboard "My Payments" link) ──
+async function getMyPayments(body) {
+  const { phone } = body;
+  if (!phone) return reply(400, { ok: false, error: 'phone required' });
+  const phoneE164 = normPhoneE164(phone);
+
+  const profRows = await sbSelect('profiles', `phone=eq.${encodeURIComponent(phoneE164)}&select=id&limit=1`);
+  if (!profRows[0]) return reply(404, { ok: false, error: 'profile not found' });
+  const profileId = profRows[0].id;
+
+  const payments = await sbSelect('payments',
+    `profile_id=eq.${encodeURIComponent(profileId)}&select=id,transaction_id,gateway_transaction_id,payment_type,amount,currency,status,payment_method,paid_at,created_at&order=created_at.desc`);
+
+  // Attach each payment's invoice number + receipt number, if any.
+  const rows = [];
+  for (const p of payments) {
+    const invRows = await sbSelect('invoices', `payment_id=eq.${encodeURIComponent(p.id)}&select=invoice_number&limit=1`);
+    const rcptRows = await sbSelect('receipts', `payment_id=eq.${encodeURIComponent(p.id)}&select=receipt_number&limit=1`);
+    rows.push({
+      ...p,
+      invoice_number: invRows[0] ? invRows[0].invoice_number : null,
+      receipt_number: rcptRows[0] ? rcptRows[0].receipt_number : null,
+    });
+  }
+  return reply(200, { ok: true, payments: rows });
+}
+// ── COMBINED DASHBOARD DATA (profile + payment history in one call) ──
+async function getMyDashboard(body) {
+  const { phone } = body;
+  if (!phone) return reply(400, { ok: false, error: 'phone required' });
+  const phoneE164 = normPhoneE164(phone);
+
+  const profRows = await sbSelect('profiles',
+    `phone=eq.${encodeURIComponent(phoneE164)}&select=id,display_name,gender,date_of_birth,division,district,education,profession,religion,marital_status,profile_completion,is_verified,member_code,profile_status,created_at&limit=1`);
+  if (!profRows[0]) return reply(404, { ok: false, error: 'profile not found' });
+  const profile = profRows[0];
+
+  const payments = await sbSelect('payments',
+    `profile_id=eq.${encodeURIComponent(profile.id)}&select=id,transaction_id,payment_type,amount,currency,status,payment_method,paid_at,created_at&order=created_at.desc&limit=25`);
+
+  const rows = [];
+  for (const p of payments) {
+    const invRows = await sbSelect('invoices', `payment_id=eq.${encodeURIComponent(p.id)}&select=invoice_number&limit=1`);
+    const rcptRows = await sbSelect('receipts', `payment_id=eq.${encodeURIComponent(p.id)}&select=receipt_number&limit=1`);
+    rows.push({ ...p, invoice_number: invRows[0] ? invRows[0].invoice_number : null, receipt_number: rcptRows[0] ? rcptRows[0].receipt_number : null });
+  }
+
+  return reply(200, { ok: true, profile, payments: rows });
 }
 
 // ── GET RECEIPT ─────────────────────────────────────────────
@@ -521,7 +677,10 @@ exports.handler = async (event) => {
     if (body.action === 'createInvoice')        return await createInvoice(body);
     if (body.action === 'getInvoice')            return await getInvoice(body);
     if (body.action === 'getReceipt')            return await getReceipt(body);
+    if (body.action === 'getMyPayments')         return await getMyPayments(body);
+    if (body.action === 'getMyDashboard')        return await getMyDashboard(body);
     if (body.action === 'confirmManualPayment')  return await confirmManualPayment(body);
+    if (body.action === 'confirmCashOtp')        return await confirmCashOtp(body);
     return reply(400, { ok: false, error: 'unknown action' });
   } catch (e) {
     console.error('payment handler error:', e);
