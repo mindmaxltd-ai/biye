@@ -164,13 +164,19 @@ async function resolveProfile(body) {
   }
 
   // 1) Create the Supabase Auth user — password lives ONLY here, never in
-  //    our own tables. phone_confirm:true because our own OTP step (via
-  //    send-otp.js) already verified this number.
+  //    our own tables. We authenticate with a synthetic "phone@biye.ltd"
+  //    EMAIL identity rather than Supabase's phone identity: the Email
+  //    provider works out of the box on every Supabase project (no SMS
+  //    provider to configure, no dashboard toggle to enable), so login
+  //    never depends on that being turned on. The user still only ever
+  //    types their phone number — this email is internal plumbing only.
+  //    `phone` is also set on the auth user for reference/display.
+  const authEmail = `${phoneE164.replace('+', '')}@biye.ltd`;
   const authRes = await authAdminCreateUser({
-    phone: phoneE164,
+    email: authEmail,
+    email_confirm: true,
     password: body.password,
-    phone_confirm: true,
-    user_metadata: { display_name: body.name },
+    user_metadata: { display_name: body.name, phone: phoneE164 },
   });
   if (!authRes.ok || !authRes.data || !authRes.data.id) {
     return { error: 'could not create account', detail: authRes.data };
