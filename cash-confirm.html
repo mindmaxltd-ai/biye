@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BIYE — নগদ পেমেন্ট নিশ্চিতকরণ</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#FF1E7E; --yellow:#FFD400; --red:#E11D2E; --red-dark:#B8121F;
+  --green:#0FA958; --green-dark:#0B7F43; --blue:#1256D6;
+  --ink:#161616; --ink-soft:rgba(22,22,22,.62); --ink-faint:rgba(22,22,22,.42);
+  --line:rgba(22,22,22,.12); --card:#fff; --page-bg:#FBFAF7; --radius:20px;
+  --shadow-card:0 24px 60px -20px rgba(22,22,22,.32), 0 4px 14px -6px rgba(22,22,22,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Hind Siliguri','Inter',sans-serif;color:var(--ink);background:var(--page-bg);min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit}
+button{cursor:pointer}
+.split-bg{position:fixed;inset:0;z-index:0;display:flex}
+.split-bg .half{flex:1}
+.split-bg .half.pink{background:var(--pink)} .split-bg .half.yellow{background:var(--yellow)}
+@media(max-width:640px){.split-bg{flex-direction:column}.split-bg .half{flex:none;height:64px}}
+.site-header{position:sticky;top:0;z-index:50;background:var(--red);color:#fff;padding:.8rem 1.1rem;text-align:center;font-weight:800;font-family:'Inter',sans-serif}
+.stage{position:relative;z-index:1;min-height:calc(100vh - 50px);display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
+.card{width:100%;max-width:420px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:1.7rem 1.5rem;border-top:6px solid var(--red)}
+.badge{width:52px;height:52px;border-radius:14px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:.8rem}
+h1{font-size:1.15rem;font-weight:800;margin-bottom:.3rem}
+p.sub{font-size:.84rem;color:var(--ink-soft);margin-bottom:1.1rem;line-height:1.6}
+.field{margin-bottom:1rem}
+label{display:block;font-size:.78rem;font-weight:700;margin-bottom:.4rem}
+select,input{width:100%;padding:.75rem .85rem;border-radius:12px;border:1.6px solid var(--line);font-size:.95rem;outline:none;background:#fff}
+select:focus,input:focus{border-color:var(--blue)}
+.otp-row{display:flex;gap:.4rem;justify-content:center;margin:.6rem 0}
+.otp-box{width:42px;height:50px;text-align:center;font-size:1.2rem;font-weight:800;border-radius:10px;border:1.6px solid var(--line);font-family:'Inter',sans-serif}
+.otp-box:focus{border-color:var(--blue)}
+.btn{width:100%;padding:.85rem;border-radius:14px;font-size:.9rem;font-weight:800;border:none;background:var(--red);color:#fff;margin-top:.5rem}
+.btn:disabled{opacity:.5}
+.alert{border-radius:12px;padding:.7rem .85rem;font-size:.82rem;font-weight:600;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.a-err{background:rgba(225,29,46,.08);border:1.4px solid rgba(225,29,46,.3);color:var(--red-dark)}
+.a-ok{background:rgba(15,169,88,.1);border:1.4px solid rgba(15,169,88,.3);color:var(--green-dark)}
+.spinner{display:inline-block;width:13px;height:13px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;margin-right:.3rem}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="split-bg" aria-hidden="true"><div class="half pink"></div><div class="half yellow"></div></div>
+<header class="site-header">BIYE — Admin Confirm</header>
+<main class="stage">
+  <div class="card">
+    <div class="badge">💵</div>
+    <h1>নগদ পেমেন্ট নিশ্চিত করুন</h1>
+    <p class="sub">গ্রাহকের কাছ থেকে টাকা পাওয়ার পর, আপনার নম্বরে পাঠানো ৬-সংখ্যার কোড দিয়ে নিশ্চিত করুন।</p>
+
+    <div class="alert" id="alertBox"></div>
+
+    <div class="field">
+      <label for="invInput">ইনভয়েস নম্বর</label>
+      <input id="invInput" placeholder="INV-...">
+    </div>
+
+    <div class="field">
+      <label for="phoneSel">আপনার নম্বর</label>
+      <select id="phoneSel">
+        <option value="01767626653">01767626653</option>
+        <option value="01346098892">01346098892</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>কোড</label>
+      <div class="otp-row" id="otpRow">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+      </div>
+    </div>
+
+    <button class="btn" id="confirmBtn" onclick="confirmCash()">
+      <span id="btnTxt">পেমেন্ট নিশ্চিত করুন</span>
+    </button>
+  </div>
+</main>
+<script>
+var params = new URLSearchParams(location.search);
+var inv = params.get('inv');
+if (inv) document.getElementById('invInput').value = inv;
+
+var boxes = Array.prototype.slice.call(document.querySelectorAll('.otp-box'));
+document.getElementById('otpRow').addEventListener('input', function(e){
+  var i = boxes.indexOf(e.target);
+  e.target.value = e.target.value.replace(/[^0-9]/g,'');
+  if (e.target.value && boxes[i+1]) boxes[i+1].focus();
+});
+document.getElementById('otpRow').addEventListener('keydown', function(e){
+  var i = boxes.indexOf(e.target);
+  if (e.key === 'Backspace' && !e.target.value && boxes[i-1]) boxes[i-1].focus();
+});
+document.getElementById('otpRow').addEventListener('paste', function(e){
+  var text = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+  if (text.length) {
+    e.preventDefault();
+    text.split('').slice(0,6).forEach(function(ch, idx){ if (boxes[idx]) boxes[idx].value = ch; });
+  }
+});
+
+function showAlert(msg, cls){
+  var b = document.getElementById('alertBox');
+  b.className = 'alert show ' + cls;
+  b.textContent = msg;
+}
+
+async function confirmCash(){
+  var invoiceNumber = document.getElementById('invInput').value.trim();
+  var phone = document.getElementById('phoneSel').value;
+  var code = boxes.map(function(b){ return b.value; }).join('');
+
+  if (!invoiceNumber) { showAlert('ইনভয়েস নম্বর দিন', 'a-err'); return; }
+  if (code.length !== 6) { showAlert('৬-সংখ্যার কোড দিন', 'a-err'); return; }
+
+  var btn = document.getElementById('confirmBtn');
+  var txt = document.getElementById('btnTxt');
+  btn.disabled = true;
+  txt.innerHTML = '<span class="spinner"></span>যাচাই হচ্ছে...';
+
+  try {
+    var res = await fetch('/.netlify/functions/payment', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'confirmCashOtp', invoice_number: invoiceNumber, phone: phone, code: code })
+    });
+    var d = await res.json();
+    if (d && d.ok) {
+      showAlert('✅ পেমেন্ট নিশ্চিত হয়েছে! গ্রাহককে SMS/ইমেইলে রসিদ পাঠানো হয়েছে।', 'a-ok');
+      txt.textContent = 'নিশ্চিত হয়েছে ✓';
+    } else {
+      btn.disabled = false;
+      txt.textContent = 'পেমেন্ট নিশ্চিত করুন';
+      showAlert((d && d.error) || 'নিশ্চিত করা যায়নি', 'a-err');
+    }
+  } catch (e) {
+    btn.disabled = false;
+    txt.textContent = 'পেমেন্ট নিশ্চিত করুন';
+    showAlert('সংযোগ করা যায়নি, আবার চেষ্টা করুন', 'a-err');
+  }
+}
+</script>
+</body>
+</html>
