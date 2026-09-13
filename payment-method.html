@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BIYE — পেমেন্ট পদ্ধতি</title>
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#FF1E7E; --yellow:#FFD400; --red:#E11D2E; --red-dark:#B8121F;
+  --green:#0FA958; --green-dark:#0B7F43; --blue:#1256D6;
+  --ink:#161616; --ink-soft:rgba(22,22,22,.62); --ink-faint:rgba(22,22,22,.42);
+  --line:rgba(22,22,22,.12); --line-soft:rgba(22,22,22,.08);
+  --card:#FFFFFF; --page-bg:#FBFAF7; --radius:20px;
+  --shadow-card:0 24px 60px -20px rgba(22,22,22,.32), 0 4px 14px -6px rgba(22,22,22,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Hind Siliguri','Inter',sans-serif;color:var(--ink);background:var(--page-bg);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input{font-family:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+.split-bg{position:fixed;inset:0;z-index:0;display:flex}
+.split-bg .half{flex:1}
+.split-bg .half.pink{background:var(--pink)}
+.split-bg .half.yellow{background:var(--yellow)}
+
+.site-header{position:sticky;top:0;z-index:50;background:var(--red);color:#fff;box-shadow:0 3px 14px -6px rgba(0,0,0,.35)}
+.header-inner{max-width:1180px;margin:0 auto;padding:.75rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem}
+.brand{display:flex;align-items:center;gap:.55rem;color:#fff}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:#fff;color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;font-family:'Inter',sans-serif}
+.brand-word{font-family:'Inter',sans-serif;font-weight:800;font-size:1.05rem}
+.brand-word small{display:block;font-weight:500;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;opacity:.88}
+.back-link{color:#fff;font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:.3rem;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.5);padding:.42rem .7rem;border-radius:50px}
+
+.stage{position:relative;z-index:1;min-height:calc(100vh - 56px);display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem 3.5rem}
+.card-wrap{width:100%;max-width:520px}
+.pm-card-outer{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:1.7rem 1.6rem 1.5rem;border-top:6px solid var(--red)}
+@media (max-width:480px){.pm-card-outer{padding:1.3rem 1.05rem 1.2rem;border-radius:16px}}
+
+.step-title{font-size:1.2rem;font-weight:800;margin-bottom:.2rem}
+.step-sub{font-size:.84rem;color:var(--ink-soft);margin-bottom:1rem}
+
+.amt-pill{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,30,126,.08);border:1.4px solid rgba(255,30,126,.25);
+  padding:.5rem 1rem;border-radius:50px;font-size:.85rem;font-weight:700;margin-bottom:1.1rem}
+.amt-pill b{font-family:'Space Mono',monospace;color:var(--pink);font-size:1.05rem}
+
+.group-label{font-size:.72rem;color:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase;font-weight:800;margin:1.1rem 0 .6rem}
+.pm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.55rem}
+@media (max-width:420px){.pm-grid{grid-template-columns:repeat(2,1fr)}}
+.pm{background:#fff;border:1.8px solid var(--line);border-radius:14px;padding:.8rem .4rem;text-align:center;
+  cursor:pointer;transition:.15s;position:relative}
+.pm:hover{border-color:var(--pink)}
+.pm.selected{border-color:var(--pink);background:rgba(255,30,126,.06);box-shadow:0 0 0 2px rgba(255,30,126,.15)}
+.pm.selected::after{content:'✓';position:absolute;top:4px;right:6px;color:var(--pink);font-size:.7rem;font-weight:900}
+.pm .ic{font-size:1.4rem;display:block;margin-bottom:.3rem}
+.pm .nm{font-size:.72rem;font-weight:700}
+
+.detail{background:#FAFAFA;border:1.4px solid var(--line);border-radius:14px;padding:1rem;margin-top:1.1rem;display:none}
+.detail.show{display:block;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.detail .instr{font-size:.82rem;color:var(--ink-soft);margin-bottom:.7rem;line-height:1.6}
+.detail .num{font-family:'Space Mono',monospace;font-size:1.05rem;color:var(--red-dark);background:#fff;
+  padding:.7rem;border-radius:10px;text-align:center;border:1.4px dashed var(--line);letter-spacing:.03em}
+.copy-hint{font-size:.68rem;color:var(--ink-faint);text-align:center;margin-top:.4rem}
+
+.field-row{margin-top:.9rem}
+.field-label{font-size:.76rem;font-weight:700;color:var(--ink);margin-bottom:.35rem;display:block}
+.field-input{width:100%;padding:.72rem .85rem;border-radius:12px;border:1.6px solid var(--line);font-size:.88rem;outline:none;font-family:'Space Mono',monospace}
+.field-input:focus{border-color:var(--blue)}
+
+.btn{width:100%;padding:.85rem .6rem;border-radius:14px;font-size:.9rem;font-weight:800;text-align:center;border:none;margin-top:1.1rem}
+.btn-primary{background:var(--red);color:#fff;box-shadow:0 10px 20px -10px rgba(225,29,46,.5)}
+.btn-primary:disabled{opacity:.45;pointer-events:none}
+.spinner{display:inline-block;width:14px;height:14px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.35rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.status-box{margin-top:1rem;padding:.8rem;border-radius:12px;font-size:.82rem;font-weight:600;text-align:center;display:none;line-height:1.6}
+.status-box.show{display:block}
+.st-wait{background:rgba(255,212,0,.15);border:1.4px solid rgba(212,160,0,.3);color:#7a5c00}
+.st-ok{background:rgba(15,169,88,.1);border:1.4px solid rgba(15,169,88,.3);color:var(--green-dark)}
+.st-err{background:rgba(225,29,46,.08);border:1.4px solid rgba(225,29,46,.3);color:var(--red-dark)}
+
+.security-note{display:flex;gap:.5rem;background:rgba(18,86,214,.06);border:1.5px solid rgba(18,86,214,.18);border-radius:12px;
+  padding:.65rem .75rem;font-size:.72rem;color:var(--ink-soft);line-height:1.5;margin-top:1.2rem}
+.security-note svg{width:15px;height:15px;stroke:var(--blue);flex-shrink:0;margin-top:.1rem}
+
+.loading-note{text-align:center;padding:2rem 0;color:var(--ink-soft);font-size:.85rem}
+
+@media (max-width:640px){.split-bg{flex-direction:column} .split-bg .half{flex:none;height:64px} .stage{padding:1.1rem .7rem 2.6rem}}
+</style>
+</head>
+<body>
+
+<div class="split-bg" aria-hidden="true"><div class="half pink"></div><div class="half yellow"></div></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark">B</span>
+      <span class="brand-word">BIYE <small>বিবাহের বিজ্ঞান। জীবনভর বিশ্বাস।</small></span>
+    </div>
+    <a class="back-link" id="backLink" href="invoice.html">← ইনভয়েসে ফিরুন</a>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="card-wrap">
+    <section class="pm-card-outer" id="pmCard">
+
+      <div id="loadingNote" class="loading-note">লোড হচ্ছে...</div>
+
+      <div id="pmContent" style="display:none">
+        <h1 class="step-title">পেমেন্ট পদ্ধতি বাছুন</h1>
+        <p class="step-sub">নিচে থেকে যেকোনো একটি পদ্ধতি বেছে নিয়ে সম্পন্ন করুন।</p>
+
+        <div class="amt-pill">পরিশোধযোগ্য: <b id="amtView">৳০</b></div>
+
+        <div id="mobileBankingGroup" style="display:none">
+          <div class="group-label">মোবাইল ব্যাংকিং</div>
+          <div class="pm-grid">
+            <div class="pm" data-method="bkash_direct" data-app="bKash">
+              <span class="ic">📱</span><span class="nm">bKash</span>
+            </div>
+            <div class="pm" data-method="bkash_direct" data-app="Nagad">
+              <span class="ic">💰</span><span class="nm">Nagad</span>
+            </div>
+            <div class="pm" data-method="bkash_direct" data-app="Rocket">
+              <span class="ic">🚀</span><span class="nm">Rocket</span>
+            </div>
+            <div class="pm" data-method="cash" data-app="নগদ টাকা">
+              <span class="ic">💵</span><span class="nm">নগদ (Cash)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-label">কার্ড ও গেটওয়ে</div>
+        <div class="pm-grid" style="grid-template-columns:1fr">
+          <div class="pm" data-method="sslcommerz" data-app="SSLCommerz">
+            <span class="ic">💳</span><span class="nm">bKash / Rocket / Nagad / কার্ড / ব্যাংকিং (SSLCommerz)</span>
+          </div>
+        </div>
+
+        <div class="detail" id="detail">
+          <div class="instr" id="instr"></div>
+          <div class="num" id="numBox" style="display:none"></div>
+          <div class="copy-hint" id="copyHint"></div>
+
+          <div class="field-row" id="trxField" style="display:none">
+            <label class="field-label" for="trxInput">Transaction ID (TrxID)</label>
+            <input class="field-input" id="trxInput" placeholder="যেমন: 9AB2CD3EFG" autocomplete="off">
+          </div>
+          <div class="field-row" id="cashRefField" style="display:none">
+            <label class="field-label" for="cashRefInput">রেফারেন্স (ঐচ্ছিক)</label>
+            <input class="field-input" id="cashRefInput" placeholder="কে নিয়েছেন / রসিদ নং">
+          </div>
+
+          <button class="btn btn-primary" id="confirmBtn" onclick="confirmPayment()">
+            <span id="confirmTxt">পেমেন্ট নিশ্চিত করুন</span>
+          </button>
+
+          <div class="status-box" id="statusBox"></div>
+        </div>
+
+        <div class="security-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>BIYE কখনো আপনার bKash/Nagad/Rocket PIN বা OTP চাইবে না — শুধু TrxID শেয়ার করাই যথেষ্ট।</span>
+        </div>
+      </div>
+
+      <div id="notFoundNote" class="loading-note" style="display:none">ইনভয়েস পাওয়া যায়নি।</div>
+    </section>
+  </div>
+</main>
+
+<script>
+const params = new URLSearchParams(location.search);
+const INV = params.get('inv');
+if (INV) document.getElementById('backLink').href = 'invoice.html?inv=' + encodeURIComponent(INV);
+
+let INVOICE = null;
+let PHONE = null;
+let GATEWAY_URL = null;
+let SELECTED = null; // {method, app}
+
+function taka(n){ return '৳' + Number(n||0).toLocaleString('bn-BD'); }
+
+async function api(body){
+  const r = await fetch('/.netlify/functions/payment', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+  return r.json();
+}
+
+async function loadInvoice(){
+  if (!INV) { showNotFound(); return; }
+  try {
+    const res = await api({ action:'getInvoice', invoice_number: INV });
+    if (!res.ok || !res.invoice) { showNotFound(); return; }
+    INVOICE = res.invoice;
+    PHONE = (res.invoice.phone || '').replace(/^0/, '880'); // normalize to 880… for the backend
+    GATEWAY_URL = res.gateway_url || null;
+
+    if (INVOICE.status !== 'pending') {
+      // Already paid (or failed) — nothing to select, just send them onward.
+      location.href = INVOICE.status === 'paid'
+        ? 'receipt.html?payment_id=' + encodeURIComponent(res.payment ? res.payment.id : '')
+        : 'invoice.html?inv=' + encodeURIComponent(INV);
+      return;
+    }
+
+    document.getElementById('amtView').textContent = taka(INVOICE.total);
+
+    const methods = res.available_methods || ['sslcommerz'];
+    if (methods.includes('cash') || methods.includes('bkash_direct')) {
+      document.getElementById('mobileBankingGroup').style.display = '';
+    }
+    window.__bkashNumber = res.bkash_number || '';
+
+    document.getElementById('loadingNote').style.display = 'none';
+    document.getElementById('pmContent').style.display = '';
+
+    document.querySelectorAll('.pm').forEach(function(el){
+      el.addEventListener('click', function(){ selectMethod(el); });
+    });
+  } catch (e) {
+    showNotFound();
+  }
+}
+
+function showNotFound(){
+  document.getElementById('loadingNote').style.display = 'none';
+  document.getElementById('notFoundNote').style.display = '';
+}
+
+function selectMethod(el){
+  document.querySelectorAll('.pm').forEach(function(p){ p.classList.remove('selected'); });
+  el.classList.add('selected');
+  const method = el.dataset.method;
+  const app = el.dataset.app;
+  SELECTED = { method: method, app: app };
+
+  const detail = document.getElementById('detail');
+  const instr = document.getElementById('instr');
+  const numBox = document.getElementById('numBox');
+  const copyHint = document.getElementById('copyHint');
+  const trxField = document.getElementById('trxField');
+  const cashRefField = document.getElementById('cashRefField');
+  const confirmTxt = document.getElementById('confirmTxt');
+
+  detail.classList.add('show');
+  setStatus('');
+
+  if (method === 'sslcommerz') {
+    instr.textContent = 'নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে — সেখানে bKash, Rocket, Nagad, ভিসা/মাস্টারকার্ড, ইন্টারনেট ব্যাংকিং সবগুলো অপশন থাকবে।';
+    numBox.style.display = 'none';
+    copyHint.textContent = '';
+    trxField.style.display = 'none';
+    cashRefField.style.display = 'none';
+    confirmTxt.textContent = 'গেটওয়েতে যান →';
+  } else if (method === 'bkash_direct') {
+    instr.textContent = app + ' অ্যাপে Send Money করুন এই নম্বরে:';
+    numBox.style.display = '';
+    numBox.textContent = window.__bkashNumber || '—';
+    copyHint.textContent = 'নম্বরটা কপি করে পেমেন্ট সম্পন্ন করুন, তারপর TrxID নিচে লিখুন';
+    trxField.style.display = '';
+    cashRefField.style.display = 'none';
+    confirmTxt.textContent = 'পেমেন্ট নিশ্চিত করুন';
+  } else if (method === 'cash') {
+    instr.textContent = 'অফিসে সরাসরি নগদ জমা দিয়ে থাকলে নিচে একটা সংক্ষিপ্ত রেফারেন্স দিন (ঐচ্ছিক)।';
+    numBox.style.display = 'none';
+    copyHint.textContent = '';
+    trxField.style.display = 'none';
+    cashRefField.style.display = '';
+    confirmTxt.textContent = 'নগদ পেমেন্ট দাবি জমা দিন';
+  }
+}
+
+function setStatus(msg, cls){
+  const box = document.getElementById('statusBox');
+  if (!msg) { box.className = 'status-box'; return; }
+  box.className = 'status-box show ' + (cls || '');
+  box.textContent = msg;
+}
+
+async function confirmPayment(){
+  if (!SELECTED) return;
+  const btn = document.getElementById('confirmBtn');
+
+  if (SELECTED.method === 'sslcommerz') {
+    if (!GATEWAY_URL) {
+      setStatus('গেটওয়ে এই মুহূর্তে অনুপলব্ধ — একটু পরে আবার চেষ্টা করুন।', 'st-err');
+      return;
+    }
+    setStatus('গেটওয়েতে পাঠানো হচ্ছে...', 'st-wait');
+    location.href = GATEWAY_URL;
+    return;
+  }
+
+  let claimRef = '';
+  if (SELECTED.method === 'bkash_direct') {
+    claimRef = document.getElementById('trxInput').value.trim();
+    if (!claimRef) { setStatus('অনুগ্রহ করে Transaction ID (TrxID) লিখুন।', 'st-err'); return; }
+  } else if (SELECTED.method === 'cash') {
+    claimRef = document.getElementById('cashRefInput').value.trim();
+  }
+
+  btn.disabled = true;
+  setStatus('⏳ জমা হচ্ছে...', 'st-wait');
+
+  try {
+    const res = await api({
+      action: 'confirmManualPayment',
+      invoice_number: INV,
+      method: SELECTED.method,
+      claim_reference: claimRef,
+      phone: PHONE,
+    });
+    if (res && res.ok) {
+      setStatus('✅ জমা হয়েছে! BIYE টাকা পাওয়া নিশ্চিত করার পর SMS/ইমেইলে রসিদ পাঠানো হবে।', 'st-ok');
+      document.getElementById('confirmTxt').textContent = 'জমা হয়েছে ✓';
+    } else {
+      btn.disabled = false;
+      setStatus((res && res.error) || 'জমা দেওয়া যায়নি, আবার চেষ্টা করুন।', 'st-err');
+    }
+  } catch (e) {
+    btn.disabled = false;
+    setStatus('সংযোগ করা যায়নি, আবার চেষ্টা করুন।', 'st-err');
+  }
+}
+
+loadInvoice();
+</script>
+</body>
+</html>
