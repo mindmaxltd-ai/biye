@@ -891,7 +891,12 @@ async function loadInvoice(){
     }
 
     // ── Status ──
-    var st=STATUS[iv.status]||STATUS.pending;
+    // Resolve one canonical status key and reuse it everywhere below —
+    // previously the badge had a "default to pending" fallback that the
+    // payment-button check didn't share, so an unrecognised/blank status
+    // could show a "Pending" badge while silently hiding the pay button.
+    var statusKey = STATUS[iv.status] ? iv.status : 'pending';
+    var st=STATUS[statusKey];
     var banner=el('invStatusBanner');
     banner.className='inv-status-banner '+st.banner;
     el('statusPulse').className='status-pulse '+st.pulse;
@@ -931,7 +936,7 @@ async function loadInvoice(){
     }
 
     // ── Payment details ──
-    if(iv.status==='paid'||pay.payment_type){
+    if(statusKey==='paid'||pay.payment_type){
       el('payDetailsGrid').style.display='';
       el('pdMethod').textContent=pay.payment_type||pay.card_type||(iv.payment_method||'SSLCommerz');
       el('pdDate').textContent=fmtDate(pay.created_at||iv.updated_at,L);
@@ -940,18 +945,18 @@ async function loadInvoice(){
     }
 
     // ── Receipt link ──
-    if(iv.status==='paid'&&(pay.id||txnId)){
+    if(statusKey==='paid'&&(pay.id||txnId)){
       el('receiptBtn').href='receipt.html?payment_id='+(pay.id||'')+(txnId?'&txn='+txnId:'');
       el('receiptBtn').style.display='';
     }
 
     // ── Continue-to-payment button (pending) ──
-    if(iv.status==='pending'){
+    if(statusKey==='pending'){
       el('gatewayBox').style.display='';
     }
 
     // ── Show questionnaire button for new paid registrations ──
-    if(iv.status==='paid'&&(fromReg||pkgCode==='REG')){
+    if(statusKey==='paid'&&(fromReg||pkgCode==='REG')){
       el('questBtn').style.display='';
     }
 
