@@ -439,26 +439,52 @@ async function confirmManualPayment(body) {
 
 // ── GET RECEIPT ─────────────────────────────────────────────
 async function getReceipt(body) {
-  const { transaction_id, invoice_number } = body;
+  const { transaction_id, invoice_number, payment_id } = body;
 
-  let receipt = null;
-  if (transaction_id) {
-    const payRows = await sbSelect('payments', `transaction_id=eq.${encodeURIComponent(transaction_id)}&select=id&limit=1`);
-    if (payRows[0]) {
-      const rows = await sbSelect('receipts', `payment_id=eq.${encodeURIComponent(payRows[0].id)}&limit=1`);
-      receipt = rows[0];
-    }
+  // Resolve the payment row first — receipt.html can arrive with any of
+  // payment_id / invoice_number / transaction_id.
+  let payment = null;
+  if (payment_id) {
+    const rows = await sbSelect('payments', `id=eq.${encodeURIComponent(payment_id)}&limit=1`);
+    payment = rows[0] || null;
+  } else if (transaction_id) {
+    const rows = await sbSelect('payments', `transaction_id=eq.${encodeURIComponent(transaction_id)}&limit=1`);
+    payment = rows[0] || null;
   } else if (invoice_number) {
     const invRows = await sbSelect('invoices', `invoice_number=eq.${encodeURIComponent(invoice_number)}&limit=1`);
-    const inv = invRows[0];
-    if (inv) {
-      const rows = await sbSelect('receipts', `payment_id=eq.${encodeURIComponent(inv.payment_id)}&limit=1`);
-      receipt = rows[0];
+    if (invRows[0] && invRows[0].payment_id) {
+      const rows = await sbSelect('payments', `id=eq.${encodeURIComponent(invRows[0].payment_id)}&limit=1`);
+      payment = rows[0] || null;
     }
   }
+  if (!payment) return reply(404, { ok: false, error: 'payment not found' });
 
-  if (!receipt) return reply(404, { ok: false, error: 'receipt not found' });
-  return reply(200, { ok: true, receipt });
+  const receiptRows = await sbSelect('receipts', `payment_id=eq.${encodeURIComponent(payment.id)}&limit=1`);
+  const receipt = receiptRows[0] || null;
+  if (!receipt) return reply(404, { ok: false, error: 'receipt not found — payment may still be pending' });
+
+  const invRows2 = await sbSelect('invoices', `payment_id=eq.${encodeURIComponent(payment.id)}&limit=1`);
+  const invoice = invRows2[0] || null;
+
+  // Same customer enrichment as getInvoice — receipts/payments/invoices
+  // carry no name/phone/email columns of their own.
+  const profileRows = payment.profile_id
+    ? await sbSelect('profiles', `id=eq.${encodeURIComponent(payment.profile_id)}&select=display_name,phone,email,profile_owner_type,member_code,guardian_name,guardian_relation&limit=1`)
+    : [];
+  const profile = profileRows[0] || null;
+  const invoiceWithCustomer = {
+    ...(invoice || {}),
+    customer_name: profile ? profile.display_name : null,
+    phone: profile ? normPhone(profile.phone) : null,
+    customer_email: profile ? profile.email : null,
+    profile_owner_type: profile ? profile.profile_owner_type : null,
+    member_code: profile ? profile.member_code : null,
+    father_name: profile && profile.guardian_relation === 'father' ? profile.guardian_name : null,
+    guardian_name: profile ? profile.guardian_name : null,
+    guardian_relation: profile ? profile.guardian_relation : null,
+  };
+
+  return reply(200, { ok: true, receipt, payment, invoice: invoiceWithCustomer });
 }
 
 // ── MAIN HANDLER ─────────────────────────────────────────────
