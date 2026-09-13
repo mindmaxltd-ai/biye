@@ -7,9 +7,12 @@
 //   SSLC_STORE_ID, SSLC_STORE_PWD, SSLC_IS_LIVE       (SSLCommerz — optional; without it, gateway_url is null)
 //   MANUAL_PAYMENT_PHONES   comma-separated phone numbers allowed to pay by cash
 //                           e.g. "01767626653,01346098892"
-//   BKASH_DIRECT_PHONES     comma-separated phone numbers allowed to pay by direct bKash
-//                           e.g. "01346098892"
+//   BKASH_DIRECT_PHONES     comma-separated phone numbers allowed to pay by direct
+//                           bKash/Rocket/Nagad (all three unlock together for these numbers)
+//                           e.g. "01346098892,01767626653"
 //   BKASH_MERCHANT_NUMBER   the personal/merchant bKash number customers send money to
+//   ROCKET_MERCHANT_NUMBER  the personal/merchant Rocket number customers send money to
+//   NAGAD_MERCHANT_NUMBER   the personal/merchant Nagad number customers send money to
 //   ADMIN_PHONE             banker's own phone — gets an SMS with a one-click confirm link
 //                           whenever someone submits a cash/bKash claim
 //   ADMIN_SECRET            a long random string; only links built with this secret can
@@ -30,6 +33,8 @@ const SSLC_API = SSLC_IS_LIVE
 const MANUAL_PAYMENT_PHONES = (process.env.MANUAL_PAYMENT_PHONES || '').split(',').map(normPhone).filter(Boolean);
 const BKASH_DIRECT_PHONES   = (process.env.BKASH_DIRECT_PHONES || '').split(',').map(normPhone).filter(Boolean);
 const BKASH_MERCHANT_NUMBER = process.env.BKASH_MERCHANT_NUMBER || '';
+const ROCKET_MERCHANT_NUMBER = process.env.ROCKET_MERCHANT_NUMBER || '';
+const NAGAD_MERCHANT_NUMBER  = process.env.NAGAD_MERCHANT_NUMBER || '';
 const ADMIN_PHONE           = process.env.ADMIN_PHONE || '';
 const ADMIN_SECRET          = process.env.ADMIN_SECRET || '';
 
@@ -242,7 +247,8 @@ function manualMethodsFor(phoneRaw) {
   const phone = normPhone(phoneRaw);
   const methods = ['sslcommerz'];
   if (phone && MANUAL_PAYMENT_PHONES.includes(phone)) methods.push('cash');
-  if (phone && BKASH_DIRECT_PHONES.includes(phone)) methods.push('bkash_direct');
+  // bKash, Rocket, Nagad direct all unlock together for the same allow-listed numbers.
+  if (phone && BKASH_DIRECT_PHONES.includes(phone)) methods.push('bkash_direct', 'rocket_direct', 'nagad_direct');
   return methods;
 }
 
@@ -295,7 +301,9 @@ async function createInvoice(body) {
     invoice: { ...invoice, transaction_id, package_name: pkg.name },
     gateway_url,
     available_methods: methods,
-    bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null,
+    bkash_number:  methods.includes('bkash_direct')  ? BKASH_MERCHANT_NUMBER  : null,
+    rocket_number: methods.includes('rocket_direct') ? ROCKET_MERCHANT_NUMBER : null,
+    nagad_number:  methods.includes('nagad_direct')  ? NAGAD_MERCHANT_NUMBER  : null,
   });
 }
 
@@ -338,7 +346,9 @@ async function getInvoice(body) {
   }
 
   return reply(200, { ok: true, invoice: invoiceWithCustomer, payment, gateway_url, available_methods: methods,
-    bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null });
+    bkash_number:  methods.includes('bkash_direct')  ? BKASH_MERCHANT_NUMBER  : null,
+    rocket_number: methods.includes('rocket_direct') ? ROCKET_MERCHANT_NUMBER : null,
+    nagad_number:  methods.includes('nagad_direct')  ? NAGAD_MERCHANT_NUMBER  : null });
 }
 
 // ── BUILD SSLCOMMERZ SESSION ────────────────────────────────
@@ -386,7 +396,9 @@ async function buildSslczSession(invoice, payment, pkg, body) {
 async function confirmManualPayment(body) {
   const { invoice_number, method, claim_reference, phone } = body;
   if (!invoice_number) return reply(400, { ok: false, error: 'invoice_number required' });
-  if (!['cash', 'bkash_direct'].includes(method)) return reply(400, { ok: false, error: 'invalid method' });
+  if (!['cash', 'bkash_direct', 'rocket_direct', 'nagad_direct'].includes(method)) {
+    return reply(400, { ok: false, error: 'invalid method' });
+  }
 
   const allowed = manualMethodsFor(phone);
   if (!allowed.includes(method)) {
@@ -416,7 +428,8 @@ async function confirmManualPayment(body) {
     const txn = payRows[0] ? payRows[0].transaction_id : '';
     const amount = payRows[0] ? payRows[0].amount : invoice.total;
     const confirmUrl = `${SITE_URL}/.netlify/functions/payment-webhook?adminConfirm=1&txn=${encodeURIComponent(txn)}&secret=${encodeURIComponent(ADMIN_SECRET)}`;
-    const msg = `BIYE: ${method === 'cash' ? 'নগদ' : 'bKash'} পেমেন্ট দাবি — ৳${amount}, ফোন ${normPhone(phone)}, রেফ: ${claim_reference || '—'}. টাকা পেয়ে থাকলে কনফার্ম করুন: ${confirmUrl}`;
+    const methodLabel = { cash: 'নগদ', bkash_direct: 'bKash', rocket_direct: 'Rocket', nagad_direct: 'Nagad' }[method] || method;
+    const msg = `BIYE: ${methodLabel} পেমেন্ট দাবি — ৳${amount}, ফোন ${normPhone(phone)}, রেফ: ${claim_reference || '—'}. টাকা পেয়ে থাকলে কনফার্ম করুন: ${confirmUrl}`;
     fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to: ADMIN_PHONE, msg }),
