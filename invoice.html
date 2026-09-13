@@ -936,16 +936,21 @@ async function loadInvoice(){
     }
 
     // ── Payment details ──
-    if(statusKey==='paid'||pay.payment_type){
+    // Only claim success when the payment record itself says so — showing
+    // "Payment Complete" just because a payment_type/method exists (which
+    // is set at invoice-creation time regardless of outcome) was the bug
+    // that made a still-pending payment look completed.
+    var actuallyPaid = statusKey==='paid' || pay.status==='completed';
+    if(actuallyPaid||pay.payment_type){
       el('payDetailsGrid').style.display='';
       el('pdMethod').textContent=pay.payment_type||pay.card_type||(iv.payment_method||'SSLCommerz');
-      el('pdDate').textContent=fmtDate(pay.created_at||iv.updated_at,L);
-      el('pdStatus').textContent=t('status.paid');
+      el('pdDate').textContent=fmtDate(pay.paid_at||pay.created_at||iv.updated_at,L);
+      el('pdStatus').textContent = actuallyPaid ? t('status.paid') : t('status.pending');
       if(pay.bank_tran_id||pay.card_issuer) el('pdBank').textContent=pay.bank_tran_id||pay.card_issuer||'SSLCommerz';
     }
 
     // ── Receipt link ──
-    if(statusKey==='paid'&&(pay.id||txnId)){
+    if(actuallyPaid&&(pay.id||txnId)){
       el('receiptBtn').href='receipt.html?payment_id='+(pay.id||'')+(txnId?'&txn='+txnId:'');
       el('receiptBtn').style.display='';
     }
