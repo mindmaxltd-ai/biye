@@ -517,8 +517,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
         <a href="#" id="receiptBtn" class="btn btn-ghost btn-sm" style="display:none">
           🧾 <span data-i18n="btn.receipt">রসিদ দেখুন</span>
         </a>
-        <a href="dashboard.html" class="btn btn-primary btn-sm">
-          📊 <span data-i18n="btn.dashboard">ড্যাশবোর্ড</span>
+        <a href="dashboard.html" id="mainActionBtn" class="btn btn-primary btn-sm">
+          <span id="mainActionIcon">📊</span> <span id="mainActionTxt" data-i18n="btn.dashboard">ড্যাশবোর্ড</span>
         </a>
         <a href="questionnaire.html" class="btn btn-ghost btn-sm" id="questBtn" style="display:none">
           🎯 <span data-i18n="btn.questionnaire">প্রশ্নমালা শুরু করুন</span>
@@ -958,6 +958,16 @@ async function loadInvoice(){
     // ── Continue-to-payment button (pending) ──
     if(statusKey==='pending'){
       el('gatewayBox').style.display='';
+      // Also repurpose the bottom primary action button as a second,
+      // always-visible way to reach payment-method.html — some browsers/
+      // caches were not showing the gatewayBox button, so this gives a
+      // guaranteed-visible path to payment as well.
+      var mainBtn = el('mainActionBtn');
+      if(mainBtn){
+        mainBtn.href = 'payment-method.html?inv=' + encodeURIComponent(CUR_INVOICE_NUMBER);
+        el('mainActionIcon').textContent = '💳';
+        el('mainActionTxt').textContent = t('gw.btn');
+      }
     }
 
     // ── Show questionnaire button for new paid registrations ──
