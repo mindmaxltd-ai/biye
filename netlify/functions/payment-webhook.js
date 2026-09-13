@@ -90,6 +90,10 @@ async function sbUpdate(table, query, row) {
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, {
     method: 'PATCH', headers: { ...SB, Prefer: 'return=minimal' }, body: JSON.stringify(row),
   });
+  if (!r.ok) {
+    const errBody = await r.text().catch(() => '');
+    console.error(`sbUpdate(${table}?${query}) failed — status ${r.status}:`, errBody);
+  }
   return r.ok;
 }
 async function sbInsert(table, row, returnRow = true) {
@@ -97,7 +101,12 @@ async function sbInsert(table, row, returnRow = true) {
     method: 'POST', headers: { ...SB, Prefer: returnRow ? 'return=representation' : 'return=minimal' },
     body: JSON.stringify(row),
   });
-  if (!returnRow) return r.ok;
+  if (!r.ok) {
+    const errBody = await r.text().catch(() => '');
+    console.error(`sbInsert(${table}) failed — status ${r.status}:`, errBody);
+    return returnRow ? null : false;
+  }
+  if (!returnRow) return true;
   const d = await r.json().catch(() => []);
   return Array.isArray(d) ? d[0] : null;
 }
@@ -118,7 +127,12 @@ async function completePayment(payment, methodOverride) {
 
   const invRows = await sbSelect('invoices', `payment_id=eq.${enc(payment.id)}&limit=1`);
   const invoice = invRows[0];
-  if (invoice) await sbUpdate('invoices', `id=eq.${enc(invoice.id)}`, { status: 'paid' });
+  if (invoice) {
+    const ok = await sbUpdate('invoices', `id=eq.${enc(invoice.id)}`, { status: 'paid' });
+    if (!ok) console.error('completePayment: failed to mark invoice', invoice.id, 'as paid for payment', payment.id);
+  } else {
+    console.error('completePayment: no invoice found with payment_id =', payment.id, '— invoice.status was never updated');
+  }
 
   const existingReceipt = await sbSelect('receipts', `payment_id=eq.${enc(payment.id)}&limit=1`);
   let receipt = existingReceipt[0];
@@ -161,10 +175,6 @@ async function sendWelcomeConfirmation(payment, receipt) {
   }
 
   if (profile.email) {
-    const methodLabel = {
-      sslcommerz: 'SSLCommerz', cash: 'নগদ (Cash)',
-      bkash_direct: 'bKash (সরাসরি)', rocket_direct: 'Rocket (সরাসরি)', nagad_direct: 'Nagad (সরাসরি)',
-    }[payment.payment_method] || payment.payment_method || 'SSLCommerz';
     const facilitiesHtml = isRegistration
       ? `<h3>আপনার লাইফটাইম রেজিস্ট্রেশনে যা যা আছে</h3><ul>` +
         REG_FACILITIES.map(([bn, en]) => `<li>${bn} <span style="color:#888">(${en})</span></li>`).join('') +
@@ -178,7 +188,7 @@ async function sendWelcomeConfirmation(payment, receipt) {
         <table style="width:100%;border-collapse:collapse;margin:16px 0">
           <tr><td style="padding:6px 0;color:#666">রসিদ নং</td><td style="text-align:right;font-weight:700">${receipt ? receipt.receipt_number : '—'}</td></tr>
           <tr><td style="padding:6px 0;color:#666">পরিমাণ</td><td style="text-align:right;font-weight:700">৳${payment.amount}</td></tr>
-          <tr><td style="padding:6px 0;color:#666">পদ্ধতি</td><td style="text-align:right">${methodLabel}</td></tr>
+          <tr><td style="padding:6px 0;color:#666">পদ্ধতি</td><td style="text-align:right">${payment.payment_method || 'SSLCommerz'}</td></tr>
         </table>
         <p><a href="${receiptUrl}" style="background:#E2136E;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;display:inline-block">রসিদ দেখুন</a></p>
         ${facilitiesHtml}
@@ -261,11 +271,7 @@ async function handleGatewayWebhook(event) {
     await sbUpdate('payments', `id=eq.${enc(payment.id)}`, { status: 'failed', updated_at: new Date().toISOString() });
     const invRows = await sbSelect('invoices', `payment_id=eq.${enc(payment.id)}&limit=1`);
     if (invRows[0]) await sbUpdate('invoices', `id=eq.${enc(invRows[0].id)}`, { status: 'void' });
-    // invoice.html reads "inv" as an invoice_number, not a transaction_id —
-    // use the invoice we just looked up; fall back to txnId only if it's
-    // somehow missing (shouldn't happen, since createInvoice always makes one).
-    const failInvNumber = invRows[0] ? invRows[0].invoice_number : txnId;
-    if (isBrowserRedirect) return reply(200, redirectHtml(`${SITE_URL}/invoice.html?inv=${enc(failInvNumber)}&failed=1`, '❌ পেমেন্ট সম্পন্ন হয়নি'), true);
+    if (isBrowserRedirect) return reply(200, redirectHtml(`${SITE_URL}/invoice.html?inv=${enc(txnId)}&failed=1`, '❌ পেমেন্ট সম্পন্ন হয়নি'), true);
     return reply(200, { ok: true, verified: false, status: 'failed' });
   }
 
