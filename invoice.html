@@ -478,6 +478,20 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
           <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="submitManualPayment('bkash_direct',this)">bKash পেমেন্ট দাবি জমা দিন</button>
         </div>
 
+        <div class="manual-pay-opt" id="rocketOpt" style="display:none">
+          <div class="manual-pay-opt-head">🚀 সরাসরি Rocket</div>
+          <div class="manual-pay-opt-sub">এই Rocket নম্বরে <b id="rocketNumberTxt">—</b> Send Money করুন, তারপর Rocket-এর দেওয়া Transaction ID নিচে লিখে জমা দিন।</div>
+          <input class="manual-pay-input" id="rocketTrxId" placeholder="Rocket Transaction ID">
+          <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="submitManualPayment('rocket_direct',this)">Rocket পেমেন্ট দাবি জমা দিন</button>
+        </div>
+
+        <div class="manual-pay-opt" id="nagadOpt" style="display:none">
+          <div class="manual-pay-opt-head">💰 সরাসরি Nagad</div>
+          <div class="manual-pay-opt-sub">এই Nagad নম্বরে <b id="nagadNumberTxt">—</b> Send Money করুন, তারপর Nagad-এর দেওয়া Transaction ID নিচে লিখে জমা দিন।</div>
+          <input class="manual-pay-input" id="nagadTrxId" placeholder="Nagad Transaction ID">
+          <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="submitManualPayment('nagad_direct',this)">Nagad পেমেন্ট দাবি জমা দিন</button>
+        </div>
+
         <div class="manual-pay-pending" id="manualPayPending">⏳ জমা হয়েছে — BIYE টাকা পাওয়া নিশ্চিত করার পর SMS/ইমেইলে জানানো হবে।</div>
         <div class="manual-pay-note">নিরাপত্তার জন্য: BIYE কখনো bKash PIN চাইবে না। শুধু TrxID শেয়ার করাই যথেষ্ট।</div>
       </div>
@@ -1001,16 +1015,26 @@ async function loadInvoice(){
       }
     }
 
-    // ── Manual payment (cash / direct bKash) — only for allow-listed phones ──
+    // ── Manual payment (cash / direct bKash / Rocket / Nagad) — only for allow-listed phones ──
     if(iv.status==='pending'&&Array.isArray(data.available_methods)){
       var hasCash=data.available_methods.indexOf('cash')>-1;
       var hasBkash=data.available_methods.indexOf('bkash_direct')>-1;
-      if(hasCash||hasBkash){
+      var hasRocket=data.available_methods.indexOf('rocket_direct')>-1;
+      var hasNagad=data.available_methods.indexOf('nagad_direct')>-1;
+      if(hasCash||hasBkash||hasRocket||hasNagad){
         el('manualPayBox').style.display='';
         if(hasCash) el('cashOpt').style.display='';
         if(hasBkash){
           el('bkashOpt').style.display='';
           el('bkashNumberTxt').textContent=data.bkash_number||'—';
+        }
+        if(hasRocket){
+          el('rocketOpt').style.display='';
+          el('rocketNumberTxt').textContent=data.rocket_number||'—';
+        }
+        if(hasNagad){
+          el('nagadOpt').style.display='';
+          el('nagadNumberTxt').textContent=data.nagad_number||'—';
         }
       }
     }
@@ -1027,11 +1051,12 @@ async function loadInvoice(){
   }
 }
 
-// ── MANUAL PAYMENT CLAIM (cash / direct bKash) ────
+// ── MANUAL PAYMENT CLAIM (cash / direct bKash / Rocket / Nagad) ────
+var MANUAL_TRX_INPUT = { bkash_direct:'bkashTrxId', rocket_direct:'rocketTrxId', nagad_direct:'nagadTrxId' };
 async function submitManualPayment(method,btn){
   if(!CUR_INVOICE_NUMBER||!CUR_PHONE){ return; }
-  var ref = method==='cash' ? (el('cashRef').value||'').trim() : (el('bkashTrxId').value||'').trim();
-  if(method==='bkash_direct' && !ref){ alert('অনুগ্রহ করে bKash Transaction ID লিখুন'); return; }
+  var ref = method==='cash' ? (el('cashRef').value||'').trim() : (el(MANUAL_TRX_INPUT[method]).value||'').trim();
+  if(method!=='cash' && !ref){ alert('অনুগ্রহ করে Transaction ID লিখুন'); return; }
 
   if(btn) btn.disabled=true;
   try{
@@ -1043,6 +1068,8 @@ async function submitManualPayment(method,btn){
     if(d&&d.ok){
       el('cashOpt').style.display='none';
       el('bkashOpt').style.display='none';
+      el('rocketOpt').style.display='none';
+      el('nagadOpt').style.display='none';
       el('manualPayPending').style.display='block';
     } else {
       alert((d&&d.error)||'জমা দেওয়া যায়নি, আবার চেষ্টা করুন');
