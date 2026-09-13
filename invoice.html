@@ -433,67 +433,16 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
     <!-- Body -->
     <div class="inv-body">
 
-      <!-- Payment method selection (pending) -->
+      <!-- Continue to payment (pending) — the actual method selection now
+           lives on its own page, payment-method.html, same as the flow
+           used elsewhere in the MindMax group. -->
       <div class="gateway-box" id="gatewayBox">
         <div class="gw-icon">💳</div>
-        <div class="gw-title" data-i18n="gw.title">পেমেন্টের পদ্ধতি বেছে নিন</div>
-        <div class="gw-sub" data-i18n="gw.sub">নিচের যেকোনো একটি বেছে নিয়ে "Pay Now"-তে ক্লিক করুন — আপনাকে নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে।</div>
-
-        <div class="pm-grid" id="pmGrid" role="radiogroup" aria-label="Payment method">
-          <button type="button" class="pm-card selected" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
-            <span class="pm-icon">📱</span><span class="pm-label">bKash</span>
-          </button>
-          <button type="button" class="pm-card" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
-            <span class="pm-icon">🚀</span><span class="pm-label">Rocket</span>
-          </button>
-          <button type="button" class="pm-card" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
-            <span class="pm-icon">💰</span><span class="pm-label">Nagad</span>
-          </button>
-          <button type="button" class="pm-card" data-method="sslcommerz" onclick="selectPayMethod('sslcommerz',this)">
-            <span class="pm-icon">💳</span><span class="pm-label">Card / Banking</span>
-          </button>
-        </div>
-        <div class="pm-note" data-i18n="pm.note">bKash, Rocket, Nagad এবং কার্ড — সবগুলোই SSLCommerz-এর নিরাপদ গেটওয়ের ভেতরে পাওয়া যাবে; উপরে যেটাই বেছে নিন, গেটওয়েতে গিয়ে সেটাই নির্বাচন করবেন।</div>
-
-        <button type="button" class="btn btn-pay" id="gatewayBtn" style="width:100%;justify-content:center" onclick="goToGateway()">
-          💳 <span data-i18n="gw.btn">Pay Now — গেটওয়েতে যান</span>
+        <div class="gw-title" data-i18n="gw.title">পেমেন্ট এখনো বাকি</div>
+        <div class="gw-sub" data-i18n="gw.sub">bKash, Nagad, Rocket, কার্ড — সব পদ্ধতি পরের পেজে বেছে নিতে পারবেন।</div>
+        <button type="button" class="btn btn-pay" id="gatewayBtn" style="width:100%;justify-content:center" onclick="goToPaymentMethod()">
+          💳 <span data-i18n="gw.btn">পরবর্তী: পেমেন্ট করুন →</span>
         </button>
-      </div>
-
-      <!-- Manual payment: cash / direct bKash — only rendered for allow-listed phones -->
-      <div class="manual-pay-box" id="manualPayBox">
-        <div class="manual-pay-title">অথবা এভাবেও পরিশোধ করতে পারেন</div>
-
-        <div class="manual-pay-opt" id="cashOpt" style="display:none">
-          <div class="manual-pay-opt-head">💵 নগদ (Cash)</div>
-          <div class="manual-pay-opt-sub">অফিসে সরাসরি নগদ জমা দিয়ে থাকলে, একটা সংক্ষিপ্ত রেফারেন্স (কে নিয়েছেন / রসিদ নং) লিখে জমা দিন — নিশ্চিত হওয়ার পর BIYE থেকে SMS/ইমেইলে কনফার্মেশন পাবেন।</div>
-          <input class="manual-pay-input" id="cashRef" placeholder="রেফারেন্স (ঐচ্ছিক)">
-          <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="submitManualPayment('cash',this)">নগদ পেমেন্ট দাবি জমা দিন</button>
-        </div>
-
-        <div class="manual-pay-opt" id="bkashOpt" style="display:none">
-          <div class="manual-pay-opt-head">📱 সরাসরি bKash</div>
-          <div class="manual-pay-opt-sub">এই bKash নম্বরে <b id="bkashNumberTxt">—</b> Send Money করুন, তারপর bKash-এর দেওয়া Transaction ID (TrxID) নিচে লিখে জমা দিন।</div>
-          <input class="manual-pay-input" id="bkashTrxId" placeholder="bKash Transaction ID (যেমন 9G7H2K3L4M)">
-          <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="submitManualPayment('bkash_direct',this)">bKash পেমেন্ট দাবি জমা দিন</button>
-        </div>
-
-        <div class="manual-pay-opt" id="rocketOpt" style="display:none">
-          <div class="manual-pay-opt-head">🚀 সরাসরি Rocket</div>
-          <div class="manual-pay-opt-sub">এই Rocket নম্বরে <b id="rocketNumberTxt">—</b> Send Money করুন, তারপর Rocket-এর দেওয়া Transaction ID নিচে লিখে জমা দিন।</div>
-          <input class="manual-pay-input" id="rocketTrxId" placeholder="Rocket Transaction ID">
-          <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="submitManualPayment('rocket_direct',this)">Rocket পেমেন্ট দাবি জমা দিন</button>
-        </div>
-
-        <div class="manual-pay-opt" id="nagadOpt" style="display:none">
-          <div class="manual-pay-opt-head">💰 সরাসরি Nagad</div>
-          <div class="manual-pay-opt-sub">এই Nagad নম্বরে <b id="nagadNumberTxt">—</b> Send Money করুন, তারপর Nagad-এর দেওয়া Transaction ID নিচে লিখে জমা দিন।</div>
-          <input class="manual-pay-input" id="nagadTrxId" placeholder="Nagad Transaction ID">
-          <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="submitManualPayment('nagad_direct',this)">Nagad পেমেন্ট দাবি জমা দিন</button>
-        </div>
-
-        <div class="manual-pay-pending" id="manualPayPending">⏳ জমা হয়েছে — BIYE টাকা পাওয়া নিশ্চিত করার পর SMS/ইমেইলে জানানো হবে।</div>
-        <div class="manual-pay-note">নিরাপত্তার জন্য: BIYE কখনো bKash PIN চাইবে না। শুধু TrxID শেয়ার করাই যথেষ্ট।</div>
       </div>
 
       <!-- Line items -->
@@ -876,17 +825,10 @@ function copyTxn(){
   });}
 }
 
-// ── PAYMENT METHOD SELECTION ─────────────────────
-var GATEWAY_URL = null;
-var SELECTED_METHOD = 'sslcommerz';
-function selectPayMethod(method, btn){
-  SELECTED_METHOD = method;
-  document.querySelectorAll('.pm-card').forEach(function(c){ c.classList.remove('selected'); });
-  btn.classList.add('selected');
-}
-function goToGateway(){
-  if(!GATEWAY_URL){ return; }
-  window.location.href = GATEWAY_URL;
+// ── CONTINUE TO PAYMENT (method selection lives on its own page) ──
+function goToPaymentMethod(){
+  if(!CUR_INVOICE_NUMBER) return;
+  window.location.href = 'payment-method.html?inv=' + encodeURIComponent(CUR_INVOICE_NUMBER);
 }
 
 // ── LOAD INVOICE ─────────────────────────────────
@@ -1003,40 +945,9 @@ async function loadInvoice(){
       el('receiptBtn').style.display='';
     }
 
-    // ── Payment method selection (pending) ──
-    GATEWAY_URL = (iv.status==='pending') ? (data.gateway_url||null) : null;
+    // ── Continue-to-payment button (pending) ──
     if(iv.status==='pending'){
       el('gatewayBox').style.display='';
-      if(!GATEWAY_URL){
-        el('gatewayBtn').disabled=true;
-        el('gatewayBtn').querySelector('span').textContent=L==='en'
-          ?'Payment gateway unavailable — please use cash/bKash below if offered, or try again shortly'
-          :'গেটওয়ে এই মুহূর্তে অনুপলব্ধ — নিচের নগদ/bKash অপশন থাকলে সেটা ব্যবহার করুন, অথবা একটু পরে চেষ্টা করুন';
-      }
-    }
-
-    // ── Manual payment (cash / direct bKash / Rocket / Nagad) — only for allow-listed phones ──
-    if(iv.status==='pending'&&Array.isArray(data.available_methods)){
-      var hasCash=data.available_methods.indexOf('cash')>-1;
-      var hasBkash=data.available_methods.indexOf('bkash_direct')>-1;
-      var hasRocket=data.available_methods.indexOf('rocket_direct')>-1;
-      var hasNagad=data.available_methods.indexOf('nagad_direct')>-1;
-      if(hasCash||hasBkash||hasRocket||hasNagad){
-        el('manualPayBox').style.display='';
-        if(hasCash) el('cashOpt').style.display='';
-        if(hasBkash){
-          el('bkashOpt').style.display='';
-          el('bkashNumberTxt').textContent=data.bkash_number||'—';
-        }
-        if(hasRocket){
-          el('rocketOpt').style.display='';
-          el('rocketNumberTxt').textContent=data.rocket_number||'—';
-        }
-        if(hasNagad){
-          el('nagadOpt').style.display='';
-          el('nagadNumberTxt').textContent=data.nagad_number||'—';
-        }
-      }
     }
 
     // ── Show questionnaire button for new paid registrations ──
@@ -1048,36 +959,6 @@ async function loadInvoice(){
     el('stateLoading').style.display='none';
     el('stateNotFound').style.display='';
     console.error('Invoice error:',e);
-  }
-}
-
-// ── MANUAL PAYMENT CLAIM (cash / direct bKash / Rocket / Nagad) ────
-var MANUAL_TRX_INPUT = { bkash_direct:'bkashTrxId', rocket_direct:'rocketTrxId', nagad_direct:'nagadTrxId' };
-async function submitManualPayment(method,btn){
-  if(!CUR_INVOICE_NUMBER||!CUR_PHONE){ return; }
-  var ref = method==='cash' ? (el('cashRef').value||'').trim() : (el(MANUAL_TRX_INPUT[method]).value||'').trim();
-  if(method!=='cash' && !ref){ alert('অনুগ্রহ করে Transaction ID লিখুন'); return; }
-
-  if(btn) btn.disabled=true;
-  try{
-    var res=await fetch('/.netlify/functions/payment',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'confirmManualPayment',invoice_number:CUR_INVOICE_NUMBER,method:method,claim_reference:ref,phone:CUR_PHONE})
-    });
-    var d=await res.json();
-    if(d&&d.ok){
-      el('cashOpt').style.display='none';
-      el('bkashOpt').style.display='none';
-      el('rocketOpt').style.display='none';
-      el('nagadOpt').style.display='none';
-      el('manualPayPending').style.display='block';
-    } else {
-      alert((d&&d.error)||'জমা দেওয়া যায়নি, আবার চেষ্টা করুন');
-      if(btn) btn.disabled=false;
-    }
-  }catch(e){
-    alert('সংযোগ করা যায়নি, আবার চেষ্টা করুন');
-    if(btn) btn.disabled=false;
   }
 }
 
