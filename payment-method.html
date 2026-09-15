@@ -1,1342 +1,2310 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIYE — পেমেন্ট পদ্ধতি</title>
-  <meta name="robots" content="noindex,follow">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --pink:#FF1E7E;
-      --yellow:#FFD400;
-      --red:#E11D2E;
-      --red-dark:#B8121F;
-      --green:#0FA958;
-      --green-dark:#0B7F43;
-      --blue:#1256D6;
-      --ink:#161616;
-      --ink-soft:rgba(22,22,22,.62);
-      --ink-faint:rgba(22,22,22,.42);
-      --line:rgba(22,22,22,.12);
-      --card:#fff;
-      --page-bg:#FBFAF7;
-      --radius:20px;
-      --shadow:
-        0 24px 60px -20px rgba(22,22,22,.32),
-        0 4px 14px -6px rgba(22,22,22,.12);
-    }
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    body{
-      font-family:'Hind Siliguri','Inter',sans-serif;
-      color:var(--ink);
-      background:var(--page-bg);
-      min-height:100vh;
-      -webkit-font-smoothing:antialiased;
-      overflow-x:hidden;
-    }
-
-    button,
-    input{
-      font-family:inherit;
-      color:inherit;
-    }
-
-    button{
-      cursor:pointer;
-    }
-
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
-
-    :focus-visible{
-      outline:3px solid var(--blue);
-      outline-offset:2px;
-    }
-
-    .split-bg{
-      position:fixed;
-      inset:0;
-      z-index:0;
-      display:flex;
-      pointer-events:none;
-    }
-
-    .split-bg .half{
-      flex:1;
-    }
-
-    .split-bg .pink{
-      background:var(--pink);
-    }
-
-    .split-bg .yellow{
-      background:var(--yellow);
-    }
-
-    .site-header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      background:var(--red);
-      color:#fff;
-      box-shadow:0 3px 14px -6px rgba(0,0,0,.35);
-    }
-
-    .header-inner{
-      max-width:1180px;
-      margin:0 auto;
-      padding:.75rem 1.1rem;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:.8rem;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:.55rem;
-      color:#fff;
-    }
-
-    .brand-mark{
-      width:34px;
-      height:34px;
-      border-radius:9px;
-      background:#fff;
-      color:var(--red);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      font-size:1.05rem;
-      font-family:'Inter',sans-serif;
-    }
-
-    .brand-word{
-      font-family:'Inter',sans-serif;
-      font-weight:800;
-      font-size:1.05rem;
-    }
-
-    .brand-word small{
-      display:block;
-      font-family:'Hind Siliguri',sans-serif;
-      font-weight:500;
-      font-size:.62rem;
-      letter-spacing:.03em;
-      opacity:.9;
-    }
-
-    .back-link{
-      color:#fff;
-      font-size:.8rem;
-      font-weight:700;
-      display:flex;
-      align-items:center;
-      gap:.3rem;
-      background:rgba(255,255,255,.14);
-      border:1.5px solid rgba(255,255,255,.5);
-      padding:.42rem .7rem;
-      border-radius:50px;
-      transition:.15s;
-    }
-
-    .back-link:hover{
-      background:rgba(255,255,255,.24);
-    }
-
-    .stage{
-      position:relative;
-      z-index:1;
-      min-height:calc(100vh - 56px);
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:2rem 1rem 3.5rem;
-    }
-
-    .card-wrap{
-      width:100%;
-      max-width:540px;
-    }
-
-    .pm-card-outer{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:1.7rem 1.6rem 1.5rem;
-      border-top:6px solid var(--red);
-    }
-
-    .loading-note{
-      text-align:center;
-      padding:2.5rem 0;
-      color:var(--ink-soft);
-      font-size:.9rem;
-    }
-
-    .loading-spinner{
-      width:28px;
-      height:28px;
-      margin:0 auto .8rem;
-      border:3px solid rgba(225,29,46,.15);
-      border-top-color:var(--red);
-      border-radius:50%;
-      animation:spin .7s linear infinite;
-    }
-
-    @keyframes spin{
-      to{transform:rotate(360deg)}
-    }
-
-    .step-title{
-      font-size:1.25rem;
-      font-weight:800;
-      margin-bottom:.2rem;
-    }
-
-    .step-sub{
-      font-size:.84rem;
-      color:var(--ink-soft);
-      margin-bottom:1rem;
-    }
-
-    .amt-pill{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:.5rem;
-      background:rgba(255,30,126,.08);
-      border:1.4px solid rgba(255,30,126,.25);
-      padding:.65rem 1rem;
-      border-radius:50px;
-      font-size:.85rem;
-      font-weight:700;
-      margin-bottom:1.2rem;
-    }
-
-    .amt-pill b{
-      font-family:'Space Mono',monospace;
-      color:var(--pink);
-      font-size:1.05rem;
-    }
-
-    .invoice-mini{
-      display:flex;
-      justify-content:space-between;
-      gap:.5rem;
-      margin:-.5rem 0 1rem;
-      color:var(--ink-faint);
-      font-size:.7rem;
-    }
-
-    .group-label{
-      font-size:.72rem;
-      color:var(--ink-faint);
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-weight:800;
-      margin:1.1rem 0 .6rem;
-    }
-
-    .pm-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:.55rem;
-    }
-
-    .pm-grid.single{
-      grid-template-columns:1fr;
-    }
-
-    .pm{
-      background:#fff;
-      border:1.8px solid var(--line);
-      border-radius:14px;
-      padding:.85rem .4rem;
-      text-align:center;
-      cursor:pointer;
-      transition:.15s;
-      position:relative;
-      user-select:none;
-    }
-
-    .pm:hover{
-      border-color:var(--pink);
-      transform:translateY(-1px);
-    }
-
-    .pm.selected{
-      border-color:var(--pink);
-      background:rgba(255,30,126,.06);
-      box-shadow:0 0 0 2px rgba(255,30,126,.15);
-    }
-
-    .pm.selected::after{
-      content:'✓';
-      position:absolute;
-      top:4px;
-      right:7px;
-      color:var(--pink);
-      font-size:.72rem;
-      font-weight:900;
-    }
-
-    .pm .ic{
-      font-size:1.4rem;
-      display:block;
-      margin-bottom:.3rem;
-    }
-
-    .pm .nm{
-      font-size:.72rem;
-      font-weight:700;
-      line-height:1.35;
-    }
-
-    .pm .desc{
-      display:block;
-      margin-top:.18rem;
-      color:var(--ink-faint);
-      font-size:.59rem;
-      font-weight:500;
-    }
-
-    .detail{
-      background:#FAFAFA;
-      border:1.4px solid var(--line);
-      border-radius:14px;
-      padding:1rem;
-      margin-top:1.1rem;
-      display:none;
-    }
-
-    .detail.show{
-      display:block;
-      animation:fadein .25s ease;
-    }
-
-    @keyframes fadein{
-      from{
-        opacity:0;
-        transform:translateY(6px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    .selected-method{
-      display:flex;
-      align-items:center;
-      gap:.5rem;
-      font-weight:800;
-      font-size:.9rem;
-      margin-bottom:.7rem;
-    }
-
-    .selected-method-icon{
-      font-size:1.2rem;
-    }
-
-    .detail .instr{
-      font-size:.82rem;
-      color:var(--ink-soft);
-      margin-bottom:.7rem;
-      line-height:1.6;
-    }
-
-    .num{
-      font-family:'Space Mono',monospace;
-      font-size:1.05rem;
-      color:var(--red-dark);
-      background:#fff;
-      padding:.7rem;
-      border-radius:10px;
-      text-align:center;
-      border:1.4px dashed var(--line);
-      letter-spacing:.03em;
-      word-break:break-all;
-    }
-
-    .copy-hint{
-      font-size:.68rem;
-      color:var(--ink-faint);
-      text-align:center;
-      margin-top:.4rem;
-    }
-
-    .copy-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:.4rem;
-      margin-bottom:.8rem;
-    }
-
-    .copy-chip{
-      background:#fff;
-      border:1.4px solid var(--line);
-      border-radius:8px;
-      padding:.38rem .65rem;
-      font-size:.72rem;
-      font-weight:700;
-      color:var(--ink-soft);
-    }
-
-    .copy-chip:hover{
-      border-color:var(--red);
-      color:var(--red-dark);
-    }
-
-    .copy-chip.copied{
-      background:rgba(15,169,88,.1);
-      border-color:var(--green);
-      color:var(--green-dark);
-    }
-
-    .steps-list{
-      margin:.9rem 0;
-      padding-left:1.3rem;
-    }
-
-    .steps-list li{
-      font-size:.8rem;
-      color:var(--ink-soft);
-      line-height:1.9;
-      padding-left:.2rem;
-    }
-
-    .steps-list b{
-      color:var(--ink);
-      font-family:'Space Mono',monospace;
-    }
-
-    .field-row{
-      margin-top:.9rem;
-    }
-
-    .field-label{
-      font-size:.76rem;
-      font-weight:700;
-      color:var(--ink);
-      margin-bottom:.35rem;
-      display:block;
-    }
-
-    .required{
-      color:var(--red);
-    }
-
-    .field-input{
-      width:100%;
-      padding:.72rem .85rem;
-      border-radius:12px;
-      border:1.6px solid var(--line);
-      font-size:.88rem;
-      outline:none;
-      font-family:'Space Mono',monospace;
-      background:#fff;
-    }
-
-    .field-input:focus{
-      border-color:var(--blue);
-      box-shadow:0 0 0 3px rgba(18,86,214,.08);
-    }
-
-    .field-input.invalid{
-      border-color:var(--red);
-    }
-
-    .security-inline{
-      display:flex;
-      gap:.5rem;
-      align-items:flex-start;
-      background:rgba(18,86,214,.06);
-      border:1.4px solid rgba(18,86,214,.16);
-      border-radius:10px;
-      padding:.6rem .75rem;
-      font-size:.7rem;
-      color:var(--ink-soft);
-      line-height:1.5;
-      margin:1rem 0 0;
-    }
-
-    .security-inline svg,
-    .security-note svg{
-      width:15px;
-      height:15px;
-      stroke:var(--blue);
-      flex-shrink:0;
-      margin-top:.1rem;
-    }
-
-    .btn{
-      width:100%;
-      padding:.85rem .6rem;
-      border-radius:14px;
-      font-size:.9rem;
-      font-weight:800;
-      text-align:center;
-      border:none;
-      margin-top:1.1rem;
-      transition:.15s;
-    }
-
-    .btn-primary{
-      background:var(--red);
-      color:#fff;
-      box-shadow:0 10px 20px -10px rgba(225,29,46,.5);
-    }
-
-    .btn-primary:hover:not(:disabled){
-      background:var(--red-dark);
-      transform:translateY(-1px);
-    }
-
-    .btn-primary:disabled{
-      opacity:.5;
-      cursor:not-allowed;
-    }
-
-    .spinner{
-      display:inline-block;
-      width:14px;
-      height:14px;
-      border:2.5px solid rgba(255,255,255,.35);
-      border-top-color:#fff;
-      border-radius:50%;
-      animation:spin .7s linear infinite;
-      vertical-align:middle;
-      margin-right:.35rem;
-    }
-
-    .status-box{
-      margin-top:1rem;
-      padding:.8rem;
-      border-radius:12px;
-      font-size:.82rem;
-      font-weight:600;
-      text-align:center;
-      display:none;
-      line-height:1.6;
-    }
-
-    .status-box.show{
-      display:block;
-    }
-
-    .st-wait{
-      background:rgba(255,212,0,.15);
-      border:1.4px solid rgba(212,160,0,.3);
-      color:#7a5c00;
-    }
-
-    .st-ok{
-      background:rgba(15,169,88,.1);
-      border:1.4px solid rgba(15,169,88,.3);
-      color:var(--green-dark);
-    }
-
-    .st-err{
-      background:rgba(225,29,46,.08);
-      border:1.4px solid rgba(225,29,46,.3);
-      color:var(--red-dark);
-    }
-
-    .security-note{
-      display:flex;
-      gap:.5rem;
-      background:rgba(18,86,214,.06);
-      border:1.5px solid rgba(18,86,214,.18);
-      border-radius:12px;
-      padding:.65rem .75rem;
-      font-size:.72rem;
-      color:var(--ink-soft);
-      line-height:1.5;
-      margin-top:1.2rem;
-    }
-
-    .not-found-icon{
-      font-size:2.5rem;
-      text-align:center;
-      margin-bottom:.5rem;
-    }
-
-    .not-found-title{
-      text-align:center;
-      font-weight:800;
-      font-size:1rem;
-    }
-
-    .not-found-text{
-      text-align:center;
-      color:var(--ink-soft);
-      font-size:.8rem;
-      margin-top:.3rem;
-      line-height:1.6;
-    }
-
-    .retry-btn{
-      margin-top:1rem;
-      background:#fff;
-      border:1.5px solid var(--red);
-      color:var(--red-dark);
-      border-radius:12px;
-      padding:.65rem 1rem;
-      font-weight:800;
-      width:100%;
-    }
-
-    .debug-box{
-      display:none;
-      margin-top:1rem;
-      padding:.7rem;
-      background:#111;
-      color:#fff;
-      border-radius:10px;
-      font-family:'Space Mono',monospace;
-      font-size:.65rem;
-      white-space:pre-wrap;
-      word-break:break-word;
-    }
-
-    @media(max-width:480px){
-      .pm-card-outer{
-        padding:1.3rem 1.05rem 1.2rem;
-        border-radius:16px;
-      }
-
-      .pm-grid{
-        grid-template-columns:repeat(2,1fr);
-      }
-
-      .header-inner{
-        padding:.65rem .75rem;
-      }
-
-      .brand-word{
-        font-size:.95rem;
-      }
-
-      .back-link{
-        font-size:.72rem;
-      }
-    }
-
-    @media(max-width:640px){
-      .split-bg{
-        flex-direction:column;
-      }
-
-      .split-bg .half{
-        flex:none;
-        height:64px;
-      }
-
-      .stage{
-        padding:1.1rem .7rem 2.6rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0">
+
+<title>BIYE — Payment Method</title>
+
+<meta name="robots" content="noindex,nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
+  rel="stylesheet">
+
+
+<style>
+
+/* ============================================================
+   ROOT
+============================================================ */
+
+:root{
+
+  --pink:#FF1E7E;
+  --pink-soft:#FFF0F7;
+
+  --yellow:#FFD400;
+
+  --red:#E11D2E;
+  --red-dark:#B8121F;
+
+  --green:#0FA958;
+  --green-dark:#08783D;
+
+  --blue:#1256D6;
+
+  --ink:#151515;
+  --ink-soft:#666;
+  --ink-faint:#999;
+
+  --line:#E6E6E6;
+
+  --page:#FBFAF7;
+  --white:#fff;
+
+  --radius:20px;
+
+  --shadow:
+    0 25px 70px rgba(0,0,0,.18),
+    0 5px 20px rgba(0,0,0,.08);
+
+}
+
+
+/* ============================================================
+   RESET
+============================================================ */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+
+  font-family:
+    'Hind Siliguri',
+    'Inter',
+    sans-serif;
+
+  color:var(--ink);
+
+  background:var(--page);
+
+  min-height:100vh;
+
+  -webkit-font-smoothing:antialiased;
+
+  overflow-x:hidden;
+
+}
+
+button,
+input{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+:focus-visible{
+  outline:3px solid var(--blue);
+  outline-offset:3px;
+}
+
+
+/* ============================================================
+   BACKGROUND
+============================================================ */
+
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  display:flex;
+}
+
+.bg-left{
+  flex:1;
+  background:var(--pink);
+}
+
+.bg-right{
+  flex:1;
+  background:var(--yellow);
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.header{
+
+  position:sticky;
+  top:0;
+  z-index:100;
+
+  background:var(--red);
+
+  color:#fff;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,.2);
+
+}
+
+.header-inner{
+
+  width:100%;
+  max-width:1180px;
+
+  margin:auto;
+
+  padding:
+    12px 18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:15px;
+
+}
+
+.brand{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+}
+
+.brand-logo{
+
+  width:36px;
+  height:36px;
+
+  background:#fff;
+
+  color:var(--red);
+
+  border-radius:10px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-family:Inter,sans-serif;
+
+  font-weight:900;
+
+  font-size:18px;
+
+}
+
+.brand-name{
+
+  font-family:Inter,sans-serif;
+
+  font-size:17px;
+
+  font-weight:900;
+
+}
+
+.brand-tagline{
+
+  display:block;
+
+  font-family:'Hind Siliguri',sans-serif;
+
+  font-size:9px;
+
+  font-weight:500;
+
+  opacity:.9;
+
+  margin-top:-2px;
+
+}
+
+.back{
+
+  color:#fff;
+
+  background:rgba(255,255,255,.14);
+
+  border:1px solid rgba(255,255,255,.45);
+
+  border-radius:30px;
+
+  padding:7px 12px;
+
+  font-size:12px;
+
+  font-weight:700;
+
+}
+
+
+/* ============================================================
+   MAIN
+============================================================ */
+
+.stage{
+
+  width:100%;
+
+  min-height:
+    calc(100vh - 60px);
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:flex-start;
+
+  padding:
+    35px 15px 60px;
+
+}
+
+.card{
+
+  width:100%;
+
+  max-width:600px;
+
+  background:#fff;
+
+  border-radius:var(--radius);
+
+  border-top:
+    6px solid var(--red);
+
+  box-shadow:var(--shadow);
+
+  padding:28px;
+
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.title{
+
+  font-size:23px;
+
+  font-weight:800;
+
+  line-height:1.3;
+
+}
+
+.subtitle{
+
+  color:var(--ink-soft);
+
+  font-size:13px;
+
+  margin-top:3px;
+
+  line-height:1.6;
+
+}
+
+
+/* ============================================================
+   AMOUNT
+============================================================ */
+
+.amount{
+
+  margin-top:20px;
+
+  padding:13px 18px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,30,126,.07),
+      rgba(255,30,126,.12)
+    );
+
+  border:
+    1.5px solid rgba(255,30,126,.25);
+
+  border-radius:50px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+}
+
+.amount-label{
+
+  font-size:13px;
+
+  font-weight:700;
+
+}
+
+.amount-value{
+
+  font-family:'Space Mono',monospace;
+
+  color:var(--pink);
+
+  font-size:20px;
+
+  font-weight:700;
+
+}
+
+.invoice-row{
+
+  margin-top:8px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  font-size:10px;
+
+  color:#999;
+
+}
+
+.invoice-row strong{
+
+  font-family:'Space Mono',monospace;
+
+  color:#777;
+
+}
+
+
+/* ============================================================
+   SECTION
+============================================================ */
+
+.section-title{
+
+  margin-top:25px;
+
+  margin-bottom:10px;
+
+  font-size:11px;
+
+  color:#999;
+
+  font-weight:800;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+
+}
+
+
+/* ============================================================
+   PAYMENT GRID
+============================================================ */
+
+.payment-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:11px;
+
+}
+
+
+/* ============================================================
+   PAYMENT CARD
+============================================================ */
+
+.payment-card{
+
+  position:relative;
+
+  min-height:130px;
+
+  padding:16px 12px;
+
+  border:
+    1.5px solid var(--line);
+
+  border-radius:16px;
+
+  background:#fff;
+
+  text-align:center;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
+
+  user-select:none;
+
+}
+
+.payment-card:hover{
+
+  transform:translateY(-2px);
+
+  border-color:#ccc;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.payment-card.selected{
+
+  border:
+    2px solid var(--pink);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      var(--pink-soft)
+    );
+
+  box-shadow:
+    0 0 0 3px rgba(255,30,126,.08);
+
+}
+
+.payment-card.selected::after{
+
+  content:'✓';
+
+  position:absolute;
+
+  top:7px;
+
+  right:8px;
+
+  width:20px;
+
+  height:20px;
+
+  border-radius:50%;
+
+  background:var(--pink);
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:11px;
+
+  font-weight:900;
+
+}
+
+
+/* ============================================================
+   LOGO
+============================================================ */
+
+.logo-box{
+
+  height:54px;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  margin-bottom:8px;
+
+}
+
+.logo{
+
+  max-width:90px;
+
+  max-height:48px;
+
+}
+
+
+/* ============================================================
+   BKASH LOGO
+============================================================ */
+
+.bkash-logo{
+
+  width:74px;
+
+  height:45px;
+
+  border-radius:10px;
+
+  background:#E2136E;
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-family:Inter,sans-serif;
+
+  font-size:20px;
+
+  font-weight:900;
+
+  font-style:italic;
+
+  letter-spacing:-1px;
+
+}
+
+
+/* ============================================================
+   NAGAD LOGO
+============================================================ */
+
+.nagad-logo{
+
+  width:74px;
+
+  height:45px;
+
+  border-radius:10px;
+
+  background:#F58220;
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-family:Inter,sans-serif;
+
+  font-size:19px;
+
+  font-weight:900;
+
+}
+
+
+/* ============================================================
+   ROCKET LOGO
+============================================================ */
+
+.rocket-logo{
+
+  width:74px;
+
+  height:45px;
+
+  border-radius:10px;
+
+  background:#8B1E88;
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:3px;
+
+  font-family:Inter,sans-serif;
+
+  font-size:15px;
+
+  font-weight:900;
+
+}
+
+.rocket-icon{
+
+  font-size:22px;
+
+}
+
+
+/* ============================================================
+   CASH LOGO
+============================================================ */
+
+.cash-logo{
+
+  width:74px;
+
+  height:45px;
+
+  border-radius:10px;
+
+  background:#138A4B;
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:25px;
+
+}
+
+
+/* ============================================================
+   SSL LOGO
+============================================================ */
+
+.ssl-logo{
+
+  width:88px;
+
+  height:45px;
+
+  border-radius:10px;
+
+  background:#0876B9;
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-family:Inter,sans-serif;
+
+  font-size:13px;
+
+  font-weight:900;
+
+  letter-spacing:-.3px;
+
+}
+
+.ssl-logo span{
+
+  font-size:7px;
+
+  display:block;
+
+  margin-left:3px;
+
+  opacity:.9;
+
+}
+
+
+/* ============================================================
+   PAYMENT NAME
+============================================================ */
+
+.payment-name{
+
+  font-size:13px;
+
+  font-weight:800;
+
+}
+
+.payment-desc{
+
+  margin-top:2px;
+
+  color:#999;
+
+  font-size:9px;
+
+  line-height:1.4;
+
+}
+
+
+/* ============================================================
+   SSL CARD
+============================================================ */
+
+.gateway-card{
+
+  grid-column:1 / -1;
+
+  min-height:115px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:18px;
+
+  text-align:left;
+
+  padding:16px 18px;
+
+}
+
+.gateway-card .logo-box{
+
+  flex:0 0 90px;
+
+  margin:0;
+
+}
+
+.gateway-info{
+
+  flex:1;
+
+}
+
+.gateway-name{
+
+  font-size:14px;
+
+  font-weight:800;
+
+}
+
+.gateway-desc{
+
+  font-size:10px;
+
+  color:#888;
+
+  margin-top:3px;
+
+  line-height:1.5;
+
+}
+
+.gateway-badges{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px;
+
+  margin-top:8px;
+
+}
+
+.gateway-badge{
+
+  background:#f5f5f5;
+
+  border:1px solid #e7e7e7;
+
+  border-radius:6px;
+
+  padding:3px 6px;
+
+  font-size:8px;
+
+  font-weight:700;
+
+  color:#666;
+
+}
+
+
+/* ============================================================
+   DETAIL
+============================================================ */
+
+.detail{
+
+  display:none;
+
+  margin-top:16px;
+
+  background:#FAFAFA;
+
+  border:
+    1.5px solid #e5e5e5;
+
+  border-radius:15px;
+
+  padding:17px;
+
+  animation:fadeIn .2s ease;
+
+}
+
+.detail.show{
+
+  display:block;
+
+}
+
+@keyframes fadeIn{
+
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+.detail-heading{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  margin-bottom:10px;
+
+}
+
+
+/* ============================================================
+   INSTRUCTION
+============================================================ */
+
+.instruction{
+
+  font-size:12px;
+
+  color:#666;
+
+  line-height:1.7;
+
+  margin-bottom:10px;
+
+}
+
+
+/* ============================================================
+   NUMBER
+============================================================ */
+
+.number-box{
+
+  display:none;
+
+  background:#fff;
+
+  border:
+    1.5px dashed #ccc;
+
+  border-radius:10px;
+
+  padding:12px;
+
+  text-align:center;
+
+  color:var(--red-dark);
+
+  font-family:'Space Mono',monospace;
+
+  font-size:17px;
+
+  font-weight:700;
+
+  word-break:break-all;
+
+}
+
+
+/* ============================================================
+   COPY
+============================================================ */
+
+.copy-row{
+
+  display:none;
+
+  gap:6px;
+
+  flex-wrap:wrap;
+
+  margin-bottom:10px;
+
+}
+
+.copy-btn{
+
+  border:
+    1px solid #ddd;
+
+  background:#fff;
+
+  border-radius:8px;
+
+  padding:6px 9px;
+
+  font-size:10px;
+
+  font-weight:700;
+
+}
+
+.copy-btn.copied{
+
+  color:var(--green-dark);
+
+  border-color:var(--green);
+
+  background:#effaf4;
+
+}
+
+
+/* ============================================================
+   STEPS
+============================================================ */
+
+.steps{
+
+  display:none;
+
+  padding-left:20px;
+
+  margin-top:12px;
+
+}
+
+.steps li{
+
+  font-size:11px;
+
+  color:#666;
+
+  line-height:1.9;
+
+}
+
+
+/* ============================================================
+   FIELD
+============================================================ */
+
+.field{
+
+  display:none;
+
+  margin-top:13px;
+
+}
+
+.field label{
+
+  display:block;
+
+  font-size:11px;
+
+  font-weight:800;
+
+  margin-bottom:5px;
+
+}
+
+.field input{
+
+  width:100%;
+
+  border:
+    1.5px solid #ddd;
+
+  background:#fff;
+
+  border-radius:10px;
+
+  padding:10px 12px;
+
+  font-family:'Space Mono',monospace;
+
+  font-size:12px;
+
+  outline:none;
+
+}
+
+.field input:focus{
+
+  border-color:var(--blue);
+
+  box-shadow:
+    0 0 0 3px rgba(18,86,214,.08);
+
+}
+
+.field input.invalid{
+
+  border-color:var(--red);
+
+}
+
+
+/* ============================================================
+   SECURITY
+============================================================ */
+
+.security{
+
+  margin-top:14px;
+
+  padding:10px 12px;
+
+  display:flex;
+
+  gap:8px;
+
+  background:rgba(18,86,214,.06);
+
+  border:
+    1px solid rgba(18,86,214,.18);
+
+  border-radius:10px;
+
+  color:#666;
+
+  font-size:10px;
+
+  line-height:1.5;
+
+}
+
+.security-icon{
+
+  color:var(--blue);
+
+  font-size:15px;
+
+}
+
+
+/* ============================================================
+   BUTTON
+============================================================ */
+
+.confirm{
+
+  width:100%;
+
+  margin-top:13px;
+
+  border:none;
+
+  border-radius:13px;
+
+  padding:13px;
+
+  background:var(--red);
+
+  color:#fff;
+
+  font-size:13px;
+
+  font-weight:800;
+
+  box-shadow:
+    0 10px 20px rgba(225,29,46,.18);
+
+}
+
+.confirm:hover:not(:disabled){
+
+  background:var(--red-dark);
+
+}
+
+.confirm:disabled{
+
+  opacity:.5;
+
+  cursor:not-allowed;
+
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.status{
+
+  display:none;
+
+  margin-top:12px;
+
+  padding:10px;
+
+  border-radius:10px;
+
+  text-align:center;
+
+  font-size:11px;
+
+  font-weight:700;
+
+  line-height:1.5;
+
+}
+
+.status.show{
+
+  display:block;
+
+}
+
+.status.wait{
+
+  background:#fff8dc;
+
+  border:1px solid #ead58a;
+
+  color:#755b00;
+
+}
+
+.status.success{
+
+  background:#edf9f2;
+
+  border:1px solid #a8dbbd;
+
+  color:var(--green-dark);
+
+}
+
+.status.error{
+
+  background:#fff0f0;
+
+  border:1px solid #efb4b4;
+
+  color:var(--red-dark);
+
+}
+
+
+/* ============================================================
+   BOTTOM SECURITY
+============================================================ */
+
+.bottom-note{
+
+  margin-top:18px;
+
+  padding:12px;
+
+  border:
+    1px solid rgba(18,86,214,.15);
+
+  border-radius:11px;
+
+  background:rgba(18,86,214,.045);
+
+  color:#666;
+
+  font-size:10px;
+
+  line-height:1.6;
+
+  text-align:center;
+
+}
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+.loading{
+
+  text-align:center;
+
+  padding:50px 10px;
+
+  color:#777;
+
+  font-size:13px;
+
+}
+
+.spinner{
+
+  width:28px;
+
+  height:28px;
+
+  margin:
+    0 auto 10px;
+
+  border:
+    3px solid #eee;
+
+  border-top-color:var(--red);
+
+  border-radius:50%;
+
+  animation:spin .7s linear infinite;
+
+}
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+
+/* ============================================================
+   ERROR
+============================================================ */
+
+.error-screen{
+
+  display:none;
+
+  text-align:center;
+
+  padding:40px 10px;
+
+}
+
+.error-icon{
+
+  font-size:40px;
+
+  margin-bottom:10px;
+
+}
+
+.error-title{
+
+  font-size:16px;
+
+  font-weight:800;
+
+}
+
+.error-text{
+
+  color:#777;
+
+  font-size:11px;
+
+  line-height:1.6;
+
+  margin-top:5px;
+
+}
+
+.retry{
+
+  margin-top:15px;
+
+  border:
+    1px solid var(--red);
+
+  background:#fff;
+
+  color:var(--red-dark);
+
+  border-radius:10px;
+
+  padding:9px 15px;
+
+  font-size:11px;
+
+  font-weight:800;
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media(max-width:600px){
+
+  .bg{
+    flex-direction:column;
+  }
+
+  .bg-left{
+    flex:none;
+    height:65px;
+  }
+
+  .bg-right{
+    flex:1;
+  }
+
+  .stage{
+    padding:
+      14px 8px 35px;
+  }
+
+  .card{
+    padding:
+      20px 14px;
+
+    border-radius:17px;
+  }
+
+  .title{
+    font-size:20px;
+  }
+
+  .payment-grid{
+    gap:8px;
+  }
+
+  .payment-card{
+    min-height:122px;
+    padding:13px 7px;
+  }
+
+  .gateway-card{
+    min-height:120px;
+    padding:13px;
+    gap:10px;
+  }
+
+  .gateway-card .logo-box{
+    flex-basis:70px;
+  }
+
+  .ssl-logo{
+    width:70px;
+    font-size:11px;
+  }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
-  <div class="split-bg" aria-hidden="true">
-    <div class="half pink"></div>
-    <div class="half yellow"></div>
-  </div>
 
-  <header class="site-header">
-    <div class="header-inner">
+<!-- ============================================================
+     BACKGROUND
+============================================================ -->
 
-      <div class="brand">
-        <span class="brand-mark">B</span>
+<div class="bg">
+  <div class="bg-left"></div>
+  <div class="bg-right"></div>
+</div>
 
-        <span class="brand-word">
-          BIYE
-          <small>বিবাহের বিজ্ঞান। জীবনভর বিশ্বাস।</small>
-        </span>
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        B
       </div>
 
-      <a class="back-link" id="backLink" href="invoice.html">
-        ← ইনভয়েসে ফিরুন
-      </a>
+      <div>
+
+        <div class="brand-name">
+          BIYE
+        </div>
+
+        <span class="brand-tagline">
+          বিবাহের বিজ্ঞান। জীবনভর বিশ্বাস।
+        </span>
+
+      </div>
 
     </div>
-  </header>
 
-  <main class="stage">
 
-    <div class="card-wrap">
+    <a
+      class="back"
+      id="backLink"
+      href="invoice.html">
 
-      <section class="pm-card-outer">
+      ← ইনভয়েসে ফিরুন
 
-        <!-- LOADING -->
-        <div id="loadingNote" class="loading-note">
-          <div class="loading-spinner"></div>
-          ইনভয়েস তথ্য লোড হচ্ছে...
+    </a>
+
+  </div>
+
+</header>
+
+
+<!-- ============================================================
+     MAIN
+============================================================ -->
+
+<main class="stage">
+
+<section class="card">
+
+
+  <!-- ==========================================================
+       LOADING
+  =========================================================== -->
+
+  <div
+    id="loading"
+    class="loading">
+
+    <div class="spinner"></div>
+
+    ইনভয়েস তথ্য লোড হচ্ছে...
+
+  </div>
+
+
+  <!-- ==========================================================
+       ERROR
+  =========================================================== -->
+
+  <div
+    id="errorScreen"
+    class="error-screen">
+
+    <div class="error-icon">
+      ⚠️
+    </div>
+
+    <div class="error-title">
+      ইনভয়েস পাওয়া যায়নি
+    </div>
+
+    <div
+      class="error-text"
+      id="errorText">
+
+      ইনভয়েস তথ্য লোড করা যায়নি।
+
+    </div>
+
+    <button
+      class="retry"
+      onclick="loadInvoice()">
+
+      আবার চেষ্টা করুন
+
+    </button>
+
+  </div>
+
+
+  <!-- ==========================================================
+       PAYMENT CONTENT
+  =========================================================== -->
+
+  <div
+    id="content"
+    style="display:none">
+
+
+    <h1 class="title">
+      পেমেন্ট পদ্ধতি বাছুন
+    </h1>
+
+    <p class="subtitle">
+      আপনার সুবিধামতো যেকোনো একটি নিরাপদ পেমেন্ট পদ্ধতি নির্বাচন করুন।
+    </p>
+
+
+    <!-- ========================================================
+         AMOUNT
+    ========================================================= -->
+
+    <div class="amount">
+
+      <span class="amount-label">
+        পরিশোধযোগ্য
+      </span>
+
+      <span
+        class="amount-value"
+        id="amount">
+
+        ৳০
+
+      </span>
+
+    </div>
+
+
+    <div class="invoice-row">
+
+      <span>
+        ইনভয়েস নম্বর
+      </span>
+
+      <strong id="invoiceNumber">
+        —
+      </strong>
+
+    </div>
+
+
+    <!-- ========================================================
+         MOBILE BANKING
+    ========================================================= -->
+
+    <div class="section-title">
+      মোবাইল ব্যাংকিং
+    </div>
+
+
+    <div class="payment-grid">
+
+
+      <!-- ======================================================
+           BKASH
+      ======================================================= -->
+
+      <div
+        class="payment-card"
+        data-method="bkash_direct"
+        data-name="bKash"
+        data-icon="💗">
+
+        <div class="logo-box">
+
+          <div class="bkash-logo">
+            bKash
+          </div>
+
         </div>
 
-        <!-- NOT FOUND -->
-        <div id="notFoundNote" class="loading-note" style="display:none">
+        <div class="payment-name">
+          bKash
+        </div>
 
-          <div class="not-found-icon">⚠️</div>
+        <div class="payment-desc">
+          Send Money
+        </div>
 
-          <div class="not-found-title">
-            ইনভয়েস পাওয়া যায়নি
+      </div>
+
+
+      <!-- ======================================================
+           NAGAD
+      ======================================================= -->
+
+      <div
+        class="payment-card"
+        data-method="nagad_direct"
+        data-name="Nagad"
+        data-icon="💰">
+
+        <div class="logo-box">
+
+          <div class="nagad-logo">
+            Nagad
           </div>
-
-          <div class="not-found-text">
-            ইনভয়েস নম্বর সঠিক আছে কি না যাচাই করুন এবং আবার চেষ্টা করুন।
-          </div>
-
-          <button
-            class="retry-btn"
-            type="button"
-            onclick="loadInvoice()">
-            আবার চেষ্টা করুন
-          </button>
-
-          <div id="debugBox" class="debug-box"></div>
 
         </div>
 
-        <!-- MAIN PAYMENT CONTENT -->
-        <div id="pmContent" style="display:none">
+        <div class="payment-name">
+          Nagad
+        </div>
 
-          <h1 class="step-title">
-            পেমেন্ট পদ্ধতি বাছুন
-          </h1>
+        <div class="payment-desc">
+          Send Money
+        </div>
 
-          <p class="step-sub">
-            নিচে থেকে একটি পদ্ধতি বেছে নিয়ে পেমেন্ট সম্পন্ন করুন।
-          </p>
+      </div>
 
-          <div class="amt-pill">
-            <span>পরিশোধযোগ্য</span>
-            <b id="amtView">৳০</b>
-          </div>
 
-          <div class="invoice-mini">
-            <span>ইনভয়েস</span>
-            <strong id="invoiceView">—</strong>
-          </div>
+      <!-- ======================================================
+           ROCKET
+      ======================================================= -->
 
-          <!-- MOBILE BANKING -->
-          <div id="mobileBankingGroup" style="display:none">
+      <div
+        class="payment-card"
+        data-method="rocket_direct"
+        data-name="Rocket"
+        data-icon="🚀">
 
-            <div class="group-label">
-              মোবাইল ব্যাংকিং
-            </div>
+        <div class="logo-box">
 
-            <div class="pm-grid">
+          <div class="rocket-logo">
 
-              <div
-                class="pm"
-                data-method="bkash_direct"
-                data-app="bKash"
-                data-icon="📱">
+            <span class="rocket-icon">
+              🚀
+            </span>
 
-                <span class="ic">📱</span>
-
-                <span class="nm">
-                  bKash
-                </span>
-
-                <span class="desc">
-                  Send Money
-                </span>
-
-              </div>
-
-              <div
-                class="pm"
-                data-method="nagad_direct"
-                data-app="Nagad"
-                data-icon="💰">
-
-                <span class="ic">💰</span>
-
-                <span class="nm">
-                  Nagad
-                </span>
-
-                <span class="desc">
-                  Send Money
-                </span>
-
-              </div>
-
-              <div
-                class="pm"
-                data-method="rocket_direct"
-                data-app="Rocket"
-                data-icon="🚀">
-
-                <span class="ic">🚀</span>
-
-                <span class="nm">
-                  Rocket
-                </span>
-
-                <span class="desc">
-                  Merchant Pay
-                </span>
-
-              </div>
-
-              <div
-                class="pm"
-                data-method="cash"
-                data-app="নগদ টাকা"
-                data-icon="💵">
-
-                <span class="ic">💵</span>
-
-                <span class="nm">
-                  নগদ Cash
-                </span>
-
-                <span class="desc">
-                  অফিসে প্রদান
-                </span>
-
-              </div>
-
-            </div>
+            Rocket
 
           </div>
 
-          <!-- GATEWAY -->
-          <div class="group-label">
-            কার্ড ও গেটওয়ে
+        </div>
+
+        <div class="payment-name">
+          Rocket
+        </div>
+
+        <div class="payment-desc">
+          Merchant Pay
+        </div>
+
+      </div>
+
+
+      <!-- ======================================================
+           CASH
+      ======================================================= -->
+
+      <div
+        class="payment-card"
+        data-method="cash"
+        data-name="Cash"
+        data-icon="💵">
+
+        <div class="logo-box">
+
+          <div class="cash-logo">
+            ৳
           </div>
 
-          <div class="pm-grid single">
+        </div>
 
-            <div
-              class="pm"
-              data-method="sslcommerz"
-              data-app="SSLCommerz"
-              data-icon="💳">
+        <div class="payment-name">
+          নগদ Cash
+        </div>
 
-              <span class="ic">💳</span>
+        <div class="payment-desc">
+          অফিসে সরাসরি প্রদান
+        </div>
 
-              <span class="nm">
-                bKash / Nagad / Rocket / কার্ড / ব্যাংকিং
-              </span>
+      </div>
 
-              <span class="desc">
-                SSLCommerz Secure Gateway
-              </span>
 
-            </div>
+      <!-- ======================================================
+           SSLCOMMERZ
+      ======================================================= -->
 
-          </div>
+      <div
+        class="payment-card gateway-card"
+        data-method="sslcommerz"
+        data-name="SSLCommerz"
+        data-icon="💳">
 
-          <!-- PAYMENT DETAIL -->
-          <div class="detail" id="detail">
 
-            <div class="selected-method">
-              <span
-                id="selectedMethodIcon"
-                class="selected-method-icon">
-                💳
-              </span>
+        <div class="logo-box">
 
-              <span id="selectedMethodName">
-                Payment
-              </span>
-            </div>
+          <div class="ssl-logo">
 
-            <div
-              class="copy-row"
-              id="copyRow"
-              style="display:none">
-
-              <button
-                class="copy-chip"
-                type="button"
-                onclick="copyVal('merchant', this)">
-                📋 <span id="copyMerchantLbl">নম্বর</span>
-              </button>
-
-              <button
-                class="copy-chip"
-                type="button"
-                onclick="copyVal('invoice', this)">
-                📋 ইনভয়েস নং
-              </button>
-
-              <button
-                class="copy-chip"
-                type="button"
-                onclick="copyVal('amount', this)">
-                📋 পরিমাণ
-              </button>
-
-            </div>
-
-            <div
-              class="instr"
-              id="instr">
-            </div>
-
-            <div
-              class="num"
-              id="numBox"
-              style="display:none">
-            </div>
-
-            <div
-              class="copy-hint"
-              id="copyHint">
-            </div>
-
-            <ol
-              class="steps-list"
-              id="stepsList"
-              style="display:none">
-            </ol>
-
-            <!-- SENDER NUMBER -->
-            <div
-              class="field-row"
-              id="senderAccField"
-              style="display:none">
-
-              <label
-                class="field-label"
-                for="senderAccInput">
-
-                যেই নম্বর থেকে পাঠিয়েছেন
-                <span class="required">*</span>
-
-              </label>
-
-              <input
-                class="field-input"
-                id="senderAccInput"
-                type="tel"
-                inputmode="numeric"
-                maxlength="15"
-                placeholder="01XXXXXXXXX"
-                autocomplete="off">
-
-            </div>
-
-            <!-- TRXID -->
-            <div
-              class="field-row"
-              id="trxField"
-              style="display:none">
-
-              <label
-                class="field-label"
-                for="trxInput">
-
-                Transaction ID (TrxID)
-                <span class="required">*</span>
-
-              </label>
-
-              <input
-                class="field-input"
-                id="trxInput"
-                type="text"
-                maxlength="80"
-                placeholder="যেমন: 9AB2CD3EFG"
-                autocomplete="off"
-                autocapitalize="characters">
-
-            </div>
-
-            <!-- CASH REF -->
-            <div
-              class="field-row"
-              id="cashRefField"
-              style="display:none">
-
-              <label
-                class="field-label"
-                for="cashRefInput">
-
-                রেফারেন্স
-                <span style="color:var(--ink-faint)">
-                  (ঐচ্ছিক)
-                </span>
-
-              </label>
-
-              <input
-                class="field-input"
-                id="cashRefInput"
-                type="text"
-                maxlength="200"
-                placeholder="কে নিয়েছেন / রসিদ নং">
-
-            </div>
-
-            <!-- SECURITY -->
-            <div class="security-inline">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-
-                <path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/>
-
-              </svg>
-
-              <span id="securityText">
-                TrxID জমা দেওয়ার আগে ভালোভাবে মিলিয়ে নিন।
-              </span>
-
-            </div>
-
-            <!-- CONFIRM -->
-            <button
-              class="btn btn-primary"
-              id="confirmBtn"
-              type="button"
-              onclick="confirmPayment()">
-
-              <span id="confirmTxt">
-                পেমেন্ট নিশ্চিত করুন
-              </span>
-
-            </button>
-
-            <!-- STATUS -->
-            <div
-              class="status-box"
-              id="statusBox">
-            </div>
-
-          </div>
-
-          <!-- BOTTOM SECURITY -->
-          <div class="security-note">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round">
-
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-
-            </svg>
-
+            SSL
             <span>
-              BIYE কখনো আপনার bKash/Nagad/Rocket PIN বা OTP চাইবে না।
-              শুধু প্রয়োজনীয় payment reference/TrxID শেয়ার করুন।
+              COMMERZ
             </span>
 
           </div>
 
         </div>
 
-      </section>
+
+        <div class="gateway-info">
+
+          <div class="gateway-name">
+            SSLCommerz Secure Gateway
+          </div>
+
+          <div class="gateway-desc">
+            কার্ড, মোবাইল ব্যাংকিং ও Internet Banking-এর
+            উপলব্ধ পেমেন্ট অপশন এক জায়গায়।
+          </div>
+
+
+          <div class="gateway-badges">
+
+            <span class="gateway-badge">
+              VISA
+            </span>
+
+            <span class="gateway-badge">
+              Mastercard
+            </span>
+
+            <span class="gateway-badge">
+              bKash
+            </span>
+
+            <span class="gateway-badge">
+              Nagad
+            </span>
+
+            <span class="gateway-badge">
+              Rocket
+            </span>
+
+            <span class="gateway-badge">
+              Internet Banking
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
 
     </div>
 
-  </main>
+
+    <!-- ========================================================
+         DETAIL
+    ========================================================= -->
+
+    <div
+      class="detail"
+      id="detail">
+
+
+      <div class="detail-heading">
+
+        <span id="selectedIcon">
+          💳
+        </span>
+
+        <span id="selectedName">
+          Payment
+        </span>
+
+      </div>
+
+
+      <!-- INSTRUCTION -->
+
+      <div
+        class="instruction"
+        id="instruction">
+
+      </div>
+
+
+      <!-- COPY BUTTONS -->
+
+      <div
+        class="copy-row"
+        id="copyRow">
+
+
+        <button
+          class="copy-btn"
+          id="copyMerchantBtn"
+          onclick="copyValue('merchant',this)">
+
+          📋 নম্বর কপি
+
+        </button>
+
+
+        <button
+          class="copy-btn"
+          onclick="copyValue('invoice',this)">
+
+          📋 ইনভয়েস কপি
+
+        </button>
+
+
+        <button
+          class="copy-btn"
+          onclick="copyValue('amount',this)">
+
+          📋 পরিমাণ কপি
+
+        </button>
+
+      </div>
+
+
+      <!-- NUMBER -->
+
+      <div
+        class="number-box"
+        id="numberBox">
+
+      </div>
+
+
+      <!-- STEPS -->
+
+      <ol
+        class="steps"
+        id="steps">
+
+      </ol>
+
+
+      <!-- SENDER ACCOUNT -->
+
+      <div
+        class="field"
+        id="senderField">
+
+        <label>
+          যেই নম্বর থেকে পেমেন্ট করেছেন *
+        </label>
+
+        <input
+          id="senderInput"
+          type="tel"
+          inputmode="numeric"
+          maxlength="15"
+          placeholder="01XXXXXXXXX"
+          autocomplete="off">
+
+      </div>
+
+
+      <!-- TRXID -->
+
+      <div
+        class="field"
+        id="trxField">
+
+        <label>
+          Transaction ID (TrxID) *
+        </label>
+
+        <input
+          id="trxInput"
+          type="text"
+          maxlength="100"
+          placeholder="যেমন: 9AB2CD3EFG"
+          autocomplete="off"
+          autocapitalize="characters">
+
+      </div>
+
+
+      <!-- CASH REFERENCE -->
+
+      <div
+        class="field"
+        id="cashField">
+
+        <label>
+          রেফারেন্স
+          <span style="font-weight:400;color:#999">
+            (ঐচ্ছিক)
+          </span>
+        </label>
+
+        <input
+          id="cashInput"
+          type="text"
+          maxlength="200"
+          placeholder="রসিদ নং / যিনি টাকা নিয়েছেন">
+
+      </div>
+
+
+      <!-- SECURITY -->
+
+      <div class="security">
+
+        <span class="security-icon">
+          🔒
+        </span>
+
+        <span id="securityText">
+          BIYE কখনো আপনার PIN বা OTP চাইবে না।
+        </span>
+
+      </div>
+
+
+      <!-- CONFIRM -->
+
+      <button
+        class="confirm"
+        id="confirmButton"
+        onclick="confirmPayment()">
+
+        <span id="confirmText">
+          পেমেন্ট নিশ্চিত করুন
+        </span>
+
+      </button>
+
+
+      <!-- STATUS -->
+
+      <div
+        class="status"
+        id="status">
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ========================================================
+         BOTTOM NOTE
+    ========================================================= -->
+
+    <div class="bottom-note">
+
+      🔐 আপনার PIN, password বা OTP কখনো BIYE-কে দেবেন না।
+      Payment সম্পন্ন করার জন্য শুধু প্রয়োজনীয়
+      payment reference/TrxID ব্যবহার করুন।
+
+    </div>
+
+
+  </div>
+
+</section>
+
+</main>
 
 
 <script>
 
-  /* ============================================================
-     BIYE PAYMENT PAGE
-     ============================================================ */
-
-  const params = new URLSearchParams(window.location.search);
-
-  const INV = params.get('inv');
-
-  let INVOICE = null;
-
-  let PHONE = null;
-
-  let GATEWAY_URL = null;
-
-  let SELECTED = null;
-
-  let PAYMENT_CONFIG = {
-    bkash: '',
-    nagad: '',
-    rocket: ''
-  };
-
-  let COPY_VALS = {
-    merchant: '',
-    invoice: '',
-    amount: ''
-  };
+/* ============================================================
+   BIYE PAYMENT METHOD
+============================================================ */
 
 
-  /* ============================================================
-     BASIC HELPERS
-     ============================================================ */
+/* ============================================================
+   URL
+============================================================ */
 
-  function taka(value){
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
 
-    const n = Number(value || 0);
+const INV =
+  params.get('inv');
 
-    return '৳' + n.toLocaleString('bn-BD');
 
+/* ============================================================
+   GLOBAL STATE
+============================================================ */
+
+let INVOICE = null;
+
+let PHONE = '';
+
+let GATEWAY_URL = '';
+
+let SELECTED = null;
+
+
+/*
+  Payment numbers come from backend.
+
+  Expected:
+
+  bkash_number
+  nagad_number
+  rocket_number
+*/
+
+let PAYMENT_CONFIG = {
+
+  bkash:'',
+  nagad:'',
+  rocket:''
+
+};
+
+
+let COPY_VALUES = {
+
+  merchant:'',
+  invoice:'',
+  amount:''
+
+};
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function taka(value){
+
+  const n =
+    Number(value || 0);
+
+  return '৳' +
+    n.toLocaleString('bn-BD');
+
+}
+
+
+function escapeHtml(value){
+
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+function normalizePhone(value){
+
+  if(!value){
+    return '';
   }
 
+  let p =
+    String(value)
+      .replace(/\D/g,'');
 
-  function escapeHtml(value){
-
-    return String(value ?? '')
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#039;');
-
-  }
-
-
-  function normalizePhone(phone){
-
-    if(!phone) return '';
-
-    let p = String(phone).replace(/\D/g,'');
-
-    if(p.startsWith('880')){
-      return p;
-    }
-
-    if(p.startsWith('0')){
-      return '880' + p.substring(1);
-    }
+  if(
+    p.startsWith('880')
+  ){
 
     return p;
 
   }
 
+  if(
+    p.startsWith('0')
+  ){
 
-  function normalizeMethod(method){
-
-    const map = {
-      bkash_direct:'bkash_direct',
-      nagad_direct:'nagad_direct',
-      rocket_direct:'rocket_direct',
-      cash:'cash',
-      sslcommerz:'sslcommerz'
-    };
-
-    return map[method] || method;
+    return '880' +
+      p.substring(1);
 
   }
 
+  return p;
 
-  /* ============================================================
-     STATUS
-     ============================================================ */
-
-  function setStatus(message, className){
-
-    const box = document.getElementById('statusBox');
-
-    if(!message){
-
-      box.className = 'status-box';
-
-      box.textContent = '';
-
-      return;
-    }
-
-    box.className =
-      'status-box show ' +
-      (className || 'st-wait');
-
-    box.textContent = message;
-
-  }
+}
 
 
-  /* ============================================================
-     COPY
-     ============================================================ */
+/* ============================================================
+   API
+============================================================ */
 
-  async function copyVal(which, btn){
+async function api(body){
 
-    const value = COPY_VALS[which] || '';
-
-    if(!value){
-
-      setStatus(
-        'কপি করার মতো তথ্য পাওয়া যায়নি।',
-        'st-err'
-      );
-
-      return;
-    }
-
-    try{
-
-      await navigator.clipboard.writeText(String(value));
-
-      btn.classList.add('copied');
-
-      const oldText = btn.innerHTML;
-
-      btn.innerHTML = '✓ কপি হয়েছে';
-
-      setTimeout(function(){
-
-        btn.classList.remove('copied');
-
-        btn.innerHTML = oldText;
-
-      },1500);
-
-    }catch(error){
-
-      setStatus(
-        'কপি করা যায়নি। অনুগ্রহ করে নম্বরটি নিজে কপি করুন।',
-        'st-err'
-      );
-
-    }
-
-  }
-
-
-  /* ============================================================
-     API
-     ============================================================ */
-
-  async function api(body){
-
-    const response = await fetch(
+  const response =
+    await fetch(
       '/.netlify/functions/payment',
       {
         method:'POST',
 
         headers:{
-          'Content-Type':'application/json',
-          'Accept':'application/json'
+          'Content-Type':
+            'application/json',
+
+          'Accept':
+            'application/json'
         },
 
-        body:JSON.stringify(body)
+        body:
+          JSON.stringify(body)
       }
     );
 
-    let data = null;
 
-    try{
+  let data;
 
-      data = await response.json();
 
-    }catch(error){
+  try{
 
-      throw new Error(
-        'Backend থেকে JSON response পাওয়া যায়নি। HTTP ' +
-        response.status
-      );
+    data =
+      await response.json();
 
-    }
+  }catch(error){
 
-    if(!response.ok){
-
-      throw new Error(
-        data?.error ||
-        data?.message ||
-        ('HTTP error ' + response.status)
-      );
-
-    }
-
-    return data;
+    throw new Error(
+      'Payment server থেকে সঠিক response পাওয়া যায়নি। HTTP ' +
+      response.status
+    );
 
   }
 
 
-  /* ============================================================
-     SHOW NOT FOUND
-     ============================================================ */
+  if(!response.ok){
 
-  function showNotFound(message){
-
-    document.getElementById('loadingNote').style.display = 'none';
-
-    document.getElementById('pmContent').style.display = 'none';
-
-    document.getElementById('notFoundNote').style.display = '';
-
-    if(message){
-
-      const debug = document.getElementById('debugBox');
-
-      debug.style.display = 'block';
-
-      debug.textContent = message;
-
-    }
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      ('HTTP ' + response.status)
+    );
 
   }
 
 
-  /* ============================================================
-     PAYMENT METHODS
-     ============================================================ */
+  return data;
 
-  function getMethods(response){
+}
+
+
+/* ============================================================
+   ERROR
+============================================================ */
+
+function showError(message){
+
+  document
+    .getElementById('loading')
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById('content')
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById('errorScreen')
+    .style.display =
+    'block';
+
+
+  document
+    .getElementById('errorText')
+    .textContent =
+    message ||
+    'Invoice তথ্য লোড করা যায়নি।';
+
+}
+
+
+/* ============================================================
+   LOAD INVOICE
+============================================================ */
+
+async function loadInvoice(){
+
+  if(!INV){
+
+    showError(
+      'URL-এ invoice number নেই।'
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById('loading')
+    .style.display =
+    'block';
+
+
+  document
+    .getElementById('errorScreen')
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById('content')
+    .style.display =
+    'none';
+
+
+  try{
+
+    const response =
+      await api({
+
+        action:
+          'getInvoice',
+
+        invoice_number:
+          INV
+
+      });
+
 
     if(
-      Array.isArray(response.available_methods) &&
-      response.available_methods.length
+      !response ||
+      !response.ok ||
+      !response.invoice
     ){
 
-      return response.available_methods;
+      throw new Error(
+        response?.error ||
+        'Invoice পাওয়া যায়নি।'
+      );
 
     }
 
-    return ['sslcommerz'];
 
-  }
+    INVOICE =
+      response.invoice;
 
 
-  function configurePaymentNumbers(response){
+    PHONE =
+      normalizePhone(
+        INVOICE.phone ||
+        response.phone ||
+        ''
+      );
+
+
+    GATEWAY_URL =
+      response.gateway_url ||
+      response.gatewayUrl ||
+      '';
+
 
     /*
-      Preferred backend response:
-
-      {
-        bkash_number: "...",
-        nagad_number: "...",
-        rocket_number: "..."
-      }
-
-      Backward compatible:
-      if only bkash_number exists,
-      bKash will still work.
+      Separate payment numbers.
     */
 
     PAYMENT_CONFIG.bkash =
@@ -1354,1079 +2322,1093 @@
       response.rocket ||
       '';
 
-  }
 
+    /* ========================================================
+       STATUS
+    ======================================================== */
 
-  function methodIsAvailable(method, availableMethods){
+    const invoiceStatus =
+      String(
+        INVOICE.status ||
+        'pending'
+      ).toLowerCase();
 
-    if(!Array.isArray(availableMethods)){
-      return true;
-    }
-
-    if(availableMethods.includes(method)){
-      return true;
-    }
-
-    /*
-      Backward compatibility with old backend
-      which used "bkash_direct" for all mobile banking.
-    */
 
     if(
-      method !== 'cash' &&
-      method !== 'sslcommerz' &&
-      availableMethods.includes('bkash_direct')
+      invoiceStatus === 'paid'
     ){
 
-      return true;
-
-    }
-
-    return false;
-
-  }
+      const paymentId =
+        response.payment?.id ||
+        INVOICE.payment_id ||
+        '';
 
 
-  /* ============================================================
-     LOAD INVOICE
-     ============================================================ */
-
-  async function loadInvoice(){
-
-    if(!INV){
-
-      showNotFound(
-        'URL-এ invoice number নেই। উদাহরণ: payment.html?inv=INV-001'
-      );
+      window.location.href =
+        'receipt.html?payment_id=' +
+        encodeURIComponent(
+          paymentId
+        );
 
       return;
 
     }
 
-    document.getElementById('loadingNote').style.display = '';
 
-    document.getElementById('notFoundNote').style.display = 'none';
+    if(
+      invoiceStatus !== 'pending' &&
+      invoiceStatus !== 'unpaid'
+    ){
 
-    document.getElementById('pmContent').style.display = 'none';
-
-    try{
-
-      const res = await api({
-        action:'getInvoice',
-        invoice_number:INV
-      });
-
-
-      if(!res || !res.ok){
-
-        throw new Error(
-          res?.error ||
-          res?.message ||
-          'Invoice পাওয়া যায়নি।'
+      window.location.href =
+        'invoice.html?inv=' +
+        encodeURIComponent(
+          INV
         );
 
-      }
-
-
-      if(!res.invoice){
-
-        throw new Error(
-          'Backend response-এ invoice object নেই।'
-        );
-
-      }
-
-
-      INVOICE = res.invoice;
-
-
-      PHONE = normalizePhone(
-        INVOICE.phone || res.phone || ''
-      );
-
-
-      GATEWAY_URL =
-        res.gateway_url ||
-        res.gatewayUrl ||
-        null;
-
-
-      configurePaymentNumbers(res);
-
-
-      COPY_VALS.invoice =
-        INVOICE.invoice_number || INV;
-
-
-      COPY_VALS.amount =
-        String(
-          INVOICE.total ??
-          INVOICE.amount ??
-          0
-        );
-
-
-      /* ========================================================
-         PAYMENT STATUS
-         ======================================================== */
-
-      const invoiceStatus =
-        String(INVOICE.status || 'pending').toLowerCase();
-
-
-      if(invoiceStatus === 'paid'){
-
-        const paymentId =
-          res.payment?.id ||
-          INVOICE.payment_id ||
-          '';
-
-        window.location.href =
-          'receipt.html?payment_id=' +
-          encodeURIComponent(paymentId);
-
-        return;
-
-      }
-
-
-      if(
-        invoiceStatus !== 'pending' &&
-        invoiceStatus !== 'unpaid'
-      ){
-
-        window.location.href =
-          'invoice.html?inv=' +
-          encodeURIComponent(INV);
-
-        return;
-
-      }
-
-
-      /* ========================================================
-         DISPLAY DATA
-         ======================================================== */
-
-      document.getElementById('amtView').textContent =
-        taka(
-          INVOICE.total ??
-          INVOICE.amount ??
-          0
-        );
-
-
-      document.getElementById('invoiceView').textContent =
-        INVOICE.invoice_number || INV;
-
-
-      const methods = getMethods(res);
-
-
-      /* ========================================================
-         MOBILE BANKING VISIBILITY
-         ======================================================== */
-
-      const hasMobile =
-        methods.includes('bkash_direct') ||
-        methods.includes('nagad_direct') ||
-        methods.includes('rocket_direct') ||
-        methods.includes('cash');
-
-
-      document.getElementById(
-        'mobileBankingGroup'
-      ).style.display =
-        hasMobile ? '' : 'none';
-
-
-      /* ========================================================
-         DISABLE METHODS WITHOUT NUMBERS
-         ======================================================== */
-
-      const methodCards =
-        document.querySelectorAll('.pm');
-
-
-      methodCards.forEach(function(card){
-
-        const method =
-          card.dataset.method;
-
-        let enabled =
-          methodIsAvailable(method, methods);
-
-
-        if(method === 'bkash_direct'){
-          enabled = enabled && !!PAYMENT_CONFIG.bkash;
-        }
-
-        if(method === 'nagad_direct'){
-          enabled = enabled && !!PAYMENT_CONFIG.nagad;
-        }
-
-        if(method === 'rocket_direct'){
-          enabled = enabled && !!PAYMENT_CONFIG.rocket;
-        }
-
-
-        if(!enabled){
-
-          card.style.display = 'none';
-
-        }else{
-
-          card.style.display = '';
-
-        }
-
-      });
-
-
-      /* ========================================================
-         SHOW PAGE
-         ======================================================== */
-
-      document.getElementById(
-        'loadingNote'
-      ).style.display = 'none';
-
-
-      document.getElementById(
-        'pmContent'
-      ).style.display = '';
-
-
-      /* ========================================================
-         EVENT LISTENERS
-         ======================================================== */
-
-      document.querySelectorAll('.pm').forEach(function(el){
-
-        el.addEventListener(
-          'click',
-          function(){
-
-            selectMethod(el);
-
-          }
-        );
-
-      });
-
-
-    }catch(error){
-
-      console.error(
-        'Payment page load error:',
-        error
-      );
-
-      showNotFound(
-        error.message || 'Unknown error'
-      );
+      return;
 
     }
 
+
+    /* ========================================================
+       DISPLAY
+    ======================================================== */
+
+    const total =
+      INVOICE.total ??
+      INVOICE.amount ??
+      0;
+
+
+    document
+      .getElementById('amount')
+      .textContent =
+      taka(total);
+
+
+    document
+      .getElementById('invoiceNumber')
+      .textContent =
+      INVOICE.invoice_number ||
+      INV;
+
+
+    COPY_VALUES.invoice =
+      INVOICE.invoice_number ||
+      INV;
+
+
+    COPY_VALUES.amount =
+      String(total);
+
+
+    document
+      .getElementById('loading')
+      .style.display =
+      'none';
+
+
+    document
+      .getElementById('content')
+      .style.display =
+      'block';
+
+
+    /*
+      IMPORTANT:
+
+      We deliberately DO NOT hide payment cards
+      based on available_methods.
+
+      All payment options remain visible.
+    */
+
+
+    attachPaymentEvents();
+
+
+  }catch(error){
+
+    console.error(
+      'loadInvoice:',
+      error
+    );
+
+
+    showError(
+      error.message ||
+      'Invoice লোড করা যায়নি।'
+    );
+
   }
 
+}
 
-  /* ============================================================
-     STEP TEMPLATES
-     ============================================================ */
 
-  const STEP_TEMPLATES = {
+/* ============================================================
+   PAYMENT EVENTS
+============================================================ */
 
-    bKash:[
-      'bKash অ্যাপ খুলুন',
-      'Send Money সিলেক্ট করুন',
-      'নম্বর দিন: <b>{num}</b>',
-      'পরিমাণ দিন: <b>{amt}</b> টাকা',
-      'Reference-এ ইনভয়েস নং দিন: <b>{inv}</b>',
-      'আপনার PIN দিয়ে নিশ্চিত করুন',
-      'SMS-এ পাওয়া TrxID নিচে জমা দিন'
-    ],
+function attachPaymentEvents(){
 
-    Nagad:[
-      'Nagad অ্যাপ খুলুন',
-      'Send Money সিলেক্ট করুন',
-      'নম্বর দিন: <b>{num}</b>',
-      'পরিমাণ দিন: <b>{amt}</b> টাকা',
-      'Reference-এ ইনভয়েস নং দিন: <b>{inv}</b>',
-      'আপনার PIN দিয়ে নিশ্চিত করুন',
-      'SMS-এ পাওয়া TrxID নিচে জমা দিন'
-    ],
+  document
+    .querySelectorAll('.payment-card')
+    .forEach(function(card){
 
-    Rocket:[
-      '*322# ডায়াল করুন অথবা Rocket অ্যাপ খুলুন',
-      'Merchant Pay সিলেক্ট করুন',
-      'Merchant নম্বর দিন: <b>{num}</b>',
-      'Invoice/reference দিন: <b>{inv}</b>',
-      'পরিমাণ দিন: <b>{amt}</b> টাকা',
-      'আপনার PIN দিয়ে নিশ্চিত করুন',
-      'SMS-এ পাওয়া TrxID নিচে জমা দিন'
-    ]
+      card.onclick =
+        function(){
+
+          selectPayment(card);
+
+        };
+
+    });
+
+}
+
+
+/* ============================================================
+   SELECT PAYMENT
+============================================================ */
+
+function selectPayment(card){
+
+  document
+    .querySelectorAll('.payment-card')
+    .forEach(function(item){
+
+      item.classList.remove(
+        'selected'
+      );
+
+    });
+
+
+  card.classList.add(
+    'selected'
+  );
+
+
+  SELECTED = {
+
+    method:
+      card.dataset.method,
+
+    name:
+      card.dataset.name,
+
+    icon:
+      card.dataset.icon
 
   };
 
 
-  /* ============================================================
-     SELECT METHOD
-     ============================================================ */
+  const detail =
+    document.getElementById(
+      'detail'
+    );
 
-  function selectMethod(el){
+
+  detail.classList.add(
+    'show'
+  );
+
+
+  document
+    .getElementById(
+      'selectedIcon'
+    )
+    .textContent =
+    SELECTED.icon;
+
+
+  document
+    .getElementById(
+      'selectedName'
+    )
+    .textContent =
+    SELECTED.name;
+
+
+  /*
+    Reset
+  */
+
+  document
+    .getElementById(
+      'copyRow'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'numberBox'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'steps'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'senderField'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'trxField'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'cashField'
+    )
+    .style.display =
+    'none';
+
+
+  clearStatus();
+
+
+  /* ==========================================================
+     BKASH
+  =========================================================== */
+
+  if(
+    SELECTED.method ===
+    'bkash_direct'
+  ){
+
+    setupDirectPayment(
+      'bKash',
+      PAYMENT_CONFIG.bkash
+    );
+
+    return;
+
+  }
+
+
+  /* ==========================================================
+     NAGAD
+  =========================================================== */
+
+  if(
+    SELECTED.method ===
+    'nagad_direct'
+  ){
+
+    setupDirectPayment(
+      'Nagad',
+      PAYMENT_CONFIG.nagad
+    );
+
+    return;
+
+  }
+
+
+  /* ==========================================================
+     ROCKET
+  =========================================================== */
+
+  if(
+    SELECTED.method ===
+    'rocket_direct'
+  ){
+
+    setupDirectPayment(
+      'Rocket',
+      PAYMENT_CONFIG.rocket
+    );
+
+    return;
+
+  }
+
+
+  /* ==========================================================
+     CASH
+  =========================================================== */
+
+  if(
+    SELECTED.method ===
+    'cash'
+  ){
 
     document
-      .querySelectorAll('.pm')
-      .forEach(function(card){
+      .getElementById(
+        'instruction'
+      )
+      .textContent =
+      'অফিসে সরাসরি নগদ টাকা প্রদান করলে নিচে reference/রসিদ নম্বর দিতে পারেন।';
 
-        card.classList.remove('selected');
 
-      });
+    document
+      .getElementById(
+        'cashField'
+      )
+      .style.display =
+      'block';
 
 
-    el.classList.add('selected');
+    document
+      .getElementById(
+        'confirmText'
+      )
+      .textContent =
+      'নগদ পেমেন্ট দাবি জমা দিন';
 
 
-    const method =
-      normalizeMethod(el.dataset.method);
+    document
+      .getElementById(
+        'securityText'
+      )
+      .textContent =
+      'Cash payment claim জমা দেওয়ার পর BIYE কর্তৃপক্ষ payment verify করবে।';
 
-    const app =
-      el.dataset.app || '';
 
-    const icon =
-      el.dataset.icon || '💳';
-
-
-    SELECTED = {
-      method:method,
-      app:app,
-      icon:icon
-    };
-
-
-    const detail =
-      document.getElementById('detail');
-
-    const instr =
-      document.getElementById('instr');
-
-    const numBox =
-      document.getElementById('numBox');
-
-    const copyHint =
-      document.getElementById('copyHint');
-
-    const copyRow =
-      document.getElementById('copyRow');
-
-    const stepsList =
-      document.getElementById('stepsList');
-
-    const senderAccField =
-      document.getElementById('senderAccField');
-
-    const trxField =
-      document.getElementById('trxField');
-
-    const cashRefField =
-      document.getElementById('cashRefField');
-
-    const confirmTxt =
-      document.getElementById('confirmTxt');
-
-    const selectedMethodName =
-      document.getElementById('selectedMethodName');
-
-    const selectedMethodIcon =
-      document.getElementById('selectedMethodIcon');
-
-    const securityText =
-      document.getElementById('securityText');
-
-
-    detail.classList.add('show');
-
-    setStatus('');
-
-
-    copyRow.style.display = 'none';
-
-    stepsList.style.display = 'none';
-
-    senderAccField.style.display = 'none';
-
-    trxField.style.display = 'none';
-
-    cashRefField.style.display = 'none';
-
-    numBox.style.display = 'none';
-
-    copyHint.textContent = '';
-
-
-    selectedMethodName.textContent =
-      app || method;
-
-    selectedMethodIcon.textContent =
-      icon;
-
-
-    /* ========================================================
-       SSL COMMERZ
-       ======================================================== */
-
-    if(method === 'sslcommerz'){
-
-      instr.textContent =
-        'নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে। সেখানে bKash, Nagad, Rocket, Visa, Mastercard এবং Internet Banking-এর উপলব্ধ অপশন থাকবে।';
-
-      confirmTxt.textContent =
-        'গেটওয়েতে যান →';
-
-      securityText.textContent =
-        'SSLCommerz-এর secure payment gateway-তে পেমেন্ট সম্পন্ন করুন।';
-
-      return;
-
-    }
-
-
-    /* ========================================================
-       bKASH
-       ======================================================== */
-
-    if(method === 'bkash_direct'){
-
-      const number =
-        PAYMENT_CONFIG.bkash;
-
-
-      COPY_VALS.merchant =
-        number;
-
-
-      document.getElementById(
-        'copyMerchantLbl'
-      ).textContent =
-        'bKash নম্বর';
-
-
-      instr.textContent =
-        'bKash-এ Send Money করে নিচের নম্বরে পেমেন্ট করুন।';
-
-
-      numBox.style.display = '';
-
-      numBox.textContent =
-        number || 'নম্বর পাওয়া যায়নি';
-
-
-      copyRow.style.display =
-        number ? '' : 'none';
-
-
-      const steps =
-        STEP_TEMPLATES.bKash.map(function(step){
-
-          return step
-            .replace(
-              '{num}',
-              escapeHtml(number)
-            )
-            .replace(
-              '{amt}',
-              escapeHtml(
-                INVOICE.total ??
-                INVOICE.amount ??
-                0
-              )
-            )
-            .replace(
-              '{inv}',
-              escapeHtml(
-                INVOICE.invoice_number ||
-                INV
-              )
-            );
-
-        });
-
-
-      stepsList.innerHTML =
-        steps.map(function(step){
-
-          return '<li>' + step + '</li>';
-
-        }).join('');
-
-
-      stepsList.style.display = '';
-
-      senderAccField.style.display = '';
-
-      trxField.style.display = '';
-
-      confirmTxt.textContent =
-        'পেমেন্ট নিশ্চিত করুন';
-
-      securityText.textContent =
-        'আপনার bKash PIN বা OTP আমাদের কখনো দিতে হবে না। শুধু sender number ও TrxID দিন।';
-
-      return;
-
-    }
-
-
-    /* ========================================================
-       NAGAD
-       ======================================================== */
-
-    if(method === 'nagad_direct'){
-
-      const number =
-        PAYMENT_CONFIG.nagad;
-
-
-      COPY_VALS.merchant =
-        number;
-
-
-      document.getElementById(
-        'copyMerchantLbl'
-      ).textContent =
-        'Nagad নম্বর';
-
-
-      instr.textContent =
-        'Nagad-এ Send Money করে নিচের নম্বরে পেমেন্ট করুন।';
-
-
-      numBox.style.display = '';
-
-      numBox.textContent =
-        number || 'নম্বর পাওয়া যায়নি';
-
-
-      copyRow.style.display =
-        number ? '' : 'none';
-
-
-      const steps =
-        STEP_TEMPLATES.Nagad.map(function(step){
-
-          return step
-            .replace(
-              '{num}',
-              escapeHtml(number)
-            )
-            .replace(
-              '{amt}',
-              escapeHtml(
-                INVOICE.total ??
-                INVOICE.amount ??
-                0
-              )
-            )
-            .replace(
-              '{inv}',
-              escapeHtml(
-                INVOICE.invoice_number ||
-                INV
-              )
-            );
-
-        });
-
-
-      stepsList.innerHTML =
-        steps.map(function(step){
-
-          return '<li>' + step + '</li>';
-
-        }).join('');
-
-
-      stepsList.style.display = '';
-
-      senderAccField.style.display = '';
-
-      trxField.style.display = '';
-
-      confirmTxt.textContent =
-        'পেমেন্ট নিশ্চিত করুন';
-
-      securityText.textContent =
-        'আপনার Nagad PIN বা OTP আমাদের কখনো দিতে হবে না। শুধু sender number ও TrxID দিন।';
-
-      return;
-
-    }
-
-
-    /* ========================================================
-       ROCKET
-       ======================================================== */
-
-    if(method === 'rocket_direct'){
-
-      const number =
-        PAYMENT_CONFIG.rocket;
-
-
-      COPY_VALS.merchant =
-        number;
-
-
-      document.getElementById(
-        'copyMerchantLbl'
-      ).textContent =
-        'Rocket নম্বর';
-
-
-      instr.textContent =
-        'Rocket-এ Merchant Pay ব্যবহার করে নিচের নম্বরে পেমেন্ট করুন।';
-
-
-      numBox.style.display = '';
-
-      numBox.textContent =
-        number || 'নম্বর পাওয়া যায়নি';
-
-
-      copyRow.style.display =
-        number ? '' : 'none';
-
-
-      const steps =
-        STEP_TEMPLATES.Rocket.map(function(step){
-
-          return step
-            .replace(
-              '{num}',
-              escapeHtml(number)
-            )
-            .replace(
-              '{amt}',
-              escapeHtml(
-                INVOICE.total ??
-                INVOICE.amount ??
-                0
-              )
-            )
-            .replace(
-              '{inv}',
-              escapeHtml(
-                INVOICE.invoice_number ||
-                INV
-              )
-            );
-
-        });
-
-
-      stepsList.innerHTML =
-        steps.map(function(step){
-
-          return '<li>' + step + '</li>';
-
-        }).join('');
-
-
-      stepsList.style.display = '';
-
-      senderAccField.style.display = '';
-
-      trxField.style.display = '';
-
-      confirmTxt.textContent =
-        'পেমেন্ট নিশ্চিত করুন';
-
-      securityText.textContent =
-        'আপনার Rocket PIN বা OTP আমাদের কখনো দিতে হবে না। শুধু sender number ও TrxID দিন।';
-
-      return;
-
-    }
-
-
-    /* ========================================================
-       CASH
-       ======================================================== */
-
-    if(method === 'cash'){
-
-      instr.textContent =
-        'অফিসে সরাসরি নগদ জমা দিয়ে থাকলে নিচে সংক্ষিপ্ত একটি reference দিতে পারেন।';
-
-
-      cashRefField.style.display = '';
-
-      confirmTxt.textContent =
-        'নগদ পেমেন্ট দাবি জমা দিন';
-
-
-      securityText.textContent =
-        'Cash payment claim জমা দেওয়ার পর BIYE কর্তৃপক্ষ payment verify করবে।';
-
-      return;
-
-    }
+    return;
 
   }
 
 
-  /* ============================================================
-     VALIDATE MOBILE NUMBER
-     ============================================================ */
+  /* ==========================================================
+     SSL COMMERZ
+  =========================================================== */
 
-  function validBangladeshMobile(value){
+  if(
+    SELECTED.method ===
+    'sslcommerz'
+  ){
 
-    const clean =
-      String(value || '')
-        .replace(/\D/g,'');
-
-
-    if(/^01[3-9]\d{8}$/.test(clean)){
-      return true;
-    }
-
-
-    if(/^8801[3-9]\d{8}$/.test(clean)){
-      return true;
-    }
+    document
+      .getElementById(
+        'instruction'
+      )
+      .textContent =
+      'SSLCommerz-এর secure gateway-তে যাওয়ার পর আপনার জন্য উপলব্ধ card, mobile banking এবং Internet Banking option নির্বাচন করতে পারবেন।';
 
 
-    return false;
+    document
+      .getElementById(
+        'confirmText'
+      )
+      .textContent =
+      'Secure Gateway-তে যান →';
+
+
+    document
+      .getElementById(
+        'securityText'
+      )
+      .textContent =
+      'SSLCommerz payment gateway-তে নিরাপদভাবে payment সম্পন্ন করুন।';
+
+
+    return;
+
+  }
+
+}
+
+
+/* ============================================================
+   DIRECT PAYMENT SETUP
+============================================================ */
+
+function setupDirectPayment(
+  app,
+  number
+){
+
+  document
+    .getElementById(
+      'instruction'
+    )
+    .textContent =
+    app +
+    ' থেকে Send Money করে নিচের নম্বরে payment করুন।';
+
+
+  const numberBox =
+    document.getElementById(
+      'numberBox'
+    );
+
+
+  numberBox.textContent =
+    number ||
+    'Payment number এখনো configured হয়নি';
+
+
+  numberBox.style.display =
+    'block';
+
+
+  /*
+    Copy
+  */
+
+  COPY_VALUES.merchant =
+    number || '';
+
+
+  if(number){
+
+    document
+      .getElementById(
+        'copyRow'
+      )
+      .style.display =
+      'flex';
 
   }
 
 
-  /* ============================================================
-     VALIDATE DIRECT PAYMENT
-     ============================================================ */
+  /*
+    Steps
+  */
 
-  function validateDirectPayment(){
+  const amount =
+    INVOICE.total ??
+    INVOICE.amount ??
+    0;
+
+
+  const invoice =
+    INVOICE.invoice_number ||
+    INV;
+
+
+  let steps = [];
+
+
+  if(app === 'bKash'){
+
+    steps = [
+
+      'bKash অ্যাপ খুলুন',
+
+      'Send Money নির্বাচন করুন',
+
+      'নম্বর দিন: <b>' +
+      escapeHtml(number) +
+      '</b>',
+
+      'পরিমাণ দিন: <b>' +
+      escapeHtml(amount) +
+      '</b> টাকা',
+
+      'Reference-এ invoice number দিন: <b>' +
+      escapeHtml(invoice) +
+      '</b>',
+
+      'PIN দিয়ে payment confirm করুন',
+
+      'SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
+
+    ];
+
+  }
+
+
+  if(app === 'Nagad'){
+
+    steps = [
+
+      'Nagad অ্যাপ খুলুন',
+
+      'Send Money নির্বাচন করুন',
+
+      'নম্বর দিন: <b>' +
+      escapeHtml(number) +
+      '</b>',
+
+      'পরিমাণ দিন: <b>' +
+      escapeHtml(amount) +
+      '</b> টাকা',
+
+      'Reference-এ invoice number দিন: <b>' +
+      escapeHtml(invoice) +
+      '</b>',
+
+      'PIN দিয়ে payment confirm করুন',
+
+      'SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
+
+    ];
+
+  }
+
+
+  if(app === 'Rocket'){
+
+    steps = [
+
+      'Rocket অ্যাপ খুলুন অথবা *322# ব্যবহার করুন',
+
+      'Merchant Pay নির্বাচন করুন',
+
+      'Merchant number দিন: <b>' +
+      escapeHtml(number) +
+      '</b>',
+
+      'Invoice/reference দিন: <b>' +
+      escapeHtml(invoice) +
+      '</b>',
+
+      'পরিমাণ দিন: <b>' +
+      escapeHtml(amount) +
+      '</b> টাকা',
+
+      'PIN দিয়ে payment confirm করুন',
+
+      'SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
+
+    ];
+
+  }
+
+
+  const stepsElement =
+    document.getElementById(
+      'steps'
+    );
+
+
+  stepsElement.innerHTML =
+    steps.map(function(step){
+
+      return '<li>' +
+        step +
+        '</li>';
+
+    }).join('');
+
+
+  stepsElement.style.display =
+    'block';
+
+
+  /*
+    Fields
+  */
+
+  document
+    .getElementById(
+      'senderField'
+    )
+    .style.display =
+    'block';
+
+
+  document
+    .getElementById(
+      'trxField'
+    )
+    .style.display =
+    'block';
+
+
+  document
+    .getElementById(
+      'confirmText'
+    )
+    .textContent =
+    'পেমেন্ট নিশ্চিত করুন';
+
+
+  document
+    .getElementById(
+      'securityText'
+    )
+    .textContent =
+    app +
+    ' PIN বা OTP কখনো BIYE-কে দেবেন না। শুধু sender number এবং TrxID দিন।';
+
+}
+
+
+/* ============================================================
+   COPY
+============================================================ */
+
+async function copyValue(
+  type,
+  button
+){
+
+  const value =
+    COPY_VALUES[type] ||
+    '';
+
+
+  if(!value){
+
+    showStatus(
+      'এই তথ্য এখনো পাওয়া যায়নি।',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      String(value)
+    );
+
+
+    const old =
+      button.innerHTML;
+
+
+    button.classList.add(
+      'copied'
+    );
+
+
+    button.innerHTML =
+      '✓ কপি হয়েছে';
+
+
+    setTimeout(function(){
+
+      button.classList.remove(
+        'copied'
+      );
+
+      button.innerHTML =
+        old;
+
+    },1500);
+
+
+  }catch(error){
+
+    showStatus(
+      'কপি করা যায়নি। তথ্যটি নিজে কপি করুন।',
+      'error'
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE VALIDATION
+============================================================ */
+
+function validMobile(value){
+
+  const number =
+    String(value || '')
+      .replace(/\D/g,'');
+
+
+  return (
+    /^01[3-9]\d{8}$/.test(number)
+    ||
+    /^8801[3-9]\d{8}$/.test(number)
+  );
+
+}
+
+
+/* ============================================================
+   CONFIRM PAYMENT
+============================================================ */
+
+async function confirmPayment(){
+
+  if(!SELECTED){
+
+    showStatus(
+      'প্রথমে একটি payment method নির্বাচন করুন।',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      'confirmButton'
+    );
+
+
+  /* ==========================================================
+     SSL COMMERZ
+  =========================================================== */
+
+  if(
+    SELECTED.method ===
+    'sslcommerz'
+  ){
+
+    if(!GATEWAY_URL){
+
+      showStatus(
+        'SSLCommerz gateway URL এখনো পাওয়া যায়নি। Backend-এ gateway configuration পরীক্ষা করুন।',
+        'error'
+      );
+
+      return;
+
+    }
+
+
+    button.disabled =
+      true;
+
+
+    showStatus(
+      'Secure payment gateway-তে পাঠানো হচ্ছে...',
+      'wait'
+    );
+
+
+    window.location.href =
+      GATEWAY_URL;
+
+
+    return;
+
+  }
+
+
+  /* ==========================================================
+     DIRECT
+  =========================================================== */
+
+  let claimReference =
+    '';
+
+
+  if(
+    SELECTED.method ===
+    'bkash_direct' ||
+    SELECTED.method ===
+    'nagad_direct' ||
+    SELECTED.method ===
+    'rocket_direct'
+  ){
 
     const senderInput =
-      document.getElementById('senderAccInput');
+      document.getElementById(
+        'senderInput'
+      );
+
 
     const trxInput =
-      document.getElementById('trxInput');
+      document.getElementById(
+        'trxInput'
+      );
 
 
     const sender =
       senderInput.value.trim();
 
+
     const trx =
       trxInput.value.trim();
 
 
-    senderInput.classList.remove('invalid');
+    senderInput.classList.remove(
+      'invalid'
+    );
 
-    trxInput.classList.remove('invalid');
+    trxInput.classList.remove(
+      'invalid'
+    );
 
 
-    if(!validBangladeshMobile(sender)){
+    if(!validMobile(sender)){
 
-      senderInput.classList.add('invalid');
+      senderInput.classList.add(
+        'invalid'
+      );
 
       senderInput.focus();
 
-      setStatus(
-        'সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।',
-        'st-err'
+
+      showStatus(
+        'সঠিক বাংলাদেশি মোবাইল নম্বর দিন।',
+        'error'
       );
 
-      return null;
+      return;
 
     }
 
 
-    if(!trx || trx.length < 4){
+    if(
+      !trx ||
+      trx.length < 4
+    ){
 
-      trxInput.classList.add('invalid');
+      trxInput.classList.add(
+        'invalid'
+      );
 
       trxInput.focus();
 
-      setStatus(
+
+      showStatus(
         'সঠিক Transaction ID (TrxID) দিন।',
-        'st-err'
+        'error'
       );
 
-      return null;
+      return;
 
     }
 
 
-    return {
-      sender:sender,
-      trx:trx
-    };
+    claimReference =
+      SELECTED.name +
+      ' | From: ' +
+      sender +
+      ' | TrxID: ' +
+      trx;
 
   }
 
 
-  /* ============================================================
-     CONFIRM PAYMENT
-     ============================================================ */
+  /* ==========================================================
+     CASH
+  =========================================================== */
 
-  async function confirmPayment(){
+  if(
+    SELECTED.method ===
+    'cash'
+  ){
 
-    if(!SELECTED){
+    claimReference =
+      document
+        .getElementById(
+          'cashInput'
+        )
+        .value
+        .trim();
 
-      setStatus(
-        'প্রথমে একটি পেমেন্ট পদ্ধতি নির্বাচন করুন।',
-        'st-err'
-      );
-
-      return;
-
-    }
-
-
-    const btn =
-      document.getElementById('confirmBtn');
-
-    const confirmTxt =
-      document.getElementById('confirmTxt');
+  }
 
 
-    /* ========================================================
-       SSL COMMERZ
-       ======================================================== */
+  /* ==========================================================
+     SUBMIT
+  =========================================================== */
 
-    if(SELECTED.method === 'sslcommerz'){
-
-      if(!GATEWAY_URL){
-
-        setStatus(
-          'Payment gateway এই মুহূর্তে প্রস্তুত নয়। অনুগ্রহ করে কিছুক্ষণ পরে আবার চেষ্টা করুন।',
-          'st-err'
-        );
-
-        return;
-
-      }
+  button.disabled =
+    true;
 
 
-      setStatus(
-        'নিরাপদ payment gateway-তে পাঠানো হচ্ছে...',
-        'st-wait'
-      );
+  document
+    .getElementById(
+      'confirmText'
+    )
+    .innerHTML =
+    '<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>জমা হচ্ছে...';
 
 
-      btn.disabled = true;
+  showStatus(
+    'Payment claim জমা দেওয়া হচ্ছে...',
+    'wait'
+  );
 
 
-      window.location.href =
-        GATEWAY_URL;
+  try{
 
+    const response =
+      await api({
 
-      return;
+        action:
+          'confirmManualPayment',
 
-    }
+        invoice_number:
+          INV,
 
+        method:
+          SELECTED.method,
 
-    /* ========================================================
-       DIRECT MOBILE PAYMENT
-       ======================================================== */
+        claim_reference:
+          claimReference,
 
-    let claimReference = '';
-
-    let paymentMethod =
-      SELECTED.method;
-
-
-    if(
-      SELECTED.method === 'bkash_direct' ||
-      SELECTED.method === 'nagad_direct' ||
-      SELECTED.method === 'rocket_direct'
-    ){
-
-      const result =
-        validateDirectPayment();
-
-
-      if(!result){
-        return;
-      }
-
-
-      claimReference =
-        SELECTED.app +
-        ' | From: ' +
-        result.sender +
-        ' | TrxID: ' +
-        result.trx;
-
-    }
-
-
-    /* ========================================================
-       CASH
-       ======================================================== */
-
-    else if(SELECTED.method === 'cash'){
-
-      claimReference =
-        document
-          .getElementById('cashRefInput')
-          .value
-          .trim();
-
-    }
-
-
-    /* ========================================================
-       LOCK BUTTON
-       ======================================================== */
-
-    btn.disabled = true;
-
-    confirmTxt.innerHTML =
-      '<span class="spinner"></span>জমা হচ্ছে...';
-
-    setStatus(
-      'আপনার payment claim জমা দেওয়া হচ্ছে...',
-      'st-wait'
-    );
-
-
-    try{
-
-      const res = await api({
-
-        action:'confirmManualPayment',
-
-        invoice_number:INV,
-
-        method:paymentMethod,
-
-        claim_reference:claimReference,
-
-        phone:PHONE
+        phone:
+          PHONE
 
       });
 
 
-      if(res && res.ok){
+    if(
+      response &&
+      response.ok
+    ){
 
-        setStatus(
-          '✅ Payment claim সফলভাবে জমা হয়েছে। BIYE payment verify করার পর receipt/SMS/email পাঠানো হবে।',
-          'st-ok'
-        );
-
-
-        confirmTxt.textContent =
-          'জমা হয়েছে ✓';
-
-
-        /*
-          Prevent duplicate submissions.
-        */
-
-        btn.disabled = true;
-
-
-        /*
-          If backend supplies receipt URL,
-          use it.
-        */
-
-        if(res.receipt_url){
-
-          setTimeout(function(){
-
-            window.location.href =
-              res.receipt_url;
-
-          },1200);
-
-        }
-
-
-        return;
-
-      }
-
-
-      throw new Error(
-        res?.error ||
-        res?.message ||
-        'Payment claim জমা দেওয়া যায়নি।'
+      showStatus(
+        '✅ Payment claim সফলভাবে জমা হয়েছে। BIYE payment verify করার পর receipt পাঠানো হবে।',
+        'success'
       );
 
 
-    }catch(error){
+      document
+        .getElementById(
+          'confirmText'
+        )
+        .textContent =
+        'জমা হয়েছে ✓';
 
-      console.error(
-        'Payment confirmation error:',
-        error
-      );
-
-
-      btn.disabled = false;
-
-      confirmTxt.textContent =
-        'পেমেন্ট নিশ্চিত করুন';
-
-
-      setStatus(
-        error.message ||
-        'সংযোগ করা যায়নি। আবার চেষ্টা করুন।',
-        'st-err'
-      );
-
-    }
-
-  }
-
-
-  /* ============================================================
-     INPUT CLEANUP
-     ============================================================ */
-
-  document.addEventListener(
-    'input',
-    function(event){
 
       if(
-        event.target.classList.contains(
-          'field-input'
-        )
+        response.receipt_url
       ){
 
-        event.target.classList.remove(
-          'invalid'
-        );
+        setTimeout(function(){
+
+          window.location.href =
+            response.receipt_url;
+
+        },1200);
 
       }
 
+
+      return;
+
     }
-  );
 
 
-  /* ============================================================
-     BACK LINK
-     ============================================================ */
+    throw new Error(
+      response?.error ||
+      response?.message ||
+      'Payment claim জমা দেওয়া যায়নি।'
+    );
 
-  if(INV){
 
-    document.getElementById(
-      'backLink'
-    ).href =
-      'invoice.html?inv=' +
-      encodeURIComponent(INV);
+  }catch(error){
+
+    console.error(
+      'confirmPayment:',
+      error
+    );
+
+
+    button.disabled =
+      false;
+
+
+    document
+      .getElementById(
+        'confirmText'
+      )
+      .textContent =
+      'পেমেন্ট নিশ্চিত করুন';
+
+
+    showStatus(
+      error.message ||
+      'সংযোগ করা যায়নি। আবার চেষ্টা করুন।',
+      'error'
+    );
 
   }
 
+}
 
-  /* ============================================================
-     START
-     ============================================================ */
 
-  loadInvoice();
+/* ============================================================
+   STATUS
+============================================================ */
+
+function showStatus(
+  message,
+  type
+){
+
+  const status =
+    document.getElementById(
+      'status'
+    );
+
+
+  status.textContent =
+    message;
+
+
+  status.className =
+    'status show ' +
+    (
+      type ||
+      'wait'
+    );
+
+}
+
+
+function clearStatus(){
+
+  const status =
+    document.getElementById(
+      'status'
+    );
+
+
+  status.className =
+    'status';
+
+
+  status.textContent =
+    '';
+
+}
+
+
+/* ============================================================
+   BACK LINK
+============================================================ */
+
+if(INV){
+
+  document
+    .getElementById(
+      'backLink'
+    )
+    .href =
+    'invoice.html?inv=' +
+    encodeURIComponent(
+      INV
+    );
+
+}
+
+
+/* ============================================================
+   START
+============================================================ */
+
+loadInvoice();
 
 </script>
 
