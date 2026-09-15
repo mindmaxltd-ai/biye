@@ -67,6 +67,19 @@ a{color:inherit;text-decoration:none}
   padding:.7rem;border-radius:10px;text-align:center;border:1.4px dashed var(--line);letter-spacing:.03em}
 .copy-hint{font-size:.68rem;color:var(--ink-faint);text-align:center;margin-top:.4rem}
 
+.copy-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.copy-chip{background:#fff;border:1.4px solid var(--line);border-radius:8px;padding:.35rem .65rem;font-size:.72rem;font-weight:700;color:var(--ink-soft)}
+.copy-chip:hover{border-color:var(--red);color:var(--red-dark)}
+.copy-chip.copied{background:rgba(15,169,88,.1);border-color:var(--green);color:var(--green-dark)}
+
+.steps-list{margin:.9rem 0;padding-left:1.3rem;display:none}
+.steps-list li{font-size:.8rem;color:var(--ink-soft);line-height:1.9;padding-left:.2rem}
+.steps-list b{color:var(--ink);font-family:'Space Mono',monospace}
+
+.security-inline{display:flex;gap:.5rem;align-items:flex-start;background:rgba(18,86,214,.06);border:1.4px solid rgba(18,86,214,.16);
+  border-radius:10px;padding:.6rem .75rem;font-size:.7rem;color:var(--ink-soft);line-height:1.5;margin:1rem 0 0}
+.security-inline svg{width:14px;height:14px;stroke:var(--blue);flex-shrink:0;margin-top:.1rem}
+
 .field-row{margin-top:.9rem}
 .field-label{font-size:.76rem;font-weight:700;color:var(--ink);margin-bottom:.35rem;display:block}
 .field-input{width:100%;padding:.72rem .85rem;border-radius:12px;border:1.6px solid var(--line);font-size:.88rem;outline:none;font-family:'Space Mono',monospace}
@@ -145,10 +158,21 @@ a{color:inherit;text-decoration:none}
         </div>
 
         <div class="detail" id="detail">
+          <div class="copy-row" id="copyRow" style="display:none">
+            <button class="copy-chip" onclick="copyVal('copyMerchant', this)">📋 <span id="copyMerchantLbl">নম্বর</span></button>
+            <button class="copy-chip" onclick="copyVal('copyInvoice', this)">📋 ইনভয়েস নং</button>
+            <button class="copy-chip" onclick="copyVal('copyAmount', this)">📋 পরিমাণ</button>
+          </div>
           <div class="instr" id="instr"></div>
           <div class="num" id="numBox" style="display:none"></div>
           <div class="copy-hint" id="copyHint"></div>
 
+          <ol class="steps-list" id="stepsList" style="display:none"></ol>
+
+          <div class="field-row" id="senderAccField" style="display:none">
+            <label class="field-label" for="senderAccInput">যেই নম্বর থেকে পাঠিয়েছেন</label>
+            <input class="field-input" id="senderAccInput" placeholder="e.g. 01XXXXXXXXX" autocomplete="off">
+          </div>
           <div class="field-row" id="trxField" style="display:none">
             <label class="field-label" for="trxInput">Transaction ID (TrxID)</label>
             <input class="field-input" id="trxInput" placeholder="যেমন: 9AB2CD3EFG" autocomplete="off">
@@ -156,6 +180,11 @@ a{color:inherit;text-decoration:none}
           <div class="field-row" id="cashRefField" style="display:none">
             <label class="field-label" for="cashRefInput">রেফারেন্স (ঐচ্ছিক)</label>
             <input class="field-input" id="cashRefInput" placeholder="কে নিয়েছেন / রসিদ নং">
+          </div>
+
+          <div class="security-inline">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+            TrxID জমা দেওয়ার আগে ভালোভাবে মিলিয়ে নিন। পেমেন্ট 256-bit এনক্রিপশনে সুরক্ষিত।
           </div>
 
           <button class="btn btn-primary" id="confirmBtn" onclick="confirmPayment()">
@@ -185,8 +214,21 @@ let INVOICE = null;
 let PHONE = null;
 let GATEWAY_URL = null;
 let SELECTED = null; // {method, app}
+let COPY_VALS = { merchant:'', invoice:'', amount:'' };
 
 function taka(n){ return '৳' + Number(n||0).toLocaleString('bn-BD'); }
+
+function copyVal(which, btn){
+  const map = { copyMerchant:'merchant', copyInvoice:'invoice', copyAmount:'amount' };
+  const val = COPY_VALS[map[which]] || '';
+  if (!val) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(val).then(function(){
+      btn.classList.add('copied');
+      setTimeout(function(){ btn.classList.remove('copied'); }, 1500);
+    });
+  }
+}
 
 async function api(body){
   const r = await fetch('/.netlify/functions/payment', {
@@ -203,6 +245,8 @@ async function loadInvoice(){
     INVOICE = res.invoice;
     PHONE = (res.invoice.phone || '').replace(/^0/, '880'); // normalize to 880… for the backend
     GATEWAY_URL = res.gateway_url || null;
+    COPY_VALS.invoice = INVOICE.invoice_number || INV;
+    COPY_VALS.amount = String(INVOICE.total || '');
 
     if (INVOICE.status !== 'pending') {
       // Already paid (or failed) — nothing to select, just send them onward.
@@ -236,6 +280,12 @@ function showNotFound(){
   document.getElementById('notFoundNote').style.display = '';
 }
 
+var STEP_TEMPLATES = {
+  bKash:  ['bKash অ্যাপ খুলুন', 'Send Money সিলেক্ট করুন', 'নম্বর দিন: <b>{num}</b>', 'পরিমাণ দিন: <b>{amt}</b> টাকা', 'রেফারেন্সে ইনভয়েস নং দিন: <b>{inv}</b>', 'আপনার PIN দিয়ে নিশ্চিত করুন', 'SMS-এ পাওয়া TrxID নিচে জমা দিন'],
+  Nagad:  ['Nagad অ্যাপ খুলুন', 'Send Money সিলেক্ট করুন', 'নম্বর দিন: <b>{num}</b>', 'পরিমাণ দিন: <b>{amt}</b> টাকা', 'রেফারেন্সে ইনভয়েস নং দিন: <b>{inv}</b>', 'আপনার PIN দিয়ে নিশ্চিত করুন', 'SMS-এ পাওয়া TrxID নিচে জমা দিন'],
+  Rocket: ['*322# ডায়াল করুন অথবা Rocket অ্যাপ খুলুন', '"Merchant Pay" সিলেক্ট করুন', 'নম্বর দিন: <b>{num}</b>', 'ইনভয়েস নং দিন: <b>{inv}</b>', 'পরিমাণ দিন: <b>{amt}</b> টাকা', 'আপনার PIN দিয়ে নিশ্চিত করুন', 'SMS-এ পাওয়া TrxID নিচে জমা দিন'],
+};
+
 function selectMethod(el){
   document.querySelectorAll('.pm').forEach(function(p){ p.classList.remove('selected'); });
   el.classList.add('selected');
@@ -247,12 +297,18 @@ function selectMethod(el){
   const instr = document.getElementById('instr');
   const numBox = document.getElementById('numBox');
   const copyHint = document.getElementById('copyHint');
+  const copyRow = document.getElementById('copyRow');
+  const stepsList = document.getElementById('stepsList');
+  const senderAccField = document.getElementById('senderAccField');
   const trxField = document.getElementById('trxField');
   const cashRefField = document.getElementById('cashRefField');
   const confirmTxt = document.getElementById('confirmTxt');
 
   detail.classList.add('show');
   setStatus('');
+  copyRow.style.display = 'none';
+  stepsList.style.display = 'none';
+  senderAccField.style.display = 'none';
 
   if (method === 'sslcommerz') {
     instr.textContent = 'নিরাপদ SSLCommerz গেটওয়েতে পাঠানো হবে — সেখানে bKash, Rocket, Nagad, ভিসা/মাস্টারকার্ড, ইন্টারনেট ব্যাংকিং সবগুলো অপশন থাকবে।';
@@ -262,10 +318,19 @@ function selectMethod(el){
     cashRefField.style.display = 'none';
     confirmTxt.textContent = 'গেটওয়েতে যান →';
   } else if (method === 'bkash_direct') {
-    instr.textContent = app + ' অ্যাপে Send Money করুন এই নম্বরে:';
+    COPY_VALS.merchant = window.__bkashNumber || '';
+    document.getElementById('copyMerchantLbl').textContent = app + ' নম্বর';
+    instr.textContent = app + ' — নিচের ধাপ অনুসরণ করুন:';
     numBox.style.display = '';
     numBox.textContent = window.__bkashNumber || '—';
-    copyHint.textContent = 'নম্বরটা কপি করে পেমেন্ট সম্পন্ন করুন, তারপর TrxID নিচে লিখুন';
+    copyHint.textContent = '';
+    copyRow.style.display = '';
+    var steps = (STEP_TEMPLATES[app] || STEP_TEMPLATES.bKash).map(function(s){
+      return s.replace('{num}', window.__bkashNumber || '').replace('{amt}', INVOICE.total).replace('{inv}', INVOICE.invoice_number || INV);
+    });
+    stepsList.innerHTML = steps.map(function(s){ return '<li>'+s+'</li>'; }).join('');
+    stepsList.style.display = '';
+    senderAccField.style.display = '';
     trxField.style.display = '';
     cashRefField.style.display = 'none';
     confirmTxt.textContent = 'পেমেন্ট নিশ্চিত করুন';
@@ -302,8 +367,11 @@ async function confirmPayment(){
 
   let claimRef = '';
   if (SELECTED.method === 'bkash_direct') {
-    claimRef = document.getElementById('trxInput').value.trim();
-    if (!claimRef) { setStatus('অনুগ্রহ করে Transaction ID (TrxID) লিখুন।', 'st-err'); return; }
+    const senderAcc = document.getElementById('senderAccInput').value.trim();
+    const trx = document.getElementById('trxInput').value.trim();
+    if (!senderAcc) { setStatus('অনুগ্রহ করে আপনার নম্বরটি লিখুন।', 'st-err'); return; }
+    if (!trx) { setStatus('অনুগ্রহ করে Transaction ID (TrxID) লিখুন।', 'st-err'); return; }
+    claimRef = SELECTED.app + ' | From: ' + senderAcc + ' | TrxID: ' + trx;
   } else if (SELECTED.method === 'cash') {
     claimRef = document.getElementById('cashRefInput').value.trim();
   }
