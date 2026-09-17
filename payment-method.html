@@ -1072,6 +1072,54 @@ a{
 
 }
 
+
+/* ============================================================
+   CASH OTP VERIFICATION
+============================================================ */
+
+.cash-otp-note{
+  margin-top:8px;
+  padding:9px 11px;
+  border:1px solid rgba(225,29,46,.16);
+  border-radius:9px;
+  background:#fff7f7;
+  color:#777;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.cash-otp-note strong{
+  color:var(--red-dark);
+  font-family:'Space Mono',monospace;
+}
+
+.otp-actions{
+  display:none;
+  margin-top:8px;
+  gap:7px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.otp-actions.show{
+  display:flex;
+}
+
+.resend-otp{
+  border:1px solid #ddd;
+  background:#fff;
+  color:#555;
+  border-radius:8px;
+  padding:6px 9px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.resend-otp:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
 .field input.invalid{
 
   border-color:var(--red);
@@ -1157,6 +1205,289 @@ a{
   opacity:.5;
 
   cursor:not-allowed;
+
+}
+
+
+
+/* ============================================================
+   CASH OTP — SEND
+============================================================ */
+
+async function sendCashOtp(isResend){
+
+  if(
+    CASH_OTP_SENDING ||
+    CASH_OTP_VERIFYING
+  ){
+    return;
+  }
+
+  if(!INV){
+
+    showStatus(
+      'Invoice number পাওয়া যায়নি।',
+      'error'
+    );
+
+    return;
+  }
+
+  const button =
+    document.getElementById(
+      'confirmButton'
+    );
+
+  const otpField =
+    document.getElementById(
+      'cashOtpField'
+    );
+
+  const otpActions =
+    document.getElementById(
+      'otpActions'
+    );
+
+  CASH_OTP_SENDING = true;
+  button.disabled = true;
+
+  document
+    .getElementById(
+      'confirmText'
+    )
+    .textContent =
+    isResend
+      ? 'OTP আবার পাঠানো হচ্ছে...'
+      : 'OTP পাঠানো হচ্ছে...';
+
+  showStatus(
+    '01745069310 নম্বরে verification OTP পাঠানো হচ্ছে...',
+    'wait'
+  );
+
+  try{
+
+    const response =
+      await api({
+
+        action:
+          'sendCashOtp',
+
+        invoice_number:
+          INV,
+
+        phone:
+          PHONE,
+
+        target_phone:
+          CASH_OTP_TARGET
+
+      });
+
+    if(
+      !response ||
+      !response.ok
+    ){
+
+      throw new Error(
+        response?.error ||
+        response?.message ||
+        'OTP পাঠানো যায়নি।'
+      );
+
+    }
+
+    CASH_OTP_SENT = true;
+
+    otpField.style.display =
+      'block';
+
+    otpActions.classList.add(
+      'show'
+    );
+
+    document
+      .getElementById(
+        'cashOtpInput'
+      )
+      .focus();
+
+    document
+      .getElementById(
+        'confirmText'
+      )
+      .textContent =
+      'OTP যাচাই ও পেমেন্ট নিশ্চিত করুন';
+
+    document
+      .getElementById(
+        'securityText'
+      )
+      .textContent =
+      'OTP শুধুমাত্র 01745069310 নম্বরে পাঠানো হয়েছে। সঠিক OTP না দিলে cash payment confirmed হবে না।';
+
+    showStatus(
+      '✅ OTP পাঠানো হয়েছে। 01745069310 নম্বরে পাওয়া ৬ সংখ্যার OTP এখানে দিন।',
+      'success'
+    );
+
+  }catch(error){
+
+    console.error(
+      'sendCashOtp:',
+      error
+    );
+
+    document
+      .getElementById(
+        'confirmText'
+      )
+      .textContent =
+      'নগদ পেমেন্ট নিশ্চিত করুন';
+
+    showStatus(
+      error.message ||
+      'OTP পাঠানো যায়নি। আবার চেষ্টা করুন।',
+      'error'
+    );
+
+  }finally{
+
+    CASH_OTP_SENDING = false;
+
+    button.disabled =
+      false;
+  }
+
+}
+
+
+/* ============================================================
+   CASH OTP — VERIFY & CONFIRM
+============================================================ */
+
+async function verifyCashOtp(
+  otp,
+  claimReference
+){
+
+  if(
+    CASH_OTP_VERIFYING
+  ){
+    return;
+  }
+
+  const button =
+    document.getElementById(
+      'confirmButton'
+    );
+
+  CASH_OTP_VERIFYING = true;
+  button.disabled = true;
+
+  document
+    .getElementById(
+      'confirmText'
+    )
+    .innerHTML =
+    '<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>OTP যাচাই হচ্ছে...';
+
+  showStatus(
+    'OTP যাচাই করে cash payment confirm করা হচ্ছে...',
+    'wait'
+  );
+
+  try{
+
+    const response =
+      await api({
+
+        action:
+          'verifyCashOtp',
+
+        invoice_number:
+          INV,
+
+        otp:
+          otp,
+
+        claim_reference:
+          claimReference,
+
+        phone:
+          PHONE,
+
+        target_phone:
+          CASH_OTP_TARGET
+
+      });
+
+    if(
+      !response ||
+      !response.ok
+    ){
+
+      throw new Error(
+        response?.error ||
+        response?.message ||
+        'OTP verification ব্যর্থ হয়েছে।'
+      );
+
+    }
+
+    document
+      .getElementById(
+        'confirmText'
+      )
+      .textContent =
+      'পেমেন্ট নিশ্চিত হয়েছে ✓';
+
+    showStatus(
+      '✅ OTP সঠিক। Cash payment সফলভাবে verified ও confirmed হয়েছে।',
+      'success'
+    );
+
+    if(
+      response.receipt_url
+    ){
+
+      setTimeout(function(){
+
+        window.location.href =
+          response.receipt_url;
+
+      },900);
+
+    }
+
+  }catch(error){
+
+    console.error(
+      'verifyCashOtp:',
+      error
+    );
+
+    button.disabled =
+      false;
+
+    document
+      .getElementById(
+        'confirmText'
+      )
+      .textContent =
+      'OTP যাচাই ও পেমেন্ট নিশ্চিত করুন';
+
+    showStatus(
+      error.message ||
+      'OTP verification করা যায়নি। আবার চেষ্টা করুন।',
+      'error'
+    );
+
+  }finally{
+
+    CASH_OTP_VERIFYING = false;
+
+  }
 
 }
 
@@ -1947,6 +2278,45 @@ a{
 
       </div>
 
+      <!-- CASH OTP VERIFICATION -->
+
+      <div
+        class="field"
+        id="cashOtpField">
+
+        <label>
+          Admin OTP *
+        </label>
+
+        <input
+          id="cashOtpInput"
+          type="text"
+          inputmode="numeric"
+          maxlength="6"
+          placeholder="৬ সংখ্যার OTP"
+          autocomplete="one-time-code">
+
+        <div class="cash-otp-note">
+          OTP পাঠানো হবে নির্ধারিত BIYE verification number
+          <strong>01745069310</strong>-এ।
+        </div>
+
+        <div
+          class="otp-actions"
+          id="otpActions">
+
+          <button
+            type="button"
+            class="resend-otp"
+            id="resendOtpButton"
+            onclick="sendCashOtp(true)">
+            OTP পুনরায় পাঠান
+          </button>
+
+        </div>
+
+      </div>
+
 
       <!-- SECURITY -->
 
@@ -2040,6 +2410,15 @@ let PHONE = '';
 let GATEWAY_URL = '';
 
 let SELECTED = null;
+
+/* ============================================================
+   CASH OTP STATE
+============================================================ */
+
+const CASH_OTP_TARGET = '01745069310';
+let CASH_OTP_SENT = false;
+let CASH_OTP_SENDING = false;
+let CASH_OTP_VERIFYING = false;
 
 
 /*
@@ -2582,6 +2961,29 @@ function selectPayment(card){
     .style.display =
     'none';
 
+  document
+    .getElementById(
+      'cashOtpField'
+    )
+    .style.display =
+    'none';
+
+  document
+    .getElementById(
+      'cashOtpInput'
+    )
+    .value = '';
+
+  document
+    .getElementById(
+      'otpActions'
+    )
+    .classList.remove('show');
+
+  CASH_OTP_SENT = false;
+  CASH_OTP_SENDING = false;
+  CASH_OTP_VERIFYING = false;
+
 
   clearStatus();
 
@@ -2657,7 +3059,7 @@ function selectPayment(card){
         'instruction'
       )
       .textContent =
-      'অফিসে সরাসরি নগদ টাকা প্রদান করলে নিচে reference/রসিদ নম্বর দিতে পারেন।';
+      'অফিসে সরাসরি নগদ টাকা প্রদান করার পর reference/রসিদ নম্বর দিতে পারেন। পেমেন্ট নিশ্চিত চাপলে BIYE verification-এর জন্য OTP পাঠানো হবে।';
 
 
     document
@@ -2673,7 +3075,7 @@ function selectPayment(card){
         'confirmText'
       )
       .textContent =
-      'নগদ পেমেন্ট দাবি জমা দিন';
+      'নগদ পেমেন্ট নিশ্চিত করুন';
 
 
     document
@@ -2681,7 +3083,7 @@ function selectPayment(card){
         'securityText'
       )
       .textContent =
-      'Cash payment claim জমা দেওয়ার পর BIYE কর্তৃপক্ষ payment verify করবে।';
+      'পেমেন্ট নিশ্চিত করলে OTP যাবে 01745069310 নম্বরে। OTP যাচাই না হওয়া পর্যন্ত cash payment confirmed হবে না।';
 
 
     return;
@@ -3198,7 +3600,7 @@ async function confirmPayment(){
 
 
   /* ==========================================================
-     CASH
+     CASH — OTP SEND / VERIFY
   =========================================================== */
 
   if(
@@ -3214,6 +3616,50 @@ async function confirmPayment(){
         .value
         .trim();
 
+    /* First click: send OTP to BIYE verification number */
+    if(!CASH_OTP_SENT){
+
+      await sendCashOtp(false);
+
+      return;
+    }
+
+    /* Second click: verify OTP and confirm cash payment */
+    const otpInput =
+      document.getElementById(
+        'cashOtpInput'
+      );
+
+    const otp =
+      String(
+        otpInput.value || ''
+      )
+      .replace(/\D/g,'')
+      .slice(0,6);
+
+    otpInput.value = otp;
+
+    if(!/^\d{6}$/.test(otp)){
+
+      otpInput.classList.add('invalid');
+      otpInput.focus();
+
+      showStatus(
+        '৬ সংখ্যার সঠিক OTP দিন।',
+        'error'
+      );
+
+      return;
+    }
+
+    otpInput.classList.remove('invalid');
+
+    await verifyCashOtp(
+      otp,
+      claimReference
+    );
+
+    return;
   }
 
 
@@ -3383,6 +3829,32 @@ function clearStatus(){
     '';
 
 }
+
+
+
+/* ============================================================
+   CASH OTP INPUT
+============================================================ */
+
+document
+  .getElementById(
+    'cashOtpInput'
+  )
+  .addEventListener(
+    'input',
+    function(){
+
+      this.value =
+        this.value
+          .replace(/\D/g,'')
+          .slice(0,6);
+
+      this.classList.remove(
+        'invalid'
+      );
+
+    }
+  );
 
 
 /* ============================================================
