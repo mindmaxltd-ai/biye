@@ -1072,54 +1072,6 @@ a{
 
 }
 
-
-/* ============================================================
-   CASH OTP VERIFICATION
-============================================================ */
-
-.cash-otp-note{
-  margin-top:8px;
-  padding:9px 11px;
-  border:1px solid rgba(225,29,46,.16);
-  border-radius:9px;
-  background:#fff7f7;
-  color:#777;
-  font-size:10px;
-  line-height:1.5;
-}
-
-.cash-otp-note strong{
-  color:var(--red-dark);
-  font-family:'Space Mono',monospace;
-}
-
-.otp-actions{
-  display:none;
-  margin-top:8px;
-  gap:7px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-.otp-actions.show{
-  display:flex;
-}
-
-.resend-otp{
-  border:1px solid #ddd;
-  background:#fff;
-  color:#555;
-  border-radius:8px;
-  padding:6px 9px;
-  font-size:10px;
-  font-weight:700;
-}
-
-.resend-otp:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-
 .field input.invalid{
 
   border-color:var(--red);
@@ -1205,289 +1157,6 @@ a{
   opacity:.5;
 
   cursor:not-allowed;
-
-}
-
-
-
-/* ============================================================
-   CASH OTP — SEND
-============================================================ */
-
-async function sendCashOtp(isResend){
-
-  if(
-    CASH_OTP_SENDING ||
-    CASH_OTP_VERIFYING
-  ){
-    return;
-  }
-
-  if(!INV){
-
-    showStatus(
-      'Invoice number পাওয়া যায়নি।',
-      'error'
-    );
-
-    return;
-  }
-
-  const button =
-    document.getElementById(
-      'confirmButton'
-    );
-
-  const otpField =
-    document.getElementById(
-      'cashOtpField'
-    );
-
-  const otpActions =
-    document.getElementById(
-      'otpActions'
-    );
-
-  CASH_OTP_SENDING = true;
-  button.disabled = true;
-
-  document
-    .getElementById(
-      'confirmText'
-    )
-    .textContent =
-    isResend
-      ? 'OTP আবার পাঠানো হচ্ছে...'
-      : 'OTP পাঠানো হচ্ছে...';
-
-  showStatus(
-    '01745069310 নম্বরে verification OTP পাঠানো হচ্ছে...',
-    'wait'
-  );
-
-  try{
-
-    const response =
-      await api({
-
-        action:
-          'sendCashOtp',
-
-        invoice_number:
-          INV,
-
-        phone:
-          PHONE,
-
-        target_phone:
-          CASH_OTP_TARGET
-
-      });
-
-    if(
-      !response ||
-      !response.ok
-    ){
-
-      throw new Error(
-        response?.error ||
-        response?.message ||
-        'OTP পাঠানো যায়নি।'
-      );
-
-    }
-
-    CASH_OTP_SENT = true;
-
-    otpField.style.display =
-      'block';
-
-    otpActions.classList.add(
-      'show'
-    );
-
-    document
-      .getElementById(
-        'cashOtpInput'
-      )
-      .focus();
-
-    document
-      .getElementById(
-        'confirmText'
-      )
-      .textContent =
-      'OTP যাচাই ও পেমেন্ট নিশ্চিত করুন';
-
-    document
-      .getElementById(
-        'securityText'
-      )
-      .textContent =
-      'OTP শুধুমাত্র 01745069310 নম্বরে পাঠানো হয়েছে। সঠিক OTP না দিলে cash payment confirmed হবে না।';
-
-    showStatus(
-      '✅ OTP পাঠানো হয়েছে। 01745069310 নম্বরে পাওয়া ৬ সংখ্যার OTP এখানে দিন।',
-      'success'
-    );
-
-  }catch(error){
-
-    console.error(
-      'sendCashOtp:',
-      error
-    );
-
-    document
-      .getElementById(
-        'confirmText'
-      )
-      .textContent =
-      'নগদ পেমেন্ট নিশ্চিত করুন';
-
-    showStatus(
-      error.message ||
-      'OTP পাঠানো যায়নি। আবার চেষ্টা করুন।',
-      'error'
-    );
-
-  }finally{
-
-    CASH_OTP_SENDING = false;
-
-    button.disabled =
-      false;
-  }
-
-}
-
-
-/* ============================================================
-   CASH OTP — VERIFY & CONFIRM
-============================================================ */
-
-async function verifyCashOtp(
-  otp,
-  claimReference
-){
-
-  if(
-    CASH_OTP_VERIFYING
-  ){
-    return;
-  }
-
-  const button =
-    document.getElementById(
-      'confirmButton'
-    );
-
-  CASH_OTP_VERIFYING = true;
-  button.disabled = true;
-
-  document
-    .getElementById(
-      'confirmText'
-    )
-    .innerHTML =
-    '<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>OTP যাচাই হচ্ছে...';
-
-  showStatus(
-    'OTP যাচাই করে cash payment confirm করা হচ্ছে...',
-    'wait'
-  );
-
-  try{
-
-    const response =
-      await api({
-
-        action:
-          'verifyCashOtp',
-
-        invoice_number:
-          INV,
-
-        otp:
-          otp,
-
-        claim_reference:
-          claimReference,
-
-        phone:
-          PHONE,
-
-        target_phone:
-          CASH_OTP_TARGET
-
-      });
-
-    if(
-      !response ||
-      !response.ok
-    ){
-
-      throw new Error(
-        response?.error ||
-        response?.message ||
-        'OTP verification ব্যর্থ হয়েছে।'
-      );
-
-    }
-
-    document
-      .getElementById(
-        'confirmText'
-      )
-      .textContent =
-      'পেমেন্ট নিশ্চিত হয়েছে ✓';
-
-    showStatus(
-      '✅ OTP সঠিক। Cash payment সফলভাবে verified ও confirmed হয়েছে।',
-      'success'
-    );
-
-    if(
-      response.receipt_url
-    ){
-
-      setTimeout(function(){
-
-        window.location.href =
-          response.receipt_url;
-
-      },900);
-
-    }
-
-  }catch(error){
-
-    console.error(
-      'verifyCashOtp:',
-      error
-    );
-
-    button.disabled =
-      false;
-
-    document
-      .getElementById(
-        'confirmText'
-      )
-      .textContent =
-      'OTP যাচাই ও পেমেন্ট নিশ্চিত করুন';
-
-    showStatus(
-      error.message ||
-      'OTP verification করা যায়নি। আবার চেষ্টা করুন।',
-      'error'
-    );
-
-  }finally{
-
-    CASH_OTP_VERIFYING = false;
-
-  }
 
 }
 
@@ -1751,6 +1420,15 @@ async function verifyCashOtp(
 
 }
 
+
+.otp-panel{display:none;margin-top:1rem;padding:1rem;border:1.5px solid rgba(18,86,214,.2);background:rgba(18,86,214,.05);border-radius:14px}
+.otp-panel.show{display:block}
+.otp-panel-title{font-weight:800;font-size:.9rem;margin-bottom:.25rem}
+.otp-panel-sub{font-size:.74rem;color:var(--ink-soft);line-height:1.55;margin-bottom:.7rem}
+.otp-grid{display:flex;gap:.4rem;justify-content:center}
+.otp-grid input{width:42px;height:48px;border:1.6px solid var(--line);border-radius:10px;text-align:center;font-size:1.15rem;font-weight:800;font-family:'Inter',sans-serif;background:#fff}
+.otp-grid input:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px rgba(18,86,214,.15)}
+.otp-grid input.filled{border-color:var(--green)}
 </style>
 </head>
 
@@ -2278,45 +1956,6 @@ async function verifyCashOtp(
 
       </div>
 
-      <!-- CASH OTP VERIFICATION -->
-
-      <div
-        class="field"
-        id="cashOtpField">
-
-        <label>
-          Admin OTP *
-        </label>
-
-        <input
-          id="cashOtpInput"
-          type="text"
-          inputmode="numeric"
-          maxlength="6"
-          placeholder="৬ সংখ্যার OTP"
-          autocomplete="one-time-code">
-
-        <div class="cash-otp-note">
-          OTP পাঠানো হবে নির্ধারিত BIYE verification number
-          <strong>01745069310</strong>-এ।
-        </div>
-
-        <div
-          class="otp-actions"
-          id="otpActions">
-
-          <button
-            type="button"
-            class="resend-otp"
-            id="resendOtpButton"
-            onclick="sendCashOtp(true)">
-            OTP পুনরায় পাঠান
-          </button>
-
-        </div>
-
-      </div>
-
 
       <!-- SECURITY -->
 
@@ -2332,6 +1971,25 @@ async function verifyCashOtp(
 
       </div>
 
+
+      <!-- PAYMENT CONFIRMATION OTP -->
+
+      <div class="otp-panel" id="manualOtpPanel">
+        <div class="otp-panel-title">🔐 Payment Confirmation OTP</div>
+        <div class="otp-panel-sub" id="manualOtpText">একই ৬-সংখ্যার OTP 01745069310 এবং 01346098892 — দুই নম্বরেই পাঠানো হয়েছে। OTP মিললেই payment completed হবে এবং Supabase receipt তৈরি হবে।</div>
+        <select id="otpConfirmPhone" style="width:100%;margin-bottom:.7rem;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-weight:700">
+          <option value="01745069310">01745069310</option>
+          <option value="01346098892">01346098892</option>
+        </select>
+        <div class="otp-grid" id="manualOtpGrid">
+          <input maxlength="1" inputmode="numeric" autocomplete="one-time-code">
+          <input maxlength="1" inputmode="numeric">
+          <input maxlength="1" inputmode="numeric">
+          <input maxlength="1" inputmode="numeric">
+          <input maxlength="1" inputmode="numeric">
+          <input maxlength="1" inputmode="numeric">
+        </div>
+      </div>
 
       <!-- CONFIRM -->
 
@@ -2379,6 +2037,16 @@ async function verifyCashOtp(
 </main>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Browser-safe Supabase anon key only. Never place the service-role key here.
+  window.__biyeSupa = window.supabase.createClient(
+    'https://xlkrggspepnysbouatec.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa3JnZ3NwZXBueXNib3VhdGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1MTU0OTEsImV4cCI6MjA5NTA5MTQ5MX0.dCAkAXL1EDNsxTBn8mcHcUHlXJ1xDBirwBdTgIq927U',
+    { auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } }
+  );
+</script>
+
 <script>
 
 /* ============================================================
@@ -2410,15 +2078,10 @@ let PHONE = '';
 let GATEWAY_URL = '';
 
 let SELECTED = null;
-
-/* ============================================================
-   CASH OTP STATE
-============================================================ */
-
-const CASH_OTP_TARGET = '01745069310';
-let CASH_OTP_SENT = false;
-let CASH_OTP_SENDING = false;
-let CASH_OTP_VERIFYING = false;
+let AVAILABLE_METHODS = [];
+let MANUAL_OTP_PENDING = false;
+const CASH_ALLOWED_PHONES = ['8801745069310','8801346098892'];
+let AUTH_SESSION = null;
 
 
 /*
@@ -2520,13 +2183,14 @@ async function api(body){
       {
         method:'POST',
 
-        headers:{
-          'Content-Type':
-            'application/json',
-
-          'Accept':
-            'application/json'
-        },
+        headers:(function(){
+          var h={
+            'Content-Type':'application/json',
+            'Accept':'application/json'
+          };
+          if(window.__biyeAccessToken) h.Authorization='Bearer '+window.__biyeAccessToken;
+          return h;
+        })(),
 
         body:
           JSON.stringify(body)
@@ -2605,7 +2269,21 @@ function showError(message){
    LOAD INVOICE
 ============================================================ */
 
+async function loadPaymentSession(){
+  try{
+    if(window.__biyeSupa){
+      const r=await window.__biyeSupa.auth.getSession();
+      AUTH_SESSION=r?.data?.session||null;
+      window.__biyeAccessToken=AUTH_SESSION?.access_token||'';
+      return AUTH_SESSION;
+    }
+  }catch(e){ console.warn('BIYE session load failed',e); }
+  return null;
+}
+
 async function loadInvoice(){
+
+  await loadPaymentSession();
 
   if(!INV){
 
@@ -2701,6 +2379,23 @@ async function loadInvoice(){
       response.rocket ||
       '';
 
+    AVAILABLE_METHODS = Array.isArray(response.available_methods) ? response.available_methods : ['sslcommerz'];
+
+    // CASH is a special controlled method. It must be available only when
+    // the invoice belongs to one of the two fixed authorised mobile numbers
+    // AND the customer is actually logged in.
+    var invoicePhone = normalizePhone(INVOICE.phone || response.phone || '');
+    var isCashAuthorised = response.cash_allowed === true && !!AUTH_SESSION?.user && CASH_ALLOWED_PHONES.includes(invoicePhone);
+    if(isCashAuthorised && !AVAILABLE_METHODS.includes('cash')) AVAILABLE_METHODS.push('cash');
+    if(!isCashAuthorised) AVAILABLE_METHODS = AVAILABLE_METHODS.filter(function(m){ return m !== 'cash'; });
+
+    document.querySelectorAll('.payment-card').forEach(function(card){
+      var method = card.dataset.method;
+      var enabled = AVAILABLE_METHODS.includes(method) && (method !== 'sslcommerz' || !!GATEWAY_URL);
+      card.style.display = enabled ? '' : 'none';
+      card.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+    });
+
 
     /* ========================================================
        STATUS
@@ -2794,16 +2489,6 @@ async function loadInvoice(){
       'block';
 
 
-    /*
-      IMPORTANT:
-
-      We deliberately DO NOT hide payment cards
-      based on available_methods.
-
-      All payment options remain visible.
-    */
-
-
     attachPaymentEvents();
 
 
@@ -2852,6 +2537,14 @@ function attachPaymentEvents(){
 ============================================================ */
 
 function selectPayment(card){
+
+  if(card.dataset.method==='cash'){
+    var invoicePhone=normalizePhone(INVOICE?.phone||PHONE);
+    if(!AUTH_SESSION?.user || !CASH_ALLOWED_PHONES.includes(invoicePhone)){
+      showStatus('এই account-এর জন্য Cash payment available নয়। Cash payment শুধু 01745069310 অথবা 01346098892 registered account-এর জন্য।','error');
+      return;
+    }
+  }
 
   document
     .querySelectorAll('.payment-card')
@@ -2961,31 +2654,13 @@ function selectPayment(card){
     .style.display =
     'none';
 
-  document
-    .getElementById(
-      'cashOtpField'
-    )
-    .style.display =
-    'none';
-
-  document
-    .getElementById(
-      'cashOtpInput'
-    )
-    .value = '';
-
-  document
-    .getElementById(
-      'otpActions'
-    )
-    .classList.remove('show');
-
-  CASH_OTP_SENT = false;
-  CASH_OTP_SENDING = false;
-  CASH_OTP_VERIFYING = false;
-
 
   clearStatus();
+  MANUAL_OTP_PENDING = false;
+  var otpPanel = document.getElementById('manualOtpPanel');
+  if(otpPanel) otpPanel.classList.remove('show');
+  document.querySelectorAll('#manualOtpGrid input').forEach(function(i){i.value='';i.classList.remove('filled');});
+  document.getElementById('confirmText').textContent='পেমেন্ট নিশ্চিত করুন';
 
 
   /* ==========================================================
@@ -3059,7 +2734,7 @@ function selectPayment(card){
         'instruction'
       )
       .textContent =
-      'অফিসে সরাসরি নগদ টাকা প্রদান করার পর reference/রসিদ নম্বর দিতে পারেন। পেমেন্ট নিশ্চিত চাপলে BIYE verification-এর জন্য OTP পাঠানো হবে।';
+      'অফিসে নগদ টাকা প্রদান করার পর reference/রসিদ নম্বর (ঐচ্ছিক) দিন। Confirm করলে OTP 01745069310 এবং 01346098892—দুই নম্বরেই যাবে।';
 
 
     document
@@ -3075,7 +2750,7 @@ function selectPayment(card){
         'confirmText'
       )
       .textContent =
-      'নগদ পেমেন্ট নিশ্চিত করুন';
+      'Cash payment + OTP পাঠান';
 
 
     document
@@ -3083,7 +2758,7 @@ function selectPayment(card){
         'securityText'
       )
       .textContent =
-      'পেমেন্ট নিশ্চিত করলে OTP যাবে 01745069310 নম্বরে। OTP যাচাই না হওয়া পর্যন্ত cash payment confirmed হবে না।';
+      'Cash payment confirm করার পর একই ৬-সংখ্যার OTP 01745069310 এবং 01346098892—দুই নম্বরেই যাবে। সঠিক OTP দিলে payment completed, Supabase receipt এবং customer SMS/email তৈরি হবে।';
 
 
     return;
@@ -3343,7 +3018,7 @@ function setupDirectPayment(
     )
     .textContent =
     app +
-    ' PIN বা OTP কখনো BIYE-কে দেবেন না। শুধু sender number এবং TrxID দিন।';
+    ' PIN/OTP কখনো BIYE-কে দেবেন না। শুধু sender number ও TrxID দিন। Claim-এর পরে confirmation OTP দুই অনুমোদিত নম্বরে যাবে।';
 
 }
 
@@ -3443,346 +3118,103 @@ function validMobile(value){
 ============================================================ */
 
 async function confirmPayment(){
-
   if(!SELECTED){
-
-    showStatus(
-      'প্রথমে একটি payment method নির্বাচন করুন।',
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  const button =
-    document.getElementById(
-      'confirmButton'
-    );
-
-
-  /* ==========================================================
-     SSL COMMERZ
-  =========================================================== */
-
-  if(
-    SELECTED.method ===
-    'sslcommerz'
-  ){
-
-    if(!GATEWAY_URL){
-
-      showStatus(
-        'SSLCommerz gateway URL এখনো পাওয়া যায়নি। Backend-এ gateway configuration পরীক্ষা করুন।',
-        'error'
-      );
-
-      return;
-
-    }
-
-
-    button.disabled =
-      true;
-
-
-    showStatus(
-      'Secure payment gateway-তে পাঠানো হচ্ছে...',
-      'wait'
-    );
-
-
-    window.location.href =
-      GATEWAY_URL;
-
-
-    return;
-
-  }
-
-
-  /* ==========================================================
-     DIRECT
-  =========================================================== */
-
-  let claimReference =
-    '';
-
-
-  if(
-    SELECTED.method ===
-    'bkash_direct' ||
-    SELECTED.method ===
-    'nagad_direct' ||
-    SELECTED.method ===
-    'rocket_direct'
-  ){
-
-    const senderInput =
-      document.getElementById(
-        'senderInput'
-      );
-
-
-    const trxInput =
-      document.getElementById(
-        'trxInput'
-      );
-
-
-    const sender =
-      senderInput.value.trim();
-
-
-    const trx =
-      trxInput.value.trim();
-
-
-    senderInput.classList.remove(
-      'invalid'
-    );
-
-    trxInput.classList.remove(
-      'invalid'
-    );
-
-
-    if(!validMobile(sender)){
-
-      senderInput.classList.add(
-        'invalid'
-      );
-
-      senderInput.focus();
-
-
-      showStatus(
-        'সঠিক বাংলাদেশি মোবাইল নম্বর দিন।',
-        'error'
-      );
-
-      return;
-
-    }
-
-
-    if(
-      !trx ||
-      trx.length < 4
-    ){
-
-      trxInput.classList.add(
-        'invalid'
-      );
-
-      trxInput.focus();
-
-
-      showStatus(
-        'সঠিক Transaction ID (TrxID) দিন।',
-        'error'
-      );
-
-      return;
-
-    }
-
-
-    claimReference =
-      SELECTED.name +
-      ' | From: ' +
-      sender +
-      ' | TrxID: ' +
-      trx;
-
-  }
-
-
-  /* ==========================================================
-     CASH — OTP SEND / VERIFY
-  =========================================================== */
-
-  if(
-    SELECTED.method ===
-    'cash'
-  ){
-
-    claimReference =
-      document
-        .getElementById(
-          'cashInput'
-        )
-        .value
-        .trim();
-
-    /* First click: send OTP to BIYE verification number */
-    if(!CASH_OTP_SENT){
-
-      await sendCashOtp(false);
-
-      return;
-    }
-
-    /* Second click: verify OTP and confirm cash payment */
-    const otpInput =
-      document.getElementById(
-        'cashOtpInput'
-      );
-
-    const otp =
-      String(
-        otpInput.value || ''
-      )
-      .replace(/\D/g,'')
-      .slice(0,6);
-
-    otpInput.value = otp;
-
-    if(!/^\d{6}$/.test(otp)){
-
-      otpInput.classList.add('invalid');
-      otpInput.focus();
-
-      showStatus(
-        '৬ সংখ্যার সঠিক OTP দিন।',
-        'error'
-      );
-
-      return;
-    }
-
-    otpInput.classList.remove('invalid');
-
-    await verifyCashOtp(
-      otp,
-      claimReference
-    );
-
+    showStatus('প্রথমে একটি payment method নির্বাচন করুন।','error');
     return;
   }
 
+  const button=document.getElementById('confirmButton');
 
-  /* ==========================================================
-     SUBMIT
-  =========================================================== */
+  if(SELECTED.method==='sslcommerz'){
+    if(!GATEWAY_URL){ showStatus('SSLCommerz gateway URL এখনো পাওয়া যায়নি। Backend-এ gateway configuration পরীক্ষা করুন।','error'); return; }
+    button.disabled=true;
+    showStatus('Secure payment gateway-তে পাঠানো হচ্ছে...','wait');
+    window.location.href=GATEWAY_URL;
+    return;
+  }
 
-  button.disabled =
-    true;
+  // Second click: verify the shared admin confirmation OTP.
+  if(MANUAL_OTP_PENDING){
+    const code=Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input')).map(function(i){return i.value;}).join('');
+    if(!/^\d{6}$/.test(code)){ showStatus('৬-সংখ্যার OTP লিখুন।','error'); return; }
+    button.disabled=true;
+    document.getElementById('confirmText').innerHTML='<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>OTP যাচাই হচ্ছে...';
+    try{
+      const response=await api({action:'confirmManualPaymentOtp',invoice_number:INV,phone:document.getElementById('otpConfirmPhone').value,code:code});
+      if(response&&response.ok&&response.verified){
+        showStatus('✅ Payment completed এবং receipt তৈরি হয়েছে।','success');
+        document.getElementById('confirmText').textContent='Payment Complete ✓';
+        if(response.receipt_url){ setTimeout(function(){window.location.href=response.receipt_url;},900); }
+        return;
+      }
+      throw new Error(response?.error||'OTP যাচাই করা যায়নি।');
+    }catch(error){
+      button.disabled=false;
+      document.getElementById('confirmText').textContent='OTP যাচাই করে Payment Complete করুন';
+      showStatus(error.message||'OTP যাচাই করা যায়নি।','error');
+    }
+    return;
+  }
 
+  let claimReference='';
+  if(['bkash_direct','nagad_direct','rocket_direct'].includes(SELECTED.method)){
+    const senderInput=document.getElementById('senderInput');
+    const trxInput=document.getElementById('trxInput');
+    const sender=senderInput.value.trim();
+    const trx=trxInput.value.trim();
+    senderInput.classList.remove('invalid'); trxInput.classList.remove('invalid');
+    if(!validMobile(sender)){ senderInput.classList.add('invalid'); senderInput.focus(); showStatus('সঠিক বাংলাদেশি মোবাইল নম্বর দিন।','error'); return; }
+    if(!trx||trx.length<4){ trxInput.classList.add('invalid'); trxInput.focus(); showStatus('সঠিক Transaction ID (TrxID) দিন।','error'); return; }
+    claimReference=SELECTED.name+' | From: '+sender+' | TrxID: '+trx;
+  }
+  if(SELECTED.method==='cash') claimReference=document.getElementById('cashInput').value.trim();
 
-  document
-    .getElementById(
-      'confirmText'
-    )
-    .innerHTML =
-    '<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>জমা হচ্ছে...';
-
-
-  showStatus(
-    'Payment claim জমা দেওয়া হচ্ছে...',
-    'wait'
-  );
-
+  button.disabled=true;
+  document.getElementById('confirmText').innerHTML='<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>OTP পাঠানো হচ্ছে...';
+  showStatus('Payment claim Supabase-এ সংরক্ষণ করে confirmation OTP পাঠানো হচ্ছে...','wait');
 
   try{
-
-    const response =
-      await api({
-
-        action:
-          'confirmManualPayment',
-
-        invoice_number:
-          INV,
-
-        method:
-          SELECTED.method,
-
-        claim_reference:
-          claimReference,
-
-        phone:
-          PHONE
-
-      });
-
-
-    if(
-      response &&
-      response.ok
-    ){
-
-      showStatus(
-        '✅ Payment claim সফলভাবে জমা হয়েছে। BIYE payment verify করার পর receipt পাঠানো হবে।',
-        'success'
-      );
-
-
-      document
-        .getElementById(
-          'confirmText'
-        )
-        .textContent =
-        'জমা হয়েছে ✓';
-
-
-      if(
-        response.receipt_url
-      ){
-
-        setTimeout(function(){
-
-          window.location.href =
-            response.receipt_url;
-
-        },1200);
-
-      }
-
-
+    const response=await api({action:'confirmManualPayment',invoice_number:INV,method:SELECTED.method,claim_reference:claimReference,phone:PHONE});
+    if(response&&response.ok&&response.status==='pending_otp_confirmation'){
+      MANUAL_OTP_PENDING=true;
+      document.getElementById('manualOtpPanel').classList.add('show');
+      document.getElementById('confirmText').textContent='OTP যাচাই করে Payment Complete করুন';
+      document.querySelector('#manualOtpGrid input').focus();
+      showStatus('✅ OTP 01745069310 এবং 01346098892 — দুই নম্বরেই পাঠানো হয়েছে।','success');
+      button.disabled=false;
       return;
-
     }
-
-
-    throw new Error(
-      response?.error ||
-      response?.message ||
-      'Payment claim জমা দেওয়া যায়নি।'
-    );
-
-
+    throw new Error(response?.error||'Payment claim জমা দেওয়া যায়নি।');
   }catch(error){
-
-    console.error(
-      'confirmPayment:',
-      error
-    );
-
-
-    button.disabled =
-      false;
-
-
-    document
-      .getElementById(
-        'confirmText'
-      )
-      .textContent =
-      'পেমেন্ট নিশ্চিত করুন';
-
-
-    showStatus(
-      error.message ||
-      'সংযোগ করা যায়নি। আবার চেষ্টা করুন।',
-      'error'
-    );
-
+    button.disabled=false;
+    document.getElementById('confirmText').textContent='পেমেন্ট নিশ্চিত করুন';
+    showStatus(error.message||'সংযোগ করা যায়নি। আবার চেষ্টা করুন।','error');
   }
-
 }
 
+// Shared OTP boxes — paste/auto-advance/auto-submit.
+document.getElementById('manualOtpGrid').addEventListener('input',function(e){
+  var boxes=Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input'));
+  var i=boxes.indexOf(e.target);
+  e.target.value=e.target.value.replace(/[^0-9]/g,'');
+  if(e.target.value){e.target.classList.add('filled');if(boxes[i+1])boxes[i+1].focus();}
+  else e.target.classList.remove('filled');
+  if(MANUAL_OTP_PENDING&&boxes.every(function(b){return b.value;})) confirmPayment();
+});
+document.getElementById('manualOtpGrid').addEventListener('keydown',function(e){
+  var boxes=Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input'));
+  var i=boxes.indexOf(e.target);
+  if(e.key==='Backspace'&&!e.target.value&&boxes[i-1])boxes[i-1].focus();
+});
+document.getElementById('manualOtpGrid').addEventListener('paste',function(e){
+  var text=(e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+  if(text.length){
+    e.preventDefault();
+    var boxes=Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input'));
+    text.split('').slice(0,6).forEach(function(ch,idx){if(boxes[idx]){boxes[idx].value=ch;boxes[idx].classList.add('filled');}});
+    if(MANUAL_OTP_PENDING&&boxes.every(function(b){return b.value;}))confirmPayment();
+  }
+});
 
 /* ============================================================
    STATUS
@@ -3829,32 +3261,6 @@ function clearStatus(){
     '';
 
 }
-
-
-
-/* ============================================================
-   CASH OTP INPUT
-============================================================ */
-
-document
-  .getElementById(
-    'cashOtpInput'
-  )
-  .addEventListener(
-    'input',
-    function(){
-
-      this.value =
-        this.value
-          .replace(/\D/g,'')
-          .slice(0,6);
-
-      this.classList.remove(
-        'invalid'
-      );
-
-    }
-  );
 
 
 /* ============================================================
