@@ -255,6 +255,12 @@ async function resolveMatchViewPrice(profileId) {
   return withVat(nextTier);
 }
 
+// 01XXXXXXXXX display format for the numbers allowed to confirm cash OTPs —
+// sent to the frontend so its dropdown never hardcodes/duplicates this list.
+function cashConfirmNumbersDisplay() {
+  return CASH_CONFIRM_PHONES.map(function (p) { return p.replace(/^880/, '0'); });
+}
+
 // Which manual methods (beyond SSLCommerz) this phone is allowed to use.
 // Configured via Netlify env — never hard-coded in source, so the allow-list
 // can be changed without a deploy and isn't visible in the shipped frontend.
@@ -319,6 +325,7 @@ async function createInvoice(body) {
     gateway_url,
     available_methods: methods,
     bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null,
+    cash_confirm_numbers: methods.includes('cash') ? cashConfirmNumbersDisplay() : [],
   });
 }
 
@@ -361,7 +368,8 @@ async function getInvoice(body) {
   }
 
   return reply(200, { ok: true, invoice: invoiceWithCustomer, payment, gateway_url, available_methods: methods,
-    bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null });
+    bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null,
+    cash_confirm_numbers: methods.includes('cash') ? cashConfirmNumbersDisplay() : [] });
 }
 
 // ── BUILD SSLCOMMERZ SESSION ────────────────────────────────
@@ -546,7 +554,12 @@ async function confirmCashOtp(body) {
     }
   }
 
-  return reply(200, { ok: true, receipt_number: receipt ? receipt.receipt_number : null });
+  return reply(200, {
+    ok: true,
+    verified: true,
+    receipt_number: receipt ? receipt.receipt_number : null,
+    receipt_url: `${SITE_URL}/receipt.html?payment_id=${payment.id}`,
+  });
 }
 
 // ── LIST A CUSTOMER'S OWN PAYMENT HISTORY (for a dashboard "My Payments" link) ──
