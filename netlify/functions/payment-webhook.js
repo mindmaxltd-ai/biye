@@ -228,7 +228,25 @@ async function adminConfirm(qs) {
     return reply(200, `<!DOCTYPE html><meta charset="UTF-8"><body style="font-family:sans-serif;text-align:center;padding:60px">✅ এই পেমেন্ট আগেই কনফার্ম করা হয়েছে।</body>`, true);
   }
 
-  await completePayment(payment);
+  // Cash payments have a separate OTP-controlled confirmation flow in
+  // payment.js. Never allow the legacy one-click admin URL to bypass that OTP.
+  if (payment.payment_method === 'cash') {
+    return reply(
+      403,
+      `<!DOCTYPE html><meta charset="UTF-8"><body style="font-family:sans-serif;text-align:center;padding:60px">
+      <h2>Cash payment requires OTP verification</h2>
+      <p>এই নগদ পেমেন্টটি নির্বাচিত cash-collection number-এ পাঠানো OTP দিয়ে নিশ্চিত করতে হবে।</p>
+      </body>`,
+      true
+    );
+  }
+
+  const allowedManual = ['bkash_direct', 'nagad_direct', 'rocket_direct', 'bank_transfer'];
+  if (!allowedManual.includes(payment.payment_method)) {
+    return reply(403, { ok: false, error: 'this payment method cannot be manually confirmed' });
+  }
+
+  await completePayment(payment, payment.payment_method);
   return reply(200, `<!DOCTYPE html><meta charset="UTF-8"><body style="font-family:sans-serif;text-align:center;padding:60px">✅ পেমেন্ট কনফার্ম করা হয়েছে এবং গ্রাহককে জানানো হয়েছে।</body>`, true);
 }
 
