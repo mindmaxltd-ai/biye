@@ -295,12 +295,11 @@ a{text-decoration:none;color:inherit}
         <span id="securityText">BIYE কখনো আপনার PIN বা OTP চাইবে না।</span>
       </div>
 
-      <!-- Cash confirmation OTP — filled in from getInvoice's own available_methods,
-           so the two numbers shown here always match the backend's real config. -->
+      <!-- Cash confirmation OTP — backend-controlled. The same OTP is sent to BOTH authorized numbers. -->
       <div class="otp-panel" id="manualOtpPanel">
         <div class="otp-panel-title">🔐 Payment Confirmation OTP</div>
         <div class="otp-panel-sub" id="manualOtpText">একই ৬-সংখ্যার OTP অনুমোদিত নম্বরগুলোতে পাঠানো হয়েছে। OTP মিললেই payment completed হবে এবং receipt তৈরি হবে।</div>
-        <select id="otpConfirmPhone" style="width:100%;margin-bottom:.7rem;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-weight:700"></select>
+        <div id="otpConfirmNumbers" style="margin-bottom:.7rem;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-weight:700;text-align:center"></div>
         <div class="otp-grid" id="manualOtpGrid">
           <input maxlength="1" inputmode="numeric" autocomplete="one-time-code">
           <input maxlength="1" inputmode="numeric">
@@ -351,7 +350,7 @@ let GATEWAY_URL = '';
 let SELECTED = null;
 let AVAILABLE_METHODS = [];
 let MANUAL_OTP_PENDING = false;
-let CASH_CONFIRM_NUMBERS = [];   // filled from getInvoice's response — never hardcoded here
+let CASH_CONFIRM_NUMBERS = [];   // backend-controlled confirmation numbers
 let AUTH_SESSION = null;
 
 let PAYMENT_CONFIG = { bkash:'', nagad:'', rocket:'' };
@@ -446,10 +445,10 @@ async function loadInvoice(){
     // The numbers that will receive/confirm the cash OTP — also from the
     // backend, so the dropdown never shows a stale hardcoded list.
     CASH_CONFIRM_NUMBERS = Array.isArray(response.cash_confirm_numbers) ? response.cash_confirm_numbers : [];
-    const otpSelect = document.getElementById('otpConfirmPhone');
-    otpSelect.innerHTML = CASH_CONFIRM_NUMBERS.map(function(n){
-      return '<option value="'+escapeHtml(n)+'">'+escapeHtml(n)+'</option>';
-    }).join('');
+    const otpNumbers = document.getElementById('otpConfirmNumbers');
+    otpNumbers.textContent = CASH_CONFIRM_NUMBERS.length
+      ? 'OTP একই সাথে পাঠানো হয়েছে: ' + CASH_CONFIRM_NUMBERS.join(' এবং ')
+      : 'অনুমোদিত নম্বরগুলোতে OTP পাঠানো হয়েছে।';
 
     document.querySelectorAll('.payment-card').forEach(function(card){
       var method = card.dataset.method;
@@ -639,7 +638,7 @@ async function confirmPayment(){
     button.disabled = true;
     document.getElementById('confirmText').innerHTML = '<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>OTP যাচাই হচ্ছে...';
     try{
-      const response = await api({ action:'confirmCashOtp', invoice_number: INV, phone: document.getElementById('otpConfirmPhone').value, code: code });
+      const response = await api({ action:'confirmCashOtp', invoice_number: INV, phone: CASH_CONFIRM_NUMBERS[0] || '', code: code });
       if(response && response.ok && response.verified){
         showStatus('✅ Payment completed এবং receipt তৈরি হয়েছে।', 'success');
         document.getElementById('confirmText').textContent = 'Payment Complete ✓';
