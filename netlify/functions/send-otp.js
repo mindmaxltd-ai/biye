@@ -103,10 +103,33 @@ async function authAdmin(path, opts = {}) {
 }
 
 async function findAuthUserByPhone(phoneE164) {
-  // Supabase doesn't expose a direct "get by phone" admin endpoint, so we
-  // look the profile up first (profiles.phone → profiles.auth_user_id).
-  const rows = (await sb(`profiles?phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`)).data;
-  return Array.isArray(rows) && rows[0] ? rows[0] : null;
+  // IMPORTANT: older BIYE records may store the same mobile as:
+  //   017XXXXXXXXX / 88017XXXXXXXXX / +88017XXXXXXXXX
+  // Never alter the stored value. We only try equivalent representations
+  // when resolving the existing profile → auth_user_id relationship.
+  const digits = String(phoneE164 || '').replace(/[^0-9]/g, '');
+  const candidates = [];
+  if (digits.startsWith('8801')) {
+    candidates.push(
+      '+' + digits,       // Supabase/Auth E.164 style
+      digits,              // international without +
+      '0' + digits.slice(2) // Bangladesh local style
+    );
+  }
+  if (String(phoneE164 || '').startsWith('+')) {
+    candidates.push(String(phoneE164).replace(/^\+/, ''));
+  }
+
+  const seen = new Set();
+  for (const candidate of candidates) {
+    if (!candidate || seen.has(candidate)) continue;
+    seen.add(candidate);
+    const rows = (await sb(
+      `profiles?phone=eq.${encodeURIComponent(candidate)}&select=id,auth_user_id&limit=1`
+    )).data;
+    if (Array.isArray(rows) && rows[0]) return rows[0];
+  }
+  return null;
 }
 
 exports.handler = async (event) => {
@@ -203,45 +226,47 @@ exports.handler = async (event) => {
 
   // ─────────── LOGIN (phone + password) ───────────
   if (action === 'login') {
-    const phone = String(p.phone || '').trim();
+    const rawPhone = String(p.phone || '').trim();
     const password = p.password || '';
-    if (!phone) return reply(400, { ok: false, error: 'no phone' });
+    if (!rawPhone) return reply(400, { ok: false, error: 'no phone' });
     if (!password) return reply(400, { ok: false, error: 'password required' });
     if (!ANON_KEY) return reply(500, { ok: false, error: 'SUPABASE_ANON_KEY missing' });
 
-    const phoneE164 = phone.startsWith('+') ? phone : normPhoneE164(phone);
+    const phoneE164 = rawPhone.startsWith('+') ? normPhoneE164(rawPhone) : normPhoneE164(rawPhone);
+    const phoneDigits = normPhone(phoneE164);
 
-    // The public UI always asks for a mobile number, but BIYE historically
-    // created Auth users in more than one way. New registrations use the
-    // internal verified email identity 8801XXXXXXXXX@biye.ltd; some older
-    // accounts may have a real Auth email or a Supabase phone identity.
-    // Resolve the profile first and, when possible, read the Auth user's
-    // actual email by auth_user_id. This keeps old accounts working without
-    // changing or deleting any existing profile/account data.
+    // Resolve the existing profile without changing any stored data.
+    // This protects legacy accounts whose profiles.phone used a different
+    // Bangladesh number format.
     const profile = await findAuthUserByPhone(phoneE164);
     const identities = [];
 
+    // 1) Existing Auth user's actual email — highest priority for legacy accounts.
     if (profile && profile.auth_user_id) {
-      const authUser = await authAdmin(`/admin/users/${encodeURIComponent(profile.auth_user_id)}`);
+      const authUser = await authAdmin(
+        `/admin/users/${encodeURIComponent(profile.auth_user_id)}`
+      );
       const actualEmail = authUser.ok && authUser.data && authUser.data.email
         ? String(authUser.data.email).trim()
         : '';
       if (actualEmail) identities.push({ email: actualEmail, password });
     }
 
-    // Current BIYE registration identity.
+    // 2) Current BIYE registration identity.
     identities.push({
-      email: `${phoneE164.replace('+', '')}@biye.ltd`,
-      password,
+      email: `${phoneDigits}@biye.ltd`,
+      password
     });
 
-    // Legacy Supabase phone-auth identity, retained as a fallback.
+    // 3) Legacy Supabase phone-auth identity.
     identities.push({ phone: phoneE164, password });
 
-    // Remove duplicate email identities while preserving the fallback order.
+    // Remove duplicates while preserving priority.
     const seen = new Set();
     const uniqueIdentities = identities.filter((x) => {
-      const key = x.email ? `email:${x.email.toLowerCase()}` : `phone:${x.phone}`;
+      const key = x.email
+        ? `email:${x.email.toLowerCase()}`
+        : `phone:${x.phone}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
@@ -249,30 +274,53 @@ exports.handler = async (event) => {
 
     let d = {};
     let r = null;
+    let lastStatus = null;
+
     for (const credentials of uniqueIdentities) {
-      r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-        method: 'POST',
-        headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      });
-      d = await r.json().catch(() => ({}));
-      if (r.ok && d.access_token) break;
+      try {
+        r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+          method: 'POST',
+          headers: {
+            apikey: ANON_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(credentials)
+        });
+
+        d = await r.json().catch(() => ({}));
+        lastStatus = r.status;
+
+        if (r.ok && d.access_token && d.refresh_token) break;
+      } catch (e) {
+        console.error('Supabase login request failed:', e && e.message ? e.message : e);
+      }
     }
 
-    if (!r || !r.ok || !d.access_token) {
+    if (!r || !r.ok || !d.access_token || !d.refresh_token) {
       console.error(
-        'login failed for', phoneE164,
-        '— Supabase status', r ? r.status : 'no response',
-        JSON.stringify(d)
+        'BIYE login failed:',
+        JSON.stringify({
+          phone: phoneE164,
+          profile_found: !!profile,
+          auth_user_found: !!(profile && profile.auth_user_id),
+          identity_count: uniqueIdentities.length,
+          last_status: lastStatus
+        })
       );
-      return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
+      // Keep the public error generic; never expose Auth internals.
+      return reply(200, {
+        ok: false,
+        error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল'
+      });
     }
 
     return reply(200, {
       ok: true,
       access_token: d.access_token,
       refresh_token: d.refresh_token,
-      user: d.user ? { id: d.user.id, email: d.user.email || null } : null,
+      user: d.user
+        ? { id: d.user.id, email: d.user.email || null, phone: d.user.phone || null }
+        : null
     });
   }
 
