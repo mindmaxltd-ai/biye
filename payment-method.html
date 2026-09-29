@@ -7,172 +7,77 @@
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --pink:#FF1E7E;
-  --pink-soft:#FFF0F7;
-  --yellow:#FFD400;
-  --red:#E11D2E;
-  --red-dark:#B8121F;
-  --green:#0FA958;
-  --green-dark:#08783D;
-  --blue:#1256D6;
-  --ink:#151515;
-  --ink-soft:#666;
-  --ink-faint:#999;
-  --line:#E6E6E6;
-  --page:#FBFAF7;
-  --white:#fff;
-  --radius:20px;
-  --shadow:0 25px 70px rgba(0,0,0,.18),0 5px 20px rgba(0,0,0,.08);
+  --pink:#ff1e7e;--pink-soft:#fff0f7;--yellow:#ffd400;
+  --red:#e11d2e;--red-dark:#b8121f;--green:#0fa958;--green-dark:#08783d;
+  --blue:#1256d6;--ink:#151515;--ink-soft:#666;--ink-faint:#999;
+  --line:#e6e6e6;--page:#fbfaf7;--white:#fff;--radius:20px;
+  --shadow:0 25px 70px rgba(0,0,0,.18),0 5px 20px rgba(0,0,0,.08)
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{font-family:'Hind Siliguri','Inter',sans-serif;color:var(--ink);background:var(--page);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-button,input{font-family:inherit}
-button{cursor:pointer}
-a{text-decoration:none;color:inherit}
+button,input{font-family:inherit} button{cursor:pointer} a{text-decoration:none;color:inherit}
 :focus-visible{outline:3px solid var(--blue);outline-offset:3px}
-
-.bg{position:fixed;inset:0;z-index:-1;display:flex}
-.bg-left{flex:1;background:var(--pink)}
-.bg-right{flex:1;background:var(--yellow)}
-
+.bg{position:fixed;inset:0;z-index:-1;display:flex}.bg-left{flex:1;background:var(--pink)}.bg-right{flex:1;background:var(--yellow)}
 .header{position:sticky;top:0;z-index:100;background:var(--red);color:#fff;box-shadow:0 5px 20px rgba(0,0,0,.2)}
 .header-inner{width:100%;max-width:1180px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-logo{width:36px;height:36px;background:#fff;color:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-weight:900;font-size:18px}
-.brand-name{font-family:Inter,sans-serif;font-size:17px;font-weight:900}
-.brand-tagline{display:block;font-family:'Hind Siliguri',sans-serif;font-size:9px;font-weight:500;opacity:.9;margin-top:-2px}
+.brand{display:flex;align-items:center;gap:10px}.brand-logo{width:36px;height:36px;background:#fff;color:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-weight:900;font-size:18px}
+.brand-name{font-family:Inter,sans-serif;font-size:17px;font-weight:900}.brand-tagline{display:block;font-size:9px;font-weight:500;opacity:.9;margin-top:-2px}
 .back{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.45);border-radius:30px;padding:7px 12px;font-size:12px;font-weight:700}
-
 .stage{width:100%;min-height:calc(100vh - 60px);display:flex;justify-content:center;align-items:flex-start;padding:35px 15px 60px}
-.card{width:100%;max-width:600px;background:#fff;border-radius:var(--radius);border-top:6px solid var(--red);box-shadow:var(--shadow);padding:28px}
-
-.title{font-size:23px;font-weight:800;line-height:1.3}
-.subtitle{color:var(--ink-soft);font-size:13px;margin-top:3px;line-height:1.6}
-
+.card{width:100%;max-width:650px;background:#fff;border-radius:var(--radius);border-top:6px solid var(--red);box-shadow:var(--shadow);padding:28px}
+.title{font-size:23px;font-weight:800;line-height:1.3}.subtitle{color:var(--ink-soft);font-size:13px;margin-top:3px;line-height:1.6}
 .amount{margin-top:20px;padding:13px 18px;background:linear-gradient(90deg,rgba(255,30,126,.07),rgba(255,30,126,.12));border:1.5px solid rgba(255,30,126,.25);border-radius:50px;display:flex;align-items:center;justify-content:space-between}
-.amount-label{font-size:13px;font-weight:700}
-.amount-value{font-family:'Space Mono',monospace;color:var(--pink);font-size:20px;font-weight:700}
-.invoice-row{margin-top:8px;display:flex;justify-content:space-between;font-size:10px;color:#999}
-.invoice-row strong{font-family:'Space Mono',monospace;color:#777}
-
+.amount-label{font-size:13px;font-weight:700}.amount-value{font-family:'Space Mono',monospace;color:var(--pink);font-size:20px;font-weight:700}
+.invoice-row{margin-top:8px;display:flex;justify-content:space-between;font-size:10px;color:#999}.invoice-row strong{font-family:'Space Mono',monospace;color:#777}
 .section-title{margin-top:25px;margin-bottom:10px;font-size:11px;color:#999;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-
 .payment-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
 .payment-card{position:relative;min-height:130px;padding:16px 12px;border:1.5px solid var(--line);border-radius:16px;background:#fff;text-align:center;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;user-select:none}
 .payment-card:hover{transform:translateY(-2px);border-color:#ccc;box-shadow:0 10px 30px rgba(0,0,0,.08)}
 .payment-card.selected{border:2px solid var(--pink);background:linear-gradient(180deg,#fff,var(--pink-soft));box-shadow:0 0 0 3px rgba(255,30,126,.08)}
 .payment-card.selected::after{content:'✓';position:absolute;top:7px;right:8px;width:20px;height:20px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}
-
 .logo-box{height:54px;display:flex;justify-content:center;align-items:center;margin-bottom:8px}
-.logo{max-width:90px;max-height:48px}
-.bkash-logo{width:74px;height:45px;border-radius:10px;background:#E2136E;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:20px;font-weight:900;font-style:italic;letter-spacing:-1px}
-.nagad-logo{width:74px;height:45px;border-radius:10px;background:#F58220;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:19px;font-weight:900}
-.rocket-logo{width:74px;height:45px;border-radius:10px;background:#8B1E88;color:#fff;display:flex;align-items:center;justify-content:center;gap:3px;font-family:Inter,sans-serif;font-size:15px;font-weight:900}
-.rocket-icon{font-size:22px}
-.cash-logo{width:74px;height:45px;border-radius:10px;background:#138A4B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:25px}
-.ssl-logo{width:88px;height:45px;border-radius:10px;background:#0876B9;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:13px;font-weight:900;letter-spacing:-.3px}
-.ssl-logo span{font-size:7px;display:block;margin-left:3px;opacity:.9}
-
-.payment-name{font-size:13px;font-weight:800}
-.payment-desc{margin-top:2px;color:#999;font-size:9px;line-height:1.4}
-
-.gateway-card{grid-column:1 / -1;min-height:115px;display:flex;align-items:center;gap:18px;text-align:left;padding:16px 18px}
-.gateway-card .logo-box{flex:0 0 90px;margin:0}
-.gateway-info{flex:1}
-.gateway-name{font-size:14px;font-weight:800}
-.gateway-desc{font-size:10px;color:#888;margin-top:3px;line-height:1.5}
-.gateway-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.gateway-badge{background:#f5f5f5;border:1px solid #e7e7e7;border-radius:6px;padding:3px 6px;font-size:8px;font-weight:700;color:#666}
-
-.detail{display:none;margin-top:16px;background:#FAFAFA;border:1.5px solid #e5e5e5;border-radius:15px;padding:17px;animation:fadeIn .2s ease}
-.detail.show{display:block}
+.bkash-logo{width:74px;height:45px;border-radius:10px;background:#e2136e;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:20px;font-weight:900;font-style:italic}
+.nagad-logo{width:74px;height:45px;border-radius:10px;background:#f58220;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:19px;font-weight:900}
+.rocket-logo{width:74px;height:45px;border-radius:10px;background:#8b1e88;color:#fff;display:flex;align-items:center;justify-content:center;gap:3px;font-family:Inter,sans-serif;font-size:15px;font-weight:900}.rocket-icon{font-size:22px}
+.cash-logo{width:74px;height:45px;border-radius:10px;background:#138a4b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:25px}
+.ssl-logo{width:88px;height:45px;border-radius:10px;background:#0876b9;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:13px;font-weight:900;letter-spacing:-.3px}.ssl-logo span{font-size:7px;display:block;margin-left:3px;opacity:.9}
+.payment-name{font-size:13px;font-weight:800}.payment-desc{margin-top:2px;color:#999;font-size:9px;line-height:1.4}
+.gateway-card{grid-column:1 / -1;min-height:115px;display:flex;align-items:center;gap:18px;text-align:left;padding:16px 18px}.gateway-card .logo-box{flex:0 0 90px;margin:0}.gateway-info{flex:1}.gateway-name{font-size:14px;font-weight:800}.gateway-desc{font-size:10px;color:#888;margin-top:3px;line-height:1.5}
+.gateway-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.gateway-badge{background:#f5f5f5;border:1px solid #e7e7e7;border-radius:6px;padding:3px 6px;font-size:8px;font-weight:700;color:#666}
+.no-methods{display:none;margin-top:12px;padding:14px;border-radius:12px;background:#fff7e6;border:1px solid #ead58a;color:#755b00;font-size:11px;line-height:1.6;text-align:center}
+.detail{display:none;margin-top:16px;background:#fafafa;border:1.5px solid #e5e5e5;border-radius:15px;padding:17px;animation:fadeIn .2s ease}.detail.show{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.detail-heading{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;margin-bottom:10px}
-
-.instruction{font-size:12px;color:#666;line-height:1.7;margin-bottom:10px}
-
+.detail-heading{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;margin-bottom:10px}.instruction{font-size:12px;color:#666;line-height:1.7;margin-bottom:10px}
 .number-box{display:none;background:#fff;border:1.5px dashed #ccc;border-radius:10px;padding:12px;text-align:center;color:var(--red-dark);font-family:'Space Mono',monospace;font-size:17px;font-weight:700;word-break:break-all}
-
-.copy-row{display:none;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.copy-btn{border:1px solid #ddd;background:#fff;border-radius:8px;padding:6px 9px;font-size:10px;font-weight:700}
-.copy-btn.copied{color:var(--green-dark);border-color:var(--green);background:#effaf4}
-
-.steps{display:none;padding-left:20px;margin-top:12px}
-.steps li{font-size:11px;color:#666;line-height:1.9}
-
-.field{display:none;margin-top:13px}
-.field label{display:block;font-size:11px;font-weight:800;margin-bottom:5px}
-.field input{width:100%;border:1.5px solid #ddd;background:#fff;border-radius:10px;padding:10px 12px;font-family:'Space Mono',monospace;font-size:12px;outline:none}
-.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(18,86,214,.08)}
-.field input.invalid{border-color:var(--red)}
-
-.security{margin-top:14px;padding:10px 12px;display:flex;gap:8px;background:rgba(18,86,214,.06);border:1px solid rgba(18,86,214,.18);border-radius:10px;color:#666;font-size:10px;line-height:1.5}
-.security-icon{color:var(--blue);font-size:15px}
-
-.confirm{width:100%;margin-top:13px;border:none;border-radius:13px;padding:13px;background:var(--red);color:#fff;font-size:13px;font-weight:800;box-shadow:0 10px 20px rgba(225,29,46,.18)}
-.confirm:hover:not(:disabled){background:var(--red-dark)}
-.confirm:disabled{opacity:.5;cursor:not-allowed}
-
-.status{display:none;margin-top:12px;padding:10px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;line-height:1.5}
-.status.show{display:block}
-.status.wait{background:#fff8dc;border:1px solid #ead58a;color:#755b00}
-.status.success{background:#edf9f2;border:1px solid #a8dbbd;color:var(--green-dark)}
-.status.error{background:#fff0f0;border:1px solid #efb4b4;color:var(--red-dark)}
-
+.copy-row{display:none;gap:6px;flex-wrap:wrap;margin-bottom:10px}.copy-btn{border:1px solid #ddd;background:#fff;border-radius:8px;padding:6px 9px;font-size:10px;font-weight:700}.copy-btn.copied{color:var(--green-dark);border-color:var(--green);background:#effaf4}
+.steps{display:none;padding-left:20px;margin-top:12px}.steps li{font-size:11px;color:#666;line-height:1.9}
+.field{display:none;margin-top:13px}.field label{display:block;font-size:11px;font-weight:800;margin-bottom:5px}.field input{width:100%;border:1.5px solid #ddd;background:#fff;border-radius:10px;padding:10px 12px;font-family:'Space Mono',monospace;font-size:12px;outline:none}.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(18,86,214,.08)}.field input.invalid{border-color:var(--red)}
+.security{margin-top:14px;padding:10px 12px;display:flex;gap:8px;background:rgba(18,86,214,.06);border:1px solid rgba(18,86,214,.18);border-radius:10px;color:#666;font-size:10px;line-height:1.5}.security-icon{color:var(--blue);font-size:15px}
+.otp-panel{display:none;margin-top:14px;padding:16px;border:1.5px solid rgba(18,86,214,.2);background:rgba(18,86,214,.05);border-radius:14px}.otp-panel.show{display:block}
+.otp-panel-title{font-weight:800;font-size:14px;margin-bottom:4px}.otp-panel-sub{font-size:11px;color:var(--ink-soft);line-height:1.6;margin-bottom:12px}
+.otp-numbers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.otp-number{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #d8e2f5;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--blue)}
+.otp-grid{display:flex;gap:7px;justify-content:center}.otp-grid input{width:42px;height:48px;border:1.6px solid var(--line);border-radius:10px;text-align:center;font-size:1.15rem;font-weight:800;font-family:Inter,sans-serif;background:#fff}.otp-grid input:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px rgba(18,86,214,.15)}.otp-grid input.filled{border-color:var(--green)}
+.confirm{width:100%;margin-top:13px;border:none;border-radius:13px;padding:13px;background:var(--red);color:#fff;font-size:13px;font-weight:800;box-shadow:0 10px 20px rgba(225,29,46,.18)}.confirm:hover:not(:disabled){background:var(--red-dark)}.confirm:disabled{opacity:.5;cursor:not-allowed}
+.status{display:none;margin-top:12px;padding:10px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;line-height:1.5}.status.show{display:block}.status.wait{background:#fff8dc;border:1px solid #ead58a;color:#755b00}.status.success{background:#edf9f2;border:1px solid #a8dbbd;color:var(--green-dark)}.status.error{background:#fff0f0;border:1px solid #efb4b4;color:var(--red-dark)}
 .bottom-note{margin-top:18px;padding:12px;border:1px solid rgba(18,86,214,.15);border-radius:11px;background:rgba(18,86,214,.045);color:#666;font-size:10px;line-height:1.6;text-align:center}
-
-.loading{text-align:center;padding:50px 10px;color:#777;font-size:13px}
-.spinner{width:28px;height:28px;margin:0 auto 10px;border:3px solid #eee;border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.error-screen{display:none;text-align:center;padding:40px 10px}
-.error-icon{font-size:40px;margin-bottom:10px}
-.error-title{font-size:16px;font-weight:800}
-.error-text{color:#777;font-size:11px;line-height:1.6;margin-top:5px}
-.retry{margin-top:15px;border:1px solid var(--red);background:#fff;color:var(--red-dark);border-radius:10px;padding:9px 15px;font-size:11px;font-weight:800}
-
-@media(max-width:600px){
-  .bg{flex-direction:column}
-  .bg-left{flex:none;height:65px}
-  .bg-right{flex:1}
-  .stage{padding:14px 8px 35px}
-  .card{padding:20px 14px;border-radius:17px}
-  .title{font-size:20px}
-  .payment-grid{gap:8px}
-  .payment-card{min-height:122px;padding:13px 7px}
-  .gateway-card{min-height:120px;padding:13px;gap:10px}
-  .gateway-card .logo-box{flex-basis:70px}
-  .ssl-logo{width:70px;font-size:11px}
-}
-
-.otp-panel{display:none;margin-top:1rem;padding:1rem;border:1.5px solid rgba(18,86,214,.2);background:rgba(18,86,214,.05);border-radius:14px}
-.otp-panel.show{display:block}
-.otp-panel-title{font-weight:800;font-size:.9rem;margin-bottom:.25rem}
-.otp-panel-sub{font-size:.74rem;color:var(--ink-soft);line-height:1.55;margin-bottom:.7rem}
-.otp-grid{display:flex;gap:.4rem;justify-content:center}
-.otp-grid input{width:42px;height:48px;border:1.6px solid var(--line);border-radius:10px;text-align:center;font-size:1.15rem;font-weight:800;font-family:'Inter',sans-serif;background:#fff}
-.otp-grid input:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px rgba(18,86,214,.15)}
-.otp-grid input.filled{border-color:var(--green)}
+.loading{text-align:center;padding:50px 10px;color:#777;font-size:13px}.spinner{width:28px;height:28px;margin:0 auto 10px;border:3px solid #eee;border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.error-screen{display:none;text-align:center;padding:40px 10px}.error-icon{font-size:40px;margin-bottom:10px}.error-title{font-size:16px;font-weight:800}.error-text{color:#777;font-size:11px;line-height:1.6;margin-top:5px}.retry{margin-top:15px;border:1px solid var(--red);background:#fff;color:var(--red-dark);border-radius:10px;padding:9px 15px;font-size:11px;font-weight:800}
+@media(max-width:600px){.bg{flex-direction:column}.bg-left{flex:none;height:65px}.bg-right{flex:1}.stage{padding:14px 8px 35px}.card{padding:20px 14px;border-radius:17px}.title{font-size:20px}.payment-grid{gap:8px}.payment-card{min-height:122px;padding:13px 7px}.gateway-card{min-height:120px;padding:13px;gap:10px}.gateway-card .logo-box{flex-basis:70px}.ssl-logo{width:70px;font-size:11px}.otp-grid{gap:5px}.otp-grid input{width:39px;height:46px}}
 </style>
 </head>
-<body>
 
-<div class="bg">
-  <div class="bg-left"></div>
-  <div class="bg-right"></div>
-</div>
+<body>
+<div class="bg"><div class="bg-left"></div><div class="bg-right"></div></div>
 
 <header class="header">
   <div class="header-inner">
     <div class="brand">
       <div class="brand-logo">B</div>
-      <div>
-        <div class="brand-name">BIYE</div>
-        <span class="brand-tagline">বিবাহের বিজ্ঞান। জীবনভর বিশ্বাস।</span>
-      </div>
+      <div><div class="brand-name">BIYE</div><span class="brand-tagline">বিবাহের বিজ্ঞান। জীবনভর বিশ্বাস।</span></div>
     </div>
     <a class="back" id="backLink" href="invoice.html">← ইনভয়েসে ফিরুন</a>
   </div>
@@ -181,10 +86,7 @@ a{text-decoration:none;color:inherit}
 <main class="stage">
 <section class="card">
 
-  <div id="loading" class="loading">
-    <div class="spinner"></div>
-    ইনভয়েস তথ্য লোড হচ্ছে...
-  </div>
+  <div id="loading" class="loading"><div class="spinner"></div>ইনভয়েস তথ্য লোড হচ্ছে...</div>
 
   <div id="errorScreen" class="error-screen">
     <div class="error-icon">⚠️</div>
@@ -194,9 +96,8 @@ a{text-decoration:none;color:inherit}
   </div>
 
   <div id="content" style="display:none">
-
     <h1 class="title">পেমেন্ট পদ্ধতি বাছুন</h1>
-    <p class="subtitle">আপনার সুবিধামতো যেকোনো একটি নিরাপদ পেমেন্ট পদ্ধতি নির্বাচন করুন।</p>
+    <p class="subtitle">আপনার জন্য উপলব্ধ নিরাপদ payment method থেকে একটি নির্বাচন করুন।</p>
 
     <div class="amount">
       <span class="amount-label">পরিশোধযোগ্য</span>
@@ -208,71 +109,58 @@ a{text-decoration:none;color:inherit}
       <strong id="invoiceNumber">—</strong>
     </div>
 
-    <div class="section-title">মোবাইল ব্যাংকিং</div>
+    <div class="section-title">পেমেন্ট অপশন</div>
 
     <div class="payment-grid">
-
       <div class="payment-card" data-method="bkash_direct" data-name="bKash" data-icon="💗">
         <div class="logo-box"><div class="bkash-logo">bKash</div></div>
-        <div class="payment-name">bKash</div>
-        <div class="payment-desc">Send Money</div>
+        <div class="payment-name">bKash</div><div class="payment-desc">Send Money</div>
       </div>
 
       <div class="payment-card" data-method="nagad_direct" data-name="Nagad" data-icon="💰">
         <div class="logo-box"><div class="nagad-logo">Nagad</div></div>
-        <div class="payment-name">Nagad</div>
-        <div class="payment-desc">Send Money</div>
+        <div class="payment-name">Nagad</div><div class="payment-desc">Send Money</div>
       </div>
 
       <div class="payment-card" data-method="rocket_direct" data-name="Rocket" data-icon="🚀">
         <div class="logo-box"><div class="rocket-logo"><span class="rocket-icon">🚀</span>Rocket</div></div>
-        <div class="payment-name">Rocket</div>
-        <div class="payment-desc">Merchant Pay</div>
+        <div class="payment-name">Rocket</div><div class="payment-desc">Merchant Pay</div>
       </div>
 
-      <!-- Cash is shown only when the backend says this phone is allowed
-           to use it (available_methods from getInvoice — server-side gate
-           via MANUAL_PAYMENT_PHONES, never a hardcoded list here). -->
       <div class="payment-card" data-method="cash" data-name="Cash" data-icon="💵">
         <div class="logo-box"><div class="cash-logo">৳</div></div>
-        <div class="payment-name">নগদ Cash</div>
-        <div class="payment-desc">অফিসে সরাসরি প্রদান</div>
+        <div class="payment-name">Cash</div><div class="payment-desc">অফিসে সরাসরি প্রদান</div>
       </div>
 
       <div class="payment-card gateway-card" data-method="sslcommerz" data-name="SSLCommerz" data-icon="💳">
         <div class="logo-box"><div class="ssl-logo">SSL<span>COMMERZ</span></div></div>
         <div class="gateway-info">
           <div class="gateway-name">SSLCommerz Secure Gateway</div>
-          <div class="gateway-desc">কার্ড, মোবাইল ব্যাংকিং ও Internet Banking-এর উপলব্ধ পেমেন্ট অপশন এক জায়গায়।</div>
+          <div class="gateway-desc">কার্ড, mobile banking এবং Internet Banking-এর available option এক জায়গায়।</div>
           <div class="gateway-badges">
-            <span class="gateway-badge">VISA</span>
-            <span class="gateway-badge">Mastercard</span>
-            <span class="gateway-badge">bKash</span>
-            <span class="gateway-badge">Nagad</span>
-            <span class="gateway-badge">Rocket</span>
-            <span class="gateway-badge">Internet Banking</span>
+            <span class="gateway-badge">VISA</span><span class="gateway-badge">Mastercard</span>
+            <span class="gateway-badge">bKash</span><span class="gateway-badge">Nagad</span>
+            <span class="gateway-badge">Rocket</span><span class="gateway-badge">Internet Banking</span>
           </div>
         </div>
       </div>
+    </div>
 
+    <div id="noMethods" class="no-methods">
+      এই invoice-এর জন্য বর্তমানে কোনো payment method configured নেই। অনুগ্রহ করে কিছুক্ষণ পরে আবার চেষ্টা করুন অথবা BIYE support-এর সঙ্গে যোগাযোগ করুন।
     </div>
 
     <div class="detail" id="detail">
-      <div class="detail-heading">
-        <span id="selectedIcon">💳</span>
-        <span id="selectedName">Payment</span>
-      </div>
-
+      <div class="detail-heading"><span id="selectedIcon">💳</span><span id="selectedName">Payment</span></div>
       <div class="instruction" id="instruction"></div>
 
       <div class="copy-row" id="copyRow">
-        <button class="copy-btn" id="copyMerchantBtn" onclick="copyValue('merchant',this)">📋 নম্বর কপি</button>
+        <button class="copy-btn" onclick="copyValue('merchant',this)">📋 নম্বর কপি</button>
         <button class="copy-btn" onclick="copyValue('invoice',this)">📋 ইনভয়েস কপি</button>
         <button class="copy-btn" onclick="copyValue('amount',this)">📋 পরিমাণ কপি</button>
       </div>
 
       <div class="number-box" id="numberBox"></div>
-
       <ol class="steps" id="steps"></ol>
 
       <div class="field" id="senderField">
@@ -290,16 +178,17 @@ a{text-decoration:none;color:inherit}
         <input id="cashInput" type="text" maxlength="200" placeholder="রসিদ নং / যিনি টাকা নিয়েছেন">
       </div>
 
-      <div class="security">
-        <span class="security-icon">🔒</span>
-        <span id="securityText">BIYE কখনো আপনার PIN বা OTP চাইবে না।</span>
-      </div>
+      <div class="security"><span class="security-icon">🔒</span><span id="securityText">BIYE কখনো আপনার PIN বা OTP চাইবে না।</span></div>
 
-      <!-- Cash confirmation OTP — backend-controlled. The same OTP is sent to BOTH authorized numbers. -->
       <div class="otp-panel" id="manualOtpPanel">
         <div class="otp-panel-title">🔐 Payment Confirmation OTP</div>
-        <div class="otp-panel-sub" id="manualOtpText">একই ৬-সংখ্যার OTP অনুমোদিত নম্বরগুলোতে পাঠানো হয়েছে। OTP মিললেই payment completed হবে এবং receipt তৈরি হবে।</div>
-        <div id="otpConfirmNumbers" style="margin-bottom:.7rem;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-weight:700;text-align:center"></div>
+        <div class="otp-panel-sub">
+          একই ৬-সংখ্যার OTP নিচের দুইটি অনুমোদিত নম্বরে পাঠানো হয়েছে। সঠিক OTP মিললেই payment completed হবে।
+        </div>
+        <div class="otp-numbers">
+          <span class="otp-number">01745069310</span>
+          <span class="otp-number">01346098892</span>
+        </div>
         <div class="otp-grid" id="manualOtpGrid">
           <input maxlength="1" inputmode="numeric" autocomplete="one-time-code">
           <input maxlength="1" inputmode="numeric">
@@ -313,439 +202,459 @@ a{text-decoration:none;color:inherit}
       <button class="confirm" id="confirmButton" onclick="confirmPayment()">
         <span id="confirmText">পেমেন্ট নিশ্চিত করুন</span>
       </button>
-
       <div class="status" id="status"></div>
     </div>
 
     <div class="bottom-note">
       🔐 আপনার PIN, password বা OTP কখনো BIYE-কে দেবেন না। Payment সম্পন্ন করার জন্য শুধু প্রয়োজনীয় payment reference/TrxID ব্যবহার করুন।
     </div>
-
   </div>
-
 </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Browser-safe Supabase anon key only. Never place the service-role key here.
-  window.__biyeSupa = window.supabase.createClient(
-    'https://xlkrggspepnysbouatec.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa3JnZ3NwZXBueXNib3VhdGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1MTU0OTEsImV4cCI6MjA5NTA5MTQ5MX0.dCAkAXL1EDNsxTBn8mcHcUHlXJ1xDBirwBdTgIq927U',
-    { auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } }
-  );
+window.__biyeSupa = window.supabase.createClient(
+  'https://xlkrggspepnysbouatec.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa3JnZ3NwZXBueXNib3VhdGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1MTU0OTEsImV4cCI6MjA5NTA5MTQ5MX0.dCAkAXL1EDNsxTB8mcHcUHlXJ1xDBirwBdTgIq927U',
+  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}
+);
 </script>
 
 <script>
-/* ============================================================
-   BIYE PAYMENT METHOD
-============================================================ */
+const params=new URLSearchParams(window.location.search);
+const INV=params.get('inv');
 
-const params = new URLSearchParams(window.location.search);
-const INV = params.get('inv');
+const AUTHORIZED_CASH_PHONES=['8801745069310','8801346098892'];
+const CASH_OTP_VERIFY_PHONE='01745069310';
 
-let INVOICE = null;
-let PHONE = '';
-let GATEWAY_URL = '';
-let SELECTED = null;
-let AVAILABLE_METHODS = [];
-let MANUAL_OTP_PENDING = false;
-let CASH_CONFIRM_NUMBERS = [];   // backend-controlled confirmation numbers
-let AUTH_SESSION = null;
-
-let PAYMENT_CONFIG = { bkash:'', nagad:'', rocket:'' };
-let COPY_VALUES = { merchant:'', invoice:'', amount:'' };
+let INVOICE=null,PHONE='',GATEWAY_URL='',SELECTED=null;
+let AVAILABLE_METHODS=[];
+let MANUAL_OTP_PENDING=false;
+let AUTH_SESSION=null;
+let PAYMENT_CONFIG={bkash:'',nagad:'',rocket:''};
+let COPY_VALUES={merchant:'',invoice:'',amount:''};
 
 function taka(value){
-  const n = Number(value || 0);
-  return '৳' + n.toLocaleString('bn-BD');
+  return '৳'+Number(value||0).toLocaleString('bn-BD');
 }
-
 function escapeHtml(value){
-  return String(value ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
-
 function normalizePhone(value){
-  if(!value) return '';
-  let p = String(value).replace(/\D/g,'');
+  let p=String(value||'').replace(/\D/g,'');
   if(p.startsWith('880')) return p;
-  if(p.startsWith('0')) return '880' + p.substring(1);
+  if(p.startsWith('0')) return '880'+p.slice(1);
   return p;
 }
-
-async function api(body){
-  const response = await fetch('/.netlify/functions/payment', {
-    method:'POST',
-    headers:(function(){
-      var h={'Content-Type':'application/json','Accept':'application/json'};
-      if(window.__biyeAccessToken) h.Authorization='Bearer '+window.__biyeAccessToken;
-      return h;
-    })(),
-    body: JSON.stringify(body)
-  });
-  let data;
-  try{ data = await response.json(); }
-  catch(error){ throw new Error('Payment server থেকে সঠিক response পাওয়া যায়নি। HTTP ' + response.status); }
-  if(!response.ok){ throw new Error(data?.error || data?.message || ('HTTP ' + response.status)); }
-  return data;
+function validMobile(value){
+  const p=String(value||'').replace(/\D/g,'');
+  return /^01[3-9]\d{8}$/.test(p)||/^8801[3-9]\d{8}$/.test(p);
 }
-
+function showStatus(message,type='wait'){
+  const el=document.getElementById('status');
+  el.textContent=message;
+  el.className='status show '+type;
+}
+function clearStatus(){
+  const el=document.getElementById('status');
+  el.textContent='';el.className='status';
+}
 function showError(message){
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('content').style.display = 'none';
-  document.getElementById('errorScreen').style.display = 'block';
-  document.getElementById('errorText').textContent = message || 'Invoice তথ্য লোড করা যায়নি।';
+  document.getElementById('loading').style.display='none';
+  document.getElementById('content').style.display='none';
+  document.getElementById('errorScreen').style.display='block';
+  document.getElementById('errorText').textContent=message||'Invoice তথ্য লোড করা যায়নি।';
 }
 
 async function loadPaymentSession(){
   try{
-    if(window.__biyeSupa){
-      const r = await window.__biyeSupa.auth.getSession();
-      AUTH_SESSION = r?.data?.session || null;
-      window.__biyeAccessToken = AUTH_SESSION?.access_token || '';
-      return AUTH_SESSION;
-    }
-  }catch(e){ console.warn('BIYE session load failed', e); }
-  return null;
+    const r=await window.__biyeSupa.auth.getSession();
+    AUTH_SESSION=r?.data?.session||null;
+    window.__biyeAccessToken=AUTH_SESSION?.access_token||'';
+    return AUTH_SESSION;
+  }catch(e){
+    console.warn('BIYE session load failed',e);
+    AUTH_SESSION=null;
+    window.__biyeAccessToken='';
+    return null;
+  }
+}
+
+async function api(body){
+  const headers={'Content-Type':'application/json','Accept':'application/json'};
+  if(window.__biyeAccessToken) headers.Authorization='Bearer '+window.__biyeAccessToken;
+  const response=await fetch('/.netlify/functions/payment',{
+    method:'POST',headers,body:JSON.stringify(body)
+  });
+  let data;
+  try{data=await response.json();}
+  catch(e){throw new Error('Payment server থেকে সঠিক response পাওয়া যায়নি। HTTP '+response.status);}
+  if(!response.ok) throw new Error(data?.error||data?.message||('HTTP '+response.status));
+  return data;
+}
+
+function deriveAvailableMethods(response){
+  const configured=Array.isArray(response.available_methods)?response.available_methods:[];
+  const methods=new Set(configured);
+
+  /*
+   * Normal payment methods may be derived from the actual merchant/gateway
+   * values returned by the trusted payment function. This prevents a blank
+   * screen when the backend has the configuration but omitted the convenience
+   * array.
+   */
+  if(response.bkash_number||response.bkash) methods.add('bkash_direct');
+  if(response.nagad_number||response.nagad) methods.add('nagad_direct');
+  if(response.rocket_number||response.rocket) methods.add('rocket_direct');
+  if(GATEWAY_URL) methods.add('sslcommerz');
+
+  /*
+   * Cash is NEVER derived from a merchant number alone.
+   * It requires backend cash_allowed + authenticated owner + exact account phone.
+   */
+  const invoicePhone=normalizePhone(INVOICE?.phone||response.phone||'');
+  const cashAllowed=response.cash_allowed===true &&
+    !!AUTH_SESSION?.user &&
+    AUTHORIZED_CASH_PHONES.includes(invoicePhone);
+
+  if(cashAllowed) methods.add('cash');
+  else methods.delete('cash');
+
+  return Array.from(methods);
 }
 
 async function loadInvoice(){
   await loadPaymentSession();
+  if(!INV){showError('URL-এ invoice number নেই।');return;}
 
-  if(!INV){ showError('URL-এ invoice number নেই।'); return; }
-
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('errorScreen').style.display = 'none';
-  document.getElementById('content').style.display = 'none';
+  document.getElementById('loading').style.display='block';
+  document.getElementById('errorScreen').style.display='none';
+  document.getElementById('content').style.display='none';
 
   try{
-    const response = await api({ action:'getInvoice', invoice_number: INV });
+    const response=await api({action:'getInvoice',invoice_number:INV});
+    if(!response?.ok||!response.invoice) throw new Error(response?.error||'Invoice পাওয়া যায়নি।');
 
-    if(!response || !response.ok || !response.invoice){
-      throw new Error(response?.error || 'Invoice পাওয়া যায়নি।');
-    }
+    INVOICE=response.invoice;
+    PHONE=normalizePhone(INVOICE.phone||response.phone||'');
+    GATEWAY_URL=response.gateway_url||response.gatewayUrl||'';
 
-    INVOICE = response.invoice;
-    PHONE = normalizePhone(INVOICE.phone || response.phone || '');
-    GATEWAY_URL = response.gateway_url || response.gatewayUrl || '';
+    PAYMENT_CONFIG.bkash=response.bkash_number||response.bkash||'';
+    PAYMENT_CONFIG.nagad=response.nagad_number||response.nagad||'';
+    PAYMENT_CONFIG.rocket=response.rocket_number||response.rocket||'';
 
-    PAYMENT_CONFIG.bkash = response.bkash_number || response.bkash || '';
-    PAYMENT_CONFIG.nagad = response.nagad_number || response.nagad || '';
-    PAYMENT_CONFIG.rocket = response.rocket_number || response.rocket || '';
+    AVAILABLE_METHODS=deriveAvailableMethods(response);
 
-    // available_methods is the ONLY source of truth for what this phone can
-    // use — it already reflects MANUAL_PAYMENT_PHONES / BKASH_DIRECT_PHONES
-    // on the server (payment.js → manualMethodsFor). No client-side phone
-    // list here: hardcoding numbers in the frontend only lets them drift
-    // out of sync with the real Netlify env config.
-    AVAILABLE_METHODS = Array.isArray(response.available_methods) ? response.available_methods : ['sslcommerz'];
-
-    // The numbers that will receive/confirm the cash OTP — also from the
-    // backend, so the dropdown never shows a stale hardcoded list.
-    CASH_CONFIRM_NUMBERS = Array.isArray(response.cash_confirm_numbers) ? response.cash_confirm_numbers : [];
-    const otpNumbers = document.getElementById('otpConfirmNumbers');
-    otpNumbers.textContent = CASH_CONFIRM_NUMBERS.length
-      ? 'OTP একই সাথে পাঠানো হয়েছে: ' + CASH_CONFIRM_NUMBERS.join(' এবং ')
-      : 'অনুমোদিত নম্বরগুলোতে OTP পাঠানো হয়েছে।';
-
-    document.querySelectorAll('.payment-card').forEach(function(card){
-      var method = card.dataset.method;
-      var enabled = AVAILABLE_METHODS.includes(method) && (method !== 'sslcommerz' || !!GATEWAY_URL);
-      card.style.display = enabled ? '' : 'none';
-      card.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+    document.querySelectorAll('.payment-card').forEach(card=>{
+      const method=card.dataset.method;
+      const enabled=AVAILABLE_METHODS.includes(method);
+      card.style.display=enabled?'':'none';
+      card.setAttribute('aria-disabled',enabled?'false':'true');
     });
 
-    const invoiceStatus = String(INVOICE.status || 'pending').toLowerCase();
+    document.getElementById('noMethods').style.display=
+      AVAILABLE_METHODS.length?'none':'block';
 
-    if(invoiceStatus === 'paid'){
-      const paymentId = response.payment?.id || INVOICE.payment_id || '';
-      window.location.href = 'receipt.html?payment_id=' + encodeURIComponent(paymentId);
+    const invoiceStatus=String(INVOICE.status||'pending').toLowerCase();
+
+    if(invoiceStatus==='paid'){
+      const paymentId=response.payment?.id||INVOICE.payment_id||'';
+      if(paymentId){
+        window.location.href='receipt.html?payment_id='+encodeURIComponent(paymentId);
+      }else{
+        showError('এই invoice paid, কিন্তু receipt reference পাওয়া যায়নি।');
+      }
       return;
     }
 
-    if(invoiceStatus !== 'pending' && invoiceStatus !== 'unpaid'){
-      window.location.href = 'invoice.html?inv=' + encodeURIComponent(INV);
+    if(!['pending','unpaid'].includes(invoiceStatus)){
+      window.location.href='invoice.html?inv='+encodeURIComponent(INV);
       return;
     }
 
-    const total = INVOICE.total ?? INVOICE.amount ?? 0;
-    document.getElementById('amount').textContent = taka(total);
-    document.getElementById('invoiceNumber').textContent = INVOICE.invoice_number || INV;
-    COPY_VALUES.invoice = INVOICE.invoice_number || INV;
-    COPY_VALUES.amount = String(total);
+    const total=INVOICE.total??INVOICE.amount??0;
+    document.getElementById('amount').textContent=taka(total);
+    document.getElementById('invoiceNumber').textContent=INVOICE.invoice_number||INV;
+    COPY_VALUES.invoice=INVOICE.invoice_number||INV;
+    COPY_VALUES.amount=String(total);
 
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-
+    document.getElementById('loading').style.display='none';
+    document.getElementById('content').style.display='block';
     attachPaymentEvents();
 
   }catch(error){
-    console.error('loadInvoice:', error);
-    showError(error.message || 'Invoice লোড করা যায়নি।');
+    console.error('loadInvoice:',error);
+    showError(error.message||'Invoice লোড করা যায়নি।');
   }
 }
 
 function attachPaymentEvents(){
-  document.querySelectorAll('.payment-card').forEach(function(card){
-    card.onclick = function(){ selectPayment(card); };
+  document.querySelectorAll('.payment-card').forEach(card=>{
+    card.onclick=()=>selectPayment(card);
   });
 }
 
-function selectPayment(card){
-  // No client-side phone check here — the card is simply not shown
-  // (display:none, set above from AVAILABLE_METHODS) when this phone isn't
-  // allowed, and the backend re-checks on submit regardless (confirmManualPayment
-  // → manualMethodsFor), so there's nothing to duplicate or get out of sync here.
+function resetDetail(){
+  ['copyRow','numberBox','steps','senderField','trxField','cashField'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+  clearStatus();
+  MANUAL_OTP_PENDING=false;
+  document.getElementById('manualOtpPanel').classList.remove('show');
+  document.querySelectorAll('#manualOtpGrid input').forEach(i=>{
+    i.value='';i.classList.remove('filled');
+  });
+  document.getElementById('confirmText').textContent='পেমেন্ট নিশ্চিত করুন';
+}
 
-  document.querySelectorAll('.payment-card').forEach(function(item){ item.classList.remove('selected'); });
+function selectPayment(card){
+  const method=card.dataset.method;
+
+  if(method==='cash'){
+    const invoicePhone=normalizePhone(INVOICE?.phone||PHONE);
+    if(!AUTH_SESSION?.user||!AUTHORIZED_CASH_PHONES.includes(invoicePhone)){
+      showStatus('এই account-এর জন্য Cash payment available নয়।','error');
+      return;
+    }
+  }
+
+  document.querySelectorAll('.payment-card').forEach(x=>x.classList.remove('selected'));
   card.classList.add('selected');
 
-  SELECTED = { method: card.dataset.method, name: card.dataset.name, icon: card.dataset.icon };
+  SELECTED={method,name:card.dataset.name,icon:card.dataset.icon};
 
-  const detail = document.getElementById('detail');
-  detail.classList.add('show');
-  document.getElementById('selectedIcon').textContent = SELECTED.icon;
-  document.getElementById('selectedName').textContent = SELECTED.name;
+  document.getElementById('detail').classList.add('show');
+  document.getElementById('selectedIcon').textContent=SELECTED.icon;
+  document.getElementById('selectedName').textContent=SELECTED.name;
+  resetDetail();
 
-  document.getElementById('copyRow').style.display = 'none';
-  document.getElementById('numberBox').style.display = 'none';
-  document.getElementById('steps').style.display = 'none';
-  document.getElementById('senderField').style.display = 'none';
-  document.getElementById('trxField').style.display = 'none';
-  document.getElementById('cashField').style.display = 'none';
+  if(method==='bkash_direct'){setupDirectPayment('bKash',PAYMENT_CONFIG.bkash);return;}
+  if(method==='nagad_direct'){setupDirectPayment('Nagad',PAYMENT_CONFIG.nagad);return;}
+  if(method==='rocket_direct'){setupDirectPayment('Rocket',PAYMENT_CONFIG.rocket);return;}
 
-  clearStatus();
-  MANUAL_OTP_PENDING = false;
-  var otpPanel = document.getElementById('manualOtpPanel');
-  if(otpPanel) otpPanel.classList.remove('show');
-  document.querySelectorAll('#manualOtpGrid input').forEach(function(i){ i.value=''; i.classList.remove('filled'); });
-  document.getElementById('confirmText').textContent = 'পেমেন্ট নিশ্চিত করুন';
-
-  if(SELECTED.method === 'bkash_direct'){ setupDirectPayment('bKash', PAYMENT_CONFIG.bkash); return; }
-  if(SELECTED.method === 'nagad_direct'){ setupDirectPayment('Nagad', PAYMENT_CONFIG.nagad); return; }
-  if(SELECTED.method === 'rocket_direct'){ setupDirectPayment('Rocket', PAYMENT_CONFIG.rocket); return; }
-
-  if(SELECTED.method === 'cash'){
-    document.getElementById('instruction').textContent =
-      'অফিসে নগদ টাকা প্রদান করার পর reference/রসিদ নম্বর (ঐচ্ছিক) দিন। Confirm করলে OTP অনুমোদিত নম্বরগুলোতে পাঠানো হবে।';
-    document.getElementById('cashField').style.display = 'block';
-    document.getElementById('confirmText').textContent = 'Cash payment + OTP পাঠান';
-    document.getElementById('securityText').textContent =
-      'Cash payment confirm করার পর একই ৬-সংখ্যার OTP অনুমোদিত নম্বরগুলোতে যাবে। সঠিক OTP দিলে payment completed, receipt এবং customer SMS/email তৈরি হবে।';
+  if(method==='cash'){
+    document.getElementById('instruction').textContent=
+      'অফিসে নগদ টাকা প্রদান করার পর reference/রসিদ নম্বর (ঐচ্ছিক) দিন। Confirm করলে একই OTP 01745069310 এবং 01346098892—দুই নম্বরেই পাঠানো হবে।';
+    document.getElementById('cashField').style.display='block';
+    document.getElementById('confirmText').textContent='Cash payment + OTP পাঠান';
+    document.getElementById('securityText').textContent=
+      'Cash payment confirm করার পর একই ৬-সংখ্যার OTP দুই অনুমোদিত নম্বরে যাবে। সঠিক OTP দিলে payment completed, invoice paid, receipt এবং customer notification তৈরি হবে।';
     return;
   }
 
-  if(SELECTED.method === 'sslcommerz'){
-    document.getElementById('instruction').textContent =
-      'SSLCommerz-এর secure gateway-তে যাওয়ার পর আপনার জন্য উপলব্ধ card, mobile banking এবং Internet Banking option নির্বাচন করতে পারবেন।';
-    document.getElementById('confirmText').textContent = 'Secure Gateway-তে যান →';
-    document.getElementById('securityText').textContent = 'SSLCommerz payment gateway-তে নিরাপদভাবে payment সম্পন্ন করুন।';
-    return;
+  if(method==='sslcommerz'){
+    document.getElementById('instruction').textContent=
+      'SSLCommerz secure gateway-তে যাওয়ার পর আপনার জন্য উপলব্ধ card, mobile banking এবং Internet Banking option নির্বাচন করুন।';
+    document.getElementById('confirmText').textContent='Secure Gateway-তে যান →';
+    document.getElementById('securityText').textContent='SSLCommerz payment gateway-তে নিরাপদভাবে payment সম্পন্ন করুন।';
   }
 }
 
-function setupDirectPayment(app, number){
-  document.getElementById('instruction').textContent = app + ' থেকে Send Money করে নিচের নম্বরে payment করুন।';
+function setupDirectPayment(app,number){
+  document.getElementById('instruction').textContent=
+    app+' থেকে Send Money করে নিচের নম্বরে payment করুন।';
 
-  const numberBox = document.getElementById('numberBox');
-  numberBox.textContent = number || 'Payment number এখনো configured হয়নি';
-  numberBox.style.display = 'block';
+  const box=document.getElementById('numberBox');
+  box.textContent=number||'Payment number এখনো configured হয়নি';
+  box.style.display='block';
 
-  COPY_VALUES.merchant = number || '';
-  if(number){ document.getElementById('copyRow').style.display = 'flex'; }
+  COPY_VALUES.merchant=number||'';
+  if(number) document.getElementById('copyRow').style.display='flex';
 
-  const amount = INVOICE.total ?? INVOICE.amount ?? 0;
-  const invoice = INVOICE.invoice_number || INV;
-  let steps = [];
+  const amount=INVOICE.total??INVOICE.amount??0;
+  const invoice=INVOICE.invoice_number||INV;
+  let steps=[];
 
-  if(app === 'bKash'){
-    steps = [
-      'bKash অ্যাপ খুলুন', 'Send Money নির্বাচন করুন',
-      'নম্বর দিন: <b>' + escapeHtml(number) + '</b>',
-      'পরিমাণ দিন: <b>' + escapeHtml(amount) + '</b> টাকা',
-      'Reference-এ invoice number দিন: <b>' + escapeHtml(invoice) + '</b>',
-      'PIN দিয়ে payment confirm করুন', 'SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
-    ];
-  }
-  if(app === 'Nagad'){
-    steps = [
-      'Nagad অ্যাপ খুলুন', 'Send Money নির্বাচন করুন',
-      'নম্বর দিন: <b>' + escapeHtml(number) + '</b>',
-      'পরিমাণ দিন: <b>' + escapeHtml(amount) + '</b> টাকা',
-      'Reference-এ invoice number দিন: <b>' + escapeHtml(invoice) + '</b>',
-      'PIN দিয়ে payment confirm করুন', 'SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
-    ];
-  }
-  if(app === 'Rocket'){
-    steps = [
-      'Rocket অ্যাপ খুলুন অথবা *322# ব্যবহার করুন', 'Merchant Pay নির্বাচন করুন',
-      'Merchant number দিন: <b>' + escapeHtml(number) + '</b>',
-      'Invoice/reference দিন: <b>' + escapeHtml(invoice) + '</b>',
-      'পরিমাণ দিন: <b>' + escapeHtml(amount) + '</b> টাকা',
-      'PIN দিয়ে payment confirm করুন', 'SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
-    ];
-  }
+  if(app==='bKash') steps=[
+    'bKash অ্যাপ খুলুন','Send Money নির্বাচন করুন',
+    'নম্বর দিন: <b>'+escapeHtml(number)+'</b>',
+    'পরিমাণ দিন: <b>'+escapeHtml(amount)+'</b> টাকা',
+    'Reference-এ invoice number দিন: <b>'+escapeHtml(invoice)+'</b>',
+    'PIN দিয়ে payment confirm করুন','SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
+  ];
 
-  const stepsElement = document.getElementById('steps');
-  stepsElement.innerHTML = steps.map(function(step){ return '<li>' + step + '</li>'; }).join('');
-  stepsElement.style.display = 'block';
+  if(app==='Nagad') steps=[
+    'Nagad অ্যাপ খুলুন','Send Money নির্বাচন করুন',
+    'নম্বর দিন: <b>'+escapeHtml(number)+'</b>',
+    'পরিমাণ দিন: <b>'+escapeHtml(amount)+'</b> টাকা',
+    'Reference-এ invoice number দিন: <b>'+escapeHtml(invoice)+'</b>',
+    'PIN দিয়ে payment confirm করুন','SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
+  ];
 
-  document.getElementById('senderField').style.display = 'block';
-  document.getElementById('trxField').style.display = 'block';
-  document.getElementById('confirmText').textContent = 'পেমেন্ট নিশ্চিত করুন';
-  document.getElementById('securityText').textContent =
-    app + ' PIN/OTP কখনো BIYE-কে দেবেন না। শুধু sender number ও TrxID দিন। Claim জমা হলে BIYE কর্তৃপক্ষ যাচাই করে confirm করবে।';
+  if(app==='Rocket') steps=[
+    'Rocket অ্যাপ খুলুন অথবা *322# ব্যবহার করুন','Merchant Pay নির্বাচন করুন',
+    'Merchant number দিন: <b>'+escapeHtml(number)+'</b>',
+    'Invoice/reference দিন: <b>'+escapeHtml(invoice)+'</b>',
+    'পরিমাণ দিন: <b>'+escapeHtml(amount)+'</b> টাকা',
+    'PIN দিয়ে payment confirm করুন','SMS-এ পাওয়া TrxID সংরক্ষণ করুন'
+  ];
+
+  document.getElementById('steps').innerHTML=steps.map(s=>'<li>'+s+'</li>').join('');
+  document.getElementById('steps').style.display='block';
+  document.getElementById('senderField').style.display='block';
+  document.getElementById('trxField').style.display='block';
+  document.getElementById('securityText').textContent=
+    app+' PIN/OTP কখনো BIYE-কে দেবেন না। শুধু sender number ও TrxID দিন। Claim জমা হলে BIYE কর্তৃপক্ষ payment verification করবে।';
 }
 
-async function copyValue(type, button){
-  const value = COPY_VALUES[type] || '';
-  if(!value){ showStatus('এই তথ্য এখনো পাওয়া যায়নি।', 'error'); return; }
+async function copyValue(type,button){
+  const value=COPY_VALUES[type]||'';
+  if(!value){showStatus('এই তথ্য এখনো পাওয়া যায়নি।','error');return;}
   try{
     await navigator.clipboard.writeText(String(value));
-    const old = button.innerHTML;
-    button.classList.add('copied');
-    button.innerHTML = '✓ কপি হয়েছে';
-    setTimeout(function(){ button.classList.remove('copied'); button.innerHTML = old; }, 1500);
-  }catch(error){
-    showStatus('কপি করা যায়নি। তথ্যটি নিজে কপি করুন।', 'error');
-  }
-}
-
-function validMobile(value){
-  const number = String(value || '').replace(/\D/g,'');
-  return (/^01[3-9]\d{8}$/.test(number) || /^8801[3-9]\d{8}$/.test(number));
+    const old=button.innerHTML;
+    button.classList.add('copied');button.innerHTML='✓ কপি হয়েছে';
+    setTimeout(()=>{button.classList.remove('copied');button.innerHTML=old;},1500);
+  }catch(e){showStatus('কপি করা যায়নি। তথ্যটি নিজে কপি করুন।','error');}
 }
 
 async function confirmPayment(){
-  if(!SELECTED){ showStatus('প্রথমে একটি payment method নির্বাচন করুন।', 'error'); return; }
+  if(!SELECTED){showStatus('প্রথমে একটি payment method নির্বাচন করুন।','error');return;}
 
-  const button = document.getElementById('confirmButton');
+  const button=document.getElementById('confirmButton');
 
-  if(SELECTED.method === 'sslcommerz'){
-    if(!GATEWAY_URL){ showStatus('SSLCommerz gateway URL এখনো পাওয়া যায়নি। Backend-এ gateway configuration পরীক্ষা করুন।', 'error'); return; }
-    button.disabled = true;
-    showStatus('Secure payment gateway-তে পাঠানো হচ্ছে...', 'wait');
-    window.location.href = GATEWAY_URL;
+  if(SELECTED.method==='sslcommerz'){
+    if(!GATEWAY_URL){showStatus('SSLCommerz gateway URL পাওয়া যায়নি।','error');return;}
+    button.disabled=true;
+    showStatus('Secure payment gateway-তে পাঠানো হচ্ছে...','wait');
+    window.location.href=GATEWAY_URL;
     return;
   }
 
-  // Second click on a cash claim: verify the shared admin confirmation OTP.
   if(MANUAL_OTP_PENDING){
-    const code = Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input')).map(function(i){ return i.value; }).join('');
-    if(!/^\d{6}$/.test(code)){ showStatus('৬-সংখ্যার OTP লিখুন।', 'error'); return; }
-    button.disabled = true;
-    document.getElementById('confirmText').innerHTML = '<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>OTP যাচাই হচ্ছে...';
+    const code=Array.from(document.querySelectorAll('#manualOtpGrid input')).map(i=>i.value).join('');
+    if(!/^\d{6}$/.test(code)){showStatus('৬-সংখ্যার OTP লিখুন।','error');return;}
+
+    button.disabled=true;
+    document.getElementById('confirmText').textContent='OTP যাচাই হচ্ছে...';
+
     try{
-      const response = await api({ action:'confirmCashOtp', invoice_number: INV, phone: CASH_CONFIRM_NUMBERS[0] || '', code: code });
-      if(response && response.ok && response.verified){
-        showStatus('✅ Payment completed এবং receipt তৈরি হয়েছে।', 'success');
-        document.getElementById('confirmText').textContent = 'Payment Complete ✓';
-        if(response.receipt_url){ setTimeout(function(){ window.location.href = response.receipt_url; }, 900); }
+      /*
+       * The same OTP was sent to BOTH authorised numbers.
+       * The server must verify the two stored OTP records before completing
+       * the payment. The frontend sends one authorised verification identity.
+       */
+      const response=await api({
+        action:'confirmManualPaymentOtp',
+        invoice_number:INV,
+        phone:CASH_OTP_VERIFY_PHONE,
+        code
+      });
+
+      if(response?.ok&&response.verified){
+        showStatus('✅ Payment completed, invoice paid এবং receipt তৈরি হয়েছে।','success');
+        document.getElementById('confirmText').textContent='Payment Complete ✓';
+        if(response.receipt_url){
+          setTimeout(()=>{window.location.href=response.receipt_url;},700);
+        }
         return;
       }
-      throw new Error(response?.error || 'OTP যাচাই করা যায়নি।');
+      throw new Error(response?.error||'OTP যাচাই করা যায়নি।');
     }catch(error){
-      button.disabled = false;
-      document.getElementById('confirmText').textContent = 'OTP যাচাই করে Payment Complete করুন';
-      showStatus(error.message || 'OTP যাচাই করা যায়নি।', 'error');
+      button.disabled=false;
+      document.getElementById('confirmText').textContent='OTP যাচাই করে Payment Complete করুন';
+      showStatus(error.message||'OTP যাচাই করা যায়নি।','error');
     }
     return;
   }
 
-  let claimReference = '';
-  if(['bkash_direct','nagad_direct','rocket_direct'].includes(SELECTED.method)){
-    const senderInput = document.getElementById('senderInput');
-    const trxInput = document.getElementById('trxInput');
-    const sender = senderInput.value.trim();
-    const trx = trxInput.value.trim();
-    senderInput.classList.remove('invalid'); trxInput.classList.remove('invalid');
-    if(!validMobile(sender)){ senderInput.classList.add('invalid'); senderInput.focus(); showStatus('সঠিক বাংলাদেশি মোবাইল নম্বর দিন।', 'error'); return; }
-    if(!trx || trx.length < 4){ trxInput.classList.add('invalid'); trxInput.focus(); showStatus('সঠিক Transaction ID (TrxID) দিন।', 'error'); return; }
-    claimReference = SELECTED.name + ' | From: ' + sender + ' | TrxID: ' + trx;
-  }
-  if(SELECTED.method === 'cash') claimReference = document.getElementById('cashInput').value.trim();
+  let claimReference='';
 
-  button.disabled = true;
-  document.getElementById('confirmText').innerHTML = '<span class="spinner" style="display:inline-block;width:12px;height:12px;border-width:2px;margin-right:5px"></span>জমা হচ্ছে...';
-  showStatus('Payment claim জমা দেওয়া হচ্ছে...', 'wait');
+  if(['bkash_direct','nagad_direct','rocket_direct'].includes(SELECTED.method)){
+    const senderInput=document.getElementById('senderInput');
+    const trxInput=document.getElementById('trxInput');
+    const sender=senderInput.value.trim();
+    const trx=trxInput.value.trim();
+
+    senderInput.classList.remove('invalid');trxInput.classList.remove('invalid');
+
+    if(!validMobile(sender)){
+      senderInput.classList.add('invalid');senderInput.focus();
+      showStatus('সঠিক বাংলাদেশি মোবাইল নম্বর দিন।','error');return;
+    }
+    if(!trx||trx.length<4){
+      trxInput.classList.add('invalid');trxInput.focus();
+      showStatus('সঠিক Transaction ID (TrxID) দিন।','error');return;
+    }
+    claimReference=SELECTED.name+' | From: '+sender+' | TrxID: '+trx;
+  }
+
+  if(SELECTED.method==='cash'){
+    const invoicePhone=normalizePhone(INVOICE?.phone||PHONE);
+    if(!AUTH_SESSION?.user||!AUTHORIZED_CASH_PHONES.includes(invoicePhone)){
+      showStatus('Cash payment এই account-এর জন্য অনুমোদিত নয়।','error');return;
+    }
+    claimReference=document.getElementById('cashInput').value.trim();
+  }
+
+  button.disabled=true;
+  document.getElementById('confirmText').textContent=
+    SELECTED.method==='cash'?'OTP পাঠানো হচ্ছে...':'Payment claim জমা হচ্ছে...';
+  showStatus('Payment claim সংরক্ষণ ও যাচাই করা হচ্ছে...','wait');
 
   try{
-    const response = await api({ action:'confirmManualPayment', invoice_number: INV, method: SELECTED.method, claim_reference: claimReference, phone: PHONE });
+    const response=await api({
+      action:'confirmManualPayment',
+      invoice_number:INV,
+      method:SELECTED.method,
+      claim_reference:claimReference,
+      phone:PHONE
+    });
 
-    // Cash → backend sends the confirmation OTP and we wait for it here.
-    if(response && response.ok && response.status === 'pending_otp_confirmation'){
-      MANUAL_OTP_PENDING = true;
+    if(response?.ok&&response.status==='pending_otp_confirmation'){
+      MANUAL_OTP_PENDING=true;
       document.getElementById('manualOtpPanel').classList.add('show');
-      document.getElementById('confirmText').textContent = 'OTP যাচাই করে Payment Complete করুন';
+      document.getElementById('confirmText').textContent='OTP যাচাই করে Payment Complete করুন';
       document.querySelector('#manualOtpGrid input').focus();
-      showStatus('✅ OTP অনুমোদিত নম্বরগুলোতে পাঠানো হয়েছে।', 'success');
-      button.disabled = false;
+      showStatus('✅ একই OTP 01745069310 এবং 01346098892—দুই নম্বরেই পাঠানো হয়েছে।','success');
+      button.disabled=false;
       return;
     }
 
-    // bKash / Nagad / Rocket direct claims → no OTP; BIYE admin verifies
-    // and confirms manually against their own bKash/Nagad/Rocket statement.
-    if(response && response.ok && response.status === 'pending_review'){
-      showStatus('✅ Payment claim জমা হয়েছে। BIYE payment verify করার পর receipt পাঠানো হবে।', 'success');
-      document.getElementById('confirmText').textContent = 'জমা হয়েছে ✓';
+    if(response?.ok&&response.status==='pending_review'){
+      showStatus('✅ Payment claim জমা হয়েছে। BIYE কর্তৃপক্ষ verification করার পর receipt তৈরি হবে।','success');
+      document.getElementById('confirmText').textContent='Claim জমা হয়েছে ✓';
       return;
     }
 
-    if(response && response.ok && response.note){
-      showStatus(response.note, 'success');
-      return;
-    }
-
-    throw new Error(response?.error || 'Payment claim জমা দেওয়া যায়নি।');
+    throw new Error(response?.error||'Payment claim জমা দেওয়া যায়নি।');
   }catch(error){
-    button.disabled = false;
-    document.getElementById('confirmText').textContent = 'পেমেন্ট নিশ্চিত করুন';
-    showStatus(error.message || 'সংযোগ করা যায়নি। আবার চেষ্টা করুন।', 'error');
+    button.disabled=false;
+    document.getElementById('confirmText').textContent='পেমেন্ট নিশ্চিত করুন';
+    showStatus(error.message||'সংযোগ করা যায়নি। আবার চেষ্টা করুন।','error');
   }
 }
 
-document.getElementById('manualOtpGrid').addEventListener('input', function(e){
-  var boxes = Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input'));
-  var i = boxes.indexOf(e.target);
-  e.target.value = e.target.value.replace(/[^0-9]/g,'');
-  if(e.target.value){ e.target.classList.add('filled'); if(boxes[i+1]) boxes[i+1].focus(); }
-  else e.target.classList.remove('filled');
-  if(MANUAL_OTP_PENDING && boxes.every(function(b){ return b.value; })) confirmPayment();
+/* OTP UX */
+document.getElementById('manualOtpGrid').addEventListener('input',e=>{
+  const boxes=Array.from(document.querySelectorAll('#manualOtpGrid input'));
+  const i=boxes.indexOf(e.target);
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,1);
+  e.target.classList.toggle('filled',!!e.target.value);
+  if(e.target.value&&boxes[i+1]) boxes[i+1].focus();
+  if(MANUAL_OTP_PENDING&&boxes.every(b=>b.value)) confirmPayment();
 });
-document.getElementById('manualOtpGrid').addEventListener('keydown', function(e){
-  var boxes = Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input'));
-  var i = boxes.indexOf(e.target);
-  if(e.key === 'Backspace' && !e.target.value && boxes[i-1]) boxes[i-1].focus();
+document.getElementById('manualOtpGrid').addEventListener('keydown',e=>{
+  const boxes=Array.from(document.querySelectorAll('#manualOtpGrid input'));
+  const i=boxes.indexOf(e.target);
+  if(e.key==='Backspace'&&!e.target.value&&boxes[i-1]) boxes[i-1].focus();
 });
-document.getElementById('manualOtpGrid').addEventListener('paste', function(e){
-  var text = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g,'');
-  if(text.length){
-    e.preventDefault();
-    var boxes = Array.prototype.slice.call(document.querySelectorAll('#manualOtpGrid input'));
-    text.split('').slice(0,6).forEach(function(ch, idx){ if(boxes[idx]){ boxes[idx].value = ch; boxes[idx].classList.add('filled'); } });
-    if(MANUAL_OTP_PENDING && boxes.every(function(b){ return b.value; })) confirmPayment();
-  }
+document.getElementById('manualOtpGrid').addEventListener('paste',e=>{
+  const text=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+  if(!text)return;
+  e.preventDefault();
+  const boxes=Array.from(document.querySelectorAll('#manualOtpGrid input'));
+  [...text].forEach((ch,i)=>{
+    if(boxes[i]){boxes[i].value=ch;boxes[i].classList.add('filled');}
+  });
+  if(MANUAL_OTP_PENDING&&boxes.every(b=>b.value)) confirmPayment();
 });
-
-function showStatus(message, type){
-  const status = document.getElementById('status');
-  status.textContent = message;
-  status.className = 'status show ' + (type || 'wait');
-}
-function clearStatus(){
-  const status = document.getElementById('status');
-  status.className = 'status';
-  status.textContent = '';
-}
 
 if(INV){
-  document.getElementById('backLink').href = 'invoice.html?inv=' + encodeURIComponent(INV);
+  document.getElementById('backLink').href='invoice.html?inv='+encodeURIComponent(INV);
 }
-
 loadInvoice();
 </script>
-
 </body>
 </html>
