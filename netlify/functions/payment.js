@@ -5,15 +5,20 @@
 // Netlify env needed:
 //   SUPABASE_URL, SUPABASE_SERVICE_KEY
 //   SSLC_STORE_ID, SSLC_STORE_PWD, SSLC_IS_LIVE       (SSLCommerz — optional; without it, gateway_url is null)
-//   MANUAL_PAYMENT_PHONES   comma-separated phone numbers allowed to pay by cash
-//                           e.g. "01767626653,01346098892"
-//   BKASH_DIRECT_PHONES     comma-separated phone numbers allowed to pay by direct bKash
-//                           e.g. "01346098892"
-//   BKASH_MERCHANT_NUMBER   the personal/merchant bKash number customers send money to
-//   ADMIN_PHONE             banker's own phone — gets an SMS with a one-click confirm link
-//                           whenever someone submits a cash/bKash claim
-//   ADMIN_SECRET            a long random string; only links built with this secret can
-//                           confirm a manual payment (see payment-webhook.js)
+//   CASH_CONFIRM_PHONES    comma-separated BIYE cash-collection numbers
+//                           default: "01767626653,01346098892"
+//   BKASH_MERCHANT_NUMBER   bKash merchant/personal collection number
+//   NAGAD_MERCHANT_NUMBER   Nagad collection number
+//   ROCKET_MERCHANT_NUMBER  Rocket collection number
+//   BANK_NAME               bank name for manual bank transfer
+//   BANK_ACCOUNT_NAME       bank account title
+//   BANK_ACCOUNT_NUMBER    bank account number
+//   BANK_BRANCH             bank branch
+//   BANK_ROUTING            bank routing number (optional)
+//   GOOGLE_PAY_URL          configured Google Pay checkout URL (optional)
+//   PAYPAL_CHECKOUT_URL     configured PayPal checkout URL (optional)
+//   ADMIN_PHONE             admin/banker phone for manual-payment alerts
+//   ADMIN_SECRET            long random secret for legacy admin confirmation
 
 const SUPABASE_URL   = process.env.SUPABASE_URL || '';
 const SERVICE_KEY    = process.env.SUPABASE_SERVICE_KEY ||
@@ -27,14 +32,21 @@ const SSLC_API = SSLC_IS_LIVE
   ? 'https://securepay.sslcommerz.com/gwprocess/v4/api.php'
   : 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php';
 
-const MANUAL_PAYMENT_PHONES = (process.env.MANUAL_PAYMENT_PHONES || '').split(',').map(normPhone).filter(Boolean);
-const BKASH_DIRECT_PHONES   = (process.env.BKASH_DIRECT_PHONES || '').split(',').map(normPhone).filter(Boolean);
+const DEFAULT_CASH_CONFIRM_PHONES = ['8801767626653', '8801346098892'];
+const CASH_CONFIRM_PHONES = (process.env.CASH_CONFIRM_PHONES || DEFAULT_CASH_CONFIRM_PHONES.join(','))
+  .split(',').map(normPhone).filter(Boolean);
 const BKASH_MERCHANT_NUMBER = process.env.BKASH_MERCHANT_NUMBER || '';
-const ADMIN_PHONE           = process.env.ADMIN_PHONE || '';
-const ADMIN_SECRET          = process.env.ADMIN_SECRET || '';
-// Numbers allowed to confirm a CASH claim by entering the OTP sent to them —
-// separate from MANUAL_PAYMENT_PHONES (which controls who can *pay* by cash).
-const CASH_CONFIRM_PHONES   = (process.env.CASH_CONFIRM_PHONES || process.env.MANUAL_PAYMENT_PHONES || '').split(',').map(normPhone).filter(Boolean);
+const NAGAD_MERCHANT_NUMBER = process.env.NAGAD_MERCHANT_NUMBER || '';
+const ROCKET_MERCHANT_NUMBER = process.env.ROCKET_MERCHANT_NUMBER || '';
+const BANK_NAME = process.env.BANK_NAME || '';
+const BANK_ACCOUNT_NAME = process.env.BANK_ACCOUNT_NAME || '';
+const BANK_ACCOUNT_NUMBER = process.env.BANK_ACCOUNT_NUMBER || '';
+const BANK_BRANCH = process.env.BANK_BRANCH || '';
+const BANK_ROUTING = process.env.BANK_ROUTING || '';
+const GOOGLE_PAY_URL = process.env.GOOGLE_PAY_URL || '';
+const PAYPAL_CHECKOUT_URL = process.env.PAYPAL_CHECKOUT_URL || '';
+const ADMIN_PHONE = process.env.ADMIN_PHONE || '';
+const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
 const crypto = require('crypto');
 function genOtp() { return String(Math.floor(100000 + Math.random() * 900000)); }
 function hashOtp(code) { return crypto.createHash('sha256').update(String(code)).digest('hex'); }
@@ -261,14 +273,13 @@ function cashConfirmNumbersDisplay() {
   return CASH_CONFIRM_PHONES.map(function (p) { return p.replace(/^880/, '0'); });
 }
 
-// Which manual methods (beyond SSLCommerz) this phone is allowed to use.
-// Configured via Netlify env — never hard-coded in source, so the allow-list
-// can be changed without a deploy and isn't visible in the shipped frontend.
+// Payment methods shown to a registered customer.
+// The two cash numbers are COLLECTION/CONFIRMATION numbers — they are NOT
+// customer allow-lists. Therefore Cash is available to every valid invoice.
+// Provider-specific direct/manual methods are also shown when their merchant
+// configuration exists; SSLCommerz remains available when configured.
 function manualMethodsFor(phoneRaw) {
-  const phone = normPhone(phoneRaw);
-  const methods = ['sslcommerz'];
-  if (phone && MANUAL_PAYMENT_PHONES.includes(phone)) methods.push('cash');
-  if (phone && BKASH_DIRECT_PHONES.includes(phone)) methods.push('bkash_direct');
+  const methods = ['cash', 'bkash_direct', 'nagad_direct', 'rocket_direct', 'bank_transfer', 'sslcommerz', 'google_pay', 'paypal'];
   return methods;
 }
 
@@ -324,8 +335,19 @@ async function createInvoice(body) {
     invoice: { ...invoice, transaction_id, package_name: pkg.name },
     gateway_url,
     available_methods: methods,
-    bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null,
-    cash_confirm_numbers: methods.includes('cash') ? cashConfirmNumbersDisplay() : [],
+    bkash_number: BKASH_MERCHANT_NUMBER || null,
+    nagad_number: NAGAD_MERCHANT_NUMBER || null,
+    rocket_number: ROCKET_MERCHANT_NUMBER || null,
+    bank: {
+      name: BANK_NAME || null,
+      account_name: BANK_ACCOUNT_NAME || null,
+      account_number: BANK_ACCOUNT_NUMBER || null,
+      branch: BANK_BRANCH || null,
+      routing: BANK_ROUTING || null,
+    },
+    google_pay_url: GOOGLE_PAY_URL || null,
+    paypal_url: PAYPAL_CHECKOUT_URL || null,
+    cash_confirm_numbers: cashConfirmNumbersDisplay(),
   });
 }
 
@@ -367,9 +389,26 @@ async function getInvoice(body) {
     gateway_url = await buildSslczSession(invoice, payment, pkg, { name: invoiceWithCustomer.customer_name, email: invoiceWithCustomer.customer_email, phone: invoiceWithCustomer.phone });
   }
 
-  return reply(200, { ok: true, invoice: invoiceWithCustomer, payment, gateway_url, available_methods: methods,
-    bkash_number: methods.includes('bkash_direct') ? BKASH_MERCHANT_NUMBER : null,
-    cash_confirm_numbers: methods.includes('cash') ? cashConfirmNumbersDisplay() : [] });
+  return reply(200, {
+    ok: true,
+    invoice: invoiceWithCustomer,
+    payment,
+    gateway_url,
+    available_methods: methods,
+    bkash_number: BKASH_MERCHANT_NUMBER || null,
+    nagad_number: NAGAD_MERCHANT_NUMBER || null,
+    rocket_number: ROCKET_MERCHANT_NUMBER || null,
+    bank: {
+      name: BANK_NAME || null,
+      account_name: BANK_ACCOUNT_NAME || null,
+      account_number: BANK_ACCOUNT_NUMBER || null,
+      branch: BANK_BRANCH || null,
+      routing: BANK_ROUTING || null,
+    },
+    google_pay_url: GOOGLE_PAY_URL || null,
+    paypal_url: PAYPAL_CHECKOUT_URL || null,
+    cash_confirm_numbers: cashConfirmNumbersDisplay(),
+  });
 }
 
 // ── BUILD SSLCOMMERZ SESSION ────────────────────────────────
@@ -415,87 +454,197 @@ async function buildSslczSession(invoice, payment, pkg, body) {
 // The admin checks their bKash app / cash-in-hand and only then confirms —
 // see payment-webhook.js's adminConfirm handler for the completion step.
 async function confirmManualPayment(body) {
-  const { invoice_number, method, claim_reference, phone } = body;
-  if (!invoice_number) return reply(400, { ok: false, error: 'invoice_number required' });
-  if (!['cash', 'bkash_direct'].includes(method)) return reply(400, { ok: false, error: 'invalid method' });
+  const { invoice_number, method, claim_reference, phone, cash_recipient } = body;
+  const MANUAL_METHODS = ['cash', 'bkash_direct', 'nagad_direct', 'rocket_direct', 'bank_transfer'];
 
-  const allowed = manualMethodsFor(phone);
-  if (!allowed.includes(method)) {
-    return reply(403, { ok: false, error: 'this phone number is not enabled for that payment method' });
-  }
+  if (!invoice_number) return reply(400, { ok: false, error: 'invoice_number required' });
+  if (!MANUAL_METHODS.includes(method)) return reply(400, { ok: false, error: 'invalid manual payment method' });
+
+  const customerPhone = normPhone(phone);
+  if (!customerPhone) return reply(400, { ok: false, error: 'customer phone required' });
 
   const invRows = await sbSelect('invoices', `invoice_number=eq.${encodeURIComponent(invoice_number)}&limit=1`);
   const invoice = invRows[0];
   if (!invoice) return reply(404, { ok: false, error: 'invoice not found' });
   if (invoice.status !== 'pending') return reply(200, { ok: true, note: 'invoice already ' + invoice.status });
 
-  // Extra safety: the invoice's own profile must actually have this phone.
-  const profRows = await sbSelect('profiles', `id=eq.${invoice.profile_id}&select=phone&limit=1`);
-  if (!profRows[0] || normPhone(profRows[0].phone) !== normPhone(phone)) {
+  // The invoice must belong to the submitting customer.
+  const profRows = await sbSelect(
+    'profiles',
+    `id=eq.${encodeURIComponent(invoice.profile_id)}&select=phone&limit=1`
+  );
+  if (!profRows[0] || normPhone(profRows[0].phone) !== customerPhone) {
     return reply(403, { ok: false, error: 'phone number does not match this invoice' });
+  }
+
+  // Cash recipient is a collection number, not the customer's phone.
+  let recipient = '';
+  if (method === 'cash') {
+    recipient = normPhone(cash_recipient || '');
+    if (!recipient || !CASH_CONFIRM_PHONES.includes(recipient)) {
+      return reply(400, {
+        ok: false,
+        error: 'valid cash collection number required',
+        allowed_numbers: cashConfirmNumbersDisplay(),
+      });
+    }
+  }
+
+  const payRows = await sbSelect(
+    'payments',
+    `id=eq.${encodeURIComponent(invoice.payment_id)}&select=id,transaction_id,amount,currency,payment_method,status,profile_id&limit=1`
+  );
+  const payment = payRows[0];
+  if (!payment) return reply(404, { ok: false, error: 'payment not found' });
+
+  const now = new Date().toISOString();
+  let reference = claim_reference || null;
+  if (method === 'cash') {
+    reference = `CASH_TO:${recipient.replace(/^880/, '0')}${claim_reference ? `|REF:${claim_reference}` : ''}`;
   }
 
   await sbUpdate('payments', `id=eq.${invoice.payment_id}`, {
     payment_method: method,
-    gateway_response_reference: claim_reference || null,
-    updated_at: new Date().toISOString(),
+    gateway_response_reference: reference,
+    updated_at: now,
   });
 
-  const payRows = await sbSelect('payments', `id=eq.${invoice.payment_id}&select=transaction_id,amount&limit=1`);
-  const txn = payRows[0] ? payRows[0].transaction_id : '';
-  const amount = payRows[0] ? payRows[0].amount : invoice.total;
+  const amount = payment.amount || invoice.total;
+  const txn = payment.transaction_id || '';
 
   if (method === 'cash') {
-    // OTP-based confirmation: one 6-digit code sent to BOTH allow-listed
-    // numbers (either one may enter it) — never a plain link, since a cash
-    // handover genuinely needs someone to actively confirm with a code.
     if (CASH_CONFIRM_PHONES.length === 0) {
-      return reply(500, { ok: false, error: 'cash confirmation is not configured (CASH_CONFIRM_PHONES missing)' });
+      return reply(500, { ok: false, error: 'cash confirmation is not configured' });
     }
+
+    // One OTP is generated for this cash claim and sent to the selected
+    // collection number. The OTP is bound to this invoice/reference.
     const code = genOtp();
     const expires = new Date(Date.now() + 15 * 60000).toISOString();
-    for (const adminPhone of CASH_CONFIRM_PHONES) {
-      await sbInsert('otp_codes', {
-        phone: '+' + adminPhone, purpose: 'verification',
-        otp_hash: hashOtp(code), expires_at: expires, attempt_count: 0,
-      }, false);
-      fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: adminPhone,
-          msg: `BIYE নগদ পেমেন্ট: ৳${amount}, ফোন ${normPhone(phone)}, রেফ: ${claim_reference || '—'}। কোড: ${code} — কনফার্ম করুন: ${SITE_URL}/cash-confirm.html?inv=${encodeURIComponent(invoice_number)}`,
-        }),
-      }).catch(() => {});
+
+    // Remove any older active verification code for the selected collector.
+    await sbUpdate(
+      'otp_codes',
+      `phone=eq.${encodeURIComponent('+' + recipient)}&purpose=eq.verification&consumed_at=is.null`,
+      { consumed_at: now }
+    );
+
+    const inserted = await sbInsert('otp_codes', {
+      phone: '+' + recipient,
+      purpose: 'verification',
+      otp_hash: hashOtp(code),
+      expires_at: expires,
+      attempt_count: 0,
+    }, false);
+
+    if (!inserted) {
+      return reply(500, { ok: false, error: 'could not create cash confirmation OTP' });
     }
-    return reply(200, { ok: true, status: 'pending_otp_confirmation' });
+
+    const smsMsg =
+      `BIYE CASH CONFIRM: Invoice ${invoice_number}, Amount BDT ${amount}, ` +
+      `Customer ${customerPhone.replace(/^880/, '0')}, Collection ${recipient.replace(/^880/, '0')}, ` +
+      `Ref ${claim_reference || '—'}, OTP ${code}. Valid 15 minutes.`;
+
+    try {
+      const smsRes = await fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: recipient, msg: smsMsg }),
+      });
+      const smsData = await smsRes.json().catch(() => ({}));
+      if (!smsData.sent) {
+        return reply(502, { ok: false, error: 'OTP SMS could not be sent', detail: smsData });
+      }
+    } catch (e) {
+      return reply(502, { ok: false, error: 'OTP SMS service unavailable' });
+    }
+
+    return reply(200, {
+      ok: true,
+      status: 'pending_otp_confirmation',
+      invoice_number,
+      amount,
+      cash_recipient: recipient.replace(/^880/, '0'),
+      message: 'OTP sent to the selected cash collection number.',
+    });
   }
 
-  // bkash_direct keeps the one-click admin link (a code doesn't add much
-  // here since the admin is only confirming money already visible in their
-  // own bKash statement, not physically handing over cash).
+  // Manual non-cash claims remain pending until an authorised admin verifies
+  // the actual transaction/transfer. No fake completion is allowed here.
   if (ADMIN_PHONE && ADMIN_SECRET) {
-    const confirmUrl = `${SITE_URL}/.netlify/functions/payment-webhook?adminConfirm=1&txn=${encodeURIComponent(txn)}&secret=${encodeURIComponent(ADMIN_SECRET)}`;
-    const msg = `BIYE: bKash পেমেন্ট দাবি — ৳${amount}, ফোন ${normPhone(phone)}, রেফ: ${claim_reference || '—'}. টাকা পেয়ে থাকলে কনফার্ম করুন: ${confirmUrl}`;
+    const confirmUrl =
+      `${SITE_URL}/.netlify/functions/payment-webhook?adminConfirm=1&txn=${encodeURIComponent(txn)}&secret=${encodeURIComponent(ADMIN_SECRET)}`;
+    const labels = {
+      bkash_direct: 'bKash',
+      nagad_direct: 'Nagad',
+      rocket_direct: 'Rocket',
+      bank_transfer: 'Bank Transfer',
+    };
+    const msg =
+      `BIYE ${labels[method] || method} payment claim: Invoice ${invoice_number}, ` +
+      `Amount BDT ${amount}, Customer ${customerPhone.replace(/^880/, '0')}, ` +
+      `Ref ${claim_reference || '—'}. Verify funds then confirm: ${confirmUrl}`;
+
     fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to: ADMIN_PHONE, msg }),
     }).catch(() => {});
   }
 
-  return reply(200, { ok: true, status: 'pending_review' });
+  return reply(200, {
+    ok: true,
+    status: 'pending_review',
+    invoice_number,
+    amount,
+    method,
+  });
 }
 
 // ── CONFIRM CASH PAYMENT VIA OTP (entered by the admin/banker) ──────
 async function confirmCashOtp(body) {
   const { invoice_number, phone, code } = body;
-  if (!invoice_number || !phone || !code) return reply(400, { ok: false, error: 'invoice_number, phone and code required' });
+  if (!invoice_number || !phone || !code) {
+    return reply(400, { ok: false, error: 'invoice_number, phone and code required' });
+  }
 
-  const adminPhone = normPhone(phone);
-  if (!CASH_CONFIRM_PHONES.includes(adminPhone)) {
+  const collectorPhone = normPhone(phone);
+  if (!CASH_CONFIRM_PHONES.includes(collectorPhone)) {
     return reply(403, { ok: false, error: 'this number is not authorised to confirm cash payments' });
   }
 
-  const q = await sbSelect('otp_codes', `phone=eq.${encodeURIComponent('+' + adminPhone)}&purpose=eq.verification&order=created_at.desc&limit=1`);
+  const invRows = await sbSelect(
+    'invoices',
+    `invoice_number=eq.${encodeURIComponent(invoice_number)}&limit=1`
+  );
+  const invoice = invRows[0];
+  if (!invoice) return reply(404, { ok: false, error: 'invoice not found' });
+  if (invoice.status !== 'pending') {
+    return reply(200, { ok: true, note: 'invoice already ' + invoice.status });
+  }
+
+  const payRows = await sbSelect(
+    'payments',
+    `id=eq.${encodeURIComponent(invoice.payment_id)}&select=id,profile_id,transaction_id,amount,currency,payment_method,gateway_response_reference,status&limit=1`
+  );
+  const payment = payRows[0];
+  if (!payment) return reply(404, { ok: false, error: 'payment not found' });
+  if (payment.payment_method !== 'cash') {
+    return reply(400, { ok: false, error: 'this invoice is not a cash payment claim' });
+  }
+
+  // Ensure the OTP was issued to this exact collector for this exact cash claim.
+  const ref = String(payment.gateway_response_reference || '');
+  const recipientMatch = ref.match(/^CASH_TO:(\d{11,14})/);
+  if (!recipientMatch || recipientMatch[1] !== collectorPhone.replace(/^880/, '0')) {
+    return reply(403, { ok: false, error: 'collector number does not match the selected cash recipient' });
+  }
+
+  const q = await sbSelect(
+    'otp_codes',
+    `phone=eq.${encodeURIComponent('+' + collectorPhone)}&purpose=eq.verification&order=created_at.desc&limit=1`
+  );
   const row = q[0];
   if (!row) return reply(400, { ok: false, error: 'কোনো কোড পাওয়া যায়নি — আবার চেষ্টা করুন' });
   if (row.consumed_at) return reply(400, { ok: false, error: 'এই কোড আগেই ব্যবহার হয়ে গেছে' });
@@ -503,62 +652,92 @@ async function confirmCashOtp(body) {
   if (new Date(row.expires_at) < new Date()) return reply(400, { ok: false, error: 'কোডের মেয়াদ শেষ' });
 
   if (row.otp_hash !== hashOtp(code)) {
-    await sbUpdate('otp_codes', `id=eq.${row.id}`, { attempt_count: (row.attempt_count || 0) + 1 });
+    await sbUpdate('otp_codes', `id=eq.${row.id}`, {
+      attempt_count: (row.attempt_count || 0) + 1,
+    });
     return reply(400, { ok: false, error: 'কোডটি সঠিক নয়' });
   }
-  await sbUpdate('otp_codes', `id=eq.${row.id}`, { consumed_at: new Date().toISOString() });
-
-  const invRows = await sbSelect('invoices', `invoice_number=eq.${encodeURIComponent(invoice_number)}&limit=1`);
-  const invoice = invRows[0];
-  if (!invoice) return reply(404, { ok: false, error: 'invoice not found' });
-  if (invoice.status !== 'pending') return reply(200, { ok: true, note: 'invoice already ' + invoice.status });
-
-  const payRows = await sbSelect('payments', `id=eq.${invoice.payment_id}&limit=1`);
-  const payment = payRows[0];
-  if (!payment) return reply(404, { ok: false, error: 'payment not found' });
 
   const now = new Date().toISOString();
-  await sbUpdate('payments', `id=eq.${payment.id}`, { status: 'completed', paid_at: now, updated_at: now });
-  await sbUpdate('invoices', `id=eq.${invoice.id}`, { status: 'paid' });
 
-  const receipt = await sbInsert('receipts', {
+  // Complete payment only after the correct collector OTP is verified.
+  const paymentUpdated = await sbUpdate('payments', `id=eq.${payment.id}`, {
+    status: 'completed',
+    paid_at: now,
+    updated_at: now,
+  });
+  const invoiceUpdated = await sbUpdate('invoices', `id=eq.${invoice.id}`, { status: 'paid' });
+
+  if (!paymentUpdated || !invoiceUpdated) {
+    return reply(500, { ok: false, error: 'payment verification could not be completed safely' });
+  }
+
+  const existing = await sbSelect('receipts', `payment_id=eq.${encodeURIComponent(payment.id)}&limit=1`);
+  const receipt = existing[0] || await sbInsert('receipts', {
     profile_id: payment.profile_id,
     payment_id: payment.id,
     receipt_number: 'RCP-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(1000 + Math.random()*9000),
     amount: payment.amount,
     currency: payment.currency || 'BDT',
     verification_status: 'verified',
-    issued_at: now, created_at: now,
+    issued_at: now,
+    created_at: now,
   });
 
-  // Notify the customer.
-  const profRows = await sbSelect('profiles', `id=eq.${payment.profile_id}&select=phone,email,display_name&limit=1`);
+  await sbUpdate('otp_codes', `id=eq.${row.id}`, { consumed_at: now });
+
+  // Notify customer; do not expose the collector OTP again.
+  const profRows = await sbSelect(
+    'profiles',
+    `id=eq.${payment.profile_id}&select=phone,email,display_name&limit=1`
+  );
   const profile = profRows[0];
+
   if (profile) {
-    const receiptUrl = `${SITE_URL}/receipt.html?payment_id=${payment.id}`;
+    const receiptUrl = `${SITE_URL}/receipt.html?payment_id=${encodeURIComponent(payment.id)}`;
+    const smsTasks = [];
+    const emailTasks = [];
+
     if (profile.phone) {
-      fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to: profile.phone, msg: `BIYE: আপনার নগদ পেমেন্ট নিশ্চিত হয়েছে! রসিদ: ${receipt ? receipt.receipt_number : ''} — ${receiptUrl}` }),
-      }).catch(() => {});
+      smsTasks.push(fetch(`${SITE_URL}/.netlify/functions/send-sms`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: profile.phone,
+          msg: `BIYE: Cash payment verified. Invoice ${invoice_number}, Amount BDT ${payment.amount}, Receipt ${receipt ? receipt.receipt_number : ''}. ${receiptUrl}`,
+        }),
+      }).catch(() => null));
     }
+
     if (profile.email) {
-      fetch(`${SITE_URL}/.netlify/functions/send-email`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      emailTasks.push(fetch(`${SITE_URL}/.netlify/functions/send-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: profile.email,
-          subject: 'BIYE — পেমেন্ট নিশ্চিত হয়েছে',
-          html: `<p>আপনার নগদ পেমেন্ট (৳${payment.amount}) নিশ্চিত হয়েছে।</p><p>রসিদ নং: <strong>${receipt ? receipt.receipt_number : ''}</strong></p><p><a href="${receiptUrl}">রসিদ দেখুন</a></p>`,
+          subject: `BIYE Payment Receipt — ${receipt ? receipt.receipt_number : ''}`,
+          html:
+            `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto">` +
+            `<h2 style="color:#E2136E">BIYE Payment Confirmed</h2>` +
+            `<p>Your cash payment has been verified.</p>` +
+            `<p><b>Invoice:</b> ${invoice_number}<br>` +
+            `<b>Amount:</b> BDT ${payment.amount}<br>` +
+            `<b>Receipt:</b> ${receipt ? receipt.receipt_number : '—'}</p>` +
+            `<p><a href="${receiptUrl}">View Receipt</a></p></div>`,
         }),
-      }).catch(() => {});
+      }).catch(() => null));
     }
+
+    await Promise.all([...smsTasks, ...emailTasks]);
   }
 
   return reply(200, {
     ok: true,
     verified: true,
+    invoice_number,
+    amount: payment.amount,
     receipt_number: receipt ? receipt.receipt_number : null,
-    receipt_url: `${SITE_URL}/receipt.html?payment_id=${payment.id}`,
+    receipt_url: `${SITE_URL}/receipt.html?payment_id=${encodeURIComponent(payment.id)}`,
   });
 }
 
@@ -673,8 +852,13 @@ exports.handler = async (event) => {
       service_key: SERVICE_KEY ? 'set' : 'MISSING',
       sslcommerz: SSLC_STORE_ID ? 'set' : 'MISSING (sandbox mode)',
       mode: SSLC_IS_LIVE ? 'LIVE' : 'sandbox',
-      manual_payment_phones_configured: MANUAL_PAYMENT_PHONES.length,
-      bkash_direct_phones_configured: BKASH_DIRECT_PHONES.length,
+      cash_confirm_phones_configured: CASH_CONFIRM_PHONES.length,
+      bkash_merchant_configured: !!BKASH_MERCHANT_NUMBER,
+      nagad_merchant_configured: !!NAGAD_MERCHANT_NUMBER,
+      rocket_merchant_configured: !!ROCKET_MERCHANT_NUMBER,
+      bank_configured: !!(BANK_NAME && BANK_ACCOUNT_NUMBER),
+      google_pay_configured: !!GOOGLE_PAY_URL,
+      paypal_configured: !!PAYPAL_CHECKOUT_URL,
     });
   }
 
