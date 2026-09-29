@@ -305,9 +305,16 @@ a{color:inherit}
      DB.getSession()) recognises the user as logged in. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module">
-  import { CONFIG } from './js/config.js';
-  window.__supa = window.supabase.createClient(CONFIG.SUPABASE.url, CONFIG.SUPABASE.anonKey, {
-    auth: { persistSession: true, autoRefreshToken: true },
+  // Keep the existing Supabase session architecture, but expose a readiness
+  // promise so a very fast click cannot race the module initialization.
+  window.__supaReady = import('./js/config.js').then(function(mod){
+    var CONFIG = mod.CONFIG;
+    window.__supa = window.supabase.createClient(
+      CONFIG.SUPABASE.url,
+      CONFIG.SUPABASE.anonKey,
+      { auth: { persistSession: true, autoRefreshToken: true } }
+    );
+    return window.__supa;
   });
 </script>
 <script>
@@ -386,13 +393,45 @@ function doLogin(){
 
 async function loginOk(accessToken, refreshToken){
   // Persist the real Supabase session so dashboard.html recognises the login.
+  // Wait for the SDK/config module if the user clicked unusually quickly.
   try {
-    if (window.__supa && accessToken && refreshToken) {
-      await window.__supa.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+    if (!accessToken || !refreshToken) throw new Error('Authentication tokens missing');
+
+    var supa = window.__supa;
+    if (!supa && window.__supaReady) supa = await window.__supaReady;
+    if (!supa) throw new Error('Supabase client is not ready');
+
+    var result = await supa.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken
+    });
+
+    if (result && result.error) throw result.error;
+
+    var sessionCheck = await supa.auth.getSession();
+    if (!sessionCheck.data || !sessionCheck.data.session) {
+      throw new Error('Supabase session was not established');
     }
-  } catch (e) { /* if this fails, dashboard.html's own auth check will redirect back here */ }
-  goStep('success');
-  setTimeout(function(){ window.location.href = 'dashboard.html'; }, 1200);
+
+    goStep('success');
+    setTimeout(function(){ window.location.href = 'dashboard.html'; }, 1200);
+  } catch (e) {
+    console.error('BIYE login session error:', e);
+    setBusy(
+      'loginBtn',
+      'loginTxt',
+      false,
+      document.getElementById('loginTxt').getAttribute('data-en') || 'Log in'
+    );
+    showAlert(
+      'loginAlert',
+      'loginAlertText',
+      tt(
+        'লগইন সম্পন্ন হয়েছে, কিন্তু সেশন তৈরি করা যায়নি। আবার চেষ্টা করুন।',
+        'Login succeeded, but the secure session could not be created. Please try again.'
+      )
+    );
+  }
 }
 
 // ── FORGOT / RESET ───────────────────────────────
