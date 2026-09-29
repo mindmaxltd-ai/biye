@@ -211,20 +211,43 @@ exports.handler = async (event) => {
 
     const phoneE164 = phone.startsWith('+') ? phone : normPhoneE164(phone);
 
-    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-      method: 'POST',
-      headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: phoneE164, password }),
-    });
-    const d = await r.json().catch(() => ({}));
-    if (!r.ok || !d.access_token) {
-      // Logged server-side only (visible in Netlify → Functions → send-otp
-      // → logs) so the real cause can be diagnosed without exposing it to
-      // whoever is trying to log in.
-      console.error('login failed for', phoneE164, '— Supabase status', r.status, JSON.stringify(d));
+    // payment.js creates Supabase Auth users with an internal verified email
+    // identity (8801XXXXXXXXX@biye.ltd), while the public UI asks only for the
+    // mobile number. Try the phone identity first for projects that have
+    // Supabase phone auth enabled; then fall back to BIYE's internal email
+    // identity so login does not depend on the phone provider being enabled.
+    const identities = [
+      { phone: phoneE164, password },
+      { email: `${phoneE164.replace('+', '')}@biye.ltd`, password },
+    ];
+
+    let d = {};
+    let r = null;
+    for (const credentials of identities) {
+      r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      });
+      d = await r.json().catch(() => ({}));
+      if (r.ok && d.access_token) break;
+    }
+
+    if (!r || !r.ok || !d.access_token) {
+      console.error(
+        'login failed for', phoneE164,
+        '— Supabase status', r ? r.status : 'no response',
+        JSON.stringify(d)
+      );
       return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
     }
-    return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token });
+
+    return reply(200, {
+      ok: true,
+      access_token: d.access_token,
+      refresh_token: d.refresh_token,
+      user: d.user ? { id: d.user.id, email: d.user.email || null } : null,
+    });
   }
 
   // ─────────── RESET PASSWORD (after a 'reset'-purpose OTP was verified) ───────────
