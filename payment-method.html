@@ -2468,11 +2468,44 @@ async function loadInvoice(){
         response
       );
 
+    /*
+      IMPORTANT UI RULE:
+      Never blank the whole payment interface merely because the backend
+      omitted/returned an empty convenience `available_methods` array.
+      Normal payment cards stay visible. The backend remains the final
+      authority when the payment is submitted.
+
+      Cash is the only method hidden by account authorization:
+        - authenticated session required
+        - invoice phone must be 01745069310 or 01346098892
+        - backend cash_allowed must be true
+    */
     document.querySelectorAll('.payment-card').forEach(function(card){
       var method = card.dataset.method;
-      var enabled = AVAILABLE_METHODS.includes(method) && (method !== 'sslcommerz' || !!GATEWAY_URL);
-      card.style.display = enabled ? '' : 'none';
-      card.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+
+      var cashVisible =
+        response.cash_allowed === true &&
+        !!AUTH_SESSION?.user &&
+        CASH_ALLOWED_PHONES.includes(
+          normalizePhone(
+            INVOICE?.phone ||
+            response.phone ||
+            ''
+          )
+        );
+
+      var enabled =
+        method === 'cash'
+          ? cashVisible
+          : true;
+
+      card.style.display =
+        enabled ? '' : 'none';
+
+      card.setAttribute(
+        'aria-disabled',
+        enabled ? 'false' : 'true'
+      );
     });
 
 
@@ -2853,6 +2886,14 @@ function selectPayment(card){
     SELECTED.method ===
     'sslcommerz'
   ){
+
+    if(!GATEWAY_URL){
+      showStatus(
+        'SSLCommerz gateway এখনো configured হয়নি।',
+        'error'
+      );
+    }
+
 
     document
       .getElementById(
