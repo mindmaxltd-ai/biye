@@ -275,28 +275,59 @@ exports.handler = async (event) => {
     let d = {};
     let r = null;
     let lastStatus = null;
+    let lastError = null;
+    let succeeded = false;
+
+    // Try the normal public/anon key first. If the Netlify environment has
+    // an outdated/missing anon key, also try the same project's service key
+    // from this SERVER-SIDE function. The service key is never sent to the
+    // browser. This fallback does not alter passwords or stored profile data.
+    const tokenKeys = [];
+    if (ANON_KEY) tokenKeys.push({ key: ANON_KEY, name: 'anon' });
+    if (SERVICE_KEY && SERVICE_KEY !== ANON_KEY) tokenKeys.push({ key: SERVICE_KEY, name: 'service' });
 
     for (const credentials of uniqueIdentities) {
-      try {
-        r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-          method: 'POST',
-          headers: {
-            apikey: ANON_KEY,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(credentials)
-        });
+      for (const keyInfo of tokenKeys) {
+        try {
+          r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+            method: 'POST',
+            headers: {
+              apikey: keyInfo.key,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(credentials)
+          });
 
-        d = await r.json().catch(() => ({}));
-        lastStatus = r.status;
+          d = await r.json().catch(() => ({}));
+          lastStatus = r.status;
+          lastError = d && (d.error_description || d.msg || d.message || d.error)
+            ? String(d.error_description || d.msg || d.message || d.error)
+            : null;
 
-        if (r.ok && d.access_token && d.refresh_token) break;
-      } catch (e) {
-        console.error('Supabase login request failed:', e && e.message ? e.message : e);
+          if (r.ok && d.access_token && d.refresh_token) {
+            succeeded = true;
+            break;
+          }
+
+          // If this credential failed with ordinary invalid credentials,
+          // trying the other key is useful only when the key itself may be
+          // invalid. Keep both attempts for compatibility with old projects.
+        } catch (e) {
+          lastError = e && e.message ? e.message : String(e);
+          console.error('Supabase login request failed:', lastError);
+        }
       }
+      if (succeeded) break;
     }
 
-    if (!r || !r.ok || !d.access_token || !d.refresh_token) {
+    if (!succeeded || !r || !r.ok || !d.access_token || !d.refresh_token) {
+      const errText = String(lastError || '').toLowerCase();
+      const configProblem =
+        errText.includes('invalid api key') ||
+        errText.includes('apikey') ||
+        errText.includes('api key') ||
+        errText.includes('project') && errText.includes('key');
+
       console.error(
         'BIYE login failed:',
         JSON.stringify({
@@ -304,10 +335,21 @@ exports.handler = async (event) => {
           profile_found: !!profile,
           auth_user_found: !!(profile && profile.auth_user_id),
           identity_count: uniqueIdentities.length,
-          last_status: lastStatus
+          tried_token_keys: tokenKeys.map(k => k.name),
+          last_status: lastStatus,
+          last_error: lastError
         })
       );
-      // Keep the public error generic; never expose Auth internals.
+
+      // Keep credential errors generic, but do not disguise a deployment/API
+      // configuration failure as a customer's wrong password.
+      if (configProblem) {
+        return reply(500, {
+          ok: false,
+          error: 'Supabase authentication configuration error — check SUPABASE_URL and SUPABASE_ANON_KEY in Netlify.'
+        });
+      }
+
       return reply(200, {
         ok: false,
         error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল'
