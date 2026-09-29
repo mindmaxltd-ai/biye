@@ -211,19 +211,45 @@ exports.handler = async (event) => {
 
     const phoneE164 = phone.startsWith('+') ? phone : normPhoneE164(phone);
 
-    // payment.js creates Supabase Auth users with an internal verified email
-    // identity (8801XXXXXXXXX@biye.ltd), while the public UI asks only for the
-    // mobile number. Try the phone identity first for projects that have
-    // Supabase phone auth enabled; then fall back to BIYE's internal email
-    // identity so login does not depend on the phone provider being enabled.
-    const identities = [
-      { phone: phoneE164, password },
-      { email: `${phoneE164.replace('+', '')}@biye.ltd`, password },
-    ];
+    // The public UI always asks for a mobile number, but BIYE historically
+    // created Auth users in more than one way. New registrations use the
+    // internal verified email identity 8801XXXXXXXXX@biye.ltd; some older
+    // accounts may have a real Auth email or a Supabase phone identity.
+    // Resolve the profile first and, when possible, read the Auth user's
+    // actual email by auth_user_id. This keeps old accounts working without
+    // changing or deleting any existing profile/account data.
+    const profile = await findAuthUserByPhone(phoneE164);
+    const identities = [];
+
+    if (profile && profile.auth_user_id) {
+      const authUser = await authAdmin(`/admin/users/${encodeURIComponent(profile.auth_user_id)}`);
+      const actualEmail = authUser.ok && authUser.data && authUser.data.email
+        ? String(authUser.data.email).trim()
+        : '';
+      if (actualEmail) identities.push({ email: actualEmail, password });
+    }
+
+    // Current BIYE registration identity.
+    identities.push({
+      email: `${phoneE164.replace('+', '')}@biye.ltd`,
+      password,
+    });
+
+    // Legacy Supabase phone-auth identity, retained as a fallback.
+    identities.push({ phone: phoneE164, password });
+
+    // Remove duplicate email identities while preserving the fallback order.
+    const seen = new Set();
+    const uniqueIdentities = identities.filter((x) => {
+      const key = x.email ? `email:${x.email.toLowerCase()}` : `phone:${x.phone}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 
     let d = {};
     let r = null;
-    for (const credentials of identities) {
+    for (const credentials of uniqueIdentities) {
       r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
         method: 'POST',
         headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
