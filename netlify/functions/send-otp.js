@@ -211,6 +211,10 @@ exports.handler = async (event) => {
   }
 
   // ─────────── LOGIN (phone + password) ───────────
+  // Primary path: real Supabase Phone + Password authentication.
+  // Transitional path: if an older BIYE account was created with the
+  // historical synthetic email identity, authenticate that same account and
+  // immediately attach the real phone identity so subsequent logins use phone.
   if (action === 'login') {
     const phone = String(p.phone || '').trim();
     const password = p.password || '';
@@ -220,20 +224,81 @@ exports.handler = async (event) => {
 
     const phoneE164 = phone.startsWith('+') ? phone : normPhoneE164(phone);
 
-    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    // 1) Preferred: genuine phone/password login.
+    let r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
       method: 'POST',
       headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone: phoneE164, password }),
     });
-    const d = await r.json().catch(() => ({}));
-    if (!r.ok || !d.access_token) {
-      // Logged server-side only (visible in Netlify → Functions → send-otp
-      // → logs) so the real cause can be diagnosed without exposing it to
-      // whoever is trying to log in.
-      console.error('login failed for', phoneE164, '— Supabase status', r.status, JSON.stringify(d));
-      return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
+    let d = await r.json().catch(() => ({}));
+
+    if (r.ok && d.access_token) {
+      return reply(200, {
+        ok: true,
+        access_token: d.access_token,
+        refresh_token: d.refresh_token,
+        login_mode: 'phone',
+      });
     }
-    return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token });
+
+    // 2) Legacy compatibility: older BIYE accounts used
+    //    8801XXXXXXXXX@biye.ltd as the Auth email. This does NOT expose that
+    //    email to the customer. A successful legacy login is immediately
+    //    upgraded to a real phone identity.
+    const authEmail = `${phoneE164.replace('+', '')}@biye.ltd`.toLowerCase();
+    const legacy = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: authEmail, password }),
+    });
+    const ld = await legacy.json().catch(() => ({}));
+
+    if (legacy.ok && ld.access_token && ld.user && ld.user.id) {
+      const authUserId = ld.user.id;
+
+      // Upgrade this exact Auth user. Never change the phone if it already
+      // belongs to another number. If the upgrade fails, the valid legacy
+      // session is still returned so the customer is not locked out.
+      const currentPhone = normPhone(ld.user.phone || ld.user.user_metadata?.phone || '');
+      if (!currentPhone || currentPhone === normPhone(phoneE164)) {
+        const metadata = { ...(ld.user.user_metadata || {}), phone: phoneE164 };
+        const upgraded = await authAdmin(`/admin/users/${encodeURIComponent(authUserId)}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            phone: phoneE164,
+            phone_confirm: true,
+            user_metadata: metadata,
+          }),
+        });
+
+        if (upgraded.ok) {
+          // Keep profiles.auth_user_id aligned with the actual Auth identity.
+          const profile = await findAuthUserByPhone(phoneE164);
+          if (profile && String(profile.auth_user_id || '') !== String(authUserId)) {
+            await sb(`profiles?id=eq.${encodeURIComponent(profile.id)}`, {
+              method: 'PATCH',
+              headers: { Prefer: 'return=minimal' },
+              body: JSON.stringify({ auth_user_id: authUserId, phone: phoneE164 }),
+            });
+          }
+        } else {
+          console.error('legacy login succeeded but phone upgrade failed', authUserId, upgraded.status, JSON.stringify(upgraded.data));
+        }
+      } else {
+        console.error('legacy Auth user has a different phone; refusing automatic phone reassignment', authUserId);
+      }
+
+      return reply(200, {
+        ok: true,
+        access_token: ld.access_token,
+        refresh_token: ld.refresh_token,
+        login_mode: 'legacy-upgraded',
+      });
+    }
+
+    // Logged server-side only; never expose Supabase's internal error details.
+    console.error('login failed for', phoneE164, '— phone status', r.status, JSON.stringify(d), '— legacy status', legacy.status, JSON.stringify(ld));
+    return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
   }
 
   // ─────────── RESET PASSWORD (after a 'reset'-purpose OTP was verified) ───────────
