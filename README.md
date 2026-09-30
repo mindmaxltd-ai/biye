@@ -1,68 +1,55 @@
-# BIYE.LTD — Mobile + Password Authentication Upgrade
+# BIYE.LTD — Mobile + Password Login Fix
 
-## What changed
+## What is included
 
-BIYE customer login is now designed around the real Supabase Auth phone identity:
+1. `netlify/functions/send-otp.js`
+   - Existing OTP send/verify rules retained.
+   - Existing reset-password and consent actions retained.
+   - Primary login is real Supabase Phone + Password.
+   - Adds a controlled legacy-login bridge for older BIYE accounts that were created with `8801XXXXXXXXX@biye.ltd`.
+   - After a successful legacy login, the exact Auth user is upgraded with the real phone identity (`phone_confirm=true`) so future logins use the mobile number.
+   - Does not expose the legacy email to the customer.
+   - Keeps `profiles.auth_user_id` aligned when the profile is found.
+   - Never stores plaintext passwords.
 
-`Mobile Number + Password → Supabase Auth → BIYE Dashboard`
+2. `login.html`
+   - Existing UI retained.
+   - Sends mobile number + password to `send-otp`.
+   - Persists the returned Supabase session and redirects to `dashboard.html`.
 
-Email remains available for notifications/receipts and legacy compatibility, but it is not the customer-facing login identifier.
+3. `migrate-phone-auth.js`
+   - One-time migration utility.
+   - DRY-RUN by default; `APPLY=1` is required to write changes.
+   - Safer matching order: real phone identity → historical synthetic BIYE identity → phone metadata → existing auth_user_id → profile email only as a last resort.
+   - If multiple preferred Auth identities exist, it reports a conflict instead of choosing one.
+   - Never reads or changes passwords.
 
-### Updated files
-- `payment.js`
-  - New registrations create Supabase Auth users with both `phone` and `phone_confirm: true`.
-  - Existing profile lookup accepts both `+880...` and `880...` phone formats.
-  - Existing password storage remains exclusively in Supabase Auth.
-- `send-otp.js`
-  - Login uses Supabase `phone + password`.
-  - Password-reset profile lookup accepts both phone formats.
-- `login.html`
-  - Already uses the BIYE mobile-number login form and calls `send-otp` with the phone number.
-- `migrate-phone-auth.js`
-  - One-time migration for existing customers.
-  - DRY RUN by default; never changes passwords.
+## Deployment
 
-## Required Supabase setting
+Copy `netlify/functions/send-otp.js` to the deployed Netlify function path and replace the existing file.
+Keep the existing `login.html` if identical; this package contains the verified current copy.
 
-Enable **Phone** authentication in Supabase Authentication → Providers before production phone-password sign-in.
+Required environment variables:
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_KEY` (or `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_KEY`)
+- `SUPABASE_ANON_KEY`
+- `SMS_API_KEY`
 
-BIYE's own registration OTP should be completed before a new Auth user is created, so the backend can safely set `phone_confirm: true` for that verified registration.
+## Important Supabase setting
 
-## Existing users: migrate before testing phone login
+Supabase Auth must allow Phone sign-in for true phone + password authentication.
 
-Required environment variables in a secure server/terminal only:
+## Migration option
 
-```text
-SUPABASE_URL=...
-SUPABASE_SERVICE_KEY=...
-```
-
-First run a dry run:
+Run the migration utility from a trusted server/terminal only:
 
 ```bash
 node migrate-phone-auth.js
-```
-
-Review `CONFLICT` and `SKIP` lines.
-
-Then apply only after the dry run is clean enough for the project:
-
-```bash
 APPLY=1 node migrate-phone-auth.js
 ```
 
-The migration:
-1. Reads profiles and Supabase Auth users.
-2. Matches accounts using existing Auth UID, mobile number, profile email, or BIYE's legacy synthetic email.
-3. Refuses ambiguous matches.
-4. Sets the Auth user's phone and `phone_confirm: true`.
-5. Synchronizes `profiles.auth_user_id` and normalizes `profiles.phone` to `+880...`.
-6. Does not read, export, or change passwords.
+Review the dry-run output first. Do not expose the service-role key in browser code.
 
-## Important
+## Payment code
 
-Never put the Supabase service-role key in `login.html`, browser JavaScript, GitHub, or any public file.
-
-Supabase documents `auth.admin.listUsers()` as a server-only operation and `auth.admin.updateUserById()` as the administrative method for updating a user's phone/phone confirmation. See the official documentation:
-- https://supabase.com/docs/reference/javascript/auth-admin-listusers
-- https://supabase.com/docs/reference/javascript/auth-admin-updateuserbyid
+`payment.js` is intentionally NOT included or changed in this package. Cash-payment OTP, invoice, receipt, SMS/email, and payment processing logic are outside this login fix.
