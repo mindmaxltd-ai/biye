@@ -103,31 +103,17 @@ async function authAdmin(path, opts = {}) {
 }
 
 async function findAuthUserByPhone(phoneE164) {
-  // IMPORTANT: older BIYE records may store the same mobile as:
-  //   017XXXXXXXXX / 88017XXXXXXXXX / +88017XXXXXXXXX
-  // Never alter the stored value. We only try equivalent representations
-  // when resolving the existing profile → auth_user_id relationship.
-  const digits = String(phoneE164 || '').replace(/[^0-9]/g, '');
-  const candidates = [];
-  if (digits.startsWith('8801')) {
-    candidates.push(
-      '+' + digits,       // Supabase/Auth E.164 style
-      digits,              // international without +
-      '0' + digits.slice(2) // Bangladesh local style
-    );
-  }
-  if (String(phoneE164 || '').startsWith('+')) {
-    candidates.push(String(phoneE164).replace(/^\+/, ''));
-  }
-
-  const seen = new Set();
-  for (const candidate of candidates) {
-    if (!candidate || seen.has(candidate)) continue;
-    seen.add(candidate);
-    const rows = (await sb(
-      `profiles?phone=eq.${encodeURIComponent(candidate)}&select=id,auth_user_id&limit=1`
-    )).data;
-    if (Array.isArray(rows) && rows[0]) return rows[0];
+  // BIYE has historically stored profiles.phone both as 8801... and
+  // +8801... . Resolve both forms so password reset and migration do not
+  // fail merely because of formatting.
+  const plain = normPhone(phoneE164);
+  const queries = [
+    `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id,email,phone&limit=1`,
+    `phone=eq.${encodeURIComponent(plain)}&select=id,auth_user_id,email,phone&limit=1`,
+  ];
+  for (const query of queries) {
+    const result = await sb(`profiles?${query}`);
+    if (result.ok && Array.isArray(result.data) && result.data[0]) return result.data[0];
   }
   return null;
 }
@@ -226,144 +212,28 @@ exports.handler = async (event) => {
 
   // ─────────── LOGIN (phone + password) ───────────
   if (action === 'login') {
-    const rawPhone = String(p.phone || '').trim();
+    const phone = String(p.phone || '').trim();
     const password = p.password || '';
-    if (!rawPhone) return reply(400, { ok: false, error: 'no phone' });
+    if (!phone) return reply(400, { ok: false, error: 'no phone' });
     if (!password) return reply(400, { ok: false, error: 'password required' });
     if (!ANON_KEY) return reply(500, { ok: false, error: 'SUPABASE_ANON_KEY missing' });
 
-    const phoneE164 = rawPhone.startsWith('+') ? normPhoneE164(rawPhone) : normPhoneE164(rawPhone);
-    const phoneDigits = normPhone(phoneE164);
+    const phoneE164 = phone.startsWith('+') ? phone : normPhoneE164(phone);
 
-    // Resolve the existing profile without changing any stored data.
-    // This protects legacy accounts whose profiles.phone used a different
-    // Bangladesh number format.
-    const profile = await findAuthUserByPhone(phoneE164);
-    const identities = [];
-
-    // 1) Existing Auth user's actual email — highest priority for legacy accounts.
-    if (profile && profile.auth_user_id) {
-      const authUser = await authAdmin(
-        `/admin/users/${encodeURIComponent(profile.auth_user_id)}`
-      );
-      const actualEmail = authUser.ok && authUser.data && authUser.data.email
-        ? String(authUser.data.email).trim()
-        : '';
-      if (actualEmail) identities.push({ email: actualEmail, password });
-    }
-
-    // 2) Current BIYE registration identity.
-    identities.push({
-      email: `${phoneDigits}@biye.ltd`,
-      password
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: phoneE164, password }),
     });
-
-    // 3) Legacy Supabase phone-auth identity.
-    identities.push({ phone: phoneE164, password });
-
-    // Remove duplicates while preserving priority.
-    const seen = new Set();
-    const uniqueIdentities = identities.filter((x) => {
-      const key = x.email
-        ? `email:${x.email.toLowerCase()}`
-        : `phone:${x.phone}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-
-    let d = {};
-    let r = null;
-    let lastStatus = null;
-    let lastError = null;
-    let succeeded = false;
-
-    // Try the normal public/anon key first. If the Netlify environment has
-    // an outdated/missing anon key, also try the same project's service key
-    // from this SERVER-SIDE function. The service key is never sent to the
-    // browser. This fallback does not alter passwords or stored profile data.
-    const tokenKeys = [];
-    if (ANON_KEY) tokenKeys.push({ key: ANON_KEY, name: 'anon' });
-    if (SERVICE_KEY && SERVICE_KEY !== ANON_KEY) tokenKeys.push({ key: SERVICE_KEY, name: 'service' });
-
-    for (const credentials of uniqueIdentities) {
-      for (const keyInfo of tokenKeys) {
-        try {
-          r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-            method: 'POST',
-            headers: {
-              apikey: keyInfo.key,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(credentials)
-          });
-
-          d = await r.json().catch(() => ({}));
-          lastStatus = r.status;
-          lastError = d && (d.error_description || d.msg || d.message || d.error)
-            ? String(d.error_description || d.msg || d.message || d.error)
-            : null;
-
-          if (r.ok && d.access_token && d.refresh_token) {
-            succeeded = true;
-            break;
-          }
-
-          // If this credential failed with ordinary invalid credentials,
-          // trying the other key is useful only when the key itself may be
-          // invalid. Keep both attempts for compatibility with old projects.
-        } catch (e) {
-          lastError = e && e.message ? e.message : String(e);
-          console.error('Supabase login request failed:', lastError);
-        }
-      }
-      if (succeeded) break;
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.access_token) {
+      // Logged server-side only (visible in Netlify → Functions → send-otp
+      // → logs) so the real cause can be diagnosed without exposing it to
+      // whoever is trying to log in.
+      console.error('login failed for', phoneE164, '— Supabase status', r.status, JSON.stringify(d));
+      return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
     }
-
-    if (!succeeded || !r || !r.ok || !d.access_token || !d.refresh_token) {
-      const errText = String(lastError || '').toLowerCase();
-      const configProblem =
-        errText.includes('invalid api key') ||
-        errText.includes('apikey') ||
-        errText.includes('api key') ||
-        errText.includes('project') && errText.includes('key');
-
-      console.error(
-        'BIYE login failed:',
-        JSON.stringify({
-          phone: phoneE164,
-          profile_found: !!profile,
-          auth_user_found: !!(profile && profile.auth_user_id),
-          identity_count: uniqueIdentities.length,
-          tried_token_keys: tokenKeys.map(k => k.name),
-          last_status: lastStatus,
-          last_error: lastError
-        })
-      );
-
-      // Keep credential errors generic, but do not disguise a deployment/API
-      // configuration failure as a customer's wrong password.
-      if (configProblem) {
-        return reply(500, {
-          ok: false,
-          error: 'Supabase authentication configuration error — check SUPABASE_URL and SUPABASE_ANON_KEY in Netlify.'
-        });
-      }
-
-      return reply(200, {
-        ok: false,
-        error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল'
-      });
-    }
-
-    return reply(200, {
-      ok: true,
-      access_token: d.access_token,
-      refresh_token: d.refresh_token,
-      user: d.user
-        ? { id: d.user.id, email: d.user.email || null, phone: d.user.phone || null }
-        : null
-    });
+    return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token });
   }
 
   // ─────────── RESET PASSWORD (after a 'reset'-purpose OTP was verified) ───────────
