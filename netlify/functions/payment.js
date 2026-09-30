@@ -169,8 +169,12 @@ async function resolveProfile(body) {
   const phoneE164 = normPhoneE164(body.phone);
   if (!phoneE164) return { error: 'phone required' };
 
+  // Existing BIYE profiles may contain either 8801... or +8801... .
+  // Resolve both formats so the phone-auth migration does not break invoices.
   const existing = await sbSelect('profiles', `phone=eq.${encodeURIComponent(phoneE164)}&select=id&limit=1`);
   if (existing[0]) return { profileId: existing[0].id, created: false };
+  const existingPlain = await sbSelect('profiles', `phone=eq.${encodeURIComponent(normPhone(body.phone))}&select=id&limit=1`);
+  if (existingPlain[0]) return { profileId: existingPlain[0].id, created: false };
 
   // No profile yet. Only create one if this looks like a real registration
   // submission (name + password present) — otherwise we'd be guessing.
@@ -181,18 +185,20 @@ async function resolveProfile(body) {
     return { error: 'password must be at least 8 characters' };
   }
 
-  // 1) Create the Supabase Auth user — password lives ONLY here, never in
-  //    our own tables. We authenticate with a synthetic "phone@biye.ltd"
-  //    EMAIL identity rather than Supabase's phone identity: the Email
-  //    provider works out of the box on every Supabase project (no SMS
-  //    provider to configure, no dashboard toggle to enable), so login
-  //    never depends on that being turned on. The user still only ever
-  //    types their phone number — this email is internal plumbing only.
-  //    `phone` is also set on the auth user for reference/display.
+  // 1) Create the Supabase Auth user — password lives ONLY in Supabase Auth.
+  //    BIYE customer login is PHONE + PASSWORD.  Email remains optional
+  //    application data/notification data and is not the login identifier.
+  //    `phone_confirm: true` is safe here because BIYE verifies the mobile
+  //    number in its own registration OTP flow before this account is created.
+  //    We retain a synthetic internal email only when Supabase needs an
+  //    email identity for legacy compatibility; the customer never logs in
+  //    with it.
   const authEmail = `${phoneE164.replace('+', '')}@biye.ltd`;
   const authRes = await authAdminCreateUser({
     email: authEmail,
     email_confirm: true,
+    phone: phoneE164,
+    phone_confirm: true,
     password: body.password,
     user_metadata: { display_name: body.name, phone: phoneE164 },
   });
