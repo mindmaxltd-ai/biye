@@ -100,23 +100,31 @@ function findCandidates(profile, users) {
   const profileEmail = String(profile.email || '').trim().toLowerCase();
   const synth = syntheticEmail(profilePhone);
 
-  const byId = profile.auth_user_id
-    ? users.filter(u => String(u.id) === String(profile.auth_user_id))
-    : [];
-  if (byId.length === 1) {
-    const u = byId[0];
-    const up = normPhone(u.phone || u.user_metadata?.phone || '');
-    if (!up || up === profilePhone) return { candidates: [u], reason: 'profile.auth_user_id' };
+  const byPhone = users.filter(u => u.phone && normPhone(u.phone) === profilePhone);
+  const byMetadataPhone = users.filter(u => u.user_metadata && normPhone(u.user_metadata.phone) === profilePhone);
+  const bySynthetic = users.filter(u => sameEmail(u.email, synth));
+  const byProfileEmail = profileEmail ? users.filter(u => sameEmail(u.email, profileEmail)) : [];
+  const byId = profile.auth_user_id ? users.filter(u => String(u.id) === String(profile.auth_user_id)) : [];
+
+  // Prefer an existing real-phone identity, then the historical synthetic
+  // BIYE identity. A normal profile email is deliberately NOT preferred over
+  // the synthetic identity because it may be a notification/contact email
+  // whose Auth password is unrelated to the BIYE account password.
+  const preferred = [];
+  for (const list of [byPhone, bySynthetic, byMetadataPhone, byId]) {
+    for (const u of list) if (!preferred.some(x => x.id === u.id)) preferred.push(u);
   }
 
-  const matches = users.filter(u =>
-    (u.phone && normPhone(u.phone) === profilePhone) ||
-    (u.user_metadata && normPhone(u.user_metadata.phone) === profilePhone) ||
-    sameEmail(u.email, profileEmail) ||
-    sameEmail(u.email, synth)
-  );
+  if (preferred.length === 1) return { candidates: preferred, reason: 'preferred phone/synthetic identity' };
+  if (preferred.length > 1) return { candidates: preferred, reason: 'multiple preferred identities' };
 
-  return { candidates: matches, reason: 'phone/email/synthetic-email match' };
+  if (byProfileEmail.length === 1) {
+    return { candidates: byProfileEmail, reason: 'profile email only' };
+  }
+  if (byProfileEmail.length > 1) {
+    return { candidates: byProfileEmail, reason: 'multiple profile-email identities' };
+  }
+  return { candidates: [], reason: 'no matching Auth identity' };
 }
 
 async function updateAuthUser(user, phone) {
