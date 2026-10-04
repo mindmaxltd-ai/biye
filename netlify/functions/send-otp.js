@@ -102,76 +102,11 @@ async function authAdmin(path, opts = {}) {
   return { ok: r.ok, status: r.status, data };
 }
 
-async function findProfileByPhone(phoneE164) {
-  const phoneDb = phoneE164.replace(/^\+/, '');
-  const a = await sb(`profiles?phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id,phone&limit=1`);
-  if (a.ok && Array.isArray(a.data) && a.data[0]) return a.data[0];
-  const b = await sb(`profiles?phone=eq.${encodeURIComponent(phoneDb)}&select=id,auth_user_id,phone&limit=1`);
-  return b.ok && Array.isArray(b.data) && b.data[0] ? b.data[0] : null;
-}
-
-async function authAdminListUsers() {
-  const r = await authAdmin('/admin/users?page=1&per_page=1000', { method: 'GET' });
-  return r.ok && r.data && Array.isArray(r.data.users) ? r.data.users : [];
-}
-
 async function findAuthUserByPhone(phoneE164) {
-  const users = await authAdminListUsers();
-  return users.find(u => String(u.phone || '') === phoneE164) || null;
-}
-
-async function ensurePhoneAuthForLogin(phoneE164, password) {
-  const profile = await findProfileByPhone(phoneE164);
-  if (!profile) return { ok: false, reason: 'PROFILE_NOT_FOUND' };
-
-  const phoneUser = await findAuthUserByPhone(phoneE164);
-  if (phoneUser) return { ok: true, authUserId: phoneUser.id };
-
-  // Legacy repair is allowed only after the customer proves possession of the
-  // existing password through the old Auth identity. We NEVER overwrite a
-  // password merely because someone knows the phone number.
-  let legacyUser = null;
-  if (profile.auth_user_id) {
-    const u = await authAdmin(`/admin/users/${encodeURIComponent(profile.auth_user_id)}`, { method: 'GET' });
-    if (u.ok && u.data && u.data.id) legacyUser = u.data;
-  }
-
-  // Some old profiles have a stale auth_user_id. Resolve the Auth user by the
-  // profile email as a safe secondary lookup.
-  if (!legacyUser && profile.email) {
-    const users = await authAdminListUsers();
-    legacyUser = users.find(u => String(u.email || '').toLowerCase() === String(profile.email).toLowerCase()) || null;
-  }
-
-  if (!legacyUser || !legacyUser.email) return { ok: false, reason: 'AUTH_USER_NOT_FOUND' };
-
-  // Verify the password against the existing email identity first.
-  const check = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-    method: 'POST',
-    headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: legacyUser.email, password }),
-  });
-  const checkData = await check.json().catch(() => ({}));
-  if (!check.ok || !checkData.access_token) {
-    console.error('legacy password verification failed for', phoneE164, '— Supabase status', check.status, JSON.stringify(checkData));
-    return { ok: false, reason: 'PASSWORD_MISMATCH' };
-  }
-
-  // Password is proven. Now upgrade the same Auth UID to real phone auth.
-  const upd = await authAdmin(`/admin/users/${encodeURIComponent(legacyUser.id)}`, {
-    method: 'PUT',
-    body: JSON.stringify({ phone: phoneE164, phone_confirm: true }),
-  });
-  if (!upd.ok) return { ok: false, reason: 'PHONE_UPGRADE_FAILED', detail: upd.data };
-
-  if (profile.auth_user_id !== legacyUser.id) {
-    await sb(`profiles?id=eq.${encodeURIComponent(profile.id)}`, {
-      method: 'PATCH',
-      headers: { Prefer: 'return=minimal' },
-      body: JSON.stringify({ auth_user_id: legacyUser.id, phone: phoneE164 }),
-    });
-  }
-  return { ok: true, authUserId: legacyUser.id, repaired: true };
+  // Supabase doesn't expose a direct "get by phone" admin endpoint, so we
+  // look the profile up first (profiles.phone → profiles.auth_user_id).
+  const rows = (await sb(`profiles?phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`)).data;
+  return Array.isArray(rows) && rows[0] ? rows[0] : null;
 }
 
 exports.handler = async (event) => {
@@ -266,7 +201,7 @@ exports.handler = async (event) => {
     }
   }
 
-  // ─────────── LOGIN (REAL SUPABASE PHONE + PASSWORD) ───────────
+  // ─────────── LOGIN (phone + password) ───────────
   if (action === 'login') {
     const phone = String(p.phone || '').trim();
     const password = p.password || '';
@@ -276,15 +211,6 @@ exports.handler = async (event) => {
 
     const phoneE164 = phone.startsWith('+') ? phone : normPhoneE164(phone);
 
-    // Before authenticating, repair an old BIYE profile whose Auth user was
-    // created with email-only identity. This is a one-time migration performed
-    // only when the customer supplies the password they are trying to use.
-    const ensured = await ensurePhoneAuthForLogin(phoneE164, password);
-    if (!ensured.ok) {
-      console.error('phone login preflight failed', phoneE164, ensured.reason || ensured.error);
-      return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
-    }
-
     const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
       method: 'POST',
       headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
@@ -292,10 +218,13 @@ exports.handler = async (event) => {
     });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.access_token) {
+      // Logged server-side only (visible in Netlify → Functions → send-otp
+      // → logs) so the real cause can be diagnosed without exposing it to
+      // whoever is trying to log in.
       console.error('login failed for', phoneE164, '— Supabase status', r.status, JSON.stringify(d));
       return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
     }
-    return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token, user: d.user || null });
+    return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token });
   }
 
   // ─────────── RESET PASSWORD (after a 'reset'-purpose OTP was verified) ───────────
@@ -318,7 +247,7 @@ exports.handler = async (event) => {
     }
 
     const phoneE164 = normPhoneE164(phone);
-    const profile = await findProfileByPhone(phoneE164);
+    const profile = await findAuthUserByPhone(phoneE164);
     if (!profile || !profile.auth_user_id) {
       return reply(200, { ok: false, error: 'এই নম্বরে কোনো অ্যাকাউন্ট পাওয়া যায়নি' });
     }
@@ -346,7 +275,7 @@ exports.handler = async (event) => {
     const consents = p.consents || {};
 
     const phoneE164 = normPhoneE164(phone);
-    const profile = await findProfileByPhone(phoneE164);
+    const profile = await findAuthUserByPhone(phoneE164);
     if (!profile) {
       // Registration may not have created the profile yet at this step —
       // that's fine, payment.js's createInvoice logs the same consents
