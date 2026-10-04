@@ -142,93 +142,71 @@ async function sbUpdate(table, query, updates) {
   });
   return r.ok;
 }
-async function authAdmin(path, opts = {}) {
-  const r = await fetch(`${SUPABASE_URL}/auth/v1${path}`, {
-    ...opts,
-    headers: {
-      apikey: SERVICE_KEY,
-      Authorization: 'Bearer ' + SERVICE_KEY,
-      'Content-Type': 'application/json',
-      ...(opts.headers || {}),
-    },
+async function authAdminCreateUser(payload) {
+  const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
+    method: 'POST',
+    headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + SERVICE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
   });
   const d = await r.json().catch(() => ({}));
-  return { ok: r.ok, status: r.status, data: d };
-}
-
-async function authAdminCreateUser(payload) {
-  const r = await authAdmin('/admin/users', { method: 'POST', body: JSON.stringify(payload) });
-  if (!r.ok) console.error('authAdminCreateUser failed — Supabase status', r.status, JSON.stringify(r.data));
-  return { ok: r.ok, data: r.data };
-}
-
-async function authAdminUpdateUser(userId, payload) {
-  const r = await authAdmin(`/admin/users/${encodeURIComponent(userId)}`, { method: 'PUT', body: JSON.stringify(payload) });
-  if (!r.ok) console.error('authAdminUpdateUser failed — Supabase status', r.status, JSON.stringify(r.data));
-  return { ok: r.ok, data: r.data };
-}
-
-async function authAdminListUsers() {
-  const r = await authAdmin('/admin/users?page=1&per_page=1000', { method: 'GET' });
-  return r.ok && r.data && Array.isArray(r.data.users) ? r.data.users : [];
-}
-
-async function findAuthUserByPhone(phoneE164) {
-  const users = await authAdminListUsers();
-  return users.find(u => String(u.phone || '') === phoneE164) || null;
-}
-
-async function findProfileByPhone(phoneE164) {
-  const phoneDb = phoneE164.replace(/^\+/, '');
-  const a = await sbSelect('profiles', `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id,phone&limit=1`);
-  if (a[0]) return a[0];
-  const b = await sbSelect('profiles', `phone=eq.${encodeURIComponent(phoneDb)}&select=id,auth_user_id,phone&limit=1`);
-  return b[0] || null;
-}
-
-// Ensure an existing BIYE profile is backed by a real Supabase Phone Auth user.
-// This also repairs old email-auth accounts in place instead of creating a second profile.
-async function ensurePhoneAuth(profile, phoneE164, password) {
-  if (!profile || !password) return { ok: false, error: 'profile and password required' };
-
-  const phoneUser = await findAuthUserByPhone(phoneE164);
-  if (phoneUser) {
-    const upd = await authAdminUpdateUser(phoneUser.id, { phone: phoneE164, phone_confirm: true, password });
-    if (!upd.ok) return { ok: false, error: 'could not update phone auth user', detail: upd.data };
-    if (profile.auth_user_id !== phoneUser.id) {
-      const mapped = await sbUpdate('profiles', `id=eq.${encodeURIComponent(profile.id)}`, { auth_user_id: phoneUser.id });
-      if (!mapped) return { ok: false, error: 'phone auth updated but profile mapping failed' };
-    }
-    return { ok: true, authUserId: phoneUser.id };
+  if (!r.ok) {
+    console.error('authAdminCreateUser failed — Supabase status', r.status, JSON.stringify(d));
   }
-
-  // Prefer the profile's existing Auth UID, if it is still a valid user.
-  if (profile.auth_user_id) {
-    const existing = await authAdmin(`/admin/users/${encodeURIComponent(profile.auth_user_id)}`, { method: 'GET' });
-    if (existing.ok && existing.data && existing.data.id) {
-      const upd = await authAdminUpdateUser(existing.data.id, { phone: phoneE164, phone_confirm: true, password });
-      if (upd.ok) return { ok: true, authUserId: existing.data.id };
-      console.error('Could not upgrade existing Auth user to phone auth', existing.status, JSON.stringify(existing.data));
-    }
-  }
-
-  // No usable Auth identity exists: create the real phone user now.
-  const created = await authAdminCreateUser({ phone: phoneE164, phone_confirm: true, password });
-  if (!created.ok || !created.data || !created.data.id) {
-    return { ok: false, error: 'could not create phone auth user', detail: created.data };
-  }
-  const mapped = await sbUpdate('profiles', `id=eq.${encodeURIComponent(profile.id)}`, { auth_user_id: created.data.id });
-  if (!mapped) {
-    await authAdmin(`/admin/users/${encodeURIComponent(created.data.id)}`, { method: 'DELETE' }).catch(() => {});
-    return { ok: false, error: 'phone auth created but profile mapping failed' };
-  }
-  return { ok: true, authUserId: created.data.id };
+  return { ok: r.ok, data: d };
 }
 
 function isStrongPassword(pw) {
   // Kept intentionally simple, matching register.html's own rule — just a
   // minimum length. No forced uppercase/digit/special character.
   return typeof pw === 'string' && pw.length >= 8;
+}
+
+// ── CREATE REAL SUPABASE PHONE AUTH USER ────────────────────
+// Called immediately after BIYE phone OTP verification. The password is
+// owned only by Supabase Auth; no password is written to public tables.
+async function createAuthUser(body) {
+  const phoneE164 = normPhoneE164(body.phone);
+  const password = String(body.password || '');
+  const name = String(body.name || '').trim();
+
+  if (!phoneE164) return reply(400, { ok:false, error:'phone required' });
+  if (!isStrongPassword(password)) {
+    return reply(400, { ok:false, error:'password must be at least 8 characters' });
+  }
+
+  // Do not silently create a second account for an existing BIYE profile.
+  const existing = await sbSelect(
+    'profiles',
+    `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`
+  );
+  if (existing[0]) {
+    return reply(409, {
+      ok:false,
+      error:'এই মোবাইল নম্বর দিয়ে ইতিমধ্যে একটি BIYE account আছে'
+    });
+  }
+
+  const authRes = await authAdminCreateUser({
+    phone: phoneE164,
+    phone_confirm: true,
+    password,
+    user_metadata: { display_name: name, phone: phoneE164 }
+  });
+
+  if (!authRes.ok || !authRes.data || !authRes.data.id) {
+    console.error('createAuthUser failed:', JSON.stringify(authRes.data));
+    return reply(400, {
+      ok:false,
+      error:'Supabase Phone Auth account তৈরি করা যায়নি',
+      detail: authRes.data
+    });
+  }
+
+  return reply(200, {
+    ok:true,
+    auth_user_id: authRes.data.id,
+    phone: phoneE164
+  });
 }
 
 // ── Resolve (or create) the profile behind a registration/payment request ──
@@ -239,17 +217,12 @@ async function resolveProfile(body) {
   const phoneE164 = normPhoneE164(body.phone);
   if (!phoneE164) return { error: 'phone required' };
 
-  const existing = await findProfileByPhone(phoneE164);
-  if (existing) {
-    // Existing profiles are repaired in place. The registration password is
-    // authoritative for the real Supabase Phone Auth identity.
-    if (!body.password) return { profileId: existing.id, created: false };
-    if (!isStrongPassword(body.password)) return { error: 'password must be at least 8 characters' };
-    const ensured = await ensurePhoneAuth(existing, phoneE164, body.password);
-    if (!ensured.ok) return { error: ensured.error, detail: ensured.detail };
-    // Normalize the stored profile phone to the same E.164 value used by Auth.
-    await sbUpdate('profiles', `id=eq.${encodeURIComponent(existing.id)}`, { phone: phoneE164 });
-    return { profileId: existing.id, created: false, authUserId: ensured.authUserId, repaired: true };
+  const existing = await sbSelect('profiles', `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`);
+  if (existing[0]) {
+    if (body.auth_user_id && existing[0].auth_user_id !== body.auth_user_id) {
+      await sbUpdate('profiles', `id=eq.${encodeURIComponent(existing[0].id)}`, { auth_user_id: body.auth_user_id });
+    }
+    return { profileId: existing[0].id, created: false };
   }
 
   // No profile yet. Only create one if this looks like a real registration
@@ -261,23 +234,24 @@ async function resolveProfile(body) {
     return { error: 'password must be at least 8 characters' };
   }
 
-  // 1) Create the REAL Supabase Phone Auth user.
-  //    The customer's mobile number and password are managed by Supabase Auth.
-  //    We never store the plaintext password in profiles or any BIYE table.
-  //    phone_confirm=true is used because registration has already verified
-  //    the mobile number with BIYE's OTP step before the paid registration
-  //    reaches createInvoice.
-  const authRes = await authAdminCreateUser({
-    phone: phoneE164,
-    phone_confirm: true,
-    password: body.password,
-    user_metadata: { display_name: body.name },
-  });
-  if (!authRes.ok || !authRes.data || !authRes.data.id) {
-    return { error: 'could not create account', detail: authRes.data };
-  }
-  const authUserId = authRes.data.id;
+  // 1) Registration must create a REAL Supabase Phone Auth user.
+  // Password is stored only by Supabase Auth. No synthetic @biye.ltd
+  // email identity is created. The frontend creates this Auth user immediately
+  // after the phone OTP is verified and passes auth_user_id here.
+  let authUserId = body.auth_user_id || null;
 
+  if (!authUserId) {
+    const authRes = await authAdminCreateUser({
+      phone: phoneE164,
+      phone_confirm: true,
+      password: body.password,
+      user_metadata: { display_name: body.name, phone: phoneE164 },
+    });
+    if (!authRes.ok || !authRes.data || !authRes.data.id) {
+      return { error: 'could not create phone authentication account', detail: authRes.data };
+    }
+    authUserId = authRes.data.id;
+  }
   // 2) Candidate gender/eligibility: derived the same way register.html's
   //    UI frames it — "looking for a bride" means the candidate is male,
   //    "looking for a groom" means the candidate is female.
@@ -948,6 +922,7 @@ exports.handler = async (event) => {
   catch { return reply(400, { ok: false, error: 'Bad JSON' }); }
 
   try {
+    if (body.action === 'createAuthUser')       return await createAuthUser(body);
     if (body.action === 'createInvoice')        return await createInvoice(body);
     if (body.action === 'getInvoice')            return await getInvoice(body);
     if (body.action === 'getReceipt')            return await getReceipt(body);
