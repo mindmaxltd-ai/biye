@@ -159,8 +159,8 @@ a{color:inherit}
         </div>
 
         <div class="field-row">
-          <label class="field-label" for="lPhone" data-bn="মোবাইল নম্বর" data-en="Mobile number">Mobile number</label>
-          <input class="field-input" id="lPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX">
+          <label class="field-label" for="lPhone" data-bn="মোবাইল নম্বর / Member ID" data-en="Mobile number / Member ID">Mobile number / Member ID</label>
+          <input class="field-input" id="lPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX / Member ID">
           <div class="field-err" id="err-lPhone" data-bn="একটি বৈধ মোবাইল নম্বর দিন" data-en="Enter a valid mobile number">Enter a valid mobile number</div>
         </div>
 
@@ -205,8 +205,8 @@ a{color:inherit}
         <div class="alert-banner" id="forgotAlert" role="alert"><span id="forgotAlertText"></span></div>
 
         <div class="field-row">
-          <label class="field-label" for="fPhone" data-bn="মোবাইল নম্বর" data-en="Mobile number">Mobile number</label>
-          <input class="field-input" id="fPhone" type="tel" inputmode="tel" placeholder="01XXXXXXXXX">
+          <label class="field-label" for="fPhone" data-bn="মোবাইল নম্বর / Member ID" data-en="Mobile number / Member ID">Mobile number / Member ID</label>
+          <input class="field-input" id="fPhone" type="tel" inputmode="tel" placeholder="01XXXXXXXXX / Member ID">
           <div class="field-err" id="err-fPhone" data-bn="একটি বৈধ মোবাইল নম্বর দিন" data-en="Enter a valid mobile number">Enter a valid mobile number</div>
         </div>
 
@@ -361,7 +361,7 @@ function doLogin(){
   var ph = document.getElementById('lPhone').value.trim();
   var pw = document.getElementById('lPw').value;
   var ok = true;
-  if (!validPh(ph)) { setErr('lPhone', true); ok = false; } else setErr('lPhone', false);
+  if (!ph || (!validPh(ph) && !/^[A-Za-z0-9_-]{3,40}$/.test(ph))) { setErr('lPhone', true); ok = false; } else setErr('lPhone', false);
   if (!pw) { setErr('lPw', true); ok = false; } else setErr('lPw', false);
   if (!ok) return;
 
@@ -370,13 +370,13 @@ function doLogin(){
 
   fetch('/.netlify/functions/send-otp', {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ action:'login', phone: norm(ph), password: pw })
+    body: JSON.stringify({ action:'login', identifier: ph, phone: validPh(ph) ? norm(ph) : '', password: pw })
   }).then(function(r){ return r.json(); }).then(function(d){
     if (d && d.ok && d.access_token) {
       loginOk(d.access_token, d.refresh_token);
     } else {
       setBusy('loginBtn','loginTxt', false, loginLabel);
-      showAlert('loginAlert','loginAlertText', (d && d.error) || tt('মোবাইল নম্বর বা পাসওয়ার্ড ভুল','Incorrect mobile number or password'));
+      showAlert('loginAlert','loginAlertText', (d && d.error) || tt('মোবাইল নম্বর/Member ID অথবা পাসওয়ার্ড ভুল','Incorrect mobile number/Member ID or password'));
     }
   }).catch(function(){
     setBusy('loginBtn','loginTxt', false, loginLabel);
