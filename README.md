@@ -1,20 +1,31 @@
-# BIYE Mobile / Member ID Login — FIXED V2
+# BIYE — Simple Real Mobile + Password Authentication
 
-## What changed
-- Login accepts either a Bangladeshi mobile number or BIYE Member ID.
-- Supabase Phone Auth is tried first for real phone identities.
-- For existing BIYE accounts, the backend resolves the actual Supabase Auth identity using profile phone, profile email, legacy `880...@biye.ltd` identity, or `profiles.auth_user_id`.
-- The password is always checked by Supabase Auth; BIYE never stores or compares plaintext passwords.
-- On successful phone login, `profiles.auth_user_id` is reconciled to the Auth user that actually authenticated.
-- Existing OTP send/verify/reset/consent logic is preserved.
-- `payment.js` is NOT included and is NOT changed.
+## Final authentication model
 
-## Deployment
-1. Replace `netlify/functions/send-otp.js` with this version.
-2. Replace `login.html` with this version.
-3. Do NOT replace `payment.js`.
-4. Redeploy Netlify.
-5. Test with the customer's mobile number and existing password.
+Registration:
+1. Customer enters mobile number + password in registration.
+2. BIYE verifies the mobile number through the existing OTP flow.
+3. At registration account creation (`payment` createInvoice), the backend creates a **real Supabase Auth user** with:
+   - `phone: +880...`
+   - `phone_confirm: true`
+   - `password: customer's password`
+4. The Supabase Auth UID is stored in `profiles.auth_user_id`.
+5. The plaintext password is never stored in BIYE tables.
 
-## Important
-This version is deliberately compatible with BIYE's historical synthetic-email Auth accounts, so an existing customer does not need a new password merely because the login screen now says mobile number / Member ID.
+Login:
+1. Customer enters mobile number + password.
+2. `send-otp.js` calls Supabase Auth password grant with `phone + password`.
+3. Supabase verifies the password.
+4. Access/refresh tokens are returned to `login.html`.
+5. `login.html` establishes the Supabase session and redirects to `dashboard.html`.
+
+## Important Supabase setting
+
+Enable **Phone provider / Phone sign-in** in Supabase Authentication Providers. Registration and login use the real Supabase phone identity; no synthetic `@biye.ltd` email is used for authentication.
+
+## Files
+- `netlify/functions/payment.js` — creates the real phone Auth user during registration.
+- `netlify/functions/send-otp.js` — existing OTP system + real phone/password login.
+- `login.html` — mobile + password login UI.
+
+Payment processing logic is retained; the only payment.js authentication change is the Auth-user creation payload so registration creates a real phone-auth account.
