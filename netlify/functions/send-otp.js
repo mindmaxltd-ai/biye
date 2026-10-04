@@ -211,10 +211,10 @@ exports.handler = async (event) => {
   }
 
   // ─────────── LOGIN (mobile / member ID + password) ───────────
-  // BIYE keeps the customer's visible identifier as mobile/member ID, while
-  // Supabase Auth may still use a historical internal email identity.
-  // Therefore login MUST resolve the real Auth identity first and then use
-  // Supabase's password grant. This supports both old and new accounts.
+  // BIYE has legacy customers whose password was stored as base64 in the
+  // old `customers.password_hash` column. New accounts use Supabase Auth.
+  // This block supports BOTH systems and transparently upgrades a successful
+  // legacy login to Supabase Auth. The password is never returned to the client.
   if (action === 'login') {
     const identifier = String(p.phone || p.identifier || '').trim();
     const password = String(p.password || '');
@@ -236,101 +236,169 @@ exports.handler = async (event) => {
       candidates.push({ email: e, reason });
     }
 
-    function addUserEmail(user, reason) {
-      if (!user || !user.id) return;
-      if (seenUsers.has(String(user.id))) return;
+    function addUser(user, reason) {
+      if (!user || !user.id || seenUsers.has(String(user.id))) return;
       seenUsers.add(String(user.id));
       if (user.email) addEmail(user.email, reason);
     }
 
-    // A. Direct real phone/password login, if Phone Auth is enabled and this
-    // account has a confirmed phone identity.
-    if (phoneE164) {
-      try {
-        const direct = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-          method: 'POST',
-          headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: phoneE164, password }),
-        });
-        const dd = await direct.json().catch(() => ({}));
-        if (direct.ok && dd.access_token) {
-          return reply(200, { ok: true, access_token: dd.access_token, refresh_token: dd.refresh_token, login_mode: 'phone' });
-        }
-      } catch (e) {
-        console.error('phone auth unavailable/failed', phoneE164, e && e.message ? e.message : e);
-      }
-
-      // B. Resolve profile by either +880... or 880... storage.
-      const profileQueries = [
-        `phone=eq.${encodeURIComponent(phoneE164)}&select=id,phone,email,auth_user_id,member_code&limit=1`,
-        `phone=eq.${encodeURIComponent(normalized)}&select=id,phone,email,auth_user_id,member_code&limit=1`,
-      ];
-      for (const q of profileQueries) {
-        const pr = await sb(`profiles?${q}`);
-        if (pr.ok && Array.isArray(pr.data) && pr.data[0]) {
-          const profile = pr.data[0];
-          addEmail(profile.email, 'profile email');
-          addEmail(`${normalized}@biye.ltd`, 'legacy synthetic email');
-          if (profile.auth_user_id) {
-            const au = await authAdmin(`/admin/users/${encodeURIComponent(profile.auth_user_id)}`);
-            if (au.ok && au.data) addUserEmail(au.data, 'profile auth_user_id');
-          }
-          break;
-        }
-      }
-    } else {
-      // C. Accept BIYE Member ID as an alternative login identifier.
-      const memberId = identifier.toUpperCase();
-      const pr = await sb(`profiles?member_code=eq.${encodeURIComponent(memberId)}&select=id,phone,email,auth_user_id,member_code&limit=1`);
-      if (pr.ok && Array.isArray(pr.data) && pr.data[0]) {
-        const profile = pr.data[0];
-        const profilePhone = normPhone(profile.phone || '');
-        if (/^8801[3-9]\d{8}$/.test(profilePhone)) {
-          addEmail(`${profilePhone}@biye.ltd`, 'member ID → legacy synthetic email');
-          addEmail(profile.email, 'member ID → profile email');
-        }
-        if (profile.auth_user_id) {
-          const au = await authAdmin(`/admin/users/${encodeURIComponent(profile.auth_user_id)}`);
-          if (au.ok && au.data) addUserEmail(au.data, 'member ID → profile auth_user_id');
-        }
-      }
+    async function getAuthUserById(id) {
+      if (!id) return null;
+      const r = await authAdmin(`/admin/users/${encodeURIComponent(id)}`);
+      return r.ok && r.data && r.data.id ? r.data : null;
     }
 
-    // D. Try each resolved Auth email. The customer's password is never
-    // stored or compared by BIYE; Supabase performs every password check.
-    for (const candidate of candidates) {
+    async function findAuthUserByEmail(email) {
+      const target = String(email || '').trim().toLowerCase();
+      if (!target) return null;
+      // Supabase admin API lists users; page through results and compare email.
+      for (let page = 1; page <= 10; page++) {
+        const r = await authAdmin(`/admin/users?page=${page}&per_page=1000`);
+        if (!r.ok || !r.data) break;
+        const users = Array.isArray(r.data.users) ? r.data.users : [];
+        const hit = users.find(u => String(u.email || '').toLowerCase() === target);
+        if (hit) return hit;
+        if (users.length < 1000) break;
+      }
+      return null;
+    }
+
+    async function signInEmail(email) {
+      if (!email) return null;
       try {
         const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
           method: 'POST',
           headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: candidate.email, password }),
+          body: JSON.stringify({ email, password }),
         });
         const d = await r.json().catch(() => ({}));
-        if (r.ok && d.access_token) {
-          // If this is a phone login, reconcile the profile/Auth mapping.
-          if (phoneE164 && d.user && d.user.id) {
-            const profile = await findAuthUserByPhone(phoneE164);
-            if (profile && String(profile.auth_user_id || '') !== String(d.user.id)) {
-              await sb(`profiles?id=eq.${encodeURIComponent(profile.id)}`, {
-                method: 'PATCH',
-                headers: { Prefer: 'return=minimal' },
-                body: JSON.stringify({ auth_user_id: d.user.id, phone: phoneE164 }),
-              });
-            }
-          }
-          return reply(200, {
-            ok: true,
-            access_token: d.access_token,
-            refresh_token: d.refresh_token,
-            login_mode: 'resolved-auth-identity',
-          });
-        }
+        if (r.ok && d.access_token) return d;
       } catch (e) {
-        console.error('candidate auth failed', candidate.reason, candidate.email, e && e.message ? e.message : e);
+        console.error('auth sign-in failed', email, e && e.message ? e.message : e);
+      }
+      return null;
+    }
+
+    // 1. Resolve profile/customer identity.
+    let profile = null;
+    if (looksLikePhone) {
+      for (const q of [
+        `phone=eq.${encodeURIComponent(phoneE164)}&select=id,phone,email,auth_user_id,member_code&limit=1`,
+        `phone=eq.${encodeURIComponent(normalized)}&select=id,phone,email,auth_user_id,member_code&limit=1`,
+      ]) {
+        const pr = await sb(`profiles?${q}`);
+        if (pr.ok && Array.isArray(pr.data) && pr.data[0]) { profile = pr.data[0]; break; }
+      }
+      if (profile) {
+        addEmail(profile.email, 'profile email');
+        addEmail(`${normalized}@biye.ltd`, 'legacy synthetic email');
+        if (profile.auth_user_id) addUser(await getAuthUserById(profile.auth_user_id), 'profile auth_user_id');
+      }
+    } else {
+      const memberId = identifier.toUpperCase();
+      const pr = await sb(`profiles?member_code=eq.${encodeURIComponent(memberId)}&select=id,phone,email,auth_user_id,member_code&limit=1`);
+      if (pr.ok && Array.isArray(pr.data) && pr.data[0]) {
+        profile = pr.data[0];
+        const profilePhone = normPhone(profile.phone || '');
+        if (/^8801[3-9]\d{8}$/.test(profilePhone)) {
+          addEmail(`${profilePhone}@biye.ltd`, 'member ID → legacy synthetic email');
+        }
+        addEmail(profile.email, 'member ID → profile email');
+        if (profile.auth_user_id) addUser(await getAuthUserById(profile.auth_user_id), 'member ID → profile auth_user_id');
       }
     }
 
-    console.error('login failed for identifier', identifier, 'resolved candidates', candidates.map(x => x.reason));
+    // 2. First try the current Supabase Auth password.
+    for (const candidate of candidates) {
+      const d = await signInEmail(candidate.email);
+      if (d) {
+        if (looksLikePhone && profile && d.user && d.user.id && String(profile.auth_user_id || '') !== String(d.user.id)) {
+          await sb(`profiles?id=eq.${encodeURIComponent(profile.id)}`, {
+            method: 'PATCH', headers: { Prefer: 'return=minimal' },
+            body: JSON.stringify({ auth_user_id: d.user.id, phone: phoneE164 }),
+          });
+        }
+        return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token, login_mode: 'supabase-auth' });
+      }
+    }
+
+    // 3. Legacy BIYE fallback: verify old customers.password_hash ONLY on the
+    // server. The legacy format is base64(UTF-8 password), as used by the
+    // original BIYE registration/login implementation.
+    let legacy = null;
+    if (looksLikePhone) {
+      const cr = await sb(`customers?phone=eq.${encodeURIComponent(normalized)}&select=id,member_id,phone,email,password_hash&limit=1`);
+      if (cr.ok && Array.isArray(cr.data) && cr.data[0]) legacy = cr.data[0];
+      if (!legacy) {
+        const cr2 = await sb(`customers?phone=eq.${encodeURIComponent(identifier)}&select=id,member_id,phone,email,password_hash&limit=1`);
+        if (cr2.ok && Array.isArray(cr2.data) && cr2.data[0]) legacy = cr2.data[0];
+      }
+    } else {
+      const cr = await sb(`customers?member_id=eq.${encodeURIComponent(identifier.toUpperCase())}&select=id,member_id,phone,email,password_hash&limit=1`);
+      if (cr.ok && Array.isArray(cr.data) && cr.data[0]) legacy = cr.data[0];
+    }
+
+    if (legacy && legacy.password_hash) {
+      let expected = '';
+      try { expected = Buffer.from(password, 'utf8').toString('base64'); } catch (_) {}
+      if (expected === String(legacy.password_hash)) {
+        const legacyPhone = normPhone(legacy.phone || (looksLikePhone ? normalized : ''));
+        const legacyEmail = String(legacy.email || '').trim().toLowerCase();
+        let authUser = null;
+
+        // Prefer the profile-linked Auth user.
+        if (profile && profile.auth_user_id) authUser = await getAuthUserById(profile.auth_user_id);
+        // Then try profile/legacy email identities.
+        if (!authUser && legacyEmail) authUser = await findAuthUserByEmail(legacyEmail);
+        if (!authUser && legacyPhone) authUser = await findAuthUserByEmail(`${legacyPhone}@biye.ltd`);
+        if (!authUser) {
+          for (const c of candidates) {
+            authUser = await findAuthUserByEmail(c.email);
+            if (authUser) break;
+          }
+        }
+
+        // If no Auth identity exists, create one using the legacy synthetic
+        // email. This does NOT create a second BIYE profile.
+        if (!authUser && legacyPhone) {
+          const created = await authAdmin('/admin/users', {
+            method: 'POST',
+            body: JSON.stringify({
+              email: `${legacyPhone}@biye.ltd`,
+              email_confirm: true,
+              phone: '+' + legacyPhone,
+              phone_confirm: true,
+              password,
+              user_metadata: { phone: '+' + legacyPhone, legacy_login_upgrade: true },
+            }),
+          });
+          if (created.ok && created.data && created.data.id) authUser = created.data;
+        }
+
+        if (authUser && authUser.id) {
+          // Synchronize the verified legacy password into Supabase Auth.
+          const upd = await authAdmin(`/admin/users/${encodeURIComponent(authUser.id)}`, {
+            method: 'PUT',
+            body: JSON.stringify({ password, email_confirm: true }),
+          });
+          if (upd.ok) {
+            const emailForLogin = authUser.email || (legacyPhone ? `${legacyPhone}@biye.ltd` : legacyEmail);
+            const d = await signInEmail(emailForLogin);
+            if (d) {
+              if (profile) {
+                await sb(`profiles?id=eq.${encodeURIComponent(profile.id)}`, {
+                  method: 'PATCH', headers: { Prefer: 'return=minimal' },
+                  body: JSON.stringify({ auth_user_id: d.user.id, phone: legacyPhone ? '+' + legacyPhone : profile.phone }),
+                });
+              }
+              return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token, login_mode: 'legacy-upgraded' });
+            }
+          }
+        }
+      }
+    }
+
+    console.error('login failed', { identifier, hasProfile: !!profile, hasLegacyCustomer: !!legacy, candidateCount: candidates.length });
     return reply(200, { ok: false, error: 'মোবাইল নম্বর/Member ID অথবা পাসওয়ার্ড ভুল' });
   }
 
