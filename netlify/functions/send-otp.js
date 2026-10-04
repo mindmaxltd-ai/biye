@@ -338,12 +338,30 @@ exports.handler = async (event) => {
       if (cr.ok && Array.isArray(cr.data) && cr.data[0]) legacy = cr.data[0];
     }
 
+    // 4. Additional legacy BIYE fallback: some early BIYE builds stored
+    // the password SHA-256 in metrics_answers(metric_id='m_pw'). This is
+    // distinct from customers.password_hash and must also be supported.
+    let legacyMetric = null;
+    if (profile && profile.id) {
+      const mr = await sb(`metrics_answers?user_id=eq.${encodeURIComponent(profile.id)}&metric_id=eq.m_pw&select=value&limit=1`);
+      if (mr.ok && Array.isArray(mr.data) && mr.data[0]) legacyMetric = mr.data[0];
+    }
+
+    let legacyPasswordOk = false;
     if (legacy && legacy.password_hash) {
       let expected = '';
       try { expected = Buffer.from(password, 'utf8').toString('base64'); } catch (_) {}
-      if (expected === String(legacy.password_hash)) {
-        const legacyPhone = normPhone(legacy.phone || (looksLikePhone ? normalized : ''));
-        const legacyEmail = String(legacy.email || '').trim().toLowerCase();
+      legacyPasswordOk = expected === String(legacy.password_hash);
+    }
+
+    if (!legacyPasswordOk && legacyMetric && legacyMetric.value) {
+      const sha256 = crypto.createHash('sha256').update(password, 'utf8').digest('hex');
+      legacyPasswordOk = sha256 === String(legacyMetric.value).trim();
+    }
+
+    if (legacyPasswordOk) {
+        const legacyPhone = normPhone((legacy && legacy.phone) || (profile && profile.phone) || (looksLikePhone ? normalized : ''));
+        const legacyEmail = String((legacy && legacy.email) || (profile && profile.email) || '').trim().toLowerCase();
         let authUser = null;
 
         // Prefer the profile-linked Auth user.
@@ -396,7 +414,6 @@ exports.handler = async (event) => {
           }
         }
       }
-    }
 
     console.error('login failed', { identifier, hasProfile: !!profile, hasLegacyCustomer: !!legacy, candidateCount: candidates.length });
     return reply(200, { ok: false, error: 'মোবাইল নম্বর/Member ID অথবা পাসওয়ার্ড ভুল' });
