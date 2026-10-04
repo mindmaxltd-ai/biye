@@ -1425,23 +1425,43 @@ function openHelp(){
 function submitRegistration(){
   track('registration_submitted', {});
   var btn = document.getElementById('btnSubmitReg');
-  btn.disabled = true; btn.textContent = tt('তৈরি হচ্ছে...','Creating account...');
+  btn.disabled = true; btn.textContent = tt('অ্যাকাউন্ট তৈরি হচ্ছে...','Creating account...');
 
-  // The real account (Supabase Auth user + profile row) is created at the
-  // payment step (payFor999 → createInvoice), the same way the production
-  // register.html does it — not here. This step only logs the accepted
-  // covenants against the phone number and moves on; nothing is faked.
-  fetch('/.netlify/functions/send-otp', {
+  // IMPORTANT: the real Supabase Phone Auth user is created immediately
+  // after successful phone OTP verification and before payment.
+  // Password is never stored in our database; Supabase Auth owns it.
+  fetch('/.netlify/functions/payment', {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
-      action:'logConsent', phone: STATE.phone,
-      consents:{tos:true, priv:true, match:true, pay:true, sms:true},
-      ts: new Date().toISOString(),
+      action:'createAuthUser',
+      phone: STATE.phone,
+      password: STATE.password,
+      name: (STATE.firstName+' '+STATE.lastName).trim()
     })
-  }).catch(function(){ /* best-effort — payment.js logs consent again once the profile exists */ });
+  }).then(function(r){ return r.json(); }).then(function(res){
+    if(!(res && res.ok && res.auth_user_id)){
+      throw new Error((res && res.error) || 'Could not create authentication account');
+    }
 
-  track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
-  showStep(STEPS.indexOf('payment'));
+    STATE.authUserId = res.auth_user_id;
+
+    return fetch('/.netlify/functions/send-otp', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action:'logConsent', phone: STATE.phone,
+        consents:{tos:true, priv:true, match:true, pay:true, sms:true},
+        ts: new Date().toISOString(),
+      })
+    });
+  }).then(function(){
+    track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
+    showStep(STEPS.indexOf('payment'));
+  }).catch(function(err){
+    console.error('registration auth creation failed:', err);
+    btn.disabled = false;
+    btn.textContent = tt('নিবন্ধন সম্পন্ন করুন','Submit registration');
+    showToast(err.message || tt('অ্যাকাউন্ট তৈরি করা যায়নি','Could not create account'));
+  });
 }
 
 /* ---------------- STEP: lifetime payment (13th window) ---------------- */
@@ -1465,6 +1485,7 @@ function payFor999(){
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
       action:'createInvoice',
+      auth_user_id: STATE.authUserId || null,
       phone: STATE.phone, name: (STATE.firstName+' '+STATE.lastName).trim(),
       email: STATE.email, dob: STATE.dob, password: STATE.password,
       owner_type: STATE.ownerType, seeking_type: STATE.seekingType,
