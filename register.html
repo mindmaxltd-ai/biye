@@ -1425,30 +1425,48 @@ function openHelp(){
 function submitRegistration(){
   track('registration_submitted', {});
   var btn = document.getElementById('btnSubmitReg');
-  btn.disabled = true; btn.textContent = tt('অ্যাকাউন্ট তৈরি হচ্ছে...','Creating account...');
+  btn.disabled = true;
+  btn.textContent = tt('অ্যাকাউন্ট তৈরি হচ্ছে...','Creating account...');
 
-  // IMPORTANT: the real Supabase Phone Auth user is created immediately
-  // after successful phone OTP verification and before payment.
-  // Password is never stored in our database; Supabase Auth owns it.
+  // OTP verification already happened in verifyOtpStep(). The server now
+  // checks the consumed registration OTP again before creating the real
+  // Supabase Phone Auth user + profile. Password is sent only to this
+  // server endpoint and is never written to an application table.
   fetch('/.netlify/functions/payment', {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
-      action:'createAuthUser',
+      action:'createRegistration',
       phone: STATE.phone,
       password: STATE.password,
-      name: (STATE.firstName+' '+STATE.lastName).trim()
+      name: (STATE.firstName+' '+STATE.lastName).trim(),
+      email: STATE.email,
+      dob: STATE.dob,
+      owner_type: STATE.ownerType,
+      seeking_type: STATE.seekingType,
+      religion: STATE.religion,
+      marital_status: STATE.marital,
+      education: STATE.education,
+      profession: STATE.profession,
+      division: STATE.division,
+      district: STATE.district,
+      guardian_name: STATE.guardianName,
+      guardian_phone: STATE.guardianPhone,
+      guardian_relation: STATE.guardianRelation,
+      candidate_phone: STATE.candidatePhone,
     })
   }).then(function(r){ return r.json(); }).then(function(res){
-    if(!(res && res.ok && res.auth_user_id)){
-      throw new Error((res && res.error) || 'Could not create authentication account');
+    if(!(res && res.ok && res.auth_user_id && res.profile_id)){
+      throw new Error((res && res.error) || 'Could not create account');
     }
 
     STATE.authUserId = res.auth_user_id;
+    STATE.profileId = res.profile_id;
 
     return fetch('/.netlify/functions/send-otp', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        action:'logConsent', phone: STATE.phone,
+        action:'logConsent',
+        phone: STATE.phone,
         consents:{tos:true, priv:true, match:true, pay:true, sms:true},
         ts: new Date().toISOString(),
       })
@@ -1457,7 +1475,7 @@ function submitRegistration(){
     track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
     showStep(STEPS.indexOf('payment'));
   }).catch(function(err){
-    console.error('registration auth creation failed:', err);
+    console.error('registration auth/profile creation failed:', err);
     btn.disabled = false;
     btn.textContent = tt('নিবন্ধন সম্পন্ন করুন','Submit registration');
     showToast(err.message || tt('অ্যাকাউন্ট তৈরি করা যায়নি','Could not create account'));
@@ -1485,9 +1503,7 @@ function payFor999(){
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
       action:'createInvoice',
-      auth_user_id: STATE.authUserId || null,
-      phone: STATE.phone, name: (STATE.firstName+' '+STATE.lastName).trim(),
-      email: STATE.email, dob: STATE.dob, password: STATE.password,
+      phone: STATE.phone,
       owner_type: STATE.ownerType, seeking_type: STATE.seekingType,
       religion: STATE.religion, marital_status: STATE.marital,
       education: STATE.education, profession: STATE.profession,
