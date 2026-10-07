@@ -161,121 +161,69 @@ function isStrongPassword(pw) {
   return typeof pw === 'string' && pw.length >= 8;
 }
 
-// ── CREATE REAL SUPABASE PHONE AUTH USER ────────────────────
-// Called immediately after BIYE phone OTP verification. The password is
-// owned only by Supabase Auth; no password is written to public tables.
-async function createAuthUser(body) {
+// ── REQUIRE RECENTLY VERIFIED REGISTRATION OTP ─────────────────
+// The browser never gets to prove OTP verification by itself. This checks
+// the server-side otp_codes record that send-otp.js consumed after a correct
+// registration OTP was entered.
+async function hasRecentVerifiedRegistrationOtp(phoneRaw) {
+  const phone = normPhone(phoneRaw);
+  if (!phone) return false;
+  const q = await fetch(`${SUPABASE_URL}/rest/v1/otp_codes?phone=eq.${encodeURIComponent(phone)}&purpose=eq.registration&consumed_at=not.is.null&order=created_at.desc&limit=1`, {
+    headers: SB,
+  });
+  if (!q.ok) return false;
+  const rows = await q.json().catch(() => []);
+  const row = Array.isArray(rows) ? rows[0] : null;
+  if (!row || !row.consumed_at) return false;
+  return (Date.now() - new Date(row.consumed_at).getTime()) <= 15 * 60 * 1000;
+}
+
+// ── CREATE REGISTRATION (REAL PHONE AUTH + PROFILE) ─────────
+// This is the only new-account creation endpoint used by register.html.
+// It requires a server-side verified BIYE registration OTP, creates a real
+// Supabase Auth phone user, then creates the matching public.profiles row.
+async function createRegistration(body) {
   const phoneE164 = normPhoneE164(body.phone);
   const password = String(body.password || '');
   const name = String(body.name || '').trim();
 
-  if (!phoneE164) return reply(400, { ok:false, error:'phone required' });
-  if (!isStrongPassword(password)) {
-    return reply(400, { ok:false, error:'password must be at least 8 characters' });
+  if (!phoneE164 || !name) return reply(400, { ok:false, error:'phone and name are required' });
+  if (!isStrongPassword(password)) return reply(400, { ok:false, error:'password must be at least 8 characters' });
+  if (!(await hasRecentVerifiedRegistrationOtp(phoneE164))) {
+    return reply(403, { ok:false, error:'ফোন OTP আগে সফলভাবে যাচাই করুন' });
   }
 
-  // Do not silently create a second account for an existing BIYE profile.
-  const existing = await sbSelect(
-    'profiles',
-    `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`
-  );
+  const existing = await sbSelect('profiles', `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`);
   if (existing[0]) {
-    return reply(409, {
-      ok:false,
-      error:'এই মোবাইল নম্বর দিয়ে ইতিমধ্যে একটি BIYE account আছে'
-    });
+    return reply(409, { ok:false, error:'এই মোবাইল নম্বর দিয়ে ইতিমধ্যে একটি BIYE account আছে' });
   }
 
   const authRes = await authAdminCreateUser({
     phone: phoneE164,
     phone_confirm: true,
     password,
-    user_metadata: { display_name: name, phone: phoneE164 }
+    user_metadata: { display_name: name, phone: phoneE164 },
   });
-
   if (!authRes.ok || !authRes.data || !authRes.data.id) {
-    console.error('createAuthUser failed:', JSON.stringify(authRes.data));
-    return reply(400, {
-      ok:false,
-      error:'Supabase Phone Auth account তৈরি করা যায়নি',
-      detail: authRes.data
-    });
+    console.error('createRegistration auth failed:', JSON.stringify(authRes.data));
+    return reply(400, { ok:false, error:'Supabase Phone Auth account তৈরি করা যায়নি', detail: authRes.data });
   }
 
-  return reply(200, {
-    ok:true,
-    auth_user_id: authRes.data.id,
-    phone: phoneE164
-  });
-}
-
-// ── Resolve (or create) the profile behind a registration/payment request ──
-// Never trusts a client-sent profile_id/customer_id as-is; always looks the
-// real row up by phone, and only creates a new account when a password was
-// supplied (i.e. this genuinely is the registration flow, step 3).
-async function resolveProfile(body) {
-  const phoneE164 = normPhoneE164(body.phone);
-  if (!phoneE164) return { error: 'phone required' };
-
-  const existing = await sbSelect('profiles', `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`);
-  if (existing[0]) {
-    if (body.auth_user_id && existing[0].auth_user_id !== body.auth_user_id) {
-      await sbUpdate('profiles', `id=eq.${encodeURIComponent(existing[0].id)}`, { auth_user_id: body.auth_user_id });
-    }
-    return { profileId: existing[0].id, created: false };
-  }
-
-  // No profile yet. Only create one if this looks like a real registration
-  // submission (name + password present) — otherwise we'd be guessing.
-  if (!body.password || !body.name) {
-    return { error: 'no profile found for this phone, and no registration details were provided to create one' };
-  }
-  if (!isStrongPassword(body.password)) {
-    return { error: 'password must be at least 8 characters' };
-  }
-
-  // 1) Registration must create a REAL Supabase Phone Auth user.
-  // Password is stored only by Supabase Auth. No synthetic @biye.ltd
-  // email identity is created. The frontend creates this Auth user immediately
-  // after the phone OTP is verified and passes auth_user_id here.
-  let authUserId = body.auth_user_id || null;
-
-  if (!authUserId) {
-    const authRes = await authAdminCreateUser({
-      phone: phoneE164,
-      phone_confirm: true,
-      password: body.password,
-      user_metadata: { display_name: body.name, phone: phoneE164 },
-    });
-    if (!authRes.ok || !authRes.data || !authRes.data.id) {
-      return { error: 'could not create phone authentication account', detail: authRes.data };
-    }
-    authUserId = authRes.data.id;
-  }
-  // 2) Candidate gender/eligibility: derived the same way register.html's
-  //    UI frames it — "looking for a bride" means the candidate is male,
-  //    "looking for a groom" means the candidate is female.
+  const authUserId = authRes.data.id;
   const gender = body.seeking_type === 'groom' ? 'female' : 'male';
 
-  // date_of_birth is NOT NULL in the schema. Prefer an exact date if the
-  // registration form collected one (body.dob, "YYYY-MM-DD"); only fall
-  // back to approximating from age (Jan 1 of the birth year) when just an
-  // age was given.
   let dob = null;
   if (body.dob && /^\d{4}-\d{2}-\d{2}$/.test(body.dob)) {
     dob = body.dob;
   } else {
     const age = parseInt(body.age, 10);
-    if (age && age > 0 && age < 120) {
-      dob = `${new Date().getFullYear() - age}-01-01`;
-    }
+    if (age && age > 0 && age < 120) dob = `${new Date().getFullYear() - age}-01-01`;
   }
 
   const ownerType = body.owner_type === 'self' ? 'self' : 'guardian_assisted';
-
   const profile = await sbInsert('profiles', {
     auth_user_id: authUserId,
-    display_name: body.name,
+    display_name: name,
     gender,
     date_of_birth: dob,
     phone: phoneE164,
@@ -295,17 +243,40 @@ async function resolveProfile(body) {
     candidate_phone: body.candidate_phone || null,
     profile_status: 'draft',
   });
+
   if (!profile) {
-    // Roll back the auth user so we don't leave an orphaned login with no
-    // profile behind it.
     await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${authUserId}`, {
-      method: 'DELETE',
-      headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + SERVICE_KEY },
+      method:'DELETE',
+      headers:{ apikey:SERVICE_KEY, Authorization:'Bearer '+SERVICE_KEY },
     }).catch(() => {});
-    return { error: 'account was created but the profile could not be saved — please try again' };
+    return reply(500, { ok:false, error:'account তৈরি হয়েছে কিন্তু profile save করা যায়নি; account rollback করা হয়েছে' });
   }
 
-  return { profileId: profile.id, created: true };
+  return reply(200, { ok:true, auth_user_id:authUserId, profile_id:profile.id, phone:phoneE164 });
+}
+
+// ── Resolve (or create) the profile behind a registration/payment request ──
+// Never trusts a client-sent profile_id/customer_id as-is; always looks the
+// real row up by phone, and only creates a new account when a password was
+// supplied (i.e. this genuinely is the registration flow, step 3).
+async function resolveProfile(body) {
+  const phoneE164 = normPhoneE164(body.phone);
+  if (!phoneE164) return { error: 'phone required' };
+
+  // Payment/invoice creation is NOT an account-registration endpoint.
+  // A profile must already exist, created by createRegistration after a
+  // server-verified BIYE OTP. This prevents payment requests from creating
+  // Auth users or profiles and keeps password handling completely out of the
+  // payment flow.
+  const existing = await sbSelect(
+    'profiles',
+    `phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`
+  );
+  if (!existing[0]) {
+    return { error: 'profile not found — complete BIYE registration first' };
+  }
+
+  return { profileId: existing[0].id, created: false };
 }
 
 // How many *completed* match-view payments a profile already has — used to
@@ -922,7 +893,7 @@ exports.handler = async (event) => {
   catch { return reply(400, { ok: false, error: 'Bad JSON' }); }
 
   try {
-    if (body.action === 'createAuthUser')       return await createAuthUser(body);
+    if (body.action === 'createRegistration')  return await createRegistration(body);
     if (body.action === 'createInvoice')        return await createInvoice(body);
     if (body.action === 'getInvoice')            return await getInvoice(body);
     if (body.action === 'getReceipt')            return await getReceipt(body);
