@@ -146,6 +146,8 @@ exports.handler = async (event) => {
       ok: true,
       function: 'send-otp',
       supabase_url: SUPABASE_URL ? 'set' : 'MISSING',
+      project: (SUPABASE_URL.match(/https?:\/\/([a-z0-9]+)\./) || [])[1] || 'unknown',
+      key_project: (() => { try { return JSON.parse(Buffer.from(SUPABASE_KEY.split('.')[1], 'base64').toString()).ref + ' / ' + JSON.parse(Buffer.from(SUPABASE_KEY.split('.')[1], 'base64').toString()).role; } catch { return 'unknown (new-style key)'; } })(),
       supabase_key: SUPABASE_KEY ? 'set' : 'MISSING',
       sms_api_key: SMS_API_KEY ? 'set' : 'MISSING',
       actions: ['send', 'verify', 'resetPassword', 'link', 'logConsent'],
