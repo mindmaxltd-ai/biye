@@ -235,337 +235,205 @@ html[dir=rtl] .biye-nav{flex-direction:row-reverse}
 .notif-text strong{display:block;font-size:.82rem;font-weight:700}
 .notif-text span{font-size:.74rem;color:var(--ink2)}
 
-/* ═══════════════════════════════════════════
-   SAR DASHBOARD DESIGN — applied to BIYE
-   ═══════════════════════════════════════════ */
-:root{--gold:#D4AF37;--bkash-pink:#E2136E;--bkash-pink-dark:#C20F5E}
+/* ═══ SAR-style mobile-app look (CSS only — HTML & JS unchanged) ═══ */
+:root{--gold:#D4AF37}
 body{background:#F5F5F7}
-.app{min-height:100vh;display:flex;flex-direction:column}
-
-/* Pink header card */
-.hero{background:linear-gradient(160deg,var(--bkash-pink) 0%,var(--bkash-pink-dark) 100%);border-radius:0 0 26px 26px;
-  padding:1.1rem 1rem 1.5rem;padding-top:calc(1.1rem + env(safe-area-inset-top));position:relative;overflow:hidden;box-shadow:0 14px 34px -14px rgba(226,19,110,.55)}
-.hero::before{content:'';position:absolute;right:-50px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08)}
-.hero::after{content:'';position:absolute;left:-50px;bottom:-70px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
-.hero-row{display:flex;align-items:center;justify-content:space-between;gap:.7rem;max-width:1280px;margin:0 auto;position:relative;z-index:1}
-.tn-logo{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
-.tn-logo-icon{width:38px;height:38px;border-radius:10px;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center}
-.tn-logo-icon img{width:32px;height:auto;object-fit:contain}
-.tn-logo-text{font-size:1rem;font-weight:800;color:#fff;line-height:1.2}
-.hero-right{display:flex;align-items:center;gap:.5rem}
-.hero-icon-btn{position:relative;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);
-  color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;transition:var(--tx)}
-.hero-icon-btn:hover{background:rgba(255,255,255,.3)}
-.hero-icon-btn .biye-notif-badge{background:#fff;color:var(--pk-d);border:2px solid var(--gold)}
-.hero-photo-row{display:flex;flex-direction:column;align-items:center;text-align:center;max-width:1280px;margin:1.1rem auto 0;position:relative;z-index:1}
-.hero-photo{width:76px;height:76px;border-radius:50%;border:3px solid #fff;overflow:hidden;background:rgba(255,255,255,.18);
-  display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-weight:800;color:#fff;box-shadow:0 8px 18px -6px rgba(0,0,0,.35)}
-.hero-greet-name{font-size:1.18rem;font-weight:800;color:#fff;margin-top:.55rem;line-height:1.3}
-.hero-greet-sub{font-size:.78rem;color:rgba(255,255,255,.85);margin-top:.15rem}
-.hero .depth-strip{justify-content:center;margin-top:.5rem}
-.hero-actions{display:flex;gap:.6rem;max-width:560px;margin:1.1rem auto 0;position:relative;z-index:1}
-.hero-action-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;background:linear-gradient(150deg,#26A65B,#157A3E);
-  border:2px solid var(--gold);border-radius:14px;padding:.75rem .6rem;color:#fff;font-size:.88rem;font-weight:700;transition:all .2s;box-shadow:0 4px 10px -4px rgba(20,20,20,.32)}
-.hero-action-btn:hover{transform:translateY(-2px);box-shadow:0 8px 16px -6px rgba(20,20,20,.42)}
-.hero-action-btn.solid{background:linear-gradient(150deg,#FB923C,#C2570A)}
-
-/* White services panel */
-.services-panel{background:#fff;border-radius:24px 24px 0 0;margin-top:-1rem;position:relative;z-index:2;padding:1.1rem .6rem 1.2rem;width:100%;box-shadow:0 -8px 24px -16px rgba(20,20,20,.12)}
-.services-title{font-size:1rem;font-weight:800;margin-bottom:.75rem;padding:0 .5rem;max-width:1280px;margin-inline:auto}
-.tn-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;width:100%;max-width:1280px;margin:0 auto}
-.tn-btn{display:flex;flex-direction:column;align-items:center;gap:.34rem;padding:.55rem .2rem;border:2px solid var(--gold);border-radius:14px;color:#fff;
-  font-size:.68rem;font-weight:700;text-align:center;transition:transform .15s,box-shadow .15s;position:relative;line-height:1.2;box-shadow:0 4px 10px -4px rgba(20,20,20,.28)}
-.tn-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 20px -8px rgba(20,20,20,.4)}
-.tn-btn:active{transform:scale(.96)}
-.tn-btn-icon{font-size:1.3rem;line-height:1;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.94)}
-.tn-btn.tn-active{outline:3px solid #fff;outline-offset:-5px}
-.tn-c1{background:linear-gradient(150deg,#F06292,#C2185B)}.tn-c2{background:linear-gradient(150deg,#26A65B,#157A3E)}
-.tn-c3{background:linear-gradient(150deg,#9C5FE0,#6A2DA8)}.tn-c4{background:linear-gradient(150deg,#3B9CE8,#1565C0)}
-.tn-c5{background:linear-gradient(150deg,#FB923C,#C2570A)}.tn-c6{background:linear-gradient(150deg,#F4C430,#C99A0E)}
-.tn-c7{background:linear-gradient(150deg,#8A9A3C,#5E6B22)}.tn-c8{background:linear-gradient(150deg,#26C6DA,#00838F)}
-@media(min-width:768px){.tn-buttons{grid-template-columns:repeat(8,1fr);gap:.6rem}.tn-btn{padding:.65rem .3rem;font-size:.76rem}.tn-btn-icon{width:48px;height:48px;font-size:1.5rem}.services-panel{padding:1.3rem 1rem 1.4rem}}
-@media(min-width:1024px){.hero{padding:1.3rem 2rem 1.9rem}.services-panel{padding:1.4rem 1.5rem 1.5rem}}
-
-/* Main */
-.main{padding:1rem 1rem 5rem;max-width:1280px;margin:0 auto;width:100%}
-@media(min-width:1024px){.main{padding:1.25rem 1.5rem 4rem}}
-
-/* Stats row */
-.stats-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin-bottom:1.1rem}
-.stat-card{background:#fff;border:1px solid var(--bdr);border-radius:18px;padding:1.1rem 1.1rem .95rem;box-shadow:0 4px 18px -6px rgba(226,19,110,.14);position:relative;overflow:hidden;transition:all .35s;display:block}
-.stat-card:hover{transform:translateY(-4px);box-shadow:0 16px 38px -16px rgba(226,19,110,.22)}
-.stat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s}
-.stat-card:hover::before{opacity:1}
-.sc-pink::before{background:linear-gradient(135deg,rgba(226,19,110,.10),transparent)}
-.sc-purple::before{background:linear-gradient(135deg,rgba(106,45,168,.10),transparent)}
-.sc-yellow::before{background:linear-gradient(135deg,rgba(245,158,11,.10),transparent)}
-.sc-green::before{background:linear-gradient(135deg,rgba(0,166,81,.10),transparent)}
-.stat-icon{font-size:1.5rem;margin-bottom:.6rem;display:block;position:relative}
-.stat-val{font-family:'Inter','Hind Siliguri',sans-serif;font-size:1.6rem;font-weight:800;line-height:1;margin-bottom:.25rem;position:relative}
-.stat-lbl{font-size:.76rem;color:var(--ink2);font-weight:600;position:relative}
-@media(max-width:768px){.stats-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
-/* Grid + cards */
-.dash-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:1.1rem;align-items:start}
-.dash-col-left,.dash-col-right{display:flex;flex-direction:column;gap:1.1rem;min-width:0}
-@media(max-width:1100px){.dash-grid{grid-template-columns:1fr}.dash-col-right{display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:768px){.dash-col-right{grid-template-columns:1fr}.main{padding:.85rem .85rem 5.5rem}}
-.dcard{background:#fff;border:1px solid var(--bdr);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px -6px rgba(226,19,110,.14);position:relative}
-.dcard-header{padding:.85rem 1.1rem .65rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;border-bottom:1px solid var(--bdr)}
-.dcard-title{font-size:.9rem;font-weight:800;display:flex;align-items:center;gap:.5rem}
-.dcard-title-icon{font-size:1rem}
-.dcard-action{font-size:.78rem;font-weight:700;color:var(--pk);cursor:pointer;transition:color .3s;white-space:nowrap}
-.dcard-action:hover{color:var(--pk-d)}
-.dcard-body{padding:.95rem 1.1rem}
-.dcard.card-blue::before,.dcard.card-pink::before,.dcard.card-green::before,.dcard.card-purple::before,.dcard.card-yellow::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;z-index:2}
-.dcard.card-blue{background:linear-gradient(165deg,rgba(59,156,232,.11),rgba(255,255,255,.98) 55%);border-color:rgba(59,156,232,.28);box-shadow:0 12px 26px -16px rgba(21,101,192,.45)}
-.dcard.card-blue::before{background:linear-gradient(90deg,#3B9CE8,#1565C0)}
-.dcard.card-blue .dcard-header{background:linear-gradient(120deg,rgba(59,156,232,.14),rgba(38,198,218,.06))}
-.dcard.card-blue .dcard-title{color:#1565C0}
-.dcard.card-pink{background:linear-gradient(165deg,rgba(240,98,146,.12),rgba(255,255,255,.98) 55%);border-color:rgba(240,98,146,.3);box-shadow:0 12px 26px -16px rgba(194,24,91,.4)}
-.dcard.card-pink::before{background:linear-gradient(90deg,#F06292,#C2185B)}
-.dcard.card-pink .dcard-header{background:linear-gradient(120deg,rgba(240,98,146,.16),rgba(255,141,193,.06))}
-.dcard.card-pink .dcard-title{color:#C2185B}
-.dcard.card-green{background:linear-gradient(165deg,rgba(38,166,91,.12),rgba(255,255,255,.98) 55%);border-color:rgba(38,166,91,.3);box-shadow:0 12px 26px -16px rgba(21,122,62,.4)}
-.dcard.card-green::before{background:linear-gradient(90deg,#26A65B,#157A3E)}
-.dcard.card-green .dcard-header{background:linear-gradient(120deg,rgba(38,166,91,.15),rgba(46,204,113,.06))}
-.dcard.card-green .dcard-title{color:#157A3E}
-.dcard.card-purple{background:linear-gradient(165deg,rgba(156,95,224,.12),rgba(255,255,255,.98) 55%);border-color:rgba(156,95,224,.3);box-shadow:0 12px 26px -16px rgba(106,45,168,.4)}
-.dcard.card-purple::before{background:linear-gradient(90deg,#9C5FE0,#6A2DA8)}
-.dcard.card-purple .dcard-header{background:linear-gradient(120deg,rgba(156,95,224,.16),rgba(196,148,255,.06))}
-.dcard.card-purple .dcard-title{color:#6A2DA8}
-.dcard.card-yellow{background:linear-gradient(165deg,rgba(244,196,48,.16),rgba(255,255,255,.98) 55%);border-color:rgba(244,196,48,.34);box-shadow:0 12px 26px -16px rgba(169,126,0,.35)}
-.dcard.card-yellow::before{background:linear-gradient(90deg,#F4C430,#C99A0E)}
-.dcard.card-yellow .dcard-header{background:linear-gradient(120deg,rgba(244,196,48,.22),rgba(251,191,36,.08))}
-.dcard.card-yellow .dcard-title{color:#A37E00}
-
-/* Quick actions (colourful, gold border) */
-.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}
-.qa-btn{display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:.85rem .5rem;border-radius:14px;border:2px solid var(--gold);color:#fff;transition:all .2s;box-shadow:0 4px 10px -4px rgba(20,20,20,.28)}
-.qa-btn:hover{transform:translateY(-3px);box-shadow:0 10px 20px -8px rgba(20,20,20,.4)}
-.qa-icon{font-size:1.3rem;width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center}
-.qa-label{font-size:.78rem;font-weight:700;color:#fff;text-align:center}
-.qc1{background:linear-gradient(150deg,#F06292,#C2185B)}.qc2{background:linear-gradient(150deg,#26A65B,#157A3E)}
-.qc4{background:linear-gradient(150deg,#3B9CE8,#1565C0)}.qc5{background:linear-gradient(150deg,#FB923C,#C2570A)}
-
-/* Metric chips, notes, buttons */
-.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.metric-chip{background:rgba(20,20,20,.04);border:1px solid var(--bdr);border-radius:12px;padding:.8rem .9rem}
-.mc-label{font-size:.72rem;color:var(--ink2);margin-bottom:.25rem;font-weight:600}
-.mc-val{font-family:'Inter','Hind Siliguri',sans-serif;font-size:1.35rem;font-weight:800;line-height:1.1;color:#157A3E}
-.info-note{margin-top:.85rem;padding:.7rem .85rem;background:var(--bl-s);border-radius:var(--r2);font-size:.78rem;color:var(--bl);font-weight:600}
-.info-note.gold{background:var(--gd-s);color:#5a3e00}
-.alert-btn{padding:.6rem 1.1rem;border-radius:50px;background:linear-gradient(150deg,#26A65B,#157A3E);border:2px solid var(--gold);color:#fff;font-size:.84rem;font-weight:700;transition:all .2s}
-.alert-btn.pay{background:linear-gradient(150deg,#FB923C,#C2570A)}
-.alert-btn:hover{transform:scale(1.03)}
-.completion-label{font-weight:600}
+.biye-nav{background:linear-gradient(160deg,#E2136E,#C20F5E);border-bottom:none;box-shadow:0 6px 18px -8px rgba(226,19,110,.5)}
+.biye-nav-logo{background:#fff;border-radius:10px;padding:3px 6px}
+.biye-nav-logo img{height:30px}
+.biye-nav-link{color:#fff;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;padding:0}
+.biye-nav-link:hover{color:#fff;background:rgba(255,255,255,.3)}
+.biye-notif-badge{background:#fff;color:#C20F5E;border:2px solid var(--gold)}
+.biye-nav .biye-avatar{background:rgba(255,255,255,.18);border:2px solid #fff}
+.biye-page{padding-top:0}
+.dash-hero{background:linear-gradient(160deg,#E2136E,#C20F5E);border-radius:0 0 26px 26px;margin:0 -1rem 1.1rem;padding:1.4rem 1rem 1.6rem;
+  flex-direction:column;text-align:center;gap:.5rem;position:relative;overflow:hidden;box-shadow:0 14px 34px -14px rgba(226,19,110,.55)}
+.dash-hero::before{content:'';position:absolute;right:-50px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08)}
+.dash-hero::after{content:'';position:absolute;left:-50px;bottom:-70px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+.dash-hero>*{position:relative;z-index:1}
+.dash-hero .biye-avatar-lg{width:76px;height:76px;background:rgba(255,255,255,.18);border:3px solid #fff;box-shadow:0 8px 18px -6px rgba(0,0,0,.35);font-size:1.8rem}
+.dash-hero-text strong{font-size:1.18rem}
+.depth-strip{justify-content:center}
+@media(max-width:480px){.dash-hero{margin:0 -.75rem 1.1rem}}
+.quick-actions{background:#fff;border-radius:22px;padding:1rem .7rem;box-shadow:0 8px 24px -16px rgba(20,20,20,.18);gap:.5rem}
+.quick-action{border:2px solid var(--gold);border-radius:14px;padding:.7rem .3rem;color:#fff;box-shadow:0 4px 10px -4px rgba(20,20,20,.28)}
+.quick-action:hover{border-color:var(--gold);transform:translateY(-3px) scale(1.02);box-shadow:0 10px 20px -8px rgba(20,20,20,.4)}
+.quick-action:active{transform:scale(.96)}
+.quick-action-icon{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;font-size:1.35rem}
+.quick-action-label{color:#fff;font-size:.74rem}
+.quick-action:nth-child(1){background:linear-gradient(150deg,#FB923C,#C2570A)}
+.quick-action:nth-child(2){background:linear-gradient(150deg,#F06292,#C2185B)}
+.quick-action:nth-child(3){background:linear-gradient(150deg,#3B9CE8,#1565C0)}
+.quick-action:nth-child(4){background:linear-gradient(150deg,#26A65B,#157A3E)}
+.quick-action:nth-child(4) .quick-action-icon{background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.6)}
+.dash-card{border-radius:16px;position:relative;box-shadow:0 12px 26px -16px rgba(20,20,20,.3)}
+.dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.dash-card-head .biye-btn-ghost{border:2px solid var(--gold);border-radius:50px;color:#fff;box-shadow:0 4px 10px -4px rgba(20,20,20,.28)}
+.dash-card-head .biye-btn-ghost:hover{color:#fff;transform:translateY(-2px)}
+#dashContent>.dash-card:nth-child(3){background:linear-gradient(165deg,rgba(156,95,224,.12),#fff 55%);border-color:rgba(156,95,224,.3)}
+#dashContent>.dash-card:nth-child(3)::before{background:linear-gradient(90deg,#9C5FE0,#6A2DA8)}
+#dashContent>.dash-card:nth-child(3) .dash-card-title{color:#6A2DA8}
+#dashContent>.dash-card:nth-child(3) .biye-btn-ghost{background:linear-gradient(150deg,#9C5FE0,#6A2DA8)}
+#dashContent>.dash-card:nth-child(4){background:linear-gradient(165deg,rgba(240,98,146,.12),#fff 55%);border-color:rgba(240,98,146,.3)}
+#dashContent>.dash-card:nth-child(4)::before{background:linear-gradient(90deg,#F06292,#C2185B)}
+#dashContent>.dash-card:nth-child(4) .dash-card-title{color:#C2185B}
+#dashContent>.dash-card:nth-child(4) .biye-btn-ghost{background:linear-gradient(150deg,#F06292,#C2185B)}
+#dashContent>.dash-card:nth-child(5){background:linear-gradient(165deg,rgba(59,156,232,.11),#fff 55%);border-color:rgba(59,156,232,.28)}
+#dashContent>.dash-card:nth-child(5)::before{background:linear-gradient(90deg,#3B9CE8,#1565C0)}
+#dashContent>.dash-card:nth-child(5) .dash-card-title{color:#1565C0}
+#dashContent>.dash-card:nth-child(5) .biye-btn-ghost{background:linear-gradient(150deg,#3B9CE8,#1565C0)}
+#dashContent>.dash-card:nth-child(6){background:linear-gradient(165deg,rgba(38,166,91,.12),#fff 55%);border-color:rgba(38,166,91,.3)}
+#dashContent>.dash-card:nth-child(6)::before{background:linear-gradient(90deg,#26A65B,#157A3E)}
+#dashContent>.dash-card:nth-child(6) .dash-card-title{color:#157A3E}
+#dashContent>.dash-card:nth-child(6) .biye-btn-ghost{background:linear-gradient(150deg,#FB923C,#C2570A)}
 .completion-bar{height:8px}
-.match-peek-card{background:#fff}
-
-/* Motivational */
-.moti-card{text-align:center;padding:1.4rem}
-.moti-icon{font-size:2rem;margin-bottom:.6rem;display:block}
-.moti-text{font-size:.95rem;font-style:italic;color:rgba(20,20,20,.72);line-height:1.6;margin-bottom:.4rem}
-.moti-source{font-size:.74rem;color:var(--ink3)}
+.match-peek-card{background:#fff;border-radius:14px}
+.biye-stat{border-radius:14px;background:rgba(255,255,255,.8)}
+.biye-stat-val{color:#157A3E}
+.biye-mobile-nav{border-top:none;box-shadow:0 -6px 20px -10px rgba(20,20,20,.25);border-radius:18px 18px 0 0}
+.biye-mobile-nav-item{font-size:.62rem}
+.biye-mobile-nav-item.active{color:#E2136E}
+.biye-mobile-nav-item.active .biye-mobile-nav-icon{background:linear-gradient(150deg,#F06292,#C2185B);border-radius:12px;padding:.2rem .7rem;filter:none}
 </style>
 </head>
 <body>
-<div class="app">
+<nav class="biye-nav" aria-label="Main navigation">
+  <a href="dashboard.html" class="biye-nav-logo" aria-label="BIYE"><img src="data:image/png;base64,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" alt="BIYE" height="34"></a>
+  <div class="biye-nav-right">
+    <button id="notifBtn" class="biye-nav-link" aria-label="Notifications" style="position:relative">🔔<span id="notifBadge" class="biye-notif-badge" style="display:none"></span></button>
+    <a href="profile.html" class="biye-avatar" id="navAvatar" aria-label="My Profile">ব</a>
+  </div>
+</nav>
 
-  <!-- ═══ HEADER (SAR style) ═══ -->
-  <div class="hero">
-    <div class="hero-row">
-      <a href="dashboard.html" class="tn-logo" aria-label="BIYE">
-        <div class="tn-logo-icon"><img src="data:image/png;base64,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" alt="BIYE"></div>
-        <span class="tn-logo-text">BIYE বিয়ে</span>
+<main class="biye-page" id="dashMain" role="main">
+  <!-- Loading skeleton -->
+  <div id="dashLoading">
+    <div class="biye-skel" style="height:90px;border-radius:20px;margin-bottom:1.25rem"></div>
+    <div class="biye-grid-4" style="margin-bottom:1.25rem">
+      <div class="biye-skel" style="height:70px;border-radius:14px"></div>
+      <div class="biye-skel" style="height:70px;border-radius:14px"></div>
+      <div class="biye-skel" style="height:70px;border-radius:14px"></div>
+      <div class="biye-skel" style="height:70px;border-radius:14px"></div>
+    </div>
+  </div>
+
+  <!-- Dashboard content -->
+  <div id="dashContent" style="display:none">
+    <!-- Hero greeting -->
+    <div class="dash-hero" role="banner">
+      <div class="biye-avatar biye-avatar-lg" id="dashAvatar" aria-hidden="true">ব</div>
+      <div class="dash-hero-text">
+        <strong id="dashGreeting" data-i18n="dash.greeting">স্বাগতম!</strong>
+        <span id="dashDepthLabel" data-i18n="dash.depthStarter">প্রোফাইল গভীরতা: শুরু হচ্ছে</span>
+        <div class="depth-strip" id="depthStrip" aria-label="Profile depth"></div>
+      </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="quick-actions" role="list">
+      <a href="questionnaire.html" class="quick-action" role="listitem" aria-label="Continue questionnaire">
+        <span class="quick-action-icon" aria-hidden="true">📝</span>
+        <span class="quick-action-label" data-i18n="dash.qa">প্রশ্নমালা</span>
       </a>
-      <div class="hero-right">
-        <button id="notifBtn" class="hero-icon-btn" aria-label="Notifications">🔔<span id="notifBadge" class="biye-notif-badge" style="display:none"></span></button>
-        <a href="profile.html" class="hero-icon-btn hero-mini-avatar" id="navAvatar" aria-label="My Profile">ব</a>
+      <a href="match-feed.html" class="quick-action" role="listitem" aria-label="View matches">
+        <span class="quick-action-icon" aria-hidden="true">💫</span>
+        <span class="quick-action-label" data-i18n="dash.matches">ম্যাচ</span>
+      </a>
+      <a href="messages.html" class="quick-action" role="listitem" aria-label="Messages">
+        <span class="quick-action-icon" aria-hidden="true">💬</span>
+        <span class="quick-action-label" data-i18n="dash.messages">বার্তা</span>
+      </a>
+      <a href="kyc.html" class="quick-action" role="listitem" aria-label="KYC verification">
+        <span class="quick-action-icon" aria-hidden="true">🛡</span>
+        <span class="quick-action-label" data-i18n="dash.kyc">যাচাই</span>
+      </a>
+    </div>
+
+    <!-- Profile completion -->
+    <div class="dash-card">
+      <div class="dash-card-head">
+        <div class="dash-card-title">📊 <span data-i18n="dash.completionTitle">প্রোফাইল অগ্রগতি</span></div>
+        <a href="profile-edit.html" class="biye-btn biye-btn-ghost biye-btn-sm" data-i18n="dash.edit">সম্পাদনা</a>
       </div>
-    </div>
-    <div class="hero-photo-row">
-      <a href="profile.html" class="hero-photo" id="dashAvatar" aria-label="My Profile">ব</a>
-      <div class="hero-greet-name" id="dashGreeting" data-i18n="dash.greeting">স্বাগতম!</div>
-      <div class="hero-greet-sub" id="dashDepthLabel" data-i18n="dash.depthStarter">প্রোফাইল গভীরতা: শুরু হচ্ছে</div>
-      <div class="depth-strip" id="depthStrip" aria-label="Profile depth"></div>
-    </div>
-    <div class="hero-actions">
-      <a href="questionnaire.html" class="hero-action-btn solid">📝 <span data-i18n="dash.qa">প্রশ্নমালা</span></a>
-      <a href="match-feed.html" class="hero-action-btn">💫 <span data-i18n="dash.matches">ম্যাচ</span></a>
-    </div>
-  </div>
-
-  <!-- ═══ SERVICES PANEL (SAR style) ═══ -->
-  <div class="services-panel">
-    <div class="services-title">সেবাসমূহ</div>
-    <nav class="tn-buttons" aria-label="Services">
-      <a href="dashboard.html" class="tn-btn tn-c1 tn-active" aria-current="page"><span class="tn-btn-icon">🏠</span><span data-i18n="nav.home">ড্যাশবোর্ড</span></a>
-      <a href="questionnaire.html" class="tn-btn tn-c5"><span class="tn-btn-icon">📝</span><span data-i18n="dash.qa">প্রশ্নমালা</span></a>
-      <a href="match-feed.html" class="tn-btn tn-c3"><span class="tn-btn-icon">💫</span><span data-i18n="dash.matches">ম্যাচ</span></a>
-      <a href="messages.html" class="tn-btn tn-c4"><span class="tn-btn-icon">💬</span><span data-i18n="dash.messages">বার্তা</span></a>
-      <a href="kyc.html" class="tn-btn tn-c2"><span class="tn-btn-icon">🔐</span><span data-i18n="dash.kyc">যাচাই</span></a>
-      <a href="profile.html" class="tn-btn tn-c8"><span class="tn-btn-icon">👤</span><span data-i18n="nav.profile">প্রোফাইল</span></a>
-      <a href="profile-edit.html" class="tn-btn tn-c7"><span class="tn-btn-icon">✏️</span><span data-i18n="dash.edit">সম্পাদনা</span></a>
-      <a href="membership.html" class="tn-btn tn-c6"><span class="tn-btn-icon">💎</span><span data-i18n="dash.membership">সদস্যপদ</span></a>
-    </nav>
-  </div>
-
-  <main class="main" id="dashMain" role="main">
-    <!-- Loading skeleton -->
-    <div id="dashLoading">
-      <div class="stats-row">
-        <div class="biye-skel" style="height:110px;border-radius:18px"></div>
-        <div class="biye-skel" style="height:110px;border-radius:18px"></div>
-        <div class="biye-skel" style="height:110px;border-radius:18px"></div>
-        <div class="biye-skel" style="height:110px;border-radius:18px"></div>
-      </div>
-      <div class="biye-skel" style="height:220px;border-radius:16px"></div>
-    </div>
-
-    <!-- Dashboard content -->
-    <div id="dashContent" style="display:none">
-
-      <!-- STATS ROW -->
-      <div class="stats-row">
-        <a href="questionnaire.html" class="stat-card sc-pink">
-          <span class="stat-icon">🧠</span>
-          <div class="stat-val" id="statDepth" style="color:var(--pk)">০%</div>
-          <div class="stat-lbl">প্রোফাইল গভীরতা</div>
-        </a>
-        <a href="profile-edit.html" class="stat-card sc-purple">
-          <span class="stat-icon">📋</span>
-          <div class="stat-val" id="statBasic" style="color:var(--pu)">০%</div>
-          <div class="stat-lbl" data-i18n="dash.basicInfo">মূল তথ্য</div>
-        </a>
-        <a href="membership.html" class="stat-card sc-yellow">
-          <span class="stat-icon">👁</span>
-          <div class="stat-val" id="statFreeViews" style="color:#C99A0E">—</div>
-          <div class="stat-lbl" data-i18n="dash.freeViews">বিনামূল্যে বাকি</div>
-        </a>
-        <a href="kyc.html" class="stat-card sc-green">
-          <span class="stat-icon">🔐</span>
-          <div class="stat-val" id="statKyc" style="color:var(--gr)">—</div>
-          <div class="stat-lbl" data-i18n="dash.verification">যাচাইকরণ</div>
-        </a>
-      </div>
-
-      <div class="dash-grid">
-        <!-- LEFT -->
-        <div class="dash-col-left">
-
-          <!-- Profile completion -->
-          <div class="dcard card-purple">
-            <div class="dcard-header">
-              <span class="dcard-title"><span class="dcard-title-icon">📊</span><span data-i18n="dash.completionTitle">প্রোফাইল অগ্রগতি</span></span>
-              <a href="profile-edit.html" class="dcard-action" data-i18n="dash.edit">সম্পাদনা →</a>
-            </div>
-            <div class="dcard-body">
-              <div class="completion-row">
-                <span class="completion-label" data-i18n="dash.basicInfo">মূল তথ্য</span>
-                <div class="completion-bar"><div class="completion-fill" id="fillBasic" style="width:0%"></div></div>
-                <span class="completion-pct" id="pctBasic">০%</span>
-              </div>
-              <div class="completion-row">
-                <span class="completion-label" data-i18n="dash.priorities">৩০ অগ্রাধিকার</span>
-                <div class="completion-bar"><div class="completion-fill" id="fillPriority" style="width:0%"></div></div>
-                <span class="completion-pct" id="pctPriority">০%</span>
-              </div>
-              <div class="completion-row">
-                <span class="completion-label" data-i18n="dash.questionnaire">প্রশ্নমালা</span>
-                <div class="completion-bar"><div class="completion-fill" id="fillQ" style="width:0%"></div></div>
-                <span class="completion-pct" id="pctQ">০%</span>
-              </div>
-              <div class="completion-row">
-                <span class="completion-label" data-i18n="dash.verification">যাচাইকরণ</span>
-                <div class="completion-bar"><div class="completion-fill" id="fillKyc" style="width:0%"></div></div>
-                <span class="completion-pct" id="pctKyc">০%</span>
-              </div>
-              <div class="info-note" data-i18n="dash.completionNote">৩০টি অগ্রাধিকার দিলেই ম্যাচিং শুরু হয়। বেশি তথ্য = গভীরতর বিশ্লেষণ।</div>
-            </div>
-          </div>
-
-          <!-- Match preview -->
-          <div class="dcard card-pink">
-            <div class="dcard-header">
-              <span class="dcard-title"><span class="dcard-title-icon">💫</span><span data-i18n="dash.matchPreview">সম্ভাব্য ম্যাচ</span></span>
-              <a href="match-feed.html" class="dcard-action" data-i18n="dash.seeAll">সব দেখুন →</a>
-            </div>
-            <div class="dcard-body">
-              <div class="match-peek" id="matchPeek" role="list" aria-label="Recent matches">
-                <div class="biye-skel" style="width:100px;height:140px;border-radius:14px;flex-shrink:0"></div>
-                <div class="biye-skel" style="width:100px;height:140px;border-radius:14px;flex-shrink:0"></div>
-                <div class="biye-skel" style="width:100px;height:140px;border-radius:14px;flex-shrink:0"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Notifications -->
-          <div class="dcard card-blue" id="notifCard">
-            <div class="dcard-header">
-              <span class="dcard-title"><span class="dcard-title-icon">🔔</span><span data-i18n="dash.notifications">বিজ্ঞপ্তি</span></span>
-              <button class="dcard-action" id="markAllRead" data-i18n="dash.markRead">সব পড়া</button>
-            </div>
-            <div class="dcard-body" id="notifList">
-              <div class="biye-empty">
-                <div class="biye-empty-icon" aria-hidden="true">🔔</div>
-                <div class="biye-empty-title" data-i18n="dash.noNotifs">কোনো বিজ্ঞপ্তি নেই</div>
-              </div>
-            </div>
-          </div>
+      <div class="dash-card-body">
+        <div class="completion-row">
+          <span class="completion-label" data-i18n="dash.basicInfo">মূল তথ্য</span>
+          <div class="completion-bar"><div class="completion-fill" id="fillBasic" style="width:0%"></div></div>
+          <span class="completion-pct" id="pctBasic">০%</span>
         </div>
-
-        <!-- RIGHT -->
-        <div class="dash-col-right">
-
-          <!-- Quick actions -->
-          <div class="dcard card-yellow">
-            <div class="dcard-header">
-              <span class="dcard-title"><span class="dcard-title-icon">⚡</span>দ্রুত কাজ</span>
-            </div>
-            <div class="dcard-body">
-              <div class="qa-grid" role="list">
-                <a href="questionnaire.html" class="qa-btn qc5" role="listitem" aria-label="Continue questionnaire"><span class="qa-icon">📝</span><span class="qa-label" data-i18n="dash.qa">প্রশ্নমালা</span></a>
-                <a href="match-feed.html" class="qa-btn qc1" role="listitem" aria-label="View matches"><span class="qa-icon">💫</span><span class="qa-label" data-i18n="dash.matches">ম্যাচ</span></a>
-                <a href="messages.html" class="qa-btn qc4" role="listitem" aria-label="Messages"><span class="qa-icon">💬</span><span class="qa-label" data-i18n="dash.messages">বার্তা</span></a>
-                <a href="kyc.html" class="qa-btn qc2" role="listitem" aria-label="KYC verification"><span class="qa-icon">🔐</span><span class="qa-label" data-i18n="dash.kyc">যাচাই</span></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Match views entitlement -->
-          <div class="dcard card-green">
-            <div class="dcard-header">
-              <span class="dcard-title"><span class="dcard-title-icon">👁</span><span data-i18n="dash.views">ম্যাচ ভিউ</span></span>
-              <a href="membership.html" class="dcard-action" data-i18n="dash.membership">সদস্যপদ →</a>
-            </div>
-            <div class="dcard-body">
-              <div class="metrics-grid">
-                <div class="metric-chip">
-                  <div class="mc-label" data-i18n="dash.freeViews">বিনামূল্যে বাকি</div>
-                  <div class="mc-val" id="freeViewsLeft">২</div>
-                </div>
-                <div class="metric-chip">
-                  <div class="mc-label" data-i18n="dash.usedViews">মোট ব্যবহৃত</div>
-                  <div class="mc-val" id="totalViewsUsed">০</div>
-                </div>
-              </div>
-              <div class="info-note gold" data-i18n="dash.extraViewNote">অতিরিক্ত ভিউ: ৳৩৩৩ প্রতিটি</div>
-              <a href="membership.html" class="alert-btn pay" style="display:block;text-align:center;margin-top:.75rem">💎 <span data-i18n="dash.membership">সদস্যপদ</span></a>
-            </div>
-          </div>
-
-          <!-- Motivational -->
-          <div class="dcard moti-card card-purple">
-            <span class="moti-icon">💍</span>
-            <div class="moti-text">"তাঁর নিদর্শনের একটি হলো তিনি তোমাদের মধ্য থেকে জীবনসঙ্গী সৃষ্টি করেছেন, যাতে তোমরা প্রশান্তি পাও।"</div>
-            <div class="moti-source">— সূরা আর-রূম ৩০:২১</div>
-          </div>
+        <div class="completion-row">
+          <span class="completion-label" data-i18n="dash.priorities">৩০ অগ্রাধিকার</span>
+          <div class="completion-bar"><div class="completion-fill" id="fillPriority" style="width:0%"></div></div>
+          <span class="completion-pct" id="pctPriority">০%</span>
+        </div>
+        <div class="completion-row">
+          <span class="completion-label" data-i18n="dash.questionnaire">প্রশ্নমালা</span>
+          <div class="completion-bar"><div class="completion-fill" id="fillQ" style="width:0%"></div></div>
+          <span class="completion-pct" id="pctQ">০%</span>
+        </div>
+        <div class="completion-row">
+          <span class="completion-label" data-i18n="dash.verification">যাচাইকরণ</span>
+          <div class="completion-bar"><div class="completion-fill" id="fillKyc" style="width:0%"></div></div>
+          <span class="completion-pct" id="pctKyc">০%</span>
+        </div>
+        <div style="margin-top:.85rem;padding:.7rem;background:var(--bl-s);border-radius:var(--r2);font-size:.78rem;color:var(--bl)" data-i18n="dash.completionNote">
+          ৩০টি অগ্রাধিকার দিলেই ম্যাচিং শুরু হয়। বেশি তথ্য = গভীরতর বিশ্লেষণ।
         </div>
       </div>
     </div>
-  </main>
-</div>
+
+    <!-- Match preview -->
+    <div class="dash-card">
+      <div class="dash-card-head">
+        <div class="dash-card-title">💫 <span data-i18n="dash.matchPreview">সম্ভাব্য ম্যাচ</span></div>
+        <a href="match-feed.html" class="biye-btn biye-btn-ghost biye-btn-sm" data-i18n="dash.seeAll">সব দেখুন</a>
+      </div>
+      <div class="dash-card-body">
+        <div class="match-peek" id="matchPeek" role="list" aria-label="Recent matches">
+          <!-- Populated by JS -->
+          <div class="biye-skel" style="width:100px;height:140px;border-radius:14px;flex-shrink:0"></div>
+          <div class="biye-skel" style="width:100px;height:140px;border-radius:14px;flex-shrink:0"></div>
+          <div class="biye-skel" style="width:100px;height:140px;border-radius:14px;flex-shrink:0"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="dash-card">
+      <div class="dash-card-head">
+        <div class="dash-card-title">🔔 <span data-i18n="dash.notifications">বিজ্ঞপ্তি</span></div>
+        <button class="biye-btn biye-btn-ghost biye-btn-sm" id="markAllRead" data-i18n="dash.markRead">সব পড়া</button>
+      </div>
+      <div class="dash-card-body" id="notifList">
+        <div class="biye-empty">
+          <div class="biye-empty-icon" aria-hidden="true">🔔</div>
+          <div class="biye-empty-title" data-i18n="dash.noNotifs">কোনো বিজ্ঞপ্তি নেই</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Match views entitlement -->
+    <div class="dash-card">
+      <div class="dash-card-head">
+        <div class="dash-card-title">👁 <span data-i18n="dash.views">ম্যাচ ভিউ</span></div>
+        <a href="membership.html" class="biye-btn biye-btn-ghost biye-btn-sm" data-i18n="dash.membership">সদস্যপদ</a>
+      </div>
+      <div class="dash-card-body">
+        <div class="biye-grid-2">
+          <div class="biye-stat">
+            <div class="biye-stat-val" id="freeViewsLeft">২</div>
+            <div class="biye-stat-lbl" data-i18n="dash.freeViews">বিনামূল্যে বাকি</div>
+          </div>
+          <div class="biye-stat">
+            <div class="biye-stat-val" id="totalViewsUsed">০</div>
+            <div class="biye-stat-lbl" data-i18n="dash.usedViews">মোট ব্যবহৃত</div>
+          </div>
+        </div>
+        <div style="margin-top:.85rem;font-size:.78rem;color:var(--ink2)" data-i18n="dash.extraViewNote">অতিরিক্ত ভিউ: ৳৩৩৩ প্রতিটি</div>
+      </div>
+    </div>
+  </div>
+</main>
 
 <!-- Mobile nav -->
 <nav class="biye-mobile-nav" aria-label="Bottom navigation">
@@ -586,11 +454,6 @@ import { Matching } from './js/matching.js';
 import { Payment } from './js/payment.js';
 import { I18n } from './js/i18n.js';
 import { UI } from './js/ui.js';
-
-document.getElementById('notifBtn').addEventListener('click', () => {
-  const c = document.getElementById('notifCard');
-  if (c && c.offsetParent) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
 
 document.addEventListener('biye:ready', async ({ detail: { user } }) => {
   if (!user) return;
@@ -627,11 +490,6 @@ document.addEventListener('biye:ready', async ({ detail: { user } }) => {
   setBar('fillQ', 'pctQ', profile.intelligence_depth || 0);
   setBar('fillKyc', 'pctKyc', profile.is_verified ? 100 : 0);
 
-  // SAR-style stat cards (same values as above)
-  document.getElementById('statDepth').textContent = (profile.intelligence_depth || 0) + '%';
-  document.getElementById('statBasic').textContent = (profile.profile_completion || 0) + '%';
-  document.getElementById('statKyc').textContent = profile.is_verified ? '✓' : '০%';
-
   // Notifications
   const notifs = await Notifications.load(profile.id, { unreadOnly: false, limit: 5 });
   const notifList = document.getElementById('notifList');
@@ -656,7 +514,6 @@ document.addEventListener('biye:ready', async ({ detail: { user } }) => {
   // Match views
   const views = await Matching.getFreeViewsRemaining(profile.id);
   document.getElementById('freeViewsLeft').textContent = views;
-  document.getElementById('statFreeViews').textContent = views;
 
   // Match preview
   const matches = await Matching.loadMatches(profile.id, { page: 0 });
@@ -688,6 +545,9 @@ document.addEventListener('biye:ready', async ({ detail: { user } }) => {
     document.getElementById('notifBadge').style.display = '';
   });
 });
+</script>
+<script>
+document.getElementById('notifBtn').addEventListener('click',function(){var c=document.getElementById('notifList');if(c&&c.offsetParent)c.closest('.dash-card').scrollIntoView({behavior:'smooth',block:'start'});});
 </script>
 </body>
 </html>
