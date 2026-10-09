@@ -234,115 +234,6 @@ html[dir=rtl] .biye-nav{flex-direction:row-reverse}
 .notif-icon{width:34px;height:34px;border-radius:50%;background:var(--pu-s);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
 .notif-text strong{display:block;font-size:.82rem;font-weight:700}
 .notif-text span{font-size:.74rem;color:var(--ink2)}
-
-/* ═══ SAR dashboard colours, buttons, slots & bars (CSS only — structure unchanged) ═══ */
-:root{--gold:#D4AF37;--sar-pink:#E2136E;--sar-pink-d:#C20F5E;--sar-shadow:0 4px 18px -6px rgba(226,19,110,.14)}
-body{background:#F5F5F7}
-/* top bar — SAR pink */
-.biye-nav{background:linear-gradient(160deg,var(--sar-pink),var(--sar-pink-d));border-bottom:none;box-shadow:0 6px 18px -8px rgba(226,19,110,.5)}
-.biye-nav-logo{background:#fff;border-radius:10px;padding:3px 6px}
-.biye-nav-logo img{height:30px}
-.biye-nav-link{color:#fff;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;padding:0}
-.biye-nav-link:hover{color:#fff;background:rgba(255,255,255,.3)}
-.biye-notif-badge{background:#fff;color:var(--sar-pink-d);border:2px solid var(--gold)}
-.biye-nav .biye-avatar{background:rgba(255,255,255,.18);border:2px solid #fff}
-/* hero — SAR header card */
-.biye-page{padding-top:0}
-.dash-hero{background:linear-gradient(160deg,var(--sar-pink),var(--sar-pink-d));border-radius:0 0 26px 26px;margin:0 -1rem 1.1rem;padding:1.4rem 1rem 1.6rem;
-  flex-direction:column;text-align:center;gap:.5rem;position:relative;overflow:hidden;box-shadow:0 14px 34px -14px rgba(226,19,110,.55)}
-.dash-hero::before{content:'';position:absolute;right:-50px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08)}
-.dash-hero::after{content:'';position:absolute;left:-50px;bottom:-70px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
-.dash-hero>*{position:relative;z-index:1}
-.dash-hero .biye-avatar-lg{width:76px;height:76px;background:rgba(255,255,255,.18);border:3px solid #fff;box-shadow:0 8px 18px -6px rgba(0,0,0,.35);font-size:1.8rem}
-.dash-hero-text strong{font-size:1.18rem;font-weight:800}
-.dash-hero-text span{color:rgba(255,255,255,.82);opacity:1}
-.depth-strip{justify-content:center}
-.depth-dot.filled{background:#F4C430;box-shadow:0 0 6px rgba(244,196,48,.7)}
-@media(max-width:480px){.dash-hero{margin:0 -.75rem 1.1rem}}
-/* quick actions — SAR services panel + tn-btn */
-.quick-actions{background:#fff;border-radius:24px;padding:1.1rem .6rem 1.2rem;box-shadow:0 -8px 24px -16px rgba(20,20,20,.12),var(--sar-shadow);gap:.45rem}
-.quick-action{border:2px solid var(--gold);border-radius:14px;padding:.6rem .2rem;color:#fff;box-shadow:0 4px 10px -4px rgba(20,20,20,.28);transition:transform .15s,box-shadow .15s}
-.quick-action:hover{border-color:var(--gold);transform:translateY(-3px) scale(1.02);box-shadow:0 10px 20px -8px rgba(20,20,20,.4)}
-.quick-action:active{transform:translateY(0) scale(.96)}
-.quick-action-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;font-size:1.35rem}
-.quick-action-label{color:#fff;font-size:.72rem}
-.quick-action:nth-child(1){background:linear-gradient(150deg,#F06292,#C2185B)}
-.quick-action:nth-child(2){background:linear-gradient(150deg,#26A65B,#157A3E)}
-.quick-action:nth-child(3){background:linear-gradient(150deg,#9C5FE0,#6A2DA8)}
-.quick-action:nth-child(4){background:linear-gradient(150deg,#3B9CE8,#1565C0)}
-.quick-action:nth-child(4) .quick-action-icon{background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.6)}
-/* cards — SAR dcard + colour variants */
-.dash-card{border-radius:16px;position:relative;box-shadow:var(--sar-shadow)}
-.dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;z-index:2}
-.dash-card-head{padding:.85rem 1.1rem .65rem}
-.dash-card-title{font-size:.88rem;font-weight:700}
-.dash-card-body{padding:.95rem 1.1rem}
-.dash-card-head .biye-btn-ghost{border:2px solid var(--gold);border-radius:50px;color:#fff;box-shadow:0 4px 10px -4px rgba(20,20,20,.28);min-height:34px}
-.dash-card-head .biye-btn-ghost:hover{color:#fff;border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 16px -6px rgba(20,20,20,.4)}
-#dashContent>.dash-card:nth-child(4){background:linear-gradient(165deg,rgba(156,95,224,.12),rgba(255,255,255,.98) 55%);border-color:rgba(156,95,224,.3);box-shadow:0 12px 26px -16px rgba(106,45,168,.4)}
-#dashContent>.dash-card:nth-child(4)::before{background:linear-gradient(90deg,#9C5FE0,#6A2DA8)}
-#dashContent>.dash-card:nth-child(4) .dash-card-head{background:linear-gradient(120deg,rgba(156,95,224,.16),rgba(196,148,255,.06))}
-#dashContent>.dash-card:nth-child(4) .dash-card-title{color:#6A2DA8}
-#dashContent>.dash-card:nth-child(4) .biye-btn-ghost{background:linear-gradient(150deg,#9C5FE0,#6A2DA8)}
-#dashContent>.dash-card:nth-child(5){background:linear-gradient(165deg,rgba(240,98,146,.12),rgba(255,255,255,.98) 55%);border-color:rgba(240,98,146,.3);box-shadow:0 12px 26px -16px rgba(194,24,91,.4)}
-#dashContent>.dash-card:nth-child(5)::before{background:linear-gradient(90deg,#F06292,#C2185B)}
-#dashContent>.dash-card:nth-child(5) .dash-card-head{background:linear-gradient(120deg,rgba(240,98,146,.16),rgba(255,141,193,.06))}
-#dashContent>.dash-card:nth-child(5) .dash-card-title{color:#C2185B}
-#dashContent>.dash-card:nth-child(5) .biye-btn-ghost{background:linear-gradient(150deg,#F06292,#C2185B)}
-#dashContent>.dash-card:nth-child(6){background:linear-gradient(165deg,rgba(59,156,232,.11),rgba(255,255,255,.98) 55%);border-color:rgba(59,156,232,.28);box-shadow:0 12px 26px -16px rgba(21,101,192,.45)}
-#dashContent>.dash-card:nth-child(6)::before{background:linear-gradient(90deg,#3B9CE8,#1565C0)}
-#dashContent>.dash-card:nth-child(6) .dash-card-head{background:linear-gradient(120deg,rgba(59,156,232,.14),rgba(38,198,218,.06))}
-#dashContent>.dash-card:nth-child(6) .dash-card-title{color:#1565C0}
-#dashContent>.dash-card:nth-child(6) .biye-btn-ghost{background:linear-gradient(150deg,#3B9CE8,#1565C0)}
-#dashContent>.dash-card:nth-child(7){background:linear-gradient(165deg,rgba(38,166,91,.12),rgba(255,255,255,.98) 55%);border-color:rgba(38,166,91,.3);box-shadow:0 12px 26px -16px rgba(21,122,62,.4)}
-#dashContent>.dash-card:nth-child(7)::before{background:linear-gradient(90deg,#26A65B,#157A3E)}
-#dashContent>.dash-card:nth-child(7) .dash-card-head{background:linear-gradient(120deg,rgba(38,166,91,.15),rgba(46,204,113,.06))}
-#dashContent>.dash-card:nth-child(7) .dash-card-title{color:#157A3E}
-#dashContent>.dash-card:nth-child(7) .biye-btn-ghost{background:linear-gradient(150deg,#FB923C,#C2570A)}
-/* bars — SAR loyalty points bar */
-.completion-row{padding:.55rem .7rem;background:rgba(20,20,20,.035);border:1px solid var(--bdr);border-radius:12px;margin-bottom:.5rem}
-.completion-label{color:rgba(20,20,20,.55);font-weight:600}
-.completion-bar{height:6px;background:rgba(20,20,20,.08);border-radius:6px}
-.completion-fill{border-radius:6px;background:linear-gradient(90deg,#F59E0B,#E2136E);box-shadow:0 0 8px rgba(245,158,11,.35);transition:width .8s ease}
-.completion-pct{font-family:'Inter',sans-serif;color:#E2136E}
-/* slots — SAR metric-chip / stat-card */
-.biye-stat{background:rgba(20,20,20,.04);border:1px solid var(--bdr);border-radius:12px;padding:.8rem .9rem;transition:all .3s}
-.biye-stat:hover{border-color:var(--bdr2);background:rgba(20,20,20,.07)}
-.biye-stat-val{font-family:'Inter',sans-serif;font-weight:700;color:#00A651}
-.biye-stat-lbl{color:rgba(20,20,20,.42);font-weight:500}
-#dashContent>.dash-card:nth-child(7) .biye-grid-2{grid-template-columns:1fr 1fr;gap:.75rem}
-/* match slots */
-.match-peek-card{background:#fff;border-radius:14px;border:1px solid var(--bdr);box-shadow:0 4px 10px -6px rgba(20,20,20,.2);transition:all .3s}
-.match-peek-card:hover{transform:translateY(-3px);box-shadow:0 10px 20px -10px rgba(226,19,110,.35)}
-.match-peek-photo{background:linear-gradient(150deg,#F06292,#9C5FE0)}
-.match-peek-score{display:inline-block;margin-top:.15rem;font-family:'Inter',sans-serif;padding:.05rem .45rem;border-radius:50px;background:rgba(0,166,81,.14);color:#157A3E}
-/* notifications — SAR order-row slots */
-.notif-item{padding:.7rem .85rem;margin-bottom:.55rem;border:1px solid var(--bdr);border-radius:13px;background:rgba(20,20,20,.038);transition:all .3s}
-.notif-item:last-child{border-bottom:1px solid var(--bdr)}
-.notif-item:hover{border-color:var(--bdr2);background:rgba(20,20,20,.06)}
-.notif-icon{background:linear-gradient(150deg,#3B9CE8,#1565C0);border:2px solid var(--gold)}
-/* notes */
-#dashContent>.dash-card:nth-child(4) .dash-card-body>div[data-i18n]{background:rgba(245,158,11,.08)!important;border:1px solid rgba(245,158,11,.25);color:#7a5200!important;border-radius:12px!important}
-/* bottom nav */
-.biye-mobile-nav{border-top:none;box-shadow:0 -6px 20px -10px rgba(20,20,20,.25);border-radius:18px 18px 0 0}
-.biye-mobile-nav-item{font-size:.62rem}
-.biye-mobile-nav-item.active{color:var(--sar-pink)}
-.biye-mobile-nav-item.active .biye-mobile-nav-icon{background:linear-gradient(150deg,#F06292,#C2185B);border:2px solid var(--gold);border-radius:12px;padding:.15rem .7rem}
-
-/* সেবাসমূহ panel — SAR services grid */
-.services-panel{background:#fff;border-radius:24px;padding:1.1rem .6rem 1.2rem;margin-bottom:1.1rem;box-shadow:0 -8px 24px -16px rgba(20,20,20,.12),0 4px 18px -6px rgba(226,19,110,.14)}
-.services-title{font-size:1rem;font-weight:800;margin-bottom:.75rem;padding:0 .5rem}
-.tn-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem}
-@media(min-width:768px){.tn-buttons{grid-template-columns:repeat(8,1fr);gap:.6rem}}
-.tn-btn{display:flex;flex-direction:column;align-items:center;gap:.34rem;padding:.55rem .2rem;border:2px solid #D4AF37;border-radius:14px;color:#fff;font-size:.66rem;font-weight:700;text-align:center;line-height:1.2;box-shadow:0 4px 10px -4px rgba(20,20,20,.28);transition:transform .15s,box-shadow .15s}
-.tn-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 20px -8px rgba(20,20,20,.4)}
-.tn-btn:active{transform:scale(.96)}
-.tn-btn-icon{font-size:1.3rem;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.94)}
-.tn-active{outline:3px solid #fff;outline-offset:-5px}
-.tn-c1{background:linear-gradient(150deg,#F06292,#C2185B)}.tn-c2{background:linear-gradient(150deg,#26A65B,#157A3E)}
-.tn-c3{background:linear-gradient(150deg,#9C5FE0,#6A2DA8)}.tn-c4{background:linear-gradient(150deg,#3B9CE8,#1565C0)}
-.tn-c5{background:linear-gradient(150deg,#FB923C,#C2570A)}.tn-c6{background:linear-gradient(150deg,#F4C430,#C99A0E)}
-.tn-c7{background:linear-gradient(150deg,#8A9A3C,#5E6B22)}.tn-c8{background:linear-gradient(150deg,#26C6DA,#00838F)}
 </style>
 </head>
 <body>
@@ -376,22 +267,6 @@ body{background:#F5F5F7}
         <span id="dashDepthLabel" data-i18n="dash.depthStarter">প্রোফাইল গভীরতা: শুরু হচ্ছে</span>
         <div class="depth-strip" id="depthStrip" aria-label="Profile depth"></div>
       </div>
-    </div>
-
-
-    <!-- সেবাসমূহ (SAR-style main menu panel) -->
-    <div class="services-panel">
-      <div class="services-title">সেবাসমূহ</div>
-      <nav class="tn-buttons" aria-label="Services">
-        <a href="dashboard.html" class="tn-btn tn-c1 tn-active" aria-current="page"><span class="tn-btn-icon">🏠</span>ড্যাশবোর্ড</a>
-        <a href="questionnaire.html" class="tn-btn tn-c5"><span class="tn-btn-icon">📝</span>প্রশ্নমালা</a>
-        <a href="match-feed.html" class="tn-btn tn-c2"><span class="tn-btn-icon">💫</span>ম্যাচ</a>
-        <a href="messages.html" class="tn-btn tn-c3"><span class="tn-btn-icon">💬</span>বার্তা</a>
-        <a href="kyc.html" class="tn-btn tn-c4"><span class="tn-btn-icon">🔐</span>যাচাই</a>
-        <a href="profile.html" class="tn-btn tn-c8"><span class="tn-btn-icon">👤</span>প্রোফাইল</a>
-        <a href="profile-edit.html" class="tn-btn tn-c7"><span class="tn-btn-icon">✏️</span>সম্পাদনা</a>
-        <a href="membership.html" class="tn-btn tn-c6"><span class="tn-btn-icon">💎</span>সদস্যপদ</a>
-      </nav>
     </div>
 
     <!-- Quick actions -->
@@ -486,7 +361,7 @@ body{background:#F5F5F7}
       <div class="dash-card-body">
         <div class="biye-grid-2">
           <div class="biye-stat">
-            <div class="biye-stat-val" id="freeViewsLeft">—</div>
+            <div class="biye-stat-val" id="freeViewsLeft">২</div>
             <div class="biye-stat-lbl" data-i18n="dash.freeViews">বিনামূল্যে বাকি</div>
           </div>
           <div class="biye-stat">
@@ -579,10 +454,6 @@ document.addEventListener('biye:ready', async ({ detail: { user } }) => {
   // Match views
   const views = await Matching.getFreeViewsRemaining(profile.id);
   document.getElementById('freeViewsLeft').textContent = views;
-  // মোট ব্যবহৃত ভিউ (আগে কখনো আপডেট হত না)
-  const used = typeof Matching.getViewsUsed === 'function' ? await Matching.getViewsUsed(profile.id)
-             : (profile.match_views_used ?? profile.views_used);
-  if (used != null) document.getElementById('totalViewsUsed').textContent = used;
 
   // Match preview
   const matches = await Matching.loadMatches(profile.id, { page: 0 });
@@ -614,13 +485,6 @@ document.addEventListener('biye:ready', async ({ detail: { user } }) => {
     document.getElementById('notifBadge').style.display = '';
   });
 });
-</script>
-<script>
-// 🔔 বাটন: বিজ্ঞপ্তি অংশে নিয়ে যায় (আগে কিছুই করত না)
-document.getElementById('notifBtn').addEventListener('click',function(){var l=document.getElementById('notifList');if(l&&l.offsetParent)l.closest('.dash-card').scrollIntoView({behavior:'smooth',block:'start'});});
-// ব্যাকআপ: js/app.js ৩ সেকেন্ডে সাড়া না দিলে পেজ লোডিং-এ আটকে থাকবে না
-setTimeout(function(){var c=document.getElementById('dashContent');if(c&&c.style.display==='none'){document.getElementById('dashLoading').style.display='none';c.style.display='';
-  document.getElementById('matchPeek').innerHTML='<div class="biye-empty" style="padding:1rem"><div class="biye-empty-icon">💫</div><div class="biye-empty-sub">প্রশ্নমালা পূরণ করলে ম্যাচ দেখা যাবে।</div></div>';}},3000);
 </script>
 </body>
 </html>
