@@ -15,8 +15,8 @@ export const CONFIG = {
   },
 
   SUPABASE: {
-    url: 'https://YOUR_PROJECT.supabase.co',   // Replace before deploy
-    anonKey: 'YOUR_ANON_KEY',                  // Browser-safe anon key only
+    url: 'https://xlkrggspepnysbouatec.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa3JnZ3NwZXBueXNib3VhdGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1MTU0OTEsImV4cCI6MjA5NTA5MTQ5MX0.dCAkAXL1EDNsxTBn8mcHcUHlXJ1xDBirwBdTgIq927U',   // Browser-safe anon key only
   },
 
   PRICING: {
