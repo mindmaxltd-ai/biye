@@ -374,28 +374,20 @@ async function doLogin(){
   }
 
   try {
-    for (var i = 0; i < 30 && !window.__supa; i++) await new Promise(function(r){ setTimeout(r, 100); });
-    if (!window.__supa) return fail(tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
-
-    if (/YOUR_/i.test(window.__supaUrl || '')) {
-      return fail('js/config.js-এ Supabase URL/anonKey বসানো হয়নি (YOUR_PROJECT)');
+    // সার্ভারে যাচাই — ভুল হলে ঠিক কারণটা দেখায় (অ্যাকাউন্ট নেই / পাসওয়ার্ড ভুল / অন্য সমস্যা)
+    var r = await fetch('/.netlify/functions/send-otp', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'login', phone: norm(ph), password: pw })
+    });
+    var d = await r.json().catch(function(){ return null; });
+    if (!d || !d.ok || !d.access_token) {
+      return fail((d && d.error) || tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
     }
-    var res = await window.__supa.auth.signInWithPassword({ email: norm(ph) + '@phone.biye.ltd', password: pw });
-    if (res.error || !res.data || !res.data.session) {
-      var m = (res.error && res.error.message) || '';
-      // শুধু আসল "ভুল পাসওয়ার্ড" হলেই এই বার্তা; অন্য error হলে আসল কারণ দেখাবে
-      if (/invalid login credentials/i.test(m)) return fail(tt('মোবাইল নম্বর বা পাসওয়ার্ড ভুল','Incorrect mobile number or password'));
-      return fail(tt('লগইন সমস্যা: ','Login problem: ') + (m || 'unknown'));
+    // dashboard যেন চেনে — ব্রাউজারে Supabase session সেভ
+    for (var i = 0; i < 30 && !window.__supa; i++) await new Promise(function(res){ setTimeout(res, 100); });
+    if (window.__supa) {
+      try { await window.__supa.auth.setSession({ access_token: d.access_token, refresh_token: d.refresh_token }); } catch (e) {}
     }
-
-    // profiles.auth_user_id লিংক (best-effort)
-    try {
-      await fetch('/.netlify/functions/send-otp', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'link', access_token: res.data.session.access_token })
-      });
-    } catch (e) {}
-
     loginOk();
   } catch (e) {
     fail(tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
