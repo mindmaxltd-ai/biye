@@ -1237,9 +1237,10 @@ function verifyOtpStep(){
   var code = Array.prototype.map.call(document.querySelectorAll('.otp-box'), function(b){return b.value;}).join('');
   if(code.length !== 6){ setErr('otp', true); return; }
 
+  // OTP সঠিক হলে সার্ভার এই পাসওয়ার্ড দিয়ে Supabase Auth-এ অ্যাকাউন্ট তৈরি করে
   fetch('/.netlify/functions/send-otp', {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action:'verify', phone: STATE.phone, code: code})
+    body: JSON.stringify({action:'verify', phone: STATE.phone, code: code, password: STATE.password})
   }).then(function(r){ return r.json(); }).then(function(d){
     if(d && d.verified){ onOtpVerified(); }
     else {
@@ -1425,61 +1426,23 @@ function openHelp(){
 function submitRegistration(){
   track('registration_submitted', {});
   var btn = document.getElementById('btnSubmitReg');
-  btn.disabled = true;
-  btn.textContent = tt('অ্যাকাউন্ট তৈরি হচ্ছে...','Creating account...');
+  btn.disabled = true; btn.textContent = tt('তৈরি হচ্ছে...','Creating account...');
 
-  // OTP verification already happened in verifyOtpStep(). The server now
-  // checks the consumed registration OTP again before creating the real
-  // Supabase Phone Auth user + profile. Password is sent only to this
-  // server endpoint and is never written to an application table.
-  fetch('/.netlify/functions/payment', {
+  // The real account (Supabase Auth user + profile row) is created at the
+  // payment step (payFor999 → createInvoice), the same way the production
+  // register.html does it — not here. This step only logs the accepted
+  // covenants against the phone number and moves on; nothing is faked.
+  fetch('/.netlify/functions/send-otp', {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
-      action:'createRegistration',
-      phone: STATE.phone,
-      password: STATE.password,
-      name: (STATE.firstName+' '+STATE.lastName).trim(),
-      email: STATE.email,
-      dob: STATE.dob,
-      owner_type: STATE.ownerType,
-      seeking_type: STATE.seekingType,
-      religion: STATE.religion,
-      marital_status: STATE.marital,
-      education: STATE.education,
-      profession: STATE.profession,
-      division: STATE.division,
-      district: STATE.district,
-      guardian_name: STATE.guardianName,
-      guardian_phone: STATE.guardianPhone,
-      guardian_relation: STATE.guardianRelation,
-      candidate_phone: STATE.candidatePhone,
+      action:'logConsent', phone: STATE.phone,
+      consents:{tos:true, priv:true, match:true, pay:true, sms:true},
+      ts: new Date().toISOString(),
     })
-  }).then(function(r){ return r.json(); }).then(function(res){
-    if(!(res && res.ok && res.auth_user_id && res.profile_id)){
-      throw new Error((res && res.error) || 'Could not create account');
-    }
+  }).catch(function(){ /* best-effort — payment.js logs consent again once the profile exists */ });
 
-    STATE.authUserId = res.auth_user_id;
-    STATE.profileId = res.profile_id;
-
-    return fetch('/.netlify/functions/send-otp', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        action:'logConsent',
-        phone: STATE.phone,
-        consents:{tos:true, priv:true, match:true, pay:true, sms:true},
-        ts: new Date().toISOString(),
-      })
-    });
-  }).then(function(){
-    track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
-    showStep(STEPS.indexOf('payment'));
-  }).catch(function(err){
-    console.error('registration auth/profile creation failed:', err);
-    btn.disabled = false;
-    btn.textContent = tt('নিবন্ধন সম্পন্ন করুন','Submit registration');
-    showToast(err.message || tt('অ্যাকাউন্ট তৈরি করা যায়নি','Could not create account'));
-  });
+  track('registration_completed', {ownerType: STATE.ownerType, seekingType: STATE.seekingType});
+  showStep(STEPS.indexOf('payment'));
 }
 
 /* ---------------- STEP: lifetime payment (13th window) ---------------- */
@@ -1503,7 +1466,8 @@ function payFor999(){
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
       action:'createInvoice',
-      phone: STATE.phone,
+      phone: STATE.phone, name: (STATE.firstName+' '+STATE.lastName).trim(),
+      email: STATE.email, dob: STATE.dob, password: STATE.password,
       owner_type: STATE.ownerType, seeking_type: STATE.seekingType,
       religion: STATE.religion, marital_status: STATE.marital,
       education: STATE.education, profession: STATE.profession,
