@@ -1,41 +1,41 @@
 // netlify/functions/send-otp.js
 // ─────────────────────────────────────────────────────────────
-// BIYE.LTD — OTP send/verify, phone+password login, password reset,
-// and consent logging. Supabase Auth is authoritative for passwords —
-// this function never stores a password anywhere itself; it only calls
-// Supabase Auth's REST API (with the service-role key) to create/verify/
-// update it. otp_codes.otp_hash stores a SHA-256 hash of the code, never
-// the plaintext code.
+// BIYE.LTD — OTP + অ্যাকাউন্ট (Supabase Auth) — এক ফাংশনে।
+//
+// actions (POST JSON):
+//   send           { action:"send",   phone }                         → OTP SMS
+//   verify         { action:"verify", phone, code, password? }        → OTP যাচাই;
+//                    password থাকলে Supabase Auth-এ ইউজার তৈরি/আপডেট (registration)
+//   resetPassword  { action:"resetPassword", phone, newPassword }     → শেষ ১০ মিনিটে
+//                    OTP যাচাই হয়ে থাকলে নতুন পাসওয়ার্ড বসায়
+//   link           { action:"link", access_token }                   → login-এর পর
+//                    profiles.auth_user_id লিংক করে
+//   logConsent     { action:"logConsent", phone, consents }          → consent_logs (best-effort)
+//
+// Login নিজে browser-এ supabase-js দিয়ে হয় (signInWithPassword) — প্রতিটি ইউজারের
+// নিজের IP, তাই Supabase-এর rate limit সবার উপর একসাথে পড়ে না।
+// ইউজারের Auth email = <8801XXXXXXXXX>@phone.biye.ltd  (ইউজার কখনো দেখে না)
 //
 // Netlify env:
-//   SUPABASE_URL                                        (required)
-//   SUPABASE_SERVICE_KEY / ..._ROLE_KEY / SUPABASE_KEY   (required — service role)
-//   SUPABASE_ANON_KEY                                    (required for login's password grant)
-//   SMS_API_KEY                                          (used by send-sms.js)
-//
-// POST JSON actions:
-//   { action:"send",   phone, purpose }            purpose: registration|login|reset|verification|consent
-//   { action:"verify", phone, code, purpose }
-//   { action:"login",  phone, password }            → { ok, access_token, refresh_token }
-//   { action:"resetPassword", phone, newPassword }  → requires a consumed 'reset' OTP for this phone first
-//   { action:"logConsent", phone, consents:{tos,priv,match,pay,sms}, ts }
+//   SUPABASE_URL                                   (আবশ্যক)
+//   SUPABASE_SERVICE_KEY / SUPABASE_SERVICE_ROLE_KEY (আবশ্যক — admin API লাগে)
+//   SMS_API_KEY                                    (send-sms.js ব্যবহার করে)
 // ─────────────────────────────────────────────────────────────
 
-const crypto = require('crypto');
-
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
-const SERVICE_KEY =
+const SUPABASE_KEY =
   process.env.SUPABASE_SERVICE_KEY ||
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
   process.env.SUPABASE_KEY ||
   '';
-const ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
 const SMS_API_KEY = process.env.SMS_API_KEY || '';
 const SITE_URL = process.env.URL || process.env.DEPLOY_PRIME_URL || 'https://biye.ltd';
 
 const OTP_TTL_MIN = 5;
 const MAX_ATTEMPTS = 5;
-const VALID_PURPOSES = ['registration', 'login', 'reset', 'verification', 'consent'];
+const VERIFIED_WINDOW_MIN = 10;          // OTP যাচাইয়ের পর কত মিনিট পাসওয়ার্ড সেট করা যাবে
+const AUTH_EMAIL_DOMAIN = 'phone.biye.ltd';
+const MIN_PW = 6;
 
 const reply = (status, body) => ({
   statusCode: status,
@@ -48,35 +48,23 @@ const reply = (status, body) => ({
   body: JSON.stringify(body),
 });
 
-// 8801XXXXXXXXX format (no +) — used for SMS and DB lookups in this function
 function normPhone(raw) {
-  let n = String(raw).replace(/[^0-9]/g, '');
+  let n = String(raw || '').replace(/[^0-9]/g, '');
   if (n.startsWith('880')) return n;
-  if (n.startsWith('0')) return '88' + n;
-  if (n.startsWith('1')) return '880' + n;
+  if (n.startsWith('0'))   return '88' + n;
+  if (n.startsWith('1'))   return '880' + n;
   return n;
 }
-// +8801XXXXXXXXX format — required by Supabase Auth's `phone` field
-function normPhoneE164(raw) {
-  return '+' + normPhone(raw);
-}
+const validPhone = (p) => /^8801[3-9]\d{8}$/.test(p);
+const authEmail = (phone) => `${phone}@${AUTH_EMAIL_DOMAIN}`;
+const phoneVariants = (phone) => ['+' + phone, '0' + phone.slice(3), phone];
 
-function hashCode(code) {
-  return crypto.createHash('sha256').update(String(code)).digest('hex');
-}
-
-function isStrongPassword(pw) {
-  // Kept intentionally simple, matching register.html's own rule — just a
-  // minimum length. No forced uppercase/digit/special character.
-  return typeof pw === 'string' && pw.length >= 8;
-}
-
-async function sb(path, opts = {}) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+async function call(url, opts = {}) {
+  const r = await fetch(url, {
     ...opts,
     headers: {
-      apikey: SERVICE_KEY,
-      Authorization: 'Bearer ' + SERVICE_KEY,
+      apikey: SUPABASE_KEY,
+      Authorization: 'Bearer ' + SUPABASE_KEY,
       'Content-Type': 'application/json',
       ...(opts.headers || {}),
     },
@@ -85,30 +73,71 @@ async function sb(path, opts = {}) {
   let data; try { data = JSON.parse(text); } catch { data = text; }
   return { ok: r.ok, status: r.status, data };
 }
+const sb   = (path, opts) => call(`${SUPABASE_URL}/rest/v1/${path}`, opts);
+const auth = (path, opts) => call(`${SUPABASE_URL}/auth/v1/${path}`, opts);
 
-// ── Supabase Auth Admin helpers (service-role only — never expose this key to the browser) ──
-async function authAdmin(path, opts = {}) {
-  const r = await fetch(`${SUPABASE_URL}/auth/v1${path}`, {
-    ...opts,
-    headers: {
-      apikey: SERVICE_KEY,
-      Authorization: 'Bearer ' + SERVICE_KEY,
-      'Content-Type': 'application/json',
-      ...(opts.headers || {}),
-    },
+// ── Auth helpers ─────────────────────────────────────────────
+async function findAuthUserByEmail(email) {
+  // admin list পেজ করে email দিয়ে খোঁজা (শুধু ইউজার আগে থেকে থাকলে লাগে)
+  for (let page = 1; page <= 50; page++) {
+    const r = await auth(`admin/users?page=${page}&per_page=1000`);
+    const users = (r.data && r.data.users) || [];
+    const hit = users.find(u => (u.email || '').toLowerCase() === email);
+    if (hit) return hit;
+    if (users.length < 1000) break;
+  }
+  return null;
+}
+
+async function linkProfile(phone, userId) {
+  const list = encodeURIComponent('(' + phoneVariants(phone).map(v => `"${v}"`).join(',') + ')');
+  await sb(`profiles?phone=in.${list}`, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ auth_user_id: userId }),
   });
-  const text = await r.text();
-  let data; try { data = JSON.parse(text); } catch { data = text; }
-  return { ok: r.ok, status: r.status, data };
 }
 
-async function findAuthUserByPhone(phoneE164) {
-  // Supabase doesn't expose a direct "get by phone" admin endpoint, so we
-  // look the profile up first (profiles.phone → profiles.auth_user_id).
-  const rows = (await sb(`profiles?phone=eq.${encodeURIComponent(phoneE164)}&select=id,auth_user_id&limit=1`)).data;
-  return Array.isArray(rows) && rows[0] ? rows[0] : null;
+// ইউজার না থাকলে তৈরি, থাকলে পাসওয়ার্ড আপডেট। সরাসরি confirmed — কোনো ইমেইল যায় না।
+async function upsertAuthUser(phone, password) {
+  const email = authEmail(phone);
+  const meta = { phone: '+' + phone };
+
+  const c = await auth('admin/users', {
+    method: 'POST',
+    body: JSON.stringify({ email, password, email_confirm: true, user_metadata: meta }),
+  });
+  let userId = c.ok && c.data && c.data.id;
+
+  if (!userId) {
+    const msg = JSON.stringify(c.data || '').toLowerCase();
+    const exists = c.status === 422 || msg.includes('already') || msg.includes('exists');
+    if (!exists) return { ok: false, error: 'অ্যাকাউন্ট তৈরি করা যায়নি', detail: c.data };
+
+    const u = await findAuthUserByEmail(email);
+    if (!u) return { ok: false, error: 'অ্যাকাউন্ট খুঁজে পাওয়া যায়নি' };
+    const up = await auth(`admin/users/${u.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ password, email_confirm: true, user_metadata: { ...(u.user_metadata || {}), ...meta } }),
+    });
+    if (!up.ok) return { ok: false, error: 'পাসওয়ার্ড সেট করা যায়নি', detail: up.data };
+    userId = u.id;
+  }
+
+  await linkProfile(phone, userId);
+  return { ok: true, user_id: userId };
 }
 
+// শেষ VERIFIED_WINDOW_MIN মিনিটে এই ফোনের OTP যাচাই হয়েছে কি না
+async function recentlyVerified(phone) {
+  const q = await sb(`otp_codes?phone=eq.${phone}&order=created_at.desc&limit=1`);
+  const row = Array.isArray(q.data) && q.data[0];
+  if (!row || !row.consumed_at) return null;
+  if (Date.now() - new Date(row.consumed_at).getTime() > VERIFIED_WINDOW_MIN * 60000) return null;
+  return row;
+}
+
+// ─────────────────────────────────────────────────────────────
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return reply(200, {});
 
@@ -117,15 +146,14 @@ exports.handler = async (event) => {
       ok: true,
       function: 'send-otp',
       supabase_url: SUPABASE_URL ? 'set' : 'MISSING',
-      supabase_service_key: SERVICE_KEY ? 'set' : 'MISSING',
-      supabase_anon_key: ANON_KEY ? 'set' : 'MISSING',
+      supabase_key: SUPABASE_KEY ? 'set' : 'MISSING',
       sms_api_key: SMS_API_KEY ? 'set' : 'MISSING',
-      note: 'POST { action:"send"|"verify"|"login"|"resetPassword"|"logConsent", ... }',
+      actions: ['send', 'verify', 'resetPassword', 'link', 'logConsent'],
     });
   }
 
-  if (event.httpMethod !== 'POST') return reply(405, { error: 'POST only' });
-  if (!SUPABASE_URL || !SERVICE_KEY) return reply(500, { ok: false, error: 'Supabase config missing' });
+  if (event.httpMethod !== 'POST') return reply(405, { ok: false, error: 'POST only' });
+  if (!SUPABASE_URL || !SUPABASE_KEY) return reply(500, { ok: false, error: 'Supabase config missing' });
 
   let p;
   try { p = JSON.parse(event.body || '{}'); }
@@ -133,22 +161,37 @@ exports.handler = async (event) => {
 
   const action = String(p.action || '').trim();
 
-  // ─────────── SEND OTP ───────────
+  // ─────────── LINK (login-এর পর) ───────────
+  if (action === 'link') {
+    const token = String(p.access_token || '');
+    if (!token) return reply(400, { ok: false, error: 'no token' });
+    const u = await auth('user', { headers: { Authorization: 'Bearer ' + token } });
+    const email = (u.ok && u.data && u.data.email) || '';
+    const phone = email.endsWith('@' + AUTH_EMAIL_DOMAIN) ? email.split('@')[0] : '';
+    if (!phone) return reply(401, { ok: false, error: 'invalid session' });
+    await linkProfile(phone, u.data.id);
+    return reply(200, { ok: true });
+  }
+
+  const phone = normPhone(p.phone);
+  if (!validPhone(phone)) return reply(400, { ok: false, error: 'সঠিক মোবাইল নম্বর দিন' });
+
+  // ─────────── SEND ───────────
   if (action === 'send') {
-    const phone = normPhone(p.phone || '');
-    if (!phone) return reply(400, { ok: false, error: 'no phone' });
-    const purpose = VALID_PURPOSES.includes(p.purpose) ? p.purpose : 'registration';
     if (!SMS_API_KEY) return reply(500, { ok: false, error: 'SMS_API_KEY missing' });
 
     const code = String(Math.floor(100000 + Math.random() * 900000));
     const expires = new Date(Date.now() + OTP_TTL_MIN * 60000).toISOString();
 
-    await sb(`otp_codes?phone=eq.${phone}&purpose=eq.${purpose}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+    await sb(`otp_codes?phone=eq.${phone}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
 
     const ins = await sb('otp_codes', {
       method: 'POST',
       headers: { Prefer: 'return=minimal' },
-      body: JSON.stringify({ phone, purpose, otp_hash: hashCode(code), expires_at: expires, attempt_count: 0 }),
+      body: JSON.stringify({
+        phone, purpose: p.purpose === 'reset' ? 'reset' : 'registration',
+        code, otp_hash: code, expires_at: expires, attempt_count: 0,
+      }),
     });
     if (!ins.ok) return reply(500, { ok: false, error: 'could not store OTP', detail: ins.data });
 
@@ -161,148 +204,82 @@ exports.handler = async (event) => {
       });
       const d = await r.json().catch(() => ({}));
       if (d && d.sent) return reply(200, { ok: true, sent: true, phone, expires_in_min: OTP_TTL_MIN });
-      return reply(200, { ok: false, sent: false, error: 'SMS failed', detail: d });
+      return reply(200, { ok: false, sent: false, error: 'SMS পাঠানো যায়নি', detail: d });
     } catch (e) {
       return reply(500, { ok: false, sent: false, error: String((e && e.message) || e) });
     }
   }
 
-  // ─────────── VERIFY OTP ───────────
+  // ─────────── VERIFY (+ registration-এ অ্যাকাউন্ট তৈরি) ───────────
   if (action === 'verify') {
-    const phone = normPhone(p.phone || '');
     const code = String(p.code || '').trim();
-    const purpose = VALID_PURPOSES.includes(p.purpose) ? p.purpose : 'registration';
-    if (!phone) return reply(400, { ok: false, error: 'no phone' });
-    if (!code) return reply(400, { ok: false, error: 'no code' });
+    const password = p.password != null ? String(p.password) : '';
+    if (!code) return reply(400, { ok: false, verified: false, error: 'no code' });
+    if (password && password.length < MIN_PW) {
+      return reply(200, { ok: false, verified: false, error: `পাসওয়ার্ড কমপক্ষে ${MIN_PW} অক্ষরের হতে হবে` });
+    }
 
-    const q = await sb(`otp_codes?phone=eq.${phone}&purpose=eq.${purpose}&order=created_at.desc&limit=1`);
+    const q = await sb(`otp_codes?phone=eq.${phone}&order=created_at.desc&limit=1`);
     if (!q.ok || !Array.isArray(q.data) || q.data.length === 0) {
       return reply(200, { ok: false, verified: false, error: 'কোনো কোড পাওয়া যায়নি — আবার পাঠান' });
     }
     const row = q.data[0];
 
-    if (row.consumed_at) return reply(200, { ok: true, verified: true, note: 'already verified' });
-    if ((row.attempt_count || 0) >= MAX_ATTEMPTS) return reply(200, { ok: false, verified: false, error: 'অনেকবার ভুল হয়েছে — নতুন কোড নিন' });
-    if (new Date(row.expires_at) < new Date()) return reply(200, { ok: false, verified: false, error: 'কোডের মেয়াদ শেষ — আবার পাঠান' });
+    if (row.consumed_at) {
+      // আগেই যাচাই হয়েছে: শুধু একই কোড + সাম্প্রতিক হলে মানব (ডাবল-ক্লিক)। অন্যথায় নতুন কোড লাগবে।
+      const fresh = Date.now() - new Date(row.consumed_at).getTime() <= VERIFIED_WINDOW_MIN * 60000;
+      if (!(fresh && row.code === code)) {
+        return reply(200, { ok: false, verified: false, error: 'এই কোড আগেই ব্যবহৃত — নতুন কোড নিন' });
+      }
+    } else {
+      if ((row.attempt_count || 0) >= MAX_ATTEMPTS) return reply(200, { ok: false, verified: false, error: 'অনেকবার ভুল হয়েছে — নতুন কোড নিন' });
+      if (new Date(row.expires_at) < new Date()) return reply(200, { ok: false, verified: false, error: 'কোডের মেয়াদ শেষ — আবার পাঠান' });
 
-    if (row.otp_hash === hashCode(code)) {
+      if (row.code !== code) {
+        await sb(`otp_codes?id=eq.${row.id}`, {
+          method: 'PATCH', headers: { Prefer: 'return=minimal' },
+          body: JSON.stringify({ attempt_count: (row.attempt_count || 0) + 1 }),
+        });
+        const left = MAX_ATTEMPTS - ((row.attempt_count || 0) + 1);
+        return reply(200, { ok: false, verified: false, error: `কোড ভুল — আর ${left} বার চেষ্টা করতে পারবেন` });
+      }
+
       await sb(`otp_codes?id=eq.${row.id}`, {
         method: 'PATCH', headers: { Prefer: 'return=minimal' },
         body: JSON.stringify({ consumed_at: new Date().toISOString() }),
       });
-      return reply(200, { ok: true, verified: true });
-    } else {
-      await sb(`otp_codes?id=eq.${row.id}`, {
-        method: 'PATCH', headers: { Prefer: 'return=minimal' },
-        body: JSON.stringify({ attempt_count: (row.attempt_count || 0) + 1 }),
-      });
-      const left = MAX_ATTEMPTS - ((row.attempt_count || 0) + 1);
-      return reply(200, { ok: false, verified: false, error: `কোড ভুল — আর ${left} বার চেষ্টা করতে পারবেন` });
     }
+
+    if (password) {
+      const a = await upsertAuthUser(phone, password);
+      if (!a.ok) return reply(200, { ok: false, verified: false, error: a.error, detail: a.detail });
+      return reply(200, { ok: true, verified: true, account: true });
+    }
+    return reply(200, { ok: true, verified: true });
   }
 
-  // ─────────── LOGIN (phone + password) ───────────
-  if (action === 'login') {
-    const phone = String(p.phone || '').trim();
-    const password = p.password || '';
-    if (!phone) return reply(400, { ok: false, error: 'no phone' });
-    if (!password) return reply(400, { ok: false, error: 'password required' });
-    if (!ANON_KEY) return reply(500, { ok: false, error: 'SUPABASE_ANON_KEY missing' });
-
-    const phoneE164 = phone.startsWith('+') ? phone : normPhoneE164(phone);
-
-    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-      method: 'POST',
-      headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: phoneE164, password }),
-    });
-    const d = await r.json().catch(() => ({}));
-    if (!r.ok || !d.access_token) {
-      // Logged server-side only (visible in Netlify → Functions → send-otp
-      // → logs) so the real cause can be diagnosed without exposing it to
-      // whoever is trying to log in.
-      console.error('login failed for', phoneE164, '— Supabase status', r.status, JSON.stringify(d));
-      return reply(200, { ok: false, error: 'মোবাইল নম্বর বা পাসওয়ার্ড ভুল' });
-    }
-    return reply(200, { ok: true, access_token: d.access_token, refresh_token: d.refresh_token });
-  }
-
-  // ─────────── RESET PASSWORD (after a 'reset'-purpose OTP was verified) ───────────
+  // ─────────── RESET PASSWORD ───────────
   if (action === 'resetPassword') {
-    const phone = normPhone(p.phone || '');
-    const newPassword = p.newPassword || '';
-    if (!phone) return reply(400, { ok: false, error: 'no phone' });
-    if (!isStrongPassword(newPassword)) {
-      return reply(400, { ok: false, error: 'পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে' });
-    }
+    const pw = String(p.newPassword || '');
+    if (pw.length < MIN_PW) return reply(200, { ok: false, error: `পাসওয়ার্ড কমপক্ষে ${MIN_PW} অক্ষরের হতে হবে` });
 
-    // Require a recently-consumed 'reset' OTP for this phone — otherwise
-    // anyone could reset anyone else's password just by knowing the number.
-    const q = await sb(`otp_codes?phone=eq.${phone}&purpose=eq.reset&order=created_at.desc&limit=1`);
-    const row = q.ok && Array.isArray(q.data) ? q.data[0] : null;
-    const consumedRecently = row && row.consumed_at &&
-      (Date.now() - new Date(row.consumed_at).getTime()) < 15 * 60000; // 15 min grace window
-    if (!consumedRecently) {
-      return reply(200, { ok: false, error: 'আগে OTP যাচাই করুন, তারপর পাসওয়ার্ড রিসেট করুন' });
-    }
+    const row = await recentlyVerified(phone);
+    if (!row) return reply(200, { ok: false, error: 'আগে OTP যাচাই করুন (১০ মিনিটের মধ্যে)' });
 
-    const phoneE164 = normPhoneE164(phone);
-    const profile = await findAuthUserByPhone(phoneE164);
-    if (!profile || !profile.auth_user_id) {
-      return reply(200, { ok: false, error: 'এই নম্বরে কোনো অ্যাকাউন্ট পাওয়া যায়নি' });
-    }
+    const a = await upsertAuthUser(phone, pw);
+    if (!a.ok) return reply(200, { ok: false, error: a.error, detail: a.detail });
 
-    const upd = await authAdmin(`/admin/users/${profile.auth_user_id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ password: newPassword }),
-    });
-    if (!upd.ok) return reply(500, { ok: false, error: 'পাসওয়ার্ড আপডেট করা যায়নি', detail: upd.data });
-
-    // Consume the reset OTP so it can't be reused
-    if (row) {
-      await sb(`otp_codes?id=eq.${row.id}`, {
-        method: 'PATCH', headers: { Prefer: 'return=minimal' },
-        body: JSON.stringify({ attempt_count: MAX_ATTEMPTS }),
-      });
-    }
+    // একই OTP দিয়ে দ্বিতীয়বার রিসেট নয়
+    await sb(`otp_codes?id=eq.${row.id}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
     return reply(200, { ok: true });
   }
 
-  // ─────────── LOG CONSENT (registration step 2) ───────────
+  // ─────────── CONSENT LOG (best-effort) ───────────
   if (action === 'logConsent') {
-    const phone = normPhone(p.phone || '');
-    if (!phone) return reply(400, { ok: false, error: 'no phone' });
-    const consents = p.consents || {};
-
-    const phoneE164 = normPhoneE164(phone);
-    const profile = await findAuthUserByPhone(phoneE164);
-    if (!profile) {
-      // Registration may not have created the profile yet at this step —
-      // that's fine, payment.js's createInvoice logs the same consents
-      // again once the profile definitely exists. Don't fail the signup
-      // flow over this.
-      return reply(200, { ok: true, note: 'profile not found yet — will be logged at payment step' });
-    }
-
-    // Map the frontend's short consent keys to the schema's agreement_type enum
-    const MAP = { tos: 'terms', priv: 'privacy', match: 'matching', pay: 'payment', sms: 'communications' };
-    const rows = Object.entries(consents)
-      .filter(([key]) => MAP[key])
-      .map(([key, accepted]) => ({
-        profile_id: profile.id,
-        agreement_type: MAP[key],
-        version: '1.0',
-        accepted: !!accepted,
-        accepted_at: accepted ? (p.ts || new Date().toISOString()) : null,
-        acceptance_method: 'checkbox',
-      }));
-    if (rows.length) {
-      await sb('agreements?on_conflict=profile_id,agreement_type,version', {
-        method: 'POST',
-        headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
-        body: JSON.stringify(rows),
-      });
-    }
+    await sb('consent_logs', {
+      method: 'POST', headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({ action: 'registration_consent', meta: { phone, consents: p.consents || {}, ts: p.ts || null } }),
+    }).catch(() => {});
     return reply(200, { ok: true });
   }
 
