@@ -305,6 +305,7 @@ a{color:inherit}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module">
   import { CONFIG } from './js/config.js';
+  window.__supaUrl = CONFIG.SUPABASE.url;
   window.__supa = window.supabase.createClient(CONFIG.SUPABASE.url, CONFIG.SUPABASE.anonKey, {
     auth: { persistSession: true, autoRefreshToken: true },
   });
@@ -376,9 +377,15 @@ async function doLogin(){
     for (var i = 0; i < 30 && !window.__supa; i++) await new Promise(function(r){ setTimeout(r, 100); });
     if (!window.__supa) return fail(tt('সংযোগ করা যায়নি, আবার চেষ্টা করুন','Could not connect, please try again'));
 
+    if (/YOUR_/i.test(window.__supaUrl || '')) {
+      return fail('js/config.js-এ Supabase URL/anonKey বসানো হয়নি (YOUR_PROJECT)');
+    }
     var res = await window.__supa.auth.signInWithPassword({ email: norm(ph) + '@phone.biye.ltd', password: pw });
     if (res.error || !res.data || !res.data.session) {
-      return fail(tt('মোবাইল নম্বর বা পাসওয়ার্ড ভুল','Incorrect mobile number or password'));
+      var m = (res.error && res.error.message) || '';
+      // শুধু আসল "ভুল পাসওয়ার্ড" হলেই এই বার্তা; অন্য error হলে আসল কারণ দেখাবে
+      if (/invalid login credentials/i.test(m)) return fail(tt('মোবাইল নম্বর বা পাসওয়ার্ড ভুল','Incorrect mobile number or password'));
+      return fail(tt('লগইন সমস্যা: ','Login problem: ') + (m || 'unknown'));
     }
 
     // profiles.auth_user_id লিংক (best-effort)
