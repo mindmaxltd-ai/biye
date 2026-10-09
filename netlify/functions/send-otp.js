@@ -150,7 +150,7 @@ exports.handler = async (event) => {
       key_project: (() => { try { return JSON.parse(Buffer.from(SUPABASE_KEY.split('.')[1], 'base64').toString()).ref + ' / ' + JSON.parse(Buffer.from(SUPABASE_KEY.split('.')[1], 'base64').toString()).role; } catch { return 'unknown (new-style key)'; } })(),
       supabase_key: SUPABASE_KEY ? 'set' : 'MISSING',
       sms_api_key: SMS_API_KEY ? 'set' : 'MISSING',
-      actions: ['send', 'verify', 'resetPassword', 'link', 'logConsent'],
+      actions: ['send', 'verify', 'login', 'resetPassword', 'link', 'logConsent'],
     });
   }
 
@@ -177,6 +177,30 @@ exports.handler = async (event) => {
 
   const phone = normPhone(p.phone);
   if (!validPhone(phone)) return reply(400, { ok: false, error: 'সঠিক মোবাইল নম্বর দিন' });
+
+  // ─────────── LOGIN (সার্ভারে যাচাই, স্পষ্ট কারণসহ) ───────────
+  if (action === 'login') {
+    const password = String(p.password || '');
+    if (!password) return reply(200, { ok: false, code: 'no_password', error: 'পাসওয়ার্ড দিন' });
+    const email = authEmail(phone);
+    const t = await auth('token?grant_type=password', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+    if (t.ok && t.data && t.data.access_token) {
+      if (t.data.user && t.data.user.id) await linkProfile(phone, t.data.user.id);
+      return reply(200, { ok: true, access_token: t.data.access_token, refresh_token: t.data.refresh_token });
+    }
+    const raw = JSON.stringify(t.data || '').toLowerCase();
+    if (raw.includes('invalid') && raw.includes('credential')) {
+      const u = await findAuthUserByEmail(email);
+      if (!u) return reply(200, { ok: false, code: 'no_account',
+        error: 'এই নম্বরে কোনো অ্যাকাউন্ট নেই — "Forgot password?" দিয়ে পাসওয়ার্ড সেট করুন বা Register করুন' });
+      return reply(200, { ok: false, code: 'wrong_password',
+        error: 'পাসওয়ার্ড মেলেনি — "Forgot password?" দিয়ে নতুন পাসওয়ার্ড সেট করুন' });
+    }
+    return reply(200, { ok: false, code: 'auth_error', error: 'লগইন সমস্যা: ' + ((t.data && (t.data.msg || t.data.error_description || t.data.message)) || t.status) });
+  }
 
   // ─────────── SEND ───────────
   if (action === 'send') {
